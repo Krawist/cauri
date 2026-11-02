@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.cauri.feature.onboarding"
 }
+
+dependencies {
+    implementation(projects.core.data)
+}

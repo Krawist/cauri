@@ -141,7 +141,10 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   visits, transactions, cash counts, decision log; internal entities and DAOs, provided by Hilt. The Cash account
   (id 1, XAF) is created with the database and a trigger refuses its deletion; a raw signal has at most one
   transaction (unique index). DAOs tested on an in-memory database with the bundled SQLite driver.
-  Next: phase 1, CAU-06.
+- [ ] **CAU-06** — profile step (`ProfileScreen`, `ProfileViewModel`): first name, occupation and income type, all
+  three required and pointed out after a first « Continuer »; saved in DataStore (`UserProfile`) through
+  `UserPreferencesRepository`, now an interface with `UserPreferencesRepositoryImpl`. Until CAU-07, the onboarding
+  completes after this step. Checked on a phone. Next: CAU-07.
 
 Update this section at the end of each ticket.
 

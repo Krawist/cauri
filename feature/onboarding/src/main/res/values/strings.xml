@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="onboarding_title">Bienvenue sur Cauri</string>
-    <string name="onboarding_subtitle">Ton cash, ton MoMo, ton Orange Money et ta banque au même endroit.</string>
-    <string name="onboarding_start">Commencer</string>
+    <string name="profile_choice_missing">Choisis une réponse</string>
+    <string name="profile_continue">Continuer</string>
+    <string name="profile_first_name">Ton prénom</string>
+    <string name="profile_first_name_missing">Indique ton prénom</string>
+    <string name="profile_income">Tes revenus arrivent…</string>
+    <string name="profile_income_fixed">À date fixe</string>
+    <string name="profile_income_fixed_hint">Un salaire chaque mois</string>
+    <string name="profile_income_variable">Variables</string>
+    <string name="profile_income_variable_hint">Selon les mois</string>
+    <string name="profile_local_only">Tout reste sur ton téléphone</string>
+    <string name="profile_occupation">Tu fais quoi dans la vie ?</string>
+    <string name="profile_occupation_employee">Salarié·e</string>
+    <string name="profile_occupation_other">Autre</string>
+    <string name="profile_occupation_self_employed">Indépendant·e</string>
+    <string name="profile_occupation_student">Étudiant·e</string>
+    <string name="profile_occupation_trader">Commerçant·e</string>
+    <string name="profile_step">Étape %1$d sur %2$d</string>
+    <string name="profile_title">Faisons connaissance</string>
 </resources>

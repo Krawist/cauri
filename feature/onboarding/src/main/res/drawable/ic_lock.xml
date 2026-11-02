@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Padlock of the « Tout reste sur ton téléphone » line, from the mockup. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="14dp"
+    android:height="14dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M7,11 H17 A2,2 0 0,1 19,13 V18 A2,2 0 0,1 17,20 H7 A2,2 0 0,1 5,18 V13 A2,2 0 0,1 7,11 Z M8,11 V8 A4,4 0 0,1 16,8 V11"
+        android:strokeWidth="2.2"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

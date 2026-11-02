@@ -6,7 +6,6 @@ import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.AccountKind
 import com.cauri.core.data.database.entity.AccountStatus
-import com.cauri.core.data.database.entity.CategoryStatus
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
@@ -84,7 +83,7 @@ internal class TransactionDaoTest {
                     kind = AccountKind.MOBILE_MONEY,
                     provider = "MTN",
                     currency = "XAF",
-                    status = AccountStatus.ACTIVE
+                    status = AccountStatus.ACTIVE,
                 ),
             )
             val out = transfer(accountId = momoId, type = TransactionType.TRANSFER_OUT, group = "withdrawal-1")

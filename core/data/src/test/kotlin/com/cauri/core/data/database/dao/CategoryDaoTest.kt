@@ -34,10 +34,20 @@ internal class CategoryDaoTest {
         fun `should list the active categories, by name`() = runTest {
             // given
             val transportId = categoryDao.insert(
-                CategoryEntity(name = "Transport", parentId = null, nature = CategoryNature.EXPENSE, status = CategoryStatus.ACTIVE),
+                CategoryEntity(
+                    name = "Transport",
+                    parentId = null,
+                    nature = CategoryNature.EXPENSE,
+                    status = CategoryStatus.ACTIVE,
+                ),
             )
             val motoId = categoryDao.insert(
-                CategoryEntity(name = "Moto", parentId = transportId, nature = CategoryNature.EXPENSE, status = CategoryStatus.ACTIVE),
+                CategoryEntity(
+                    name = "Moto",
+                    parentId = transportId,
+                    nature = CategoryNature.EXPENSE,
+                    status = CategoryStatus.ACTIVE,
+                ),
             )
             categoryDao.insert(
                 CategoryEntity(
