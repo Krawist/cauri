@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,7 @@ import com.cauri.core.design.theme.CauriTheme
 /** Temporary home screen; the real one, cash first, comes with CAU-25. */
 @Composable
 internal fun HomeScreen(onCountCash: () -> Unit, onAddExpense: () -> Unit, modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.fillMaxSize(), color = CauriTheme.palette.background) {
+    Surface(modifier = modifier.fillMaxSize(), color = Color.Transparent) {
         Column(
             modifier = Modifier.safeDrawingPadding().padding(horizontal = 20.dp, vertical = 28.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

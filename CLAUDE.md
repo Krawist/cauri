@@ -131,7 +131,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 - [ ] **CAU-03** — `GlassScreen` (background, content and overlay layers) and `GlassSurface` with Haze 1.6.10 (2.x
   needs Compose 1.12 and Kotlin 2.4); blur from Android 12 on phones not flagged low-RAM, decided once per process in
   `CauriApplication`, opaque tinted fallback otherwise. Checked on a Galaxy S23; smooth scrolling on an entry-level
-  Tecno or Infinix not verified. Next: CAU-04 and CAU-05.
+  Tecno or Infinix not verified.
+- [ ] **CAU-04** — floating glass `CauriBottomBar` (Accueil, Activité, « + », Objectifs, Analyses), shown on the tabs
+  only; « + » opens `QuickEntrySheet` from `:feature:transactions`; Objectifs and Analyses are placeholders in `:app`
+  until their phase 3 modules. Back from a tab returns to Accueil, then leaves the app (checked on a phone). The
+  mockups' blurred shapes (`backdrop`, `screenBackdropShapes`) are drawn once behind transparent screens; the bar and
+  « + » are raised with a `shadow` palette colour.
+  Next: CAU-05.
 
 Update this section at the end of each ticket.
 

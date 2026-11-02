@@ -17,17 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import com.cauri.core.design.component.BackdropShape
+import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.theme.CauriTheme
 import kotlin.time.Duration.Companion.seconds
 
@@ -50,7 +47,7 @@ private const val BLOB_RADIUS = 0.7f
 
 /**
  * Launch screen: the logo tile in the centre of the screen, on the blurred lagoon and gold shapes, with the wordmark
- * under it. The shapes are radial gradients, so they look the same on every phone, with or without blur support.
+ * under it.
  */
 @Composable
 internal fun LaunchScreen(modifier: Modifier = Modifier) {
@@ -59,16 +56,17 @@ internal fun LaunchScreen(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .background(palette.background)
-            .drawBehind {
-                drawBlob(
-                    color = palette.blobLagoon,
-                    center = Offset(
-                        size.width * LAGOON_BLOB_X,
-                        size.height * LAGOON_BLOB_Y,
+            .backdrop(
+                listOf(
+                    BackdropShape(
+                        color = palette.blobLagoon,
+                        x = LAGOON_BLOB_X,
+                        y = LAGOON_BLOB_Y,
+                        radius = BLOB_RADIUS,
                     ),
-                )
-                drawBlob(color = palette.blobGold, center = Offset(size.width * GOLD_BLOB_X, size.height * GOLD_BLOB_Y))
-            },
+                    BackdropShape(color = palette.blobGold, x = GOLD_BLOB_X, y = GOLD_BLOB_Y, radius = BLOB_RADIUS),
+                ),
+            ),
     ) {
         // A spacer as tall as the wordmark above the tile keeps the tile in the exact centre of the screen.
         Column(
@@ -102,20 +100,6 @@ internal fun LaunchScreen(modifier: Modifier = Modifier) {
             }
         }
     }
-}
-
-// A blurred disc, drawn as a radial gradient fading to transparent.
-private fun DrawScope.drawBlob(color: Color, center: Offset) {
-    val radius = size.width * BLOB_RADIUS
-    drawCircle(
-        brush = Brush.radialGradient(
-            colors = listOf(color, color.copy(alpha = 0f)),
-            center = center,
-            radius = radius,
-        ),
-        radius = radius,
-        center = center,
-    )
 }
 
 @Preview(name = "Light")

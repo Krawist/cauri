@@ -63,6 +63,7 @@ private fun CauriPalette.tokens(): List<Pair<String, Color>> = listOf(
     "trackStrong" to trackStrong,
     "handle" to handle,
     "scrim" to scrim,
+    "shadow" to shadow,
     "accent" to accent,
     "onAccent" to onAccent,
     "accentSoft" to accentSoft,

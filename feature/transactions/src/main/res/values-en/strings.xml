@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="transactions_quick_entry_title">New expense</string>
+    <string name="transactions_activity_title">Activity</string>
     <string name="transactions_coming_soon">Screen coming soon</string>
-    <string name="transactions_back">Back</string>
+    <string name="transactions_quick_entry_title">New expense</string>
 </resources>

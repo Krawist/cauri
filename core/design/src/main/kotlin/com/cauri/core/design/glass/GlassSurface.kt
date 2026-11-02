@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cauri.core.design.theme.CauriTheme
 import dev.chrisbanes.haze.HazeStyle
@@ -24,12 +26,14 @@ private val GlassBorderWidth = 1.dp
  * glass colour, with the same shape and border.
  *
  * @param strong Whether to use the more opaque glass of the bottom bar.
+ * @param elevation Height of the soft shadow under the surface, for surfaces that float above the content.
  */
 @Composable
 fun GlassSurface(
     shape: Shape,
     modifier: Modifier = Modifier,
     strong: Boolean = false,
+    elevation: Dp = 0.dp,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val palette = CauriTheme.palette
@@ -50,6 +54,8 @@ fun GlassSurface(
     }
     Box(
         modifier = modifier
+            // The fill is opaque (blurred backdrop or tinted fallback), so the shadow only shows around the surface.
+            .shadow(elevation = elevation, shape = shape, ambientColor = palette.shadow, spotColor = palette.shadow)
             .clip(shape)
             .then(fill)
             .border(width = GlassBorderWidth, color = palette.glassBorder, shape = shape),

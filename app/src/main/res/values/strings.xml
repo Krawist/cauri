@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="add_expense">Ajouter une dépense</string>
     <string name="app_name" translatable="false">Cauri</string>
+    <string name="coming_soon">Écran à venir</string>
     <string name="launch_wordmark" translatable="false">cauri</string>
+    <string name="tab_activity">Activité</string>
+    <string name="tab_goals">Objectifs</string>
+    <string name="tab_home">Accueil</string>
+    <string name="tab_insights">Analyses</string>
 </resources>

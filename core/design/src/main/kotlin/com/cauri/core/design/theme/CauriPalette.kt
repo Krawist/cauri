@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
  * @property trackStrong Background of progress bars drawn on glass.
  * @property handle Drag handle of sheets and dashed borders.
  * @property scrim Dimming layer behind a sheet.
+ * @property shadow Colour of the shadows under raised surfaces; opaque, as Android sets the shadow strength itself.
  * @property accent Lagoon: main buttons, selection, the active tab.
  * @property onAccent Text and icons drawn on [accent].
  * @property accentSoft Light lagoon fill of selected chips and badges.
@@ -54,6 +55,7 @@ data class CauriPalette(
     val trackStrong: Color,
     val handle: Color,
     val scrim: Color,
+    val shadow: Color,
     val accent: Color,
     val onAccent: Color,
     val accentSoft: Color,
@@ -86,6 +88,7 @@ internal val LightPalette = CauriPalette(
     trackStrong = Color(0x1F0E1A1C),
     handle = Color(0x380E1A1C),
     scrim = Color(0x470E1A1C),
+    shadow = Color(0xFF0E1A1C),
     accent = Color(0xFF0F7B76),
     onAccent = Color(0xFFFFFFFF),
     accentSoft = Color(0x240F7B76),
@@ -119,6 +122,7 @@ internal val DarkPalette = CauriPalette(
     trackStrong = Color(0x29FFFFFF),
     handle = Color(0x40FFFFFF),
     scrim = Color(0x73000000),
+    shadow = Color(0xFF000000),
     accent = Color(0xFF2BB3A8),
     onAccent = Color(0xFF06201E),
     accentSoft = Color(0x2E2BB3A8),
