@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.cauri.core.design"
 }
+
+dependencies {
+    implementation(libs.haze)
+}

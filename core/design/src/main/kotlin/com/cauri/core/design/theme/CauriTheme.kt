@@ -7,10 +7,20 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import com.cauri.core.design.glass.LocalGlassBlur
 
-/** Cauri theme. Follows the phone's dark mode; screens read the full palette through [CauriTheme.palette]. */
+/**
+ * Cauri theme. Follows the phone's dark mode; screens read the full palette through [CauriTheme.palette].
+ *
+ * @param glassBlur Whether glass surfaces blur what is behind them, from `supportsGlassBlur()` at startup; otherwise
+ * they are opaque tinted surfaces.
+ */
 @Composable
-fun CauriTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun CauriTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    glassBlur: Boolean = false,
+    content: @Composable () -> Unit,
+) {
     val palette = if (darkTheme) DarkPalette else LightPalette
     val colorScheme = if (darkTheme) {
         darkColorScheme(
@@ -37,7 +47,7 @@ fun CauriTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
             error = palette.coralText,
         )
     }
-    CompositionLocalProvider(LocalCauriPalette provides palette) {
+    CompositionLocalProvider(LocalCauriPalette provides palette, LocalGlassBlur provides glassBlur) {
         MaterialTheme(colorScheme = colorScheme, typography = CauriTypography, content = content)
     }
 }

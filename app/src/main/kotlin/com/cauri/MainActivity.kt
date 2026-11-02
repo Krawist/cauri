@@ -21,7 +21,7 @@ internal class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-            CauriTheme {
+            CauriTheme(glassBlur = (application as CauriApplication).glassBlur) {
                 CauriApp(uiState = uiState, onOnboardingCompleted = viewModel::onOnboardingCompleted)
             }
         }

@@ -128,12 +128,16 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 - [ ] **CAU-51** — logo coin (SVG masters in `core/design/logo/`, vector drawables), silhouette for notifications and
   themed icons, adaptive launcher icon, system splash handing off to the Compose launch screen (`LaunchDuration`,
   2 s). Launch screen and splash checked on a phone in light and dark mode; launcher icon not checked on a device.
-  Next: CAU-03 and CAU-05.
+- [ ] **CAU-03** — `GlassScreen` (background, content and overlay layers) and `GlassSurface` with Haze 1.6.10 (2.x
+  needs Compose 1.12 and Kotlin 2.4); blur from Android 12 on phones not flagged low-RAM, decided once per process in
+  `CauriApplication`, opaque tinted fallback otherwise. Checked on a Galaxy S23; smooth scrolling on an entry-level
+  Tecno or Infinix not verified. Next: CAU-04 and CAU-05.
 
 Update this section at the end of each ticket.
 
 ## Way of working
 
-- One ticket at a time, on a `cau-0xx-description` branch, with small, readable commits.
+- One ticket at a time, on a `cau-0xx-description` branch, ending in one commit named after the ticket
+  (`CAU-03 · Glass surface`), committed and merged before the next ticket starts.
 - Reread the ticket's acceptance criteria in `docs/tickets.md` before coding and check them at the end.
 - If a product choice is not settled by the documents, ask rather than decide alone.
