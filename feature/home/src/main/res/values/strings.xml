@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_title">Bonjour</string>
+    <string name="home_add_expense">Ajouter une dépense</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>
-    <string name="home_add_expense">Ajouter une dépense</string>
+    <string name="home_settings">Réglages</string>
+    <string name="home_title">Bonjour</string>
 </resources>

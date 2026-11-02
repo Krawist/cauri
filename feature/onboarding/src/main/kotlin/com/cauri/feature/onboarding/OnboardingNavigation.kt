@@ -14,6 +14,9 @@ import androidx.navigation.compose.navigation
 import com.cauri.feature.onboarding.accounts.AccountsScreen
 import com.cauri.feature.onboarding.categories.CategoriesScreen
 import com.cauri.feature.onboarding.habits.HabitsScreen
+import com.cauri.feature.onboarding.permissions.BackgroundLocationScreen
+import com.cauri.feature.onboarding.permissions.LocationScreen
+import com.cauri.feature.onboarding.permissions.NotificationsScreen
 import com.cauri.feature.onboarding.profile.ProfileScreen
 import kotlinx.serialization.Serializable
 
@@ -32,10 +35,19 @@ internal data object CategoriesRoute
 @Serializable
 internal data object AccountsRoute
 
+@Serializable
+internal data object NotificationsRoute
+
+@Serializable
+internal data object LocationRoute
+
+@Serializable
+internal data object BackgroundLocationRoute
+
 /**
  * Profile, payment habits, categories, accounts and permissions (CAU-06 to CAU-11). Each step hands its answers to the
- * [OnboardingViewModel] of the graph, which saves them all after the last one. Until the next steps exist, the
- * onboarding ends after the accounts.
+ * [OnboardingViewModel] of the graph, which saves them all after the last one: the permissions, given or put off.
+ * Until the battery guide (CAU-11) exists, the onboarding ends there.
  */
 fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: () -> Unit) {
     navigation<OnboardingGraph>(startDestination = ProfileRoute) {
@@ -68,12 +80,36 @@ fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: (
         }
         composable<AccountsRoute> { entry ->
             val onboarding = onboardingViewModel(navController, entry)
-            val completed by onboarding.completed.collectAsStateWithLifecycle()
-            LaunchedEffect(completed) {
-                if (completed) onCompleted()
-            }
-            AccountsScreen(onAccountsChosen = onboarding::complete)
+            AccountsScreen(
+                onAccountsChosen = { accounts ->
+                    onboarding.onAccountsChosen(accounts)
+                    navController.navigate(NotificationsRoute)
+                },
+            )
         }
+        composable<NotificationsRoute> { NotificationsScreen(onDone = { navController.navigate(LocationRoute) }) }
+        composable<LocationRoute> { entry ->
+            val onboarding = onboardingViewModel(navController, entry)
+            EndWhenSaved(onboarding = onboarding, onCompleted = onCompleted)
+            LocationScreen(
+                onForegroundAllowed = { navController.navigate(BackgroundLocationRoute) },
+                onDone = onboarding::complete,
+            )
+        }
+        composable<BackgroundLocationRoute> { entry ->
+            val onboarding = onboardingViewModel(navController, entry)
+            EndWhenSaved(onboarding = onboarding, onCompleted = onCompleted)
+            BackgroundLocationScreen(onDone = onboarding::complete)
+        }
+    }
+}
+
+// Ends the onboarding once the answers are saved, from the screens that can be the last one.
+@Composable
+private fun EndWhenSaved(onboarding: OnboardingViewModel, onCompleted: () -> Unit) {
+    val completed by onboarding.completed.collectAsStateWithLifecycle()
+    LaunchedEffect(completed) {
+        if (completed) onCompleted()
     }
 }
 

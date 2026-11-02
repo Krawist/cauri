@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.cauri.feature.home"
 }
+
+dependencies {
+    implementation(projects.core.data)
+}

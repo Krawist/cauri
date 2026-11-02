@@ -2,28 +2,18 @@ package com.cauri.feature.onboarding.profile
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -31,6 +21,7 @@ import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
+import com.cauri.feature.onboarding.LocalOnlyNote
 import com.cauri.feature.onboarding.MissingAnswer
 import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
@@ -93,24 +84,6 @@ private fun ProfileContent(
         QuestionLabel(R.string.profile_income, modifier = Modifier.padding(top = CauriSpacing.xxl))
         IncomeTypeChoices(selected = state.incomeType, onSelect = onIncomeTypeSelect)
         if (ProfileField.INCOME_TYPE in state.missingFields) MissingAnswer(R.string.onboarding_choice_missing)
-    }
-}
-
-@Composable
-private fun LocalOnlyNote() {
-    val palette = CauriTheme.palette
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(bottom = CauriSpacing.m + 2.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(painter = painterResource(R.drawable.ic_lock), contentDescription = null, tint = palette.muted)
-        Spacer(Modifier.width(CauriSpacing.xs + 2.dp))
-        Text(
-            text = stringResource(R.string.profile_local_only),
-            style = MaterialTheme.typography.bodySmall,
-            color = palette.muted,
-        )
     }
 }
 

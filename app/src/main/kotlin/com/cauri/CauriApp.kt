@@ -32,6 +32,8 @@ import com.cauri.feature.home.HomeGraph
 import com.cauri.feature.home.homeGraph
 import com.cauri.feature.onboarding.OnboardingGraph
 import com.cauri.feature.onboarding.onboardingGraph
+import com.cauri.feature.settings.navigateToSettings
+import com.cauri.feature.settings.settingsGraph
 import com.cauri.feature.transactions.ActivityGraph
 import com.cauri.feature.transactions.QuickEntrySheet
 import com.cauri.feature.transactions.activityGraph
@@ -114,10 +116,12 @@ private fun CauriNavHost(
             homeGraph(
                 onCountCash = { navController.navigateToCashCount() },
                 onAddExpense = { quickEntryOpen = true },
+                onOpenSettings = { navController.navigateToSettings() },
             )
             activityGraph()
             placeholderTabs()
             cashGraph(onBack = { navController.popBackStack() })
+            settingsGraph(onBack = { navController.popBackStack() })
         }
     }
     if (quickEntryOpen) {

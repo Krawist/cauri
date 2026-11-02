@@ -29,8 +29,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -76,6 +79,7 @@ private val SelectedBorderWidth = 1.5.dp
  * points out what is missing.
  * @param subtitle Line under the title; `null` when there is none.
  * @param continueLabel Text of the button, « Continuer » by default.
+ * @param onLater What « Plus tard », under the button, does; `null` for a step that cannot be put off.
  */
 @Composable
 internal fun OnboardingStep(
@@ -86,6 +90,7 @@ internal fun OnboardingStep(
     subtitle: String? = null,
     continueLabel: String = stringResource(R.string.onboarding_continue),
     note: @Composable (() -> Unit)? = null,
+    onLater: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val palette = CauriTheme.palette
@@ -130,6 +135,15 @@ internal fun OnboardingStep(
         ) {
             Text(text = continueLabel, style = MaterialTheme.typography.titleMedium)
         }
+        if (onLater != null) {
+            TextButton(
+                onClick = onLater,
+                modifier = Modifier.fillMaxWidth().padding(top = CauriSpacing.xs).height(CauriSpacing.touchTarget),
+                colors = ButtonDefaults.textButtonColors(contentColor = palette.muted),
+            ) {
+                Text(text = stringResource(R.string.onboarding_later), style = MaterialTheme.typography.bodyLarge)
+            }
+        }
         Spacer(Modifier.height(CauriSpacing.l))
     }
 }
@@ -149,6 +163,25 @@ private fun StepIndicator(current: Int) {
                     .background(if (index < current) palette.accent else palette.trackStrong, CircleShape),
             )
         }
+    }
+}
+
+/** « Tout reste sur ton téléphone », with a padlock, above the button of the steps that touch personal data. */
+@Composable
+internal fun LocalOnlyNote() {
+    val palette = CauriTheme.palette
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(bottom = CauriSpacing.m + 2.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(painter = painterResource(R.drawable.ic_lock), contentDescription = null, tint = palette.muted)
+        Spacer(Modifier.width(CauriSpacing.xs + 2.dp))
+        Text(
+            text = stringResource(R.string.onboarding_local_only),
+            style = MaterialTheme.typography.bodySmall,
+            color = palette.muted,
+        )
     }
 }
 

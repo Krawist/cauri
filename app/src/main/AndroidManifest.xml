@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- The notification listener is declared by :core:capture. Location permissions come with the places tickets
-         (CAU-33), each one requested just before it is needed. -->
+    <!-- The notification listener is declared by :core:capture. Each permission below is asked during the onboarding
+         (CAU-10), after an explanation, and can be refused: Cauri stays useful without it. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".CauriApplication"

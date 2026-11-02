@@ -66,12 +66,13 @@ internal class OnboardingViewModelTest {
                     NewCategory(name = "Tontine", nature = CategoryNature.SAVING),
                 ),
             )
+            viewModel.onAccountsChosen(emptyList())
         }
 
         @Test
         fun `should save the whole profile`() {
             // when
-            viewModel.complete(emptyList())
+            viewModel.complete()
 
             // then
             preferences.profile.value shouldBe UserProfile(
@@ -85,7 +86,7 @@ internal class OnboardingViewModelTest {
         @Test
         fun `should record the cash in pocket as the first cash count`() {
             // when
-            viewModel.complete(emptyList())
+            viewModel.complete()
 
             // then
             cashCounts.counts shouldContainExactly listOf(
@@ -96,7 +97,7 @@ internal class OnboardingViewModelTest {
         @Test
         fun `should create the categories chosen in the earlier step`() {
             // when
-            viewModel.complete(emptyList())
+            viewModel.complete()
 
             // then
             categories.created shouldContainExactly listOf(
@@ -106,15 +107,17 @@ internal class OnboardingViewModelTest {
         }
 
         @Test
-        fun `should create the declared accounts`() {
+        fun `should create the accounts declared in the earlier step`() {
             // given
             val declared = listOf(
                 NewAccount(name = "MTN MoMo", kind = AccountKind.MOBILE_MONEY, provider = "MTN_MOMO", currency = "XAF"),
                 NewAccount(name = "BICEC", kind = AccountKind.BANK, provider = "BICEC", currency = "XAF"),
             )
 
+            viewModel.onAccountsChosen(declared)
+
             // when
-            viewModel.complete(declared)
+            viewModel.complete()
 
             // then
             accounts.created shouldContainExactly declared
@@ -123,7 +126,7 @@ internal class OnboardingViewModelTest {
         @Test
         fun `should end the onboarding once everything is saved`() {
             // when
-            viewModel.complete(emptyList())
+            viewModel.complete()
 
             // then
             viewModel.completed.value.shouldBeTrue()
@@ -136,7 +139,7 @@ internal class OnboardingViewModelTest {
             val restored = OnboardingViewModel(kept, preferences, cashCounts, categories, accounts, clock)
 
             // when
-            restored.complete(emptyList())
+            restored.complete()
 
             // then
             preferences.profile.value?.displayName shouldBe "Krawist"

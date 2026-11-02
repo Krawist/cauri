@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_allowed">Allowed</string>
+    <string name="settings_back">Back</string>
+    <string name="settings_location">Location</string>
+    <string name="settings_location_always">Always</string>
+    <string name="settings_location_text">Reminders after you shop somewhere</string>
+    <string name="settings_location_while_in_use">App open</string>
+    <string name="settings_notification_access">Reading notifications</string>
+    <string name="settings_notification_access_text">Detects your MoMo, Orange Money and bank payments</string>
+    <string name="settings_notifications">Cauri\'s notifications</string>
+    <string name="settings_notifications_text">Reminders and expenses to confirm</string>
+    <string name="settings_off">Off</string>
+    <string name="settings_permissions">Permissions</string>
+    <string name="settings_permissions_hint">Tap a row to change the permission in Android\'s settings.</string>
+    <string name="settings_refused">Refused</string>
+    <string name="settings_title">Settings</string>
+</resources>

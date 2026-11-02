@@ -88,9 +88,10 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:home`         | Home screen, one-tap habits, cards to confirm             | 14, 25, 27     |
 | `:feature:cash`         | Cash count, split of the gap                              | 15, 16         |
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
+| `:feature:settings`     | Settings: permission statuses                             | 10             |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
-| `:core:capture`         | Notification listening, raw signals, health check         | 18, 21, 24     |
+| `:core:capture`         | Permissions, notification listening, raw signals, health  | 10, 18, 21, 24 |
 | `:core:parsing`         | Message templates and parsing (pure Kotlin)               | 19, 20         |
 | `:core:engine`          | Reminder rules, guardrails, bandit (pure Kotlin)          | 37–42          |
 
@@ -156,7 +157,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (`MobileMoney`), up to 3 banks from `knownBanks` (`Bank`: code, name, description, country; the account's provider
   is the bank's code), chosen in a sheet (`BankPicker`) with a search (case and accents ignored) and several at once.
   The sheet is a `GlassScreen` of its own, with its backdrop. The bank list comes from the Ministry of Finance list of
-  September 2023: to check against COBAC before release. Cash only is allowed. Checked on a phone. Next: CAU-10.
+  September 2023: to check against COBAC before release. Cash only is allowed. Checked on a phone.
+- [ ] **CAU-10** — permissions step, now the last one, each screen explaining before asking and « Plus tard » never
+  blocking: notification access (system settings, read again on return), then Cauri's own notifications (Android
+  13+) on « Continuer »; place reminders ask the location, then the background location on a screen of its own.
+  `PermissionService` (`:core:capture`) reads the statuses and gives the system screens. The accounts are kept with
+  the other answers and everything is saved after this step. `:feature:settings`: « Réglages » screen, opened from
+  the profile button of Accueil, with the status of each permission. Checked on a phone with every permission put
+  off; granting them not checked on a phone yet. Next: CAU-11.
 
 Update this section at the end of each ticket.
 

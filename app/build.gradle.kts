@@ -65,6 +65,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.cash)
     implementation(projects.feature.transactions)
+    implementation(projects.feature.settings)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
