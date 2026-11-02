@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.cauri.core.data.model.CategoryNature
 
 /**
  * A category of transactions, on two levels at most.

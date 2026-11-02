@@ -2,9 +2,9 @@ package com.cauri.core.data.database.dao
 
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.CategoryEntity
-import com.cauri.core.data.database.entity.CategoryNature
 import com.cauri.core.data.database.entity.CategoryStatus
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.CategoryNature
 import io.kotest.matchers.collections.shouldContainExactly
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

@@ -1,50 +1,19 @@
 package com.cauri.feature.onboarding.habits
 
-import com.cauri.core.data.model.IncomeType
-import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
-import com.cauri.core.data.model.UserProfile
-import com.cauri.feature.onboarding.FakeCashCountRepository
-import com.cauri.feature.onboarding.FakeUserPreferencesRepository
-import com.cauri.feature.onboarding.profile.ProfileAnswers
+import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class HabitsViewModelTest {
-    private val preferences = FakeUserPreferencesRepository()
-    private val cashCounts = FakeCashCountRepository()
-    private val clock = Clock.fixed(Instant.parse("2026-11-02T08:30:00Z"), ZoneOffset.UTC)
-    private lateinit var viewModel: HabitsViewModel
-
-    @BeforeEach
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = HabitsViewModel(preferences, cashCounts, clock)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    private val viewModel = HabitsViewModel()
 
     @Nested
     inner class OnCashAmountChange {
@@ -56,6 +25,31 @@ internal class HabitsViewModelTest {
 
             // then
             viewModel.uiState.value.cashDigits shouldBe expected
+        }
+
+        @Test
+        fun `should be complete once the amount is typed after the payment habit`() {
+            // given
+            viewModel.onPaymentHabitSelect(PaymentHabit.MOSTLY_CASH)
+
+            // when
+            viewModel.onCashAmountChange("7500")
+
+            // then
+            viewModel.uiState.value.complete.shouldBeTrue()
+        }
+
+        @Test
+        fun `should not be complete once the amount is erased`() {
+            // given
+            viewModel.onPaymentHabitSelect(PaymentHabit.MOSTLY_CASH)
+            viewModel.onCashAmountChange("7500")
+
+            // when
+            viewModel.onCashAmountChange("")
+
+            // then
+            viewModel.uiState.value.complete.shouldBeFalse()
         }
 
         @Test
@@ -73,57 +67,36 @@ internal class HabitsViewModelTest {
         @Test
         fun `should point out both missing answers on a first attempt`() {
             // when
-            viewModel.onContinue(profileAnswers())
+            viewModel.onContinue()
 
             // then
             viewModel.uiState.value.missingFields shouldContainExactlyInAnyOrder HabitsField.entries
         }
 
         @Test
-        fun `should save nothing while an answer is missing`() {
+        fun `should give no answers while one is missing`() {
             // given
             viewModel.onPaymentHabitSelect(PaymentHabit.MOSTLY_CASH)
 
             // when
-            viewModel.onContinue(profileAnswers())
+            viewModel.onContinue()
 
             // then
-            preferences.profile.value.shouldBeNull()
-            cashCounts.counts.shouldBeEmpty()
+            viewModel.uiState.value.answered.shouldBeNull()
         }
 
         @Test
-        fun `should save the whole profile with the payment habit`() {
+        fun `should give the payment habit and the cash in pocket`() {
             // given
             viewModel.onPaymentHabitSelect(PaymentHabit.BOTH)
             viewModel.onCashAmountChange("7500")
 
             // when
-            viewModel.onContinue(profileAnswers())
+            viewModel.onContinue()
 
             // then
-            preferences.profile.value shouldBe UserProfile(
-                displayName = "Krawist",
-                occupation = Occupation.TRADER,
-                incomeType = IncomeType.VARIABLE,
-                paymentHabit = PaymentHabit.BOTH,
-            )
-        }
-
-        @Test
-        fun `should record the cash in pocket as the first cash count`() {
-            // given
-            viewModel.onPaymentHabitSelect(PaymentHabit.MOSTLY_CASH)
-            viewModel.onCashAmountChange("7500")
-
-            // when
-            viewModel.onContinue(profileAnswers())
-
-            // then
-            viewModel.uiState.value.saved.shouldBeTrue()
-            cashCounts.counts shouldContainExactly listOf(
-                FakeCashCountRepository.Count(amount = 7_500, countedAt = clock.instant(), expectedAmount = null),
-            )
+            viewModel.uiState.value.answered shouldBe
+                HabitsAnswers(paymentHabit = PaymentHabit.BOTH, cashAmount = 7_500)
         }
 
         @Test
@@ -133,10 +106,28 @@ internal class HabitsViewModelTest {
             viewModel.onCashAmountChange("0")
 
             // when
-            viewModel.onContinue(profileAnswers())
+            viewModel.onContinue()
 
             // then
-            cashCounts.counts.map { it.amount } shouldContainExactly listOf(0L)
+            viewModel.uiState.value.answered shouldBe
+                HabitsAnswers(paymentHabit = PaymentHabit.MOSTLY_PHONE, cashAmount = 0)
+        }
+    }
+
+    @Nested
+    inner class OnAnswersHandedOn {
+        @Test
+        fun `should not give the answers again when the user comes back to the step`() {
+            // given
+            viewModel.onPaymentHabitSelect(PaymentHabit.BOTH)
+            viewModel.onCashAmountChange("7500")
+            viewModel.onContinue()
+
+            // when
+            viewModel.onAnswersHandedOn()
+
+            // then
+            viewModel.uiState.value.answered.shouldBeNull()
         }
     }
 
@@ -145,7 +136,7 @@ internal class HabitsViewModelTest {
         @Test
         fun `should stop pointing out the payment habit once chosen after an attempt`() {
             // given
-            viewModel.onContinue(profileAnswers())
+            viewModel.onContinue()
 
             // when
             viewModel.onPaymentHabitSelect(PaymentHabit.MOSTLY_CASH)
@@ -154,8 +145,4 @@ internal class HabitsViewModelTest {
             viewModel.uiState.value.missingFields shouldContainExactlyInAnyOrder listOf(HabitsField.CASH_AMOUNT)
         }
     }
-
-    // The answers of the profile step, as the navigation hands them on.
-    private fun profileAnswers() =
-        ProfileAnswers(displayName = "Krawist", occupation = Occupation.TRADER, incomeType = IncomeType.VARIABLE)
 }

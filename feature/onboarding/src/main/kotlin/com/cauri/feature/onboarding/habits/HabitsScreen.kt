@@ -43,31 +43,26 @@ import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.QuestionLabel
 import com.cauri.feature.onboarding.R
-import com.cauri.feature.onboarding.profile.ProfileAnswers
 
 private const val HABITS_STEP = 2
 private val IconBoxSize = 40.dp
 private val AmountFieldHeight = 60.dp
 
-/**
- * Payment habits step of the onboarding: it saves the whole profile, with the [profile] answers of the previous step,
- * and [onHabitsSaved] is called once done.
- */
+/** Payment habits step of the onboarding: [onHabitsAnswered] receives both answers once given. */
 @Composable
-internal fun HabitsScreen(
-    profile: ProfileAnswers,
-    onHabitsSaved: () -> Unit,
-    viewModel: HabitsViewModel = hiltViewModel(),
-) {
+internal fun HabitsScreen(onHabitsAnswered: (HabitsAnswers) -> Unit, viewModel: HabitsViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    LaunchedEffect(state.saved) {
-        if (state.saved) onHabitsSaved()
+    LaunchedEffect(state.answered) {
+        state.answered?.let { answers ->
+            onHabitsAnswered(answers)
+            viewModel.onAnswersHandedOn()
+        }
     }
     HabitsContent(
         state = state,
         onPaymentHabitSelect = viewModel::onPaymentHabitSelect,
         onCashAmountChange = viewModel::onCashAmountChange,
-        onContinue = { viewModel.onContinue(profile) },
+        onContinue = viewModel::onContinue,
     )
 }
 
@@ -79,7 +74,12 @@ private fun HabitsContent(
     onContinue: () -> Unit,
 ) {
     val palette = CauriTheme.palette
-    OnboardingStep(step = HABITS_STEP, title = stringResource(R.string.habits_title), onContinue = onContinue) {
+    OnboardingStep(
+        step = HABITS_STEP,
+        title = stringResource(R.string.habits_title),
+        onContinue = onContinue,
+        complete = state.complete,
+    ) {
         Column(
             modifier = Modifier.selectableGroup(),
             verticalArrangement = Arrangement.spacedBy(CauriSpacing.s + 2.dp),

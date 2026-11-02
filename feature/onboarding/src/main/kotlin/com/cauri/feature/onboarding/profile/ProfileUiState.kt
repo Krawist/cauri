@@ -9,6 +9,7 @@ import com.cauri.core.data.model.Occupation
  * @property firstName First name as typed so far.
  * @property occupation Chosen occupation; `null` until the user picks one.
  * @property incomeType Chosen income type; `null` until the user picks one.
+ * @property complete Whether every required answer is given, so « Continuer » can be shown active.
  * @property missingFields Answers to point out: empty until the user first tries to continue.
  * @property answered The answers, once all given and the user continued, for the screen to hand on; `null` otherwise.
  */
@@ -16,6 +17,7 @@ internal data class ProfileUiState(
     val firstName: String = "",
     val occupation: Occupation? = null,
     val incomeType: IncomeType? = null,
+    val complete: Boolean = false,
     val missingFields: Set<ProfileField> = emptySet(),
     val answered: ProfileAnswers? = null,
 )

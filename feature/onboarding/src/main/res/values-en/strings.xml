@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="categories_add">+ Add</string>
+    <string name="categories_add_confirm">Add</string>
+    <plurals name="categories_continue">
+        <item quantity="one">Continue · %d category</item>
+        <item quantity="other">Continue · %d categories</item>
+    </plurals>
+    <string name="categories_new_name">New category</string>
+    <string name="categories_none_kept">Keep at least one category</string>
+    <string name="categories_subtitle">Keep what fits you. You can rename or add anything later.</string>
+    <string name="categories_title">Where does your money go?</string>
+    <string name="categories_tontine_note">The tontine counts as savings, not as spending.</string>
+    <string name="category_airtime_and_data">Airtime and data</string>
+    <string name="category_clothing">Clothing</string>
+    <string name="category_education">Education</string>
+    <string name="category_family">Family</string>
+    <string name="category_family_emergencies">Family emergencies</string>
+    <string name="category_food">Food</string>
+    <string name="category_health">Health</string>
+    <string name="category_housing_and_bills">Housing and bills</string>
+    <string name="category_leisure">Leisure</string>
+    <string name="category_tontine">Tontine</string>
+    <string name="category_transport">Transport</string>
     <string name="habits_both">A bit of both</string>
     <string name="habits_both_hint">Cash and mobile money</string>
     <string name="habits_cash">Mostly cash</string>

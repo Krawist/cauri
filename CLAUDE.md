@@ -146,10 +146,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   `UserPreferencesRepository`, now an interface with `UserPreferencesRepositoryImpl`. Until CAU-07, the onboarding
   completes after this step. Checked on a phone.
 - [ ] **CAU-07** — payment habits step (`HabitsScreen`, `HabitsViewModel`): main way of paying and cash in pocket,
-  both required. The profile step saves nothing and hands its answers on through `HabitsRoute`; the habits step saves
-  the complete `UserProfile` (every property non-null, `paymentHabit` included) and the first cash count through
-  `CashCountRepository` (time from an injected `Clock`). Amounts typed with `FcfaVisualTransformation`; the steps share
-  `OnboardingStep`. Checked on a phone, back navigation included. Next: CAU-08.
+  both required; amounts typed with `FcfaVisualTransformation`. Checked on a phone.
+- [ ] **CAU-08** — categories step (`CategoriesScreen`): Cameroon pack (`PackCategory`, the six of the mockup kept by
+  default, tontine as savings), user additions, at least one category required, « Continuer · n catégories ». The
+  onboarding steps save nothing: they hand their answers to the graph-scoped `OnboardingViewModel` (kept in its
+  `SavedStateHandle`), which saves the complete `UserProfile`, the first cash count and the categories after the last
+  step. Steps share `OnboardingStep`. Checked on a phone, back navigation included. Next: CAU-09.
 
 Update this section at the end of each ticket.
 

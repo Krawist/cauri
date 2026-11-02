@@ -1,35 +1,23 @@
 package com.cauri.feature.onboarding.habits
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.cauri.core.data.model.PaymentHabit
-import com.cauri.core.data.model.UserProfile
-import com.cauri.core.data.preferences.UserPreferencesRepository
-import com.cauri.core.data.repository.CashCountRepository
-import com.cauri.feature.onboarding.profile.ProfileAnswers
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.Clock
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.updateAndGet
-import kotlinx.coroutines.launch
 
 // Up to 999 999 999 F: more than enough for cash in pocket, and far from overflowing a Long.
 private const val MAX_CASH_DIGITS = 9
 
 /**
- * Payment habits step of the onboarding: the main way of paying, saved with the profile answers as the whole user
- * profile (the reminder rules use it), and the cash in pocket, saved as the first cash count.
+ * Payment habits step of the onboarding: the main way of paying and the cash in pocket, both required. It saves
+ * nothing: the onboarding saves every answer at its end.
  */
 @HiltViewModel
-internal class HabitsViewModel @Inject constructor(
-    private val preferences: UserPreferencesRepository,
-    private val cashCounts: CashCountRepository,
-    private val clock: Clock,
-) : ViewModel() {
+internal class HabitsViewModel @Inject constructor() : ViewModel() {
     private val state = MutableStateFlow(HabitsUiState())
     val uiState: StateFlow<HabitsUiState> = state.asStateFlow()
 
@@ -45,30 +33,33 @@ internal class HabitsViewModel @Inject constructor(
         updateAnswers { it.copy(cashDigits = withoutLeadingZeros) }
     }
 
-    /** Saves the whole profile and the first cash count when both answers are there, otherwise points them out. */
-    fun onContinue(profile: ProfileAnswers) {
+    /** Gives the answers to hand on when both are there, otherwise points out the missing ones. */
+    fun onContinue() {
         continueAttempted = true
-        val answers = state.updateAndGet { it.copy(missingFields = missingFields(it)) }
-        val habit = answers.paymentHabit
-        val cash = answers.cashDigits.toLongOrNull()
-        if (habit == null || cash == null) return
-        viewModelScope.launch {
-            preferences.saveProfile(
-                UserProfile(
-                    displayName = profile.displayName,
-                    occupation = profile.occupation,
-                    incomeType = profile.incomeType,
-                    paymentHabit = habit,
-                ),
-            )
-            cashCounts.addCount(amount = cash, countedAt = clock.instant(), expectedAmount = null)
-            state.update { it.copy(saved = true) }
+        state.update { current ->
+            val habit = current.paymentHabit
+            val cash = current.cashDigits.toLongOrNull()
+            val answered = if (habit != null &&
+                cash != null
+            ) {
+                HabitsAnswers(paymentHabit = habit, cashAmount = cash)
+            } else {
+                null
+            }
+            current.copy(missingFields = missingFields(current), answered = answered)
         }
     }
 
+    /** The screen handed the answers on: coming back to this step must not hand them on again by itself. */
+    fun onAnswersHandedOn() = state.update { it.copy(answered = null) }
+
     private fun updateAnswers(change: (HabitsUiState) -> HabitsUiState) = state.update { current ->
         val changed = change(current)
-        if (continueAttempted) changed.copy(missingFields = missingFields(changed)) else changed
+        val missing = missingFields(changed)
+        changed.copy(
+            complete = missing.isEmpty(),
+            missingFields = if (continueAttempted) missing else changed.missingFields,
+        )
     }
 
     private fun missingFields(answers: HabitsUiState): Set<HabitsField> = buildSet {

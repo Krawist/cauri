@@ -70,6 +70,7 @@ private fun ProfileContent(
         step = PROFILE_STEP,
         title = stringResource(R.string.profile_title),
         onContinue = onContinue,
+        complete = state.complete,
         note = { LocalOnlyNote() },
     ) {
         QuestionLabel(R.string.profile_first_name)

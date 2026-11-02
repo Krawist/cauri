@@ -2,6 +2,8 @@ package com.cauri.feature.onboarding.profile
 
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
@@ -126,6 +128,35 @@ internal class ProfileViewModelTest {
             // then
             viewModel.uiState.value.missingFields shouldContainExactlyInAnyOrder
                 listOf(ProfileField.FIRST_NAME, ProfileField.INCOME_TYPE)
+        }
+    }
+
+    @Nested
+    inner class OnIncomeTypeSelect {
+        @Test
+        fun `should be complete once the last answer is given`() {
+            // given
+            viewModel.onFirstNameChange("Krawist")
+            viewModel.onOccupationSelect(Occupation.TRADER)
+
+            // when
+            viewModel.onIncomeTypeSelect(IncomeType.VARIABLE)
+
+            // then
+            viewModel.uiState.value.complete.shouldBeTrue()
+        }
+
+        @Test
+        fun `should not be complete while the first name is blank`() {
+            // given
+            viewModel.onFirstNameChange("  ")
+            viewModel.onOccupationSelect(Occupation.TRADER)
+
+            // when
+            viewModel.onIncomeTypeSelect(IncomeType.VARIABLE)
+
+            // then
+            viewModel.uiState.value.complete.shouldBeFalse()
         }
     }
 }

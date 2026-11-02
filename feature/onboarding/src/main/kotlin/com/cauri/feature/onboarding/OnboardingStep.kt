@@ -24,6 +24,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -31,13 +32,17 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -63,16 +68,23 @@ private val FieldHeight = 56.dp
 private val SelectedBorderWidth = 1.5.dp
 
 /**
- * Layout of an onboarding step: progress, [title], the scrolling [content], an optional [note] and « Continuer »,
- * always enabled. Transparent: the app draws the backdrop behind it.
+ * Layout of an onboarding step: progress, [title], the scrolling [content], an optional [note] and « Continuer ».
+ * Transparent: the app draws the backdrop behind it.
  *
  * @param step Number of this step, from 1.
+ * @param complete Whether every required answer is given. « Continuer » is gray until then, but stays enabled: a tap
+ * points out what is missing.
+ * @param subtitle Line under the title; `null` when there is none.
+ * @param continueLabel Text of the button, « Continuer » by default.
  */
 @Composable
 internal fun OnboardingStep(
     step: Int,
     title: String,
     onContinue: () -> Unit,
+    complete: Boolean,
+    subtitle: String? = null,
+    continueLabel: String = stringResource(R.string.onboarding_continue),
     note: @Composable (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -84,8 +96,25 @@ internal fun OnboardingStep(
                 text = title,
                 style = MaterialTheme.typography.headlineLarge,
                 color = palette.ink,
-                modifier = Modifier.padding(top = CauriSpacing.xxl, bottom = CauriSpacing.xl),
+                modifier = Modifier.padding(
+                    top = CauriSpacing.xxl,
+                    bottom = if (subtitle ==
+                        null
+                    ) {
+                        CauriSpacing.xl
+                    } else {
+                        CauriSpacing.s
+                    },
+                ),
             )
+            if (subtitle != null) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = palette.muted,
+                    modifier = Modifier.padding(bottom = CauriSpacing.xxl),
+                )
+            }
             content()
             Spacer(Modifier.height(CauriSpacing.xl))
         }
@@ -94,9 +123,12 @@ internal fun OnboardingStep(
             onClick = onContinue,
             modifier = Modifier.fillMaxWidth().height(ButtonHeight),
             shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(containerColor = palette.accent, contentColor = palette.onAccent),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (complete) palette.accent else palette.trackStrong,
+                contentColor = if (complete) palette.onAccent else palette.muted,
+            ),
         ) {
-            Text(text = stringResource(R.string.onboarding_continue), style = MaterialTheme.typography.titleMedium)
+            Text(text = continueLabel, style = MaterialTheme.typography.titleMedium)
         }
         Spacer(Modifier.height(CauriSpacing.l))
     }
@@ -151,12 +183,17 @@ internal fun OnboardingField(
     textStyle: TextStyle,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     height: Dp = FieldHeight,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    placeholder: String? = null,
+    autoFocus: Boolean = false,
     trailing: @Composable (RowScope.() -> Unit)? = null,
 ) {
     val palette = CauriTheme.palette
     val shape = RoundedCornerShape(CauriRadius.control)
     var focused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    if (autoFocus) LaunchedEffect(Unit) { focusRequester.requestFocus() }
     val borderColor = when {
         missing -> palette.coralText
         focused -> palette.accent
@@ -169,10 +206,12 @@ internal fun OnboardingField(
         textStyle = textStyle.copy(color = palette.ink),
         cursorBrush = SolidColor(palette.accent),
         keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         modifier = Modifier
             .fillMaxWidth()
             .height(height)
+            .focusRequester(focusRequester)
             .onFocusChanged { focused = it.isFocused }
             .background(palette.field, shape)
             .border(SelectedBorderWidth, borderColor, shape),
@@ -184,31 +223,42 @@ internal fun OnboardingField(
             ) {
                 // With a suffix (« 7 500 F »), the field is as wide as its text, so the suffix follows it.
                 val fieldWidth = if (trailing == null) Modifier.weight(1f) else Modifier.width(IntrinsicSize.Max)
-                Box(modifier = fieldWidth) { field() }
+                Box(modifier = fieldWidth) {
+                    if (value.isEmpty() && placeholder != null) {
+                        Text(text = placeholder, style = textStyle, color = palette.muted)
+                    }
+                    field()
+                }
                 trailing?.invoke(this)
             }
         },
     )
 }
 
-/** A glass answer to pick; the selected one gets a lagoon fill and border, as in the mockups. */
+/**
+ * A glass answer to pick; the selected one gets a fill and a border, lagoon by default as in the mockups.
+ *
+ * @param role [Role.RadioButton] for one answer among several, [Role.Checkbox] when several can be picked.
+ */
 @Composable
 internal fun ChoiceSurface(
     selected: Boolean,
     onSelect: () -> Unit,
     shape: Shape,
     modifier: Modifier = Modifier,
+    selectedColor: Color = CauriTheme.palette.accent,
+    selectedFill: Color = CauriTheme.palette.accentSoft,
+    role: Role = Role.RadioButton,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val palette = CauriTheme.palette
     GlassSurface(
         shape = shape,
         modifier = modifier.then(
-            if (selected) Modifier.border(SelectedBorderWidth, palette.accent, shape) else Modifier,
+            if (selected) Modifier.border(SelectedBorderWidth, selectedColor, shape) else Modifier,
         ),
-        interaction = Modifier.selectable(selected = selected, role = Role.RadioButton, onClick = onSelect),
+        interaction = Modifier.selectable(selected = selected, role = role, onClick = onSelect),
     ) {
-        if (selected) Box(Modifier.matchParentSize().background(palette.accentSoft))
+        if (selected) Box(Modifier.matchParentSize().background(selectedFill))
         content()
     }
 }

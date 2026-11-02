@@ -13,6 +13,10 @@ internal interface CategoryDao {
     @Insert
     suspend fun insert(category: CategoryEntity): Long
 
+    /** Inserts [categories] in one statement: all or none. */
+    @Insert
+    suspend fun insertAll(categories: List<CategoryEntity>)
+
     @Update
     suspend fun update(category: CategoryEntity)
 

@@ -49,7 +49,11 @@ internal class ProfileViewModel @Inject constructor() : ViewModel() {
 
     private fun updateAnswers(change: (ProfileUiState) -> ProfileUiState) = state.update { current ->
         val changed = change(current)
-        if (continueAttempted) changed.copy(missingFields = missingFields(changed)) else changed
+        val missing = missingFields(changed)
+        changed.copy(
+            complete = missing.isEmpty(),
+            missingFields = if (continueAttempted) missing else changed.missingFields,
+        )
     }
 
     private fun missingFields(answers: ProfileUiState): Set<ProfileField> = buildSet {

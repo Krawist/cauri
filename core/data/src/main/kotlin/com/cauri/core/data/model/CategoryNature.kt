@@ -1,7 +1,7 @@
-package com.cauri.core.data.database.entity
+package com.cauri.core.data.model
 
 /** What a category counts: spending, income or money put aside. */
-internal enum class CategoryNature {
+enum class CategoryNature {
     EXPENSE,
     INCOME,
 

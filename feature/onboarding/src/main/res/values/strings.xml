@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="categories_add">+ Ajouter</string>
+    <string name="categories_add_confirm">Ajouter</string>
+    <plurals name="categories_continue">
+        <item quantity="one">Continuer · %d catégorie</item>
+        <item quantity="many">Continuer · %d catégories</item>
+        <item quantity="other">Continuer · %d catégories</item>
+    </plurals>
+    <string name="categories_new_name">Nouvelle catégorie</string>
+    <string name="categories_none_kept">Garde au moins une catégorie</string>
+    <string name="categories_subtitle">Garde ce qui te ressemble. Tu pourras tout renommer ou ajouter plus tard.</string>
+    <string name="categories_title">Où part ton argent ?</string>
+    <string name="categories_tontine_note">La tontine est comptée comme de l\'épargne, pas comme une dépense.</string>
+    <string name="category_airtime_and_data">Crédit et forfaits</string>
+    <string name="category_clothing">Habillement</string>
+    <string name="category_education">Éducation</string>
+    <string name="category_family">Famille</string>
+    <string name="category_family_emergencies">Imprévus famille</string>
+    <string name="category_food">Alimentation</string>
+    <string name="category_health">Santé</string>
+    <string name="category_housing_and_bills">Logement et factures</string>
+    <string name="category_leisure">Loisirs</string>
+    <string name="category_tontine">Tontine</string>
+    <string name="category_transport">Transport</string>
     <string name="habits_both">Un peu des deux</string>
     <string name="habits_both_hint">Espèces et Mobile Money</string>
     <string name="habits_cash">Surtout en espèces</string>
