@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- System splash icon: the frosted glass tile of the launch screen (96 dp, radius 26) with the coin of
+     core/design logo_coin.xml (62 dp), centred in the 288 dp icon area. One vector, as the system splash does not
+     draw the second layer of a layer-list. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <path
+        android:fillColor="#85FFFFFF"
+        android:pathData="M122,96 h44 a26,26 0 0,1 26,26 v44 a26,26 0 0,1 -26,26 h-44 a26,26 0 0,1 -26,-26 v-44 a26,26 0 0,1 26,-26 Z"
+        android:strokeWidth="1"
+        android:strokeColor="#CCFFFFFF" />
+    <group
+        android:scaleX="0.62"
+        android:scaleY="0.62"
+        android:translateX="113"
+        android:translateY="113">
+        <path android:pathData="M4,50 A46,46 0 1,0 96,50 A46,46 0 1,0 4,50 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:endColor="#B07E2A"
+                    android:endX="77.6"
+                    android:endY="96"
+                    android:startColor="#EBC77F"
+                    android:startX="22.4"
+                    android:startY="4"
+                    android:type="linear" />
+            </aapt:attr>
+        </path>
+        <path
+            android:pathData="M11.5,50 A38.5,38.5 0 1,0 88.5,50 A38.5,38.5 0 1,0 11.5,50 Z"
+            android:strokeWidth="2.4"
+            android:strokeColor="#F6E2B4" />
+        <path
+            android:pathData="M17,36 A35,35 0 0,1 40,13"
+            android:strokeWidth="3.6"
+            android:strokeColor="#99FFFFFF"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M50,22 C44,36 44,64 50,78"
+            android:strokeWidth="4.6"
+            android:strokeColor="#5E4212"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M45.2,33 h-5 M44.2,42 h-5.6 M44,50 h-5.8 M44.2,58 h-5.6 M45.2,67 h-5 M50.8,33 h5 M49.8,42 h5.6 M49.6,50 h5.8 M49.8,58 h5.6 M50.8,67 h5"
+            android:strokeWidth="2.8"
+            android:strokeColor="#5E4212"
+            android:strokeLineCap="round" />
+    </group>
+</vector>

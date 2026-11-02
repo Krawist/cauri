@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pearl tile with the blurred lagoon and gold shapes of the launch screen, under a frosted white veil. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#F6F2EA"
+        android:pathData="M0,0 h108 v108 h-108 Z" />
+    <path android:pathData="M0,0 h108 v108 h-108 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="22"
+                android:centerY="24"
+                android:endColor="#002BB3A8"
+                android:gradientRadius="62"
+                android:startColor="#8C2BB3A8"
+                android:type="radial" />
+        </aapt:attr>
+    </path>
+    <path android:pathData="M0,0 h108 v108 h-108 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="88"
+                android:centerY="88"
+                android:endColor="#00E8C27A"
+                android:gradientRadius="62"
+                android:startColor="#B3E8C27A"
+                android:type="radial" />
+        </aapt:attr>
+    </path>
+    <path
+        android:fillColor="#6BFFFFFF"
+        android:pathData="M0,0 h108 v108 h-108 Z" />
+</vector>

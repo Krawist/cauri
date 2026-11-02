@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One-colour Cauri coin with its slit, no teeth, from core/design/logo/cauri-coin-silhouette.svg. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M4,50 A46,46 0 1,0 96,50 A46,46 0 1,0 4,50 Z M50,20 C38,36 38,64 50,80 C48,64 48,36 50,20 Z" />
+</vector>

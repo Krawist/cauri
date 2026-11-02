@@ -1,0 +1,4 @@
+<!-- Cauri logo, one-colour silhouette for small sizes, notifications and themed icons: the coin with its slit, no teeth. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <path fill="#FFFFFF" fill-rule="evenodd" d="M4,50 A46,46 0 1,0 96,50 A46,46 0 1,0 4,50 Z M50,20 C38,36 38,64 50,80 C48,64 48,36 50,20 Z"/>
+</svg>

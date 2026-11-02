@@ -25,6 +25,7 @@ private val CauriFontFamily = FontFamily(
     inter(FontWeight.Medium),
     inter(FontWeight.SemiBold),
     inter(FontWeight.Bold),
+    inter(FontWeight.ExtraBold),
 )
 
 // Tabular figures everywhere, as in the mockups: amounts line up in lists and do not jump when they change.
