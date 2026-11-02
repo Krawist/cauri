@@ -20,7 +20,7 @@ import com.cauri.core.design.theme.CauriTheme
 /** Temporary home screen; the real one, cash first, comes with CAU-25. */
 @Composable
 internal fun HomeScreen(onCountCash: () -> Unit, onAddExpense: () -> Unit, modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(modifier = modifier.fillMaxSize(), color = CauriTheme.palette.background) {
         Column(
             modifier = Modifier.safeDrawingPadding().padding(horizontal = 20.dp, vertical = 28.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

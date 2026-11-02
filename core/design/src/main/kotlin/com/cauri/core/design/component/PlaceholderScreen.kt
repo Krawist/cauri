@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cauri.core.design.theme.CauriTheme
@@ -25,7 +26,7 @@ fun PlaceholderScreen(
     actionLabel: String? = null,
     onAction: () -> Unit = {},
 ) {
-    Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+    Surface(modifier = modifier.fillMaxSize(), color = CauriTheme.palette.background) {
         Column(
             modifier = Modifier.safeDrawingPadding().padding(horizontal = 20.dp, vertical = 28.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
@@ -35,7 +36,8 @@ fun PlaceholderScreen(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = CauriTheme.palette.muted,
+                textAlign = TextAlign.Center,
             )
             if (actionLabel != null) {
                 Button(onClick = onAction) { Text(actionLabel) }

@@ -121,7 +121,10 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   notification listener, French default and English locales.
 - [ ] **CAU-01** — builds with the catalogue versions; ktlint, detekt, unit tests, debug and release builds pass
   locally; onboarding → home → back checked on a phone. CI workflow in `.github/workflows/ci.yml`. Left: CI green
-  on GitHub once the repository is pushed, release signing once `keystore.properties` exists. Then CAU-02 and CAU-05.
+  on GitHub once the repository is pushed, release signing once `keystore.properties` exists.
+- [ ] **CAU-02** — palette of every mockup token (light coral text darkened to `#BE4834` for 4.5:1), Inter variable
+  font embedded, type scale with tabular figures, `CauriRadius`, `CauriSpacing`, contrast unit test, preview catalogue
+  (`ThemeCatalog.kt`). Checked on a phone in light mode only. Next: CAU-51, then CAU-03 and CAU-05.
 
 Update this section at the end of each ticket.
 

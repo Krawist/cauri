@@ -3,13 +3,13 @@ package com.cauri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.cash.cashGraph
 import com.cauri.feature.cash.navigateToCashCount
 import com.cauri.feature.home.HomeGraph
@@ -24,7 +24,7 @@ import com.cauri.feature.transactions.transactionsGraph
 internal fun CauriApp(uiState: MainUiState, onOnboardingCompleted: () -> Unit) {
     when (uiState) {
         // Plain background while the preferences load (a few milliseconds).
-        MainUiState.Loading -> Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
+        MainUiState.Loading -> Box(Modifier.fillMaxSize().background(CauriTheme.palette.background))
         is MainUiState.Ready -> CauriNavHost(
             onboardingCompleted = uiState.onboardingCompleted,
             onOnboardingCompleted = onOnboardingCompleted,

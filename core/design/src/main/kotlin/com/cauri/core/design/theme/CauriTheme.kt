@@ -16,7 +16,7 @@ fun CauriTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
         darkColorScheme(
             primary = palette.accent,
             onPrimary = palette.onAccent,
-            secondary = palette.gold,
+            secondary = palette.accent,
             background = palette.background,
             onBackground = palette.ink,
             surface = palette.background,
@@ -28,7 +28,7 @@ fun CauriTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
         lightColorScheme(
             primary = palette.accent,
             onPrimary = palette.onAccent,
-            secondary = palette.gold,
+            secondary = palette.accent,
             background = palette.background,
             onBackground = palette.ink,
             surface = palette.background,
