@@ -137,7 +137,11 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   until their phase 3 modules. Back from a tab returns to Accueil, then leaves the app (checked on a phone). The
   mockups' blurred shapes (`backdrop`, `screenBackdropShapes`) are drawn once behind transparent screens; the bar and
   « + » are raised with a `shadow` palette colour.
-  Next: CAU-05.
+- [ ] **CAU-05** — `CauriDatabase` (Room, schema v1 in `core/data/schemas/`): accounts, categories, raw signals, places,
+  visits, transactions, cash counts, decision log; internal entities and DAOs, provided by Hilt. The Cash account
+  (id 1, XAF) is created with the database and a trigger refuses its deletion; a raw signal has at most one
+  transaction (unique index). DAOs tested on an in-memory database with the bundled SQLite driver.
+  Next: phase 1, CAU-06.
 
 Update this section at the end of each ticket.
 

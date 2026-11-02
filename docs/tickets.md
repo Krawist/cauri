@@ -14,7 +14,7 @@ The skeleton and the design system come first, then the database, since every fe
 
 ## Phase 1 · Technical foundations
 
-### CAU-01 · Create the project
+### CAU-01 · Set up the multi-module project and CI
 
 Set up the multi-module Gradle project (Kotlin DSL, version catalog, convention plugins) with Compose, Hilt, Room, DataStore and type-safe navigation. The skeleton exists in this repository; this ticket is done when it builds and runs.
 
@@ -24,7 +24,7 @@ Set up the multi-module Gradle project (Kotlin DSL, version catalog, convention 
 
 Size: M.
 
-### CAU-02 · Cauri theme
+### CAU-02 · Build the Cauri Compose theme
 
 Turn the mockups into a Compose theme: lagoon, gold, coral, green, pearl and night palettes in light and dark, embedded Inter font (OFL), type scale with tabular figures for amounts, radii and spacing.
 
@@ -35,7 +35,7 @@ Turn the mockups into a Compose theme: lagoon, gold, coral, green, pearl and nig
 
 Size: M. Dependencies: CAU-01. Mockups: all screens.
 
-### CAU-51 · App logo and launch screen
+### CAU-51 · Add the app logo and launch screen
 
 The default logo of the app is the coin with a cowrie: the frosted glass version in light mode, the night glass version in dark mode. The launch screen shows it on the pearl background (light) or the night background (dark), with the coloured blurred shapes behind and the "cauri" wordmark under it, for 2 seconds by default. To be done as early as possible, right after CAU-02.
 
@@ -48,7 +48,7 @@ The default logo of the app is the coin with a cowrie: the frosted glass version
 
 Size: M. Dependencies: CAU-02. Mockups: « Logo B · déclinaisons » (frosted glass, night glass, launch screen, small sizes).
 
-### CAU-03 · Glass surface
+### CAU-03 · Build the reusable glass surface
 
 A reusable surface with background blur and transparency (Haze), used for cards, the bottom bar and sheets. On devices without blur (before Android 12, or low-end ones), it becomes an opaque tinted surface with the same shape and border.
 
@@ -58,7 +58,7 @@ A reusable surface with background blur and transparency (Haze), used for cards,
 
 Size: M. Dependencies: CAU-02. Mockups: « Accueil » (bottom bar, cards).
 
-### CAU-04 · Navigation
+### CAU-04 · Set up the floating bottom bar and navigation
 
 Floating bottom bar with Accueil, Activité, the central « + », Objectifs and Analyses, and navigation between the features. Features never navigate to each other directly: `:app` wires them through callbacks.
 
@@ -67,7 +67,7 @@ Floating bottom bar with Accueil, Activité, the central « + », Objectifs and 
 
 Size: S. Dependencies: CAU-03. Mockups: « Accueil », « Activité », « Objectifs », « Analyses ».
 
-### CAU-05 · Database
+### CAU-05 · Set up the Room database
 
 Room tables: accounts, categories, transactions, cash counts, places, visits, raw signals and decision log. Amounts are `Long` in minor units, always positive, with the account's ISO 4217 currency; the direction comes from the transaction type. Schemas are exported for migrations.
 
@@ -80,7 +80,7 @@ Size: M. Dependencies: CAU-01.
 
 ## Phase 1 · Onboarding
 
-### CAU-06 · Profile screen
+### CAU-06 · Build the onboarding profile screen
 
 First name, occupation (« Salarié·e », « Indépendant·e », « Commerçant·e », « Étudiant·e », « Autre ») and income type (« À date fixe » or « Variables »). Saved locally.
 
@@ -89,7 +89,7 @@ First name, occupation (« Salarié·e », « Indépendant·e », « Commerçant
 
 Size: S. Dependencies: CAU-05. Mockup: « Onboarding · profil ».
 
-### CAU-07 · Payment habits screen
+### CAU-07 · Build the payment habits screen
 
 Main way of paying (« Surtout en espèces », « Un peu des deux », « Surtout par téléphone ») and cash in pocket right now.
 
@@ -98,7 +98,7 @@ Main way of paying (« Surtout en espèces », « Un peu des deux », « Surtout
 
 Size: S. Dependencies: CAU-05, CAU-12. Mockup: « Onboarding · habitudes ».
 
-### CAU-08 · Choice of categories
+### CAU-08 · Build the category selection screen
 
 Cameroon pack of categories to keep or remove, with free additions: Alimentation, Transport, Crédit et forfaits, Famille, Tontine, Logement et factures, Santé, Loisirs, Éducation, Habillement, Imprévus famille. Two levels at most.
 
@@ -108,7 +108,7 @@ Cameroon pack of categories to keep or remove, with free additions: Alimentation
 
 Size: M. Dependencies: CAU-05. Mockup: « Onboarding · catégories ».
 
-### CAU-09 · Accounts
+### CAU-09 · Let the user declare their accounts
 
 The user ticks the accounts they use: MTN MoMo, Orange Money, their bank. The Cash account always exists.
 
@@ -117,7 +117,7 @@ The user ticks the accounts they use: MTN MoMo, Orange Money, their bank. The Ca
 
 Size: S. Dependencies: CAU-05.
 
-### CAU-10 · Permissions
+### CAU-10 · Request notification and location permissions
 
 Access to notifications, then location as an option. Each request comes after a short explanation screen; a refusal never blocks the onboarding.
 
@@ -127,7 +127,7 @@ Access to notifications, then location as an option. Each request comes after a 
 
 Size: M. Dependencies: CAU-06.
 
-### CAU-11 · Battery optimisation
+### CAU-11 · Guide the user through battery optimisation
 
 Guide to exclude Cauri from battery saving, with steps per brand (Tecno HiOS, Infinix XOS, itel, Samsung, others), based on dontkillmyapp.com.
 
@@ -139,7 +139,7 @@ Size: M. Dependencies: CAU-10.
 
 ## Phase 1 · Cash
 
-### CAU-12 · Estimated cash balance
+### CAU-12 · Compute the estimated cash balance
 
 The Cash balance is the last cash count, plus withdrawals and cash income, minus cash expenses since that count.
 
@@ -148,7 +148,7 @@ The Cash balance is the last cash count, plus withdrawals and cash income, minus
 
 Size: M. Dependencies: CAU-05. Mockup: « Accueil » (card « Cash dans ta poche »).
 
-### CAU-13 · Withdrawal as a transfer to cash
+### CAU-13 · Record withdrawals as transfers to cash
 
 A MoMo, Orange Money or bank withdrawal creates a transfer to the Cash account: two transactions with the same transfer group, never an expense.
 
@@ -157,7 +157,7 @@ A MoMo, Orange Money or bank withdrawal creates a transfer to the Cash account: 
 
 Size: S. Dependencies: CAU-12, CAU-21. Mockup: « Activité » (« Retrait au guichet »).
 
-### CAU-14 · One-tap expenses
+### CAU-14 · Add one-tap cash expenses to the home screen
 
 A row of habitual cash expenses on the home screen (« Moto 500 F », « Beignets 300 F »…). One tap records a confirmed cash expense, with a short undo.
 
@@ -167,7 +167,7 @@ A row of habitual cash expenses on the home screen (« Moto 500 F », « Beignet
 
 Size: M. Dependencies: CAU-12. Mockup: « Accueil ».
 
-### CAU-15 · Count my cash
+### CAU-15 · Build the cash count screen
 
 Screen with banknotes (10 000, 5 000, 2 000, 1 000) and coins (500, 100, 50, 25), each with « − » and « + » and its count, « Tout effacer », total counted, expected amount and gap.
 
@@ -177,7 +177,7 @@ Screen with banknotes (10 000, 5 000, 2 000, 1 000) and coins (500, 100, 50, 25)
 
 Size: M. Dependencies: CAU-12. Mockup: « Compter mon cash » (interactive).
 
-### CAU-16 · Split the gap
+### CAU-16 · Build the gap split screen
 
 List of the moments Cauri noticed since the last count (visits, habits), each with an amount to type. Suggestions stay grey placeholders until typed; only typed amounts count. The rest is recorded as « Divers cash ».
 
@@ -187,7 +187,7 @@ List of the moments Cauri noticed since the last count (visits, habits), each wi
 
 Size: M. Dependencies: CAU-15. Mockup: « Répartir l'écart » (interactive).
 
-### CAU-17 · Cash count reminder
+### CAU-17 · Send cash count reminders
 
 A notification suggests counting the cash, for example in the evening after a day with many cash expenses or a withdrawal. Frequency adjustable in the settings.
 
@@ -198,7 +198,7 @@ Size: S. Dependencies: CAU-15.
 
 ## Phase 1 · Digital capture
 
-### CAU-18 · Listen to notifications
+### CAU-18 · Listen to banking and mobile money notifications
 
 The notification listener stores, as raw signals, the notifications of the watched senders: MoMo, Orange Money, the banks and the SMS app. Nothing else is kept.
 
@@ -208,7 +208,7 @@ The notification listener stores, as raw signals, the notifications of the watch
 
 Size: M. Dependencies: CAU-05, CAU-10.
 
-### CAU-19 · Template engine
+### CAU-19 · Build the message template engine
 
 A template describes one message format of one sender and extracts amount, direction, counterparty, date and fees. Templates are versioned data (JSON), not code, so they can later be updated without a new release.
 
@@ -217,7 +217,7 @@ A template describes one message format of one sender and extracts amount, direc
 
 Size: L. Dependencies: CAU-01.
 
-### CAU-20 · MoMo, Orange Money and bank templates
+### CAU-20 · Write the MoMo, Orange Money and bank templates
 
 Templates for MTN MoMo, Orange Money and the main banks of Cameroon, for the common messages: payment, transfer, withdrawal, money received.
 
@@ -226,7 +226,7 @@ Templates for MTN MoMo, Orange Money and the main banks of Cameroon, for the com
 
 Size: M. Dependencies: CAU-19, collected messages.
 
-### CAU-21 · Detected transaction
+### CAU-21 · Create detected transactions from messages
 
 A recognised signal creates a transaction « à confirmer ». A notification received twice creates only one transaction.
 
@@ -235,7 +235,7 @@ A recognised signal creates a transaction « à confirmer ». A notification rec
 
 Size: S. Dependencies: CAU-18, CAU-20. Mockup: « Accueil » (card « Boulangerie Saker »).
 
-### CAU-22 · Duplicates
+### CAU-22 · Merge duplicate transactions
 
 A manual entry close to a detected transaction (same amount, close time, same account) is merged with it instead of creating a second expense.
 
@@ -244,7 +244,7 @@ A manual entry close to a detected transaction (same amount, close time, same ac
 
 Size: M. Dependencies: CAU-21.
 
-### CAU-23 · Internal transfers
+### CAU-23 · Link internal transfers between accounts
 
 A debit and a credit of the same amount between two accounts of the user, within a short window, are linked as one transfer and never counted as spending.
 
@@ -253,7 +253,7 @@ A debit and a credit of the same amount between two accounts of the user, within
 
 Size: M. Dependencies: CAU-21.
 
-### CAU-24 · Health check
+### CAU-24 · Warn when notification capture stops
 
 If no banking notification has arrived for several days while they used to, Cauri tells the user that detection may have stopped and offers the battery guide.
 
@@ -264,7 +264,7 @@ Size: S. Dependencies: CAU-18, CAU-11.
 
 ## Phase 1 · Entry and confirmation
 
-### CAU-25 · Home screen
+### CAU-25 · Build the home screen
 
 Home screen, cash first: « Cash dans ta poche » with « Compter mon cash », one-tap expenses, available today with the digital account balances, and the cards to confirm.
 
@@ -273,7 +273,7 @@ Home screen, cash first: « Cash dans ta poche » with « Compter mon cash », o
 
 Size: M. Dependencies: CAU-12, CAU-14. Mockups: « Accueil », « Accueil · sombre ».
 
-### CAU-26 · Quick entry
+### CAU-26 · Build the quick entry sheet
 
 Sheet with the type (« Dépense », « Revenu », « Transfert »), the amount on a numeric keypad, the account (Cash selected by default), suggested categories and « Enregistrer ».
 
@@ -282,7 +282,7 @@ Sheet with the type (« Dépense », « Revenu », « Transfert »), the amount 
 
 Size: M. Dependencies: CAU-05. Mockup: « Ajout rapide ».
 
-### CAU-27 · Cards to confirm
+### CAU-27 · Build the confirmation cards and their swipes
 
 A card arrives pre-filled with Cauri's proposal: a category for a detected transaction, an amount for a visit. ✓ or a swipe right confirms, a swipe left means « Rien dépensé », a tap on the amount edits it, a tap on the card opens the edit sheet.
 
@@ -292,7 +292,7 @@ A card arrives pre-filled with Cauri's proposal: a category for a detected trans
 
 Size: M. Dependencies: CAU-25, CAU-29. Mockup: « Accueil » (section « À confirmer »).
 
-### CAU-28 · Edit an expense
+### CAU-28 · Build the expense edit sheet
 
 Full sheet: amount, category (with « Proposée par Cauri » when it is the proposal), account, date, place, note and split across several categories. « Rien dépensé » and « Valider » at the bottom.
 
@@ -301,7 +301,7 @@ Full sheet: amount, category (with « Proposée par Cauri » when it is the prop
 
 Size: M. Dependencies: CAU-26. Mockup: « Modifier une dépense ».
 
-### CAU-29 · Keep the proposal
+### CAU-29 · Store Cauri's proposal next to the confirmed values
 
 Each transaction keeps the proposed category and amount next to the confirmed ones.
 
@@ -310,7 +310,7 @@ Each transaction keeps the proposed category and amount next to the confirmed on
 
 Size: S. Dependencies: CAU-05.
 
-### CAU-30 · Activity
+### CAU-30 · Build the activity screen
 
 History grouped by day, filters « Tout », « Cash », « Mobile » and « Banque », cash and digital totals for the month. Cash counts appear in the timeline with their gap.
 
@@ -319,7 +319,7 @@ History grouped by day, filters « Tout », « Cash », « Mobile » and « Banq
 
 Size: M. Dependencies: CAU-28. Mockup: « Activité ».
 
-### CAU-31 · Actionable notifications
+### CAU-31 · Add actions to transaction and visit notifications
 
 The notification of a detected transaction shows category buttons; the one of a visit lets the user type the amount without opening the app (`RemoteInput`).
 
@@ -328,7 +328,7 @@ The notification of a detected transaction shows category buttons; the one of a 
 
 Size: M. Dependencies: CAU-21, CAU-36.
 
-### CAU-32 · Widget and quick settings tile
+### CAU-32 · Add the home screen widget and quick settings tile
 
 A home screen widget (cash in pocket and an add button) and a quick settings tile that opens the quick entry.
 
@@ -338,7 +338,7 @@ Size: M. Dependencies: CAU-12, CAU-26.
 
 ## Phase 2 · Places and visits
 
-### CAU-33 · Declared places
+### CAU-33 · Let the user declare places to watch
 
 The user saves a shop: name, position, default category. Each place becomes a geofence.
 
@@ -347,7 +347,7 @@ The user saves a shop: name, position, default category. Each place becomes a ge
 
 Size: M. Dependencies: CAU-10.
 
-### CAU-34 · Detect visits
+### CAU-34 · Detect visits to places
 
 Entering and leaving a geofence, with the visit duration. Activity Recognition avoids continuous GPS.
 
@@ -365,7 +365,7 @@ Places where the user often stops are clustered from stays; Cauri asks « Tu vie
 
 Size: L. Dependencies: CAU-34.
 
-### CAU-36 · Visit as a card to confirm
+### CAU-36 · Turn shop visits into cards to confirm
 
 A visit to a shop with no transaction creates a card with the place's category and its usual amounts as suggestions. A message arriving during the visit is attached to it instead.
 
@@ -376,7 +376,7 @@ Size: M. Dependencies: CAU-34, CAU-27. Mockup: « Accueil » (card « Marché Mo
 
 ## Phase 2 · Reminder engine and predictions
 
-### CAU-37 · Reminder rules and decision log
+### CAU-37 · Implement the reminder rules and decision log
 
 Simple rules decide to notify now, add to the evening summary or skip. Each decision is logged with the feature vector computed at that moment, the action, its probability and the model version.
 
@@ -385,7 +385,7 @@ Simple rules decide to notify now, add to the evening summary or skip. Each deci
 
 Size: M. Dependencies: CAU-05.
 
-### CAU-38 · Guardrails
+### CAU-38 · Apply the reminder guardrails
 
 Quiet hours, a daily cap on notifications, no reminder at home or at work. Guardrails apply before any decision.
 
@@ -393,7 +393,7 @@ Quiet hours, a daily cap on notifications, no reminder at home or at work. Guard
 
 Size: S. Dependencies: CAU-37.
 
-### CAU-39 · Evening summary
+### CAU-39 · Send the evening summary
 
 One notification in the evening gathers what is left to confirm.
 
@@ -401,7 +401,7 @@ One notification in the evening gathers what is left to confirm.
 
 Size: S. Dependencies: CAU-37.
 
-### CAU-40 · Rewards
+### CAU-40 · Attribute rewards to reminder decisions
 
 Each decision gets an outcome: confirmed, nothing spent, dismissed, missed (manual entry or cash gap after a skip), timeout. Reward values live in a versioned configuration and are applied at training time.
 
@@ -410,7 +410,7 @@ Each decision gets an outcome: confirmed, nothing spent, dismissed, missed (manu
 
 Size: M. Dependencies: CAU-37, CAU-27.
 
-### CAU-41 · Bandit and nightly training
+### CAU-41 · Train the contextual bandit every night
 
 A linear Thompson sampling bandit replaces the rules once enough decisions are valid. A nightly WorkManager job (charging, idle) attributes the closed outcomes, then retrains on a 90-day window.
 
@@ -419,7 +419,7 @@ A linear Thompson sampling bandit replaces the rules once enough decisions are v
 
 Size: L. Dependencies: CAU-40.
 
-### CAU-42 · Predict category and amount
+### CAU-42 · Predict category and amount per place and merchant
 
 Suggest the most likely category and amount per place and per merchant, from the history and past corrections.
 
@@ -429,7 +429,7 @@ Size: M. Dependencies: CAU-29.
 
 ## Phase 3 · Budgets, goals and insights
 
-### CAU-43 · Split an income
+### CAU-43 · Split incoming income
 
 When an income arrives, Cauri offers to split it: savings first, then fixed costs, then budgets.
 
@@ -437,7 +437,7 @@ When an income arrives, Cauri offers to split it: savings first, then fixed cost
 
 Size: M. Dependencies: CAU-21.
 
-### CAU-44 · Savings goals
+### CAU-44 · Build savings goals
 
 Create a goal (amount, deadline), follow its progress and its estimated completion date. Tontine and family emergencies included. This screen is still to be clarified with Krawist before starting.
 
@@ -445,7 +445,7 @@ Create a goal (amount, deadline), follow its progress and its estimated completi
 
 Size: M. Dependencies: CAU-43. Mockup: « Objectifs ».
 
-### CAU-45 · Suggested budgets
+### CAU-45 · Suggest budgets from real spending
 
 After four to six weeks, Cauri suggests a budget per category from real spending.
 
@@ -453,13 +453,13 @@ After four to six weeks, Cauri suggests a budget per category from real spending
 
 Size: M. Dependencies: CAU-30.
 
-### CAU-46 · Available today
+### CAU-46 · Compute the daily available amount
 
 Money received, minus fixed costs, planned savings and spending, divided by the days left. Shown on the home screen and the widget.
 
 Size: S. Dependencies: CAU-43. Mockup: « Accueil ».
 
-### CAU-47 · Insights screen
+### CAU-47 · Build the insights screen
 
 Spending per category against budget, share of cash (including the unidentified part), overrun projection and yearly cost of habits.
 
@@ -469,7 +469,7 @@ Size: L. Dependencies: CAU-45. Mockup: « Analyses ».
 
 ## Phase 3 · Finishing touches
 
-### CAU-48 · Encrypted backup
+### CAU-48 · Add encrypted backup and restore
 
 Encrypted export to a file or Google Drive, and restore on a new phone.
 
@@ -477,13 +477,13 @@ Encrypted export to a file or Google Drive, and restore on a new phone.
 
 Size: L. Dependencies: CAU-05.
 
-### CAU-49 · Floating onboarding
+### CAU-49 · Add floating help bubbles
 
 A help bubble appears the first time an element is shown (for example the swipes on a card). One at a time, never shown again once closed.
 
 Size: M. Dependencies: CAU-27.
 
-### CAU-50 · Natural language entry
+### CAU-50 · Add natural language entry
 
 On compatible phones, « taxi 1500, beignets 500 » creates two expenses. Without an available model, the field is hidden.
 
