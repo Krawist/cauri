@@ -1,10 +1,11 @@
-package com.cauri.feature.onboarding
+package com.cauri.core.data.repository
 
-import com.cauri.core.data.repository.CashCountRepository
+import com.cauri.core.data.model.CashBalance
 import java.time.Instant
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /** In-memory [CashCountRepository] for tests. */
-internal class FakeCashCountRepository : CashCountRepository {
+class FakeCashCountRepository : CashCountRepository {
     /**
      * A count recorded by [addCount].
      *
@@ -15,6 +16,8 @@ internal class FakeCashCountRepository : CashCountRepository {
     data class Count(val amount: Long, val countedAt: Instant, val expectedAmount: Long?)
 
     val counts = mutableListOf<Count>()
+
+    override val balance = MutableStateFlow<CashBalance?>(null)
 
     override suspend fun addCount(amount: Long, countedAt: Instant, expectedAmount: Long?) {
         counts += Count(amount = amount, countedAt = countedAt, expectedAmount = expectedAmount)

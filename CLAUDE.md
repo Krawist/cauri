@@ -169,7 +169,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   status (`BatteryService` in `:core:capture`: unrestricted or not), and a tap opens Cauri's app details in Android,
   where « Batterie » lifts the restriction. Each row of Réglages says why Cauri needs it. The onboarding ends after the
   permissions. `FakePermissionService` and `FakeBatteryService` are test fixtures of `:core:capture`. Checked on a
-  Galaxy S23. Next: CAU-12.
+  Galaxy S23.
+- [ ] **CAU-12** — `CashBalanceService` (pure Kotlin in `:core:data`, JVM tests): last count, plus income and transfers
+  in, minus expenses and transfers out on the Cash account after it; dismissed transactions are left out, detected
+  ones count. The balance may go below zero until the next count. `CashCountRepository.balance` follows the latest
+  count and the cash transactions (`CashBalance`: amount, count time, expenses since). Accueil shows the « Cash dans ta
+  poche » card of the mockup (« ≈ », « Compté hier à 20 h · 3 dépenses depuis », « Compter mon cash »). The widget
+  comes with CAU-32. The fakes of `:core:data` are its test fixtures. Checked on a phone. Next: CAU-13.
 
 Update this section at the end of each ticket.
 

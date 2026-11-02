@@ -12,4 +12,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     testImplementation(testFixtures(projects.core.capture))
+
+    testImplementation(testFixtures(projects.core.data))
 }

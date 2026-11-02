@@ -6,6 +6,9 @@ plugins {
 
 android {
     namespace = "com.cauri.core.data"
+
+    // Fakes shared by the tests of the modules that use this one.
+    testFixtures.enable = true
 }
 
 dependencies {

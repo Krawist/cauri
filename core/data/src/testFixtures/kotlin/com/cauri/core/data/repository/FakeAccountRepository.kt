@@ -1,10 +1,9 @@
-package com.cauri.feature.onboarding
+package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.NewAccount
-import com.cauri.core.data.repository.AccountRepository
 
 /** In-memory [AccountRepository] for tests. */
-internal class FakeAccountRepository : AccountRepository {
+class FakeAccountRepository : AccountRepository {
     val created = mutableListOf<NewAccount>()
 
     override suspend fun createAccounts(accounts: List<NewAccount>) {

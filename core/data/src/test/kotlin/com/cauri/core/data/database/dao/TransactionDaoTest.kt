@@ -123,6 +123,72 @@ internal class TransactionDaoTest {
         }
     }
 
+    @Nested
+    inner class ObserveOnAccountAfter {
+        @Test
+        fun `should list the account's transactions after the time, oldest first`() = runTest {
+            // given
+            val first = expense(amount = 300, rawSignalId = null, at = 2_000)
+            val second = expense(amount = 700, rawSignalId = null, at = 3_000)
+            val secondId = transactionDao.insert(second)
+            val firstId = transactionDao.insert(first)
+            transactionDao.insert(expense(amount = 900, rawSignalId = null, at = 1_000))
+
+            // when
+            val after = transactionDao.observeOnAccountAfter(
+                accountId = CASH_ACCOUNT_ID,
+                after = Instant.ofEpochMilli(1_000),
+                excluded = TransactionStatus.DISMISSED,
+            ).first()
+
+            // then
+            after shouldContainExactly listOf(first.copy(id = firstId), second.copy(id = secondId))
+        }
+
+        @Test
+        fun `should leave out the excluded status`() = runTest {
+            // given
+            transactionDao.insert(
+                expense(amount = 300, rawSignalId = null, status = TransactionStatus.DISMISSED, at = 2_000),
+            )
+
+            // when
+            val after = transactionDao.observeOnAccountAfter(
+                accountId = CASH_ACCOUNT_ID,
+                after = Instant.EPOCH,
+                excluded = TransactionStatus.DISMISSED,
+            ).first()
+
+            // then
+            after shouldHaveSize 0
+        }
+
+        @Test
+        fun `should leave out the other accounts`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(
+                AccountEntity(
+                    name = "MTN MoMo",
+                    kind = AccountKind.MOBILE_MONEY,
+                    provider = "MTN_MOMO",
+                    currency = "XAF",
+                    status = AccountStatus.ACTIVE,
+                ),
+            )
+            transactionDao.insert(expense(amount = 300, rawSignalId = null, at = 2_000).copy(accountId = momoId))
+
+            // when
+            val after = transactionDao.observeOnAccountAfter(
+                accountId = CASH_ACCOUNT_ID,
+                after = Instant.EPOCH,
+                excluded = TransactionStatus.DISMISSED,
+            ).first()
+
+            // then
+            after shouldHaveSize 0
+        }
+    }
+
     // A cash expense: only the fields the tests vary are parameters.
     private fun expense(
         amount: Long,

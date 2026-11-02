@@ -9,6 +9,10 @@ import com.cauri.core.data.model.NewCategory
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
 import com.cauri.core.data.model.UserProfile
+import com.cauri.core.data.preferences.FakeUserPreferencesRepository
+import com.cauri.core.data.repository.FakeAccountRepository
+import com.cauri.core.data.repository.FakeCashCountRepository
+import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.feature.onboarding.habits.HabitsAnswers
 import com.cauri.feature.onboarding.profile.ProfileAnswers
 import io.kotest.matchers.booleans.shouldBeTrue

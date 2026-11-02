@@ -8,4 +8,6 @@ android {
 
 dependencies {
     implementation(projects.core.data)
+
+    testImplementation(testFixtures(projects.core.data))
 }

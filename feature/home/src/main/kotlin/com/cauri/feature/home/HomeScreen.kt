@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -32,8 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cauri.core.data.model.CashBalance
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriTheme
+import java.time.Duration
+import java.time.Instant
 
 private val ProfileButtonSize = 52.dp
 private val ProfileButtonElevation = 16.dp
@@ -48,9 +50,9 @@ internal fun HomeScreen(
     onOpenSettings: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val initial by viewModel.initial.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
     HomeContent(
-        initial = initial,
+        state = state,
         onCountCash = onCountCash,
         onAddExpense = onAddExpense,
         onOpenSettings = onOpenSettings,
@@ -59,7 +61,7 @@ internal fun HomeScreen(
 
 @Composable
 private fun HomeContent(
-    initial: String,
+    state: HomeUiState,
     onCountCash: () -> Unit,
     onAddExpense: () -> Unit,
     onOpenSettings: () -> Unit,
@@ -75,14 +77,9 @@ private fun HomeContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = stringResource(R.string.home_title), style = MaterialTheme.typography.headlineMedium)
-                ProfileButton(initial = initial, onClick = onOpenSettings)
+                ProfileButton(initial = state.initial, onClick = onOpenSettings)
             }
-            Text(
-                text = stringResource(R.string.home_cash_label),
-                style = MaterialTheme.typography.labelMedium,
-                color = CauriTheme.palette.goldText,
-            )
-            Button(onClick = onCountCash) { Text(stringResource(R.string.home_count_cash)) }
+            CashCard(cash = state.cash, onCountCash = onCountCash)
             OutlinedButton(onClick = onAddExpense) { Text(stringResource(R.string.home_add_expense)) }
         }
     }
@@ -122,5 +119,19 @@ private fun ProfileButton(initial: String, onClick: () -> Unit) {
 @Preview
 @Composable
 private fun HomeContentPreview() {
-    CauriTheme { HomeContent(initial = "K", onCountCash = {}, onAddExpense = {}, onOpenSettings = {}) }
+    CauriTheme {
+        HomeContent(
+            state = HomeUiState(
+                initial = "K",
+                cash = CashBalance(
+                    amount = 7_500,
+                    countedAt = Instant.now().minus(Duration.ofHours(1)),
+                    expensesSinceCount = 3,
+                ),
+            ),
+            onCountCash = {},
+            onAddExpense = {},
+            onOpenSettings = {},
+        )
+    }
 }

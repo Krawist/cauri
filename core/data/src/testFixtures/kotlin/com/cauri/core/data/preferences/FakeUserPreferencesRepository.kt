@@ -1,11 +1,10 @@
-package com.cauri.feature.home
+package com.cauri.core.data.preferences
 
 import com.cauri.core.data.model.UserProfile
-import com.cauri.core.data.preferences.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /** In-memory [UserPreferencesRepository] for tests. */
-internal class FakeUserPreferencesRepository : UserPreferencesRepository {
+class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val onboardingCompleted = MutableStateFlow(false)
     override val profile = MutableStateFlow<UserProfile?>(null)
 
