@@ -88,7 +88,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:home`         | Home screen, one-tap habits, cards to confirm             | 14, 25, 27     |
 | `:feature:cash`         | Cash count, split of the gap                              | 15, 16         |
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
-| `:feature:settings`     | Settings: permission statuses                             | 10             |
+| `:feature:settings`     | Settings: permission and battery statuses                 | 10, 11         |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
 | `:core:capture`         | Permissions, notification listening, raw signals, health  | 10, 18, 21, 24 |
@@ -164,7 +164,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   `PermissionService` (`:core:capture`) reads the statuses and gives the system screens. The accounts are kept with
   the other answers and everything is saved after this step. `:feature:settings`: « Réglages » screen, opened from
   the profile button of Accueil, with the status of each permission. Checked on a phone with every permission put
-  off; granting them not checked on a phone yet. Next: CAU-11.
+  off; granting them not checked on a phone yet.
+- [ ] **CAU-11** — no guide with steps per brand (dropped by decision): Réglages shows « Batterie de Cauri » with its
+  status (`BatteryService` in `:core:capture`: unrestricted or not), and a tap opens Cauri's app details in Android,
+  where « Batterie » lifts the restriction. Each row of Réglages says why Cauri needs it. The onboarding ends after the
+  permissions. `FakePermissionService` and `FakeBatteryService` are test fixtures of `:core:capture`. Checked on a
+  Galaxy S23. Next: CAU-12.
 
 Update this section at the end of each ticket.
 

@@ -47,7 +47,7 @@ internal data object BackgroundLocationRoute
 /**
  * Profile, payment habits, categories, accounts and permissions (CAU-06 to CAU-11). Each step hands its answers to the
  * [OnboardingViewModel] of the graph, which saves them all after the last one: the permissions, given or put off.
- * Until the battery guide (CAU-11) exists, the onboarding ends there.
+ * The onboarding ends there.
  */
 fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: () -> Unit) {
     navigation<OnboardingGraph>(startDestination = ProfileRoute) {

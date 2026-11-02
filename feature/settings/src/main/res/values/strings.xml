@@ -2,17 +2,22 @@
 <resources>
     <string name="settings_allowed">Autorisé</string>
     <string name="settings_back">Retour</string>
+    <string name="settings_battery">Batterie de Cauri</string>
+    <string name="settings_battery_restricted">Limitée</string>
+    <string name="settings_battery_section">Fonctionnement</string>
+    <string name="settings_battery_text">Sinon ton téléphone peut arrêter Cauri, qui raterait alors tes paiements.</string>
+    <string name="settings_battery_unrestricted">Libre</string>
+    <string name="settings_hint">Touche une ligne pour la changer dans les réglages d\'Android.</string>
     <string name="settings_location">Localisation</string>
     <string name="settings_location_always">Toujours</string>
-    <string name="settings_location_text">Rappels après tes achats dans un lieu</string>
+    <string name="settings_location_text">Pour te rappeler une dépense quand tu quittes un marché ou une boutique. Facultatif.</string>
     <string name="settings_location_while_in_use">App ouverte</string>
     <string name="settings_notification_access">Lecture des notifications</string>
-    <string name="settings_notification_access_text">Détecte tes paiements MoMo, Orange Money et bancaires</string>
+    <string name="settings_notification_access_text">Cauri lit les messages de MoMo, Orange Money et de tes banques pour noter tes paiements à ta place.</string>
     <string name="settings_notifications">Notifications de Cauri</string>
-    <string name="settings_notifications_text">Rappels et dépenses à confirmer</string>
+    <string name="settings_notifications_text">Pour te demander de confirmer une dépense, au bon moment et jamais la nuit.</string>
     <string name="settings_off">Désactivé</string>
     <string name="settings_permissions">Autorisations</string>
-    <string name="settings_permissions_hint">Touche une ligne pour changer l\'autorisation dans les réglages d\'Android.</string>
     <string name="settings_refused">Refusé</string>
     <string name="settings_title">Réglages</string>
 </resources>

@@ -2,8 +2,8 @@ package com.cauri.feature.settings
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.cauri.core.capture.battery.BatteryService
 import com.cauri.core.capture.permission.PermissionService
-import com.cauri.core.capture.permission.PermissionStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,17 +11,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * Settings screen: the status of each permission, changed in the system settings. The screen calls [refresh] when the
- * user comes back from them.
+ * Settings screen: the status of each permission and of the battery, changed in the system settings. The screen calls
+ * [refresh] when the user comes back from them.
  */
 @HiltViewModel
-internal class SettingsViewModel @Inject constructor(private val permissions: PermissionService) : ViewModel() {
-    private val state = MutableStateFlow(permissions.status())
+internal class SettingsViewModel @Inject constructor(
+    private val permissions: PermissionService,
+    private val battery: BatteryService,
+) : ViewModel() {
+    private val state = MutableStateFlow(read())
 
-    val status: StateFlow<PermissionStatus> = state.asStateFlow()
+    val uiState: StateFlow<SettingsUiState> = state.asStateFlow()
 
     fun refresh() {
-        state.value = permissions.status()
+        state.value = read()
     }
 
     /** System screen where the user gives or takes back the access to the notifications. */
@@ -32,4 +35,10 @@ internal class SettingsViewModel @Inject constructor(private val permissions: Pe
 
     /** System screen of Cauri's permissions, where the location is changed. */
     fun locationSettings(): Intent = permissions.appSettings()
+
+    /** System screen of Cauri's details, whose « Batterie » entry lifts its restriction. */
+    fun batterySettings(): Intent = battery.appSettings()
+
+    private fun read() =
+        SettingsUiState(permissions = permissions.status(), batteryUnrestricted = battery.unrestricted())
 }

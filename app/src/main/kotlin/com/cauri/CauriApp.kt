@@ -81,22 +81,9 @@ private fun CauriNavHost(
         overlay = {
             // Only on the tabs: the bar is hidden during the onboarding and on screens opened from a tab.
             if (selectedTab >= 0) {
-                CauriBottomBar(
-                    tabs = listOf(
-                        BottomBarTab(icon = DesignR.drawable.ic_nav_home, label = stringResource(R.string.tab_home)),
-                        BottomBarTab(
-                            icon = DesignR.drawable.ic_nav_activity,
-                            label = stringResource(R.string.tab_activity),
-                        ),
-                        BottomBarTab(icon = DesignR.drawable.ic_nav_goals, label = stringResource(R.string.tab_goals)),
-                        BottomBarTab(
-                            icon = DesignR.drawable.ic_nav_insights,
-                            label = stringResource(R.string.tab_insights),
-                        ),
-                    ),
+                TabBar(
                     selectedTab = selectedTab,
                     onTabSelected = { index -> navController.navigateToTab(TabRoutes[index]) },
-                    addLabel = stringResource(R.string.add_expense),
                     onAdd = { quickEntryOpen = true },
                     modifier = Modifier.align(Alignment.BottomCenter),
                 )
@@ -127,6 +114,29 @@ private fun CauriNavHost(
     if (quickEntryOpen) {
         QuickEntrySheet(onDismiss = { quickEntryOpen = false })
     }
+}
+
+@Composable
+private fun TabBar(selectedTab: Int, onTabSelected: (Int) -> Unit, onAdd: () -> Unit, modifier: Modifier = Modifier) {
+    CauriBottomBar(
+        tabs = listOf(
+            BottomBarTab(icon = DesignR.drawable.ic_nav_home, label = stringResource(R.string.tab_home)),
+            BottomBarTab(
+                icon = DesignR.drawable.ic_nav_activity,
+                label = stringResource(R.string.tab_activity),
+            ),
+            BottomBarTab(icon = DesignR.drawable.ic_nav_goals, label = stringResource(R.string.tab_goals)),
+            BottomBarTab(
+                icon = DesignR.drawable.ic_nav_insights,
+                label = stringResource(R.string.tab_insights),
+            ),
+        ),
+        selectedTab = selectedTab,
+        onTabSelected = onTabSelected,
+        addLabel = stringResource(R.string.add_expense),
+        onAdd = onAdd,
+        modifier = modifier,
+    )
 }
 
 // Accueil stays at the bottom of the back stack: back from another tab returns to it, then leaves the app. Each tab

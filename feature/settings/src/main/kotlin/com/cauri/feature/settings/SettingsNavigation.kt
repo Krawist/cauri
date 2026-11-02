@@ -14,7 +14,7 @@ internal data object SettingsRoute
 
 fun NavController.navigateToSettings() = navigate(SettingsGraph)
 
-/** Settings: for now the status of each permission (CAU-10); accounts and the battery guide come with their tickets. */
+/** Settings: the status of each permission and of the battery (CAU-10, CAU-11). */
 fun NavGraphBuilder.settingsGraph(onBack: () -> Unit) {
     navigation<SettingsGraph>(startDestination = SettingsRoute) {
         composable<SettingsRoute> { SettingsScreen(onBack = onBack) }
