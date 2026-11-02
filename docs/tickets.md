@@ -2,7 +2,7 @@
 
 > English working copy of the reference document kept in Claude (November 2, 2026): https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e. The reference is written in French; if the two differ, the Claude document prevails. Update this copy when it changes.
 
-This document splits the Cauri MVP into 50 tickets over three phases. Phase 1 gives an app usable every day that follows the four places money lives: cash, MTN MoMo, Orange Money and the bank. Phase 2 makes the reminders smart (places, contextual bandit, predictions). Phase 3 adds budgets, goals, insights and the finishing touches.
+This document splits the Cauri MVP into 51 tickets over three phases. Phase 1 gives an app usable every day that follows the four places money lives: cash, MTN MoMo, Orange Money and the bank. Phase 2 makes the reminders smart (places, contextual bandit, predictions). Phase 3 adds budgets, goals, insights and the finishing touches.
 
 Indicative sizes: S for a day at most, M for two or three days, L for about a week.
 
@@ -34,6 +34,19 @@ Turn the mockups into a Compose theme: lagoon, gold, coral, green, pearl and nig
 - A catalogue of previews shows every token and component.
 
 Size: M. Dependencies: CAU-01. Mockups: all screens.
+
+### CAU-51 · App logo and launch screen
+
+The default logo of the app is the coin with a cowrie: the frosted glass version in light mode, the night glass version in dark mode. The launch screen shows it on the pearl background (light) or the night background (dark), with the coloured blurred shapes behind and the "cauri" wordmark under it, for 2 seconds by default. To be done as early as possible, right after CAU-02.
+
+- The system splash (`androidx.core:core-splashscreen`) shows the logo on the right background for the current mode, so the hand-off to the Compose launch screen is seamless.
+- The Compose launch screen reproduces the mockup; the blur is drawn in the screen, as the system splash cannot blur.
+- The duration is one constant, 2 seconds by default; the home screen or the onboarding opens right after.
+- The launcher icon is the frosted glass coin on a pearl tile (an adaptive icon cannot follow dark mode), with a monochrome layer for Android 13 themed icons.
+- The notification icon is the white silhouette of the coin with its slit, without teeth.
+- The logo files (SVG master, vector drawables) live in `:core:design`.
+
+Size: M. Dependencies: CAU-02. Mockups: « Logo B · déclinaisons » (frosted glass, night glass, launch screen, small sizes).
 
 ### CAU-03 · Glass surface
 

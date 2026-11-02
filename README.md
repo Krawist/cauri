@@ -56,7 +56,6 @@ core/capture            notification listening (MoMo, Orange Money, banks, SMS)
 core/parsing            message templates and parsing (pure Kotlin)
 core/engine             reminder rules and contextual bandit (pure Kotlin)
 build-logic/            Gradle convention plugins
-config/                 CI workflow and detekt rules
+config/                 detekt rules
+.github/workflows/      CI workflow
 ```
-
-The CI workflow lives in `config/ci/ci.yml`; copy it to `.github/workflows/` once the repository is on GitHub.

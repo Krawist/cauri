@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -37,10 +38,9 @@ private fun CauriNavHost(
     onOnboardingCompleted: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = if (onboardingCompleted) HomeGraph else OnboardingGraph,
-    ) {
+    // Chosen once: a new start destination would rebuild the graph under the back stack when the onboarding completes.
+    val startDestination = remember { if (onboardingCompleted) HomeGraph else OnboardingGraph }
+    NavHost(navController = navController, startDestination = startDestination) {
         onboardingGraph(
             onCompleted = {
                 onOnboardingCompleted()

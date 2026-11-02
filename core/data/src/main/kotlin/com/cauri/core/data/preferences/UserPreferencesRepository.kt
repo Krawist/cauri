@@ -11,9 +11,7 @@ import kotlinx.coroutines.flow.map
 
 /** Small user settings that are not business data. The Room database (CAU-05) holds everything else. */
 @Singleton
-class UserPreferencesRepository @Inject internal constructor(
-    private val dataStore: DataStore<Preferences>,
-) {
+class UserPreferencesRepository @Inject internal constructor(private val dataStore: DataStore<Preferences>) {
     val onboardingCompleted: Flow<Boolean> = dataStore.data.map { it[OnboardingCompleted] ?: false }
 
     suspend fun setOnboardingCompleted() {

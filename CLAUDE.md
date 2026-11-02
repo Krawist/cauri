@@ -21,7 +21,7 @@ The documents kept in Claude are the reference; they are written in French.
 | Document                                  | Local copy        | Reference                                         |
 |-------------------------------------------|-------------------|---------------------------------------------------|
 | Product requirements (what and why)       | —                 | https://claude.ai/artifact/6ZMKPajYcTATWmgfoHCqin |
-| MVP tickets (CAU-01 to CAU-50, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
+| MVP tickets (CAU-01 to CAU-51, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
 | Mockups, light and dark (canvas)          | —                 | https://claude.ai/artifact/7cuvPsaveMQEG1VCZh2qbP |
 
 `docs/tickets.md` is the detailed English working copy: acceptance criteria, dependencies and the mockup of each
@@ -83,7 +83,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 
 | Module                  | Content                                                   | Tickets        |
 |-------------------------|-----------------------------------------------------------|----------------|
-| `:app`                  | Application, navigation between features, signing         | 01, 04         |
+| `:app`                  | Application, navigation, launch screen, signing           | 01, 04, 51     |
 | `:feature:onboarding`   | Profile, payment habits, categories, accounts, permissions | 06–11         |
 | `:feature:home`         | Home screen, one-tap habits, cards to confirm             | 14, 25, 27     |
 | `:feature:cash`         | Cash count, split of the gap                              | 15, 16         |
@@ -118,9 +118,10 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 - [x] **Skeleton** — multi-module project, convention plugins, CI, debug/release signing, Hilt, type-safe navigation
   with placeholder screens, DataStore (`UserPreferencesRepository`: onboarding done or not), Room plugin wired in
   `:core:data` (the database class comes with its first entities in CAU-05), light and dark palettes, empty
-  notification listener, French default and English locales. Not compiled yet: the first sync may need version
-  adjustments (see README).
-- [ ] **Next ticket: CAU-01** (check that the skeleton builds and runs, CI green), then CAU-02 and CAU-05.
+  notification listener, French default and English locales.
+- [ ] **CAU-01** — builds with the catalogue versions; ktlint, detekt, unit tests, debug and release builds pass
+  locally; onboarding → home → back checked on a phone. CI workflow in `.github/workflows/ci.yml`. Left: CI green
+  on GitHub once the repository is pushed, release signing once `keystore.properties` exists. Then CAU-02 and CAU-05.
 
 Update this section at the end of each ticket.
 
