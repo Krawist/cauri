@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_choice_missing">Choose an answer</string>
-    <string name="profile_continue">Continue</string>
+    <string name="habits_both">A bit of both</string>
+    <string name="habits_both_hint">Cash and mobile money</string>
+    <string name="habits_cash">Mostly cash</string>
+    <string name="habits_cash_amount">How much cash do you have on you right now?</string>
+    <string name="habits_cash_amount_hint">A rough amount is enough. It is where your cash starts.</string>
+    <string name="habits_cash_amount_missing">Enter an amount, even a rough one</string>
+    <string name="habits_cash_hint">Market, moto-taxi, small purchases</string>
+    <string name="habits_phone">Mostly by phone</string>
+    <string name="habits_phone_hint">MoMo, Orange Money, card</string>
+    <string name="habits_title">How do you pay day to day?</string>
+    <string name="onboarding_choice_missing">Choose an answer</string>
+    <string name="onboarding_continue">Continue</string>
+    <string name="onboarding_step">Step %1$d of %2$d</string>
     <string name="profile_first_name">Your first name</string>
     <string name="profile_first_name_missing">Enter your first name</string>
     <string name="profile_income">Your income arrives…</string>
@@ -16,6 +27,5 @@
     <string name="profile_occupation_self_employed">Self-employed</string>
     <string name="profile_occupation_student">Student</string>
     <string name="profile_occupation_trader">Trader</string>
-    <string name="profile_step">Step %1$d of %2$d</string>
     <string name="profile_title">Let\'s get to know you</string>
 </resources>

@@ -13,5 +13,6 @@ interface UserPreferencesRepository {
 
     suspend fun setOnboardingCompleted()
 
+    /** Saves the whole [profile], replacing the stored one. */
     suspend fun saveProfile(profile: UserProfile)
 }

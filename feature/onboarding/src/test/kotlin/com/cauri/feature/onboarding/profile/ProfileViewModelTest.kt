@@ -2,38 +2,15 @@ package com.cauri.feature.onboarding.profile
 
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
-import com.cauri.core.data.model.UserProfile
-import io.kotest.matchers.booleans.shouldBeFalse
-import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class ProfileViewModelTest {
-    private val preferences = FakeUserPreferencesRepository()
-    private lateinit var viewModel: ProfileViewModel
-
-    @BeforeEach
-    fun setUp() {
-        Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = ProfileViewModel(preferences)
-    }
-
-    @AfterEach
-    fun tearDown() {
-        Dispatchers.resetMain()
-    }
+    private val viewModel = ProfileViewModel()
 
     @Nested
     inner class OnContinue {
@@ -61,7 +38,7 @@ internal class ProfileViewModelTest {
         }
 
         @Test
-        fun `should not save the profile while an answer is missing`() {
+        fun `should give no answers while one is missing`() {
             // given
             viewModel.onFirstNameChange("Krawist")
             viewModel.onOccupationSelect(Occupation.TRADER)
@@ -70,12 +47,11 @@ internal class ProfileViewModelTest {
             viewModel.onContinue()
 
             // then
-            viewModel.uiState.value.saved.shouldBeFalse()
-            preferences.profile.value.shouldBeNull()
+            viewModel.uiState.value.answered.shouldBeNull()
         }
 
         @Test
-        fun `should save the profile with the first name trimmed`() {
+        fun `should give the answers with the first name trimmed`() {
             // given
             viewModel.onFirstNameChange("  Krawist ")
             viewModel.onOccupationSelect(Occupation.TRADER)
@@ -85,9 +61,30 @@ internal class ProfileViewModelTest {
             viewModel.onContinue()
 
             // then
-            viewModel.uiState.value.saved.shouldBeTrue()
-            preferences.profile.value shouldBe
-                UserProfile(displayName = "Krawist", occupation = Occupation.TRADER, incomeType = IncomeType.FIXED_DATE)
+            viewModel.uiState.value.answered shouldBe
+                ProfileAnswers(
+                    displayName = "Krawist",
+                    occupation = Occupation.TRADER,
+                    incomeType = IncomeType.FIXED_DATE,
+                )
+        }
+    }
+
+    @Nested
+    inner class OnAnswersHandedOn {
+        @Test
+        fun `should not give the answers again when the user comes back to the step`() {
+            // given
+            viewModel.onFirstNameChange("Krawist")
+            viewModel.onOccupationSelect(Occupation.TRADER)
+            viewModel.onIncomeTypeSelect(IncomeType.FIXED_DATE)
+            viewModel.onContinue()
+
+            // when
+            viewModel.onAnswersHandedOn()
+
+            // then
+            viewModel.uiState.value.answered.shouldBeNull()
         }
     }
 

@@ -144,7 +144,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 - [ ] **CAU-06** — profile step (`ProfileScreen`, `ProfileViewModel`): first name, occupation and income type, all
   three required and pointed out after a first « Continuer »; saved in DataStore (`UserProfile`) through
   `UserPreferencesRepository`, now an interface with `UserPreferencesRepositoryImpl`. Until CAU-07, the onboarding
-  completes after this step. Checked on a phone. Next: CAU-07.
+  completes after this step. Checked on a phone.
+- [ ] **CAU-07** — payment habits step (`HabitsScreen`, `HabitsViewModel`): main way of paying and cash in pocket,
+  both required. The profile step saves nothing and hands its answers on through `HabitsRoute`; the habits step saves
+  the complete `UserProfile` (every property non-null, `paymentHabit` included) and the first cash count through
+  `CashCountRepository` (time from an injected `Clock`). Amounts typed with `FcfaVisualTransformation`; the steps share
+  `OnboardingStep`. Checked on a phone, back navigation included. Next: CAU-08.
 
 Update this section at the end of each ticket.
 

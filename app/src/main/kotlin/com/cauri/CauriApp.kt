@@ -103,6 +103,7 @@ private fun CauriNavHost(
     ) {
         NavHost(navController = navController, startDestination = startDestination) {
             onboardingGraph(
+                navController = navController,
                 onCompleted = {
                     onOnboardingCompleted()
                     navController.navigate(HomeGraph) {

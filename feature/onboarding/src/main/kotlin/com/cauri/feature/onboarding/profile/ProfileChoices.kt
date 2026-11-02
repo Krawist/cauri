@@ -1,11 +1,7 @@
 package com.cauri.feature.onboarding.profile
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -13,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,21 +19,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
-import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
+import com.cauri.feature.onboarding.ChoiceSurface
 import com.cauri.feature.onboarding.R
 
 private val ChipHeight = 44.dp
-private val SelectedBorderWidth = 1.5.dp
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -98,28 +90,6 @@ internal fun IncomeTypeChoices(selected: IncomeType?, onSelect: (IncomeType) -> 
                 }
             }
         }
-    }
-}
-
-// A glass choice; the selected one gets a lagoon fill and border, as in the mockup.
-@Composable
-private fun ChoiceSurface(
-    selected: Boolean,
-    onSelect: () -> Unit,
-    shape: Shape,
-    modifier: Modifier = Modifier,
-    content: @Composable BoxScope.() -> Unit,
-) {
-    val palette = CauriTheme.palette
-    GlassSurface(
-        shape = shape,
-        modifier = modifier.then(
-            if (selected) Modifier.border(SelectedBorderWidth, palette.accent, shape) else Modifier,
-        ),
-        interaction = Modifier.selectable(selected = selected, role = Role.RadioButton, onClick = onSelect),
-    ) {
-        if (selected) Box(Modifier.matchParentSize().background(palette.accentSoft))
-        content()
     }
 }
 

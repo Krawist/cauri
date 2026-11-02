@@ -1,4 +1,4 @@
-package com.cauri.feature.onboarding.profile
+package com.cauri.feature.onboarding
 
 import com.cauri.core.data.model.UserProfile
 import com.cauri.core.data.preferences.UserPreferencesRepository

@@ -3,6 +3,7 @@ package com.cauri.core.data.preferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
+import com.cauri.core.data.model.PaymentHabit
 import com.cauri.core.data.model.UserProfile
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -40,19 +41,44 @@ internal class UserPreferencesRepositoryImplTest {
             // then
             profile.shouldBeNull()
         }
+    }
 
+    @Nested
+    inner class SaveProfile {
         @Test
-        fun `should return the saved profile`() = scope.runTest {
+        fun `should save the whole profile`() = scope.runTest {
             // given
-            val saved =
-                UserProfile(displayName = "Krawist", occupation = Occupation.TRADER, incomeType = IncomeType.VARIABLE)
-            repository.saveProfile(saved)
+            val saved = UserProfile(
+                displayName = "Krawist",
+                occupation = Occupation.TRADER,
+                incomeType = IncomeType.VARIABLE,
+                paymentHabit = PaymentHabit.MOSTLY_CASH,
+            )
 
             // when
-            val profile = repository.profile.first()
+            repository.saveProfile(saved)
 
             // then
-            profile shouldBe saved
+            repository.profile.first() shouldBe saved
+        }
+
+        @Test
+        fun `should replace the stored profile`() = scope.runTest {
+            // given
+            val first = UserProfile(
+                displayName = "Krawist",
+                occupation = Occupation.TRADER,
+                incomeType = IncomeType.VARIABLE,
+                paymentHabit = PaymentHabit.MOSTLY_CASH,
+            )
+            repository.saveProfile(first)
+            val second = first.copy(occupation = Occupation.EMPLOYEE, paymentHabit = PaymentHabit.BOTH)
+
+            // when
+            repository.saveProfile(second)
+
+            // then
+            repository.profile.first() shouldBe second
         }
     }
 }
