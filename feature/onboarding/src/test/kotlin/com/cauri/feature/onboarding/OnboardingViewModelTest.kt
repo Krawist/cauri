@@ -1,8 +1,10 @@
 package com.cauri.feature.onboarding
 
 import androidx.lifecycle.SavedStateHandle
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.IncomeType
+import com.cauri.core.data.model.NewAccount
 import com.cauri.core.data.model.NewCategory
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
@@ -31,13 +33,14 @@ internal class OnboardingViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val cashCounts = FakeCashCountRepository()
     private val categories = FakeCategoryRepository()
+    private val accounts = FakeAccountRepository()
     private val clock = Clock.fixed(Instant.parse("2026-11-02T08:30:00Z"), ZoneOffset.UTC)
     private lateinit var viewModel: OnboardingViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = OnboardingViewModel(savedState, preferences, cashCounts, categories, clock)
+        viewModel = OnboardingViewModel(savedState, preferences, cashCounts, categories, accounts, clock)
     }
 
     @AfterEach
@@ -57,6 +60,12 @@ internal class OnboardingViewModelTest {
                 ),
             )
             viewModel.onHabitsAnswered(HabitsAnswers(paymentHabit = PaymentHabit.MOSTLY_CASH, cashAmount = 7_500))
+            viewModel.onCategoriesChosen(
+                listOf(
+                    NewCategory(name = "Transport", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Tontine", nature = CategoryNature.SAVING),
+                ),
+            )
         }
 
         @Test
@@ -85,18 +94,30 @@ internal class OnboardingViewModelTest {
         }
 
         @Test
-        fun `should create the chosen categories`() {
-            // given
-            val chosen = listOf(
+        fun `should create the categories chosen in the earlier step`() {
+            // when
+            viewModel.complete(emptyList())
+
+            // then
+            categories.created shouldContainExactly listOf(
                 NewCategory(name = "Transport", nature = CategoryNature.EXPENSE),
                 NewCategory(name = "Tontine", nature = CategoryNature.SAVING),
             )
+        }
+
+        @Test
+        fun `should create the declared accounts`() {
+            // given
+            val declared = listOf(
+                NewAccount(name = "MTN MoMo", kind = AccountKind.MOBILE_MONEY, provider = "MTN_MOMO", currency = "XAF"),
+                NewAccount(name = "BICEC", kind = AccountKind.BANK, provider = "BICEC", currency = "XAF"),
+            )
 
             // when
-            viewModel.complete(chosen)
+            viewModel.complete(declared)
 
             // then
-            categories.created shouldContainExactly chosen
+            accounts.created shouldContainExactly declared
         }
 
         @Test
@@ -111,18 +132,8 @@ internal class OnboardingViewModelTest {
         @Test
         fun `should use the answers kept when the app was killed between two steps`() {
             // given
-            val restored =
-                OnboardingViewModel(
-                    SavedStateHandle(
-                        savedState.keys().associateWith {
-                            savedState.get<Any>(it)
-                        },
-                    ),
-                    preferences,
-                    cashCounts,
-                    categories,
-                    clock,
-                )
+            val kept = SavedStateHandle(savedState.keys().associateWith { savedState.get<Any>(it) })
+            val restored = OnboardingViewModel(kept, preferences, cashCounts, categories, accounts, clock)
 
             // when
             restored.complete(emptyList())

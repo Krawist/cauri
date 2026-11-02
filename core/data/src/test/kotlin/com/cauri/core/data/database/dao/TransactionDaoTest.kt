@@ -4,7 +4,6 @@ import android.database.SQLException
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
-import com.cauri.core.data.database.entity.AccountKind
 import com.cauri.core.data.database.entity.AccountStatus
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
@@ -12,6 +11,7 @@ import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.AccountKind
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder

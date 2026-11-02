@@ -1,7 +1,7 @@
-package com.cauri.core.data.database.entity
+package com.cauri.core.data.model
 
 /** Kind of an account: where the money lives. */
-internal enum class AccountKind {
+enum class AccountKind {
     /** Cash in pocket; the Cash account always exists. */
     CASH,
 

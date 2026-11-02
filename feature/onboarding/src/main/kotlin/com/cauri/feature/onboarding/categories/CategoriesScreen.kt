@@ -25,10 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
@@ -52,11 +48,10 @@ import com.cauri.feature.onboarding.MissingAnswer
 import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.R
+import com.cauri.feature.onboarding.dashedBorder
 
 private const val CATEGORIES_STEP = 3
 private val ChipHeight = 44.dp
-private val DashWidth = 6.dp
-private val DashedBorderWidth = 1.5.dp
 
 /**
  * Category selection step of the onboarding: [onCategoriesChosen] receives the categories to create, named in the
@@ -75,6 +70,7 @@ internal fun CategoriesScreen(
                 answers.pack.map { NewCategory(name = context.getString(it.label), nature = it.nature) } +
                     answers.added.map { NewCategory(name = it, nature = CategoryNature.EXPENSE) },
             )
+            viewModel.onAnswersHandedOn()
         }
     }
     CategoriesContent(state = state, actions = viewModel)
@@ -159,17 +155,7 @@ private fun AddChip(onClick: () -> Unit) {
         modifier = Modifier
             .height(ChipHeight)
             .clip(CircleShape)
-            .drawBehind {
-                val dash = DashWidth.toPx()
-                drawRoundRect(
-                    color = palette.handle,
-                    cornerRadius = CornerRadius(size.height / 2),
-                    style = Stroke(
-                        width = DashedBorderWidth.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash, dash)),
-                    ),
-                )
-            }
+            .dashedBorder(palette.handle)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {

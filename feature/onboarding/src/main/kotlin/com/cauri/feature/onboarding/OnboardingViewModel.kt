@@ -3,12 +3,15 @@ package com.cauri.feature.onboarding
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.IncomeType
+import com.cauri.core.data.model.NewAccount
 import com.cauri.core.data.model.NewCategory
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
 import com.cauri.core.data.model.UserProfile
 import com.cauri.core.data.preferences.UserPreferencesRepository
+import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.feature.onboarding.habits.HabitsAnswers
@@ -31,6 +34,7 @@ internal class OnboardingViewModel @Inject constructor(
     private val preferences: UserPreferencesRepository,
     private val cashCounts: CashCountRepository,
     private val categories: CategoryRepository,
+    private val accounts: AccountRepository,
     private val clock: Clock,
 ) : ViewModel() {
     private val state = MutableStateFlow(false)
@@ -49,11 +53,16 @@ internal class OnboardingViewModel @Inject constructor(
         savedState[CASH_AMOUNT] = answers.cashAmount
     }
 
+    fun onCategoriesChosen(categories: List<NewCategory>) {
+        savedState[CATEGORY_NAMES] = ArrayList(categories.map { it.name })
+        savedState[CATEGORY_NATURES] = ArrayList(categories.map { it.nature.name })
+    }
+
     /**
-     * Saves the profile, the cash in pocket as the first cash count and the chosen [categories], the answers of the
-     * last step. The earlier steps always came first: their answers are there.
+     * Saves the profile, the cash in pocket as the first cash count, the categories and the declared [accounts], the
+     * answers of the last step. The earlier steps always came first: their answers are there.
      */
-    fun complete(categories: List<NewCategory>) {
+    fun complete(accounts: List<NewAccount>) {
         val profile = UserProfile(
             displayName = stored(DISPLAY_NAME),
             occupation = Occupation.valueOf(stored(OCCUPATION)),
@@ -61,10 +70,16 @@ internal class OnboardingViewModel @Inject constructor(
             paymentHabit = PaymentHabit.valueOf(stored(PAYMENT_HABIT)),
         )
         val cashAmount: Long = stored(CASH_AMOUNT)
+        val categoryNames: List<String> = stored(CATEGORY_NAMES)
+        val categoryNatures: List<String> = stored(CATEGORY_NATURES)
+        val chosenCategories = categoryNames.zip(categoryNatures) { name, nature ->
+            NewCategory(name = name, nature = CategoryNature.valueOf(nature))
+        }
         viewModelScope.launch {
             preferences.saveProfile(profile)
             cashCounts.addCount(amount = cashAmount, countedAt = clock.instant(), expectedAmount = null)
-            this@OnboardingViewModel.categories.createCategories(categories)
+            categories.createCategories(chosenCategories)
+            this@OnboardingViewModel.accounts.createAccounts(accounts)
             state.value = true
         }
     }
@@ -78,5 +93,7 @@ internal class OnboardingViewModel @Inject constructor(
         const val INCOME_TYPE = "income_type"
         const val PAYMENT_HABIT = "payment_habit"
         const val CASH_AMOUNT = "cash_amount"
+        const val CATEGORY_NAMES = "category_names"
+        const val CATEGORY_NATURES = "category_natures"
     }
 }

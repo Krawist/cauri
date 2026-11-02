@@ -14,6 +14,10 @@ internal interface AccountDao {
     @Insert
     suspend fun insert(account: AccountEntity): Long
 
+    /** Inserts [accounts] in one statement: all or none. */
+    @Insert
+    suspend fun insertAll(accounts: List<AccountEntity>)
+
     @Update
     suspend fun update(account: AccountEntity)
 

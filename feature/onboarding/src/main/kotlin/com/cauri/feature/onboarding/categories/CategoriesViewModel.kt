@@ -45,6 +45,9 @@ internal class CategoriesViewModel @Inject constructor() :
         }
     }
 
+    /** The screen handed the choice on: coming back to this step must not hand it on again by itself. */
+    fun onAnswersHandedOn() = state.update { it.copy(answered = null) }
+
     private fun updateChoices(change: (CategoriesUiState) -> CategoriesUiState) = state.update { current ->
         val changed = change(current)
         val noneKept = noneKept(changed)

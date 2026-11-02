@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="accounts_add_bank">+ Ajouter une banque</string>
+    <string name="accounts_bank_hint">Banque</string>
+    <string name="accounts_banks">Ta banque</string>
+    <plurals name="accounts_banks_done">
+        <item quantity="one">Valider · %d banque</item>
+        <item quantity="many">Valider · %d banques</item>
+        <item quantity="other">Valider · %d banques</item>
+    </plurals>
+    <string name="accounts_banks_max">Jusqu\'à 3 banques pour l\'instant, d\'autres plus tard dans les réglages.</string>
+    <string name="accounts_banks_max_reached">3 banques au maximum</string>
+    <string name="accounts_banks_why">Le nom de ta banque permet à Cauri de lire correctement ses notifications.</string>
+    <string name="accounts_cash">Cash</string>
+    <string name="accounts_cash_hint">Toujours suivi</string>
+    <string name="accounts_mobile_money_hint">Mobile Money</string>
+    <string name="accounts_no_bank_found">Aucune banque trouvée</string>
+    <string name="accounts_pick_bank">Choisis tes banques</string>
+    <string name="accounts_search_bank">Rechercher une banque</string>
+    <string name="accounts_subtitle">Coche ce que tu utilises. Le cash est toujours suivi.</string>
+    <string name="accounts_title">Quels comptes utilises-tu ?</string>
     <string name="categories_add">+ Ajouter</string>
     <string name="categories_add_confirm">Ajouter</string>
     <plurals name="categories_continue">

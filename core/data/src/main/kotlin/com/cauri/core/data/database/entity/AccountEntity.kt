@@ -2,6 +2,7 @@ package com.cauri.core.data.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.cauri.core.data.model.AccountKind
 
 /**
  * An account where the user's money lives. The Cash account (id [CASH_ACCOUNT_ID]) is created with the database and

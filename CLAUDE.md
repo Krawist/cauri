@@ -151,7 +151,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   default, tontine as savings), user additions, at least one category required, « Continuer · n catégories ». The
   onboarding steps save nothing: they hand their answers to the graph-scoped `OnboardingViewModel` (kept in its
   `SavedStateHandle`), which saves the complete `UserProfile`, the first cash count and the categories after the last
-  step. Steps share `OnboardingStep`. Checked on a phone, back navigation included. Next: CAU-09.
+  step. Steps share `OnboardingStep`. Checked on a phone, back navigation included.
+- [ ] **CAU-09** — accounts step (`AccountsScreen`), now the last one: Cash always tracked, MTN MoMo and Orange Money
+  (`MobileMoney`), up to 3 banks from `knownBanks` (`Bank`: code, name, description, country; the account's provider
+  is the bank's code), chosen in a sheet (`BankPicker`) with a search (case and accents ignored) and several at once.
+  The sheet is a `GlassScreen` of its own, with its backdrop. The bank list comes from the Ministry of Finance list of
+  September 2023: to check against COBAC before release. Cash only is allowed. Checked on a phone. Next: CAU-10.
 
 Update this section at the end of each ticket.
 

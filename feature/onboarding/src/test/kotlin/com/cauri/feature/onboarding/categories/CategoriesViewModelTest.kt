@@ -197,4 +197,19 @@ internal class CategoriesViewModelTest {
             viewModel.uiState.value.noneKept.shouldBeFalse()
         }
     }
+
+    @Nested
+    inner class OnAnswersHandedOn {
+        @Test
+        fun `should not give the categories again when the user comes back to the step`() {
+            // given
+            viewModel.onContinue()
+
+            // when
+            viewModel.onAnswersHandedOn()
+
+            // then
+            viewModel.uiState.value.answered.shouldBeNull()
+        }
+    }
 }

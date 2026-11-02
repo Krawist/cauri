@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.cauri.feature.onboarding.accounts.AccountsScreen
 import com.cauri.feature.onboarding.categories.CategoriesScreen
 import com.cauri.feature.onboarding.habits.HabitsScreen
 import com.cauri.feature.onboarding.profile.ProfileScreen
@@ -28,10 +29,13 @@ internal data object HabitsRoute
 @Serializable
 internal data object CategoriesRoute
 
+@Serializable
+internal data object AccountsRoute
+
 /**
  * Profile, payment habits, categories, accounts and permissions (CAU-06 to CAU-11). Each step hands its answers to the
  * [OnboardingViewModel] of the graph, which saves them all after the last one. Until the next steps exist, the
- * onboarding ends after the categories.
+ * onboarding ends after the accounts.
  */
 fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: () -> Unit) {
     navigation<OnboardingGraph>(startDestination = ProfileRoute) {
@@ -55,11 +59,20 @@ fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: (
         }
         composable<CategoriesRoute> { entry ->
             val onboarding = onboardingViewModel(navController, entry)
+            CategoriesScreen(
+                onCategoriesChosen = { categories ->
+                    onboarding.onCategoriesChosen(categories)
+                    navController.navigate(AccountsRoute)
+                },
+            )
+        }
+        composable<AccountsRoute> { entry ->
+            val onboarding = onboardingViewModel(navController, entry)
             val completed by onboarding.completed.collectAsStateWithLifecycle()
             LaunchedEffect(completed) {
                 if (completed) onCompleted()
             }
-            CategoriesScreen(onCategoriesChosen = onboarding::complete)
+            AccountsScreen(onAccountsChosen = onboarding::complete)
         }
     }
 }
