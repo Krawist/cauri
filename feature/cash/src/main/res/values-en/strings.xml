@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cash_count_title">Count my cash</string>
+    <string name="cash_coming_soon">Screen coming soon</string>
+    <string name="cash_back">Back</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_title">Welcome to Cauri</string>
+    <string name="onboarding_subtitle">Your cash, MoMo, Orange Money and bank in one place.</string>
+    <string name="onboarding_start">Get started</string>
+</resources>

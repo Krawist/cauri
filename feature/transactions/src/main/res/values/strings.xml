@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="transactions_quick_entry_title">Nouvelle dépense</string>
+    <string name="transactions_coming_soon">Écran à venir</string>
+    <string name="transactions_back">Retour</string>
+</resources>
