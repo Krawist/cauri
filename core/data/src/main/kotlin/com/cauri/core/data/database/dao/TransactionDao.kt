@@ -18,6 +18,10 @@ internal interface TransactionDao {
     @Insert
     suspend fun insert(transaction: TransactionEntity): Long
 
+    /** Inserts [transactions] all or none: none when one of their raw signals already created a transaction. */
+    @Insert
+    suspend fun insertAll(transactions: List<TransactionEntity>)
+
     @Update
     suspend fun update(transaction: TransactionEntity)
 

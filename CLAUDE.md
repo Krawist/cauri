@@ -175,7 +175,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   ones count. The balance may go below zero until the next count. `CashCountRepository.balance` follows the latest
   count and the cash transactions (`CashBalance`: amount, count time, expenses since). Accueil shows the « Cash dans ta
   poche » card of the mockup (« ≈ », « Compté hier à 20 h · 3 dépenses depuis », « Compter mon cash »). The widget
-  comes with CAU-32. The fakes of `:core:data` are its test fixtures. Checked on a phone. Next: CAU-13.
+  comes with CAU-32. The fakes of `:core:data` are its test fixtures. Checked on a phone. The layout of the card is
+  to be reworked (button next to the amount when it fits).
+- [ ] **CAU-13** — `TransactionRepository.recordWithdrawal(Withdrawal)`: a transfer from the account to the Cash
+  account (two transactions, one transfer group) and the fee, when given, as an expense on the account; all or
+  nothing. Parsed from a signal it is « à confirmer » and keeps the signal on the account's side; entered by the user it
+  is confirmed. The cash balance goes up by the amount withdrawn (tested). Nothing creates withdrawals yet: parsing
+  comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30). Next: CAU-14.
 
 Update this section at the end of each ticket.
 
