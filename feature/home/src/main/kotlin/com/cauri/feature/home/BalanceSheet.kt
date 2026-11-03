@@ -57,7 +57,7 @@ private const val MAX_AMOUNT_DIGITS = 8
 /**
  * « Solde d'Orange Money »: the balance the user reads in the operator's app, against the one Cauri shows. Less than
  * shown, « Répartir l'écart » opens the split of the gap through [onSplitGap] (typed, shown); « Enregistrer » keeps the
- * balance and leaves the gap unsplit.
+ * balance and leaves the gap unsplit. A long press on the erase key clears the balance typed.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -177,34 +177,35 @@ private fun Comparison(shown: Long, typed: Long?, gap: Long) {
     }
 }
 
-// « Répartir l'écart » first when money is missing, « Enregistrer » always: it keeps the balance, the gap unsplit.
+// « Répartir l'écart » above « Enregistrer », both always in place so that nothing moves: the first waits for money
+// missing, the second for a balance typed.
 @Composable
 private fun Answers(typed: Long?, splits: Boolean, onSplit: () -> Unit, onSave: () -> Unit) {
     val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
-    if (splits) {
+    Column(
+        modifier = Modifier.padding(top = CauriSpacing.s),
+        verticalArrangement = Arrangement.spacedBy(CauriSpacing.s),
+    ) {
         Button(
             onClick = {
                 haptics.select()
                 onSplit()
             },
-            modifier = Modifier.fillMaxWidth().padding(top = CauriSpacing.s).height(ButtonHeight),
+            enabled = splits,
+            modifier = Modifier.fillMaxWidth().height(ButtonHeight),
+            shape = CircleShape,
+            colors = ButtonDefaults.buttonColors(containerColor = palette.chip, contentColor = palette.ink),
+        ) { Text(text = stringResource(R.string.home_balance_split), style = MaterialTheme.typography.titleMedium) }
+        Button(
+            onClick = {
+                haptics.confirm()
+                onSave()
+            },
+            enabled = typed != null,
+            modifier = Modifier.fillMaxWidth().height(ButtonHeight),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(containerColor = palette.accent, contentColor = palette.onAccent),
-        ) { Text(text = stringResource(R.string.home_balance_split), style = MaterialTheme.typography.titleMedium) }
+        ) { Text(text = stringResource(R.string.home_balance_save), style = MaterialTheme.typography.titleMedium) }
     }
-    Button(
-        onClick = {
-            haptics.confirm()
-            onSave()
-        },
-        enabled = typed != null,
-        modifier = Modifier.fillMaxWidth().padding(top = if (splits) 0.dp else CauriSpacing.s).height(ButtonHeight),
-        shape = CircleShape,
-        colors = if (splits) {
-            ButtonDefaults.buttonColors(containerColor = palette.chip, contentColor = palette.ink)
-        } else {
-            ButtonDefaults.buttonColors(containerColor = palette.accent, contentColor = palette.onAccent)
-        },
-    ) { Text(text = stringResource(R.string.home_balance_save), style = MaterialTheme.typography.titleMedium) }
 }
