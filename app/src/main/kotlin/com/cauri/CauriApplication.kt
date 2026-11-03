@@ -6,6 +6,7 @@ import androidx.work.Configuration
 import com.cauri.core.capture.health.CaptureHealth
 import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.capture.reminder.EveningSummary
+import com.cauri.core.capture.reminder.ReminderLearning
 import com.cauri.core.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
 import com.cauri.feature.places.discovery.PlaceDiscovery
@@ -36,5 +37,6 @@ internal class CauriApplication :
         placeWatcher.start()
         PlaceDiscovery.schedule(this)
         EveningSummary.schedule(this)
+        ReminderLearning.schedule(this)
     }
 }

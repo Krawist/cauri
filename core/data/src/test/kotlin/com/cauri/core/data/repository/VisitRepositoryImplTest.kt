@@ -2,6 +2,8 @@ package com.cauri.core.data.repository
 
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
+import com.cauri.core.data.database.entity.DecisionLogEntity
+import com.cauri.core.data.database.entity.DecisionOutcome
 import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
@@ -9,6 +11,7 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.model.ReminderAction
 import com.cauri.core.data.service.VisitServiceImpl
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.shouldBeNull
@@ -129,6 +132,38 @@ internal class VisitRepositoryImplTest {
             database.transactionDao().getById(card(bakeryId)).shouldNotBeNull().status shouldBe
                 TransactionStatus.DISMISSED
             repository.waiting.first().shouldBeEmpty()
+        }
+
+        @Test
+        fun `should miss a visit skipped whose amount the count found, and time out those set aside`() = runTest {
+            // given
+            val marketId = database.placeDao().insert(market())
+            val bakeryId = database.placeDao().insert(market().copy(name = "Boulangerie", latitude = 3.9))
+            listOf(marketId, bakeryId).forEach {
+                database.visitDao().enter(placeId = it, enteredAt = ENTERED)
+                repository.leave(placeId = it, at = LEFT)
+                database.decisionLogDao().insert(
+                    DecisionLogEntity(
+                        decidedAt = LEFT,
+                        visitId = null,
+                        transactionId = card(it),
+                        features = listOf(1.0),
+                        featureVersion = 1,
+                        action = ReminderAction.SKIP,
+                        probability = 1.0,
+                        modelVersion = "rules-2",
+                        outcome = null,
+                        outcomeAt = null,
+                    ),
+                )
+            }
+
+            // when
+            repository.settle(amounts = mapOf(card(marketId) to 3_000L), at = LEFT + Duration.ofHours(2))
+
+            // then
+            database.decisionLogDao().getSince(Instant.EPOCH).associate { it.transactionId to it.outcome } shouldBe
+                mapOf(card(marketId) to DecisionOutcome.MISSED, card(bakeryId) to DecisionOutcome.TIMEOUT)
         }
     }
 

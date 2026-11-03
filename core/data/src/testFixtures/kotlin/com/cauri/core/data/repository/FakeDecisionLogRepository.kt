@@ -26,6 +26,13 @@ class FakeDecisionLogRepository : DecisionLogRepository {
 
     override suspend fun answerTimes(since: Instant) = answers
 
+    /** When [attributeOutcomes] ran, in order. */
+    val attributions = mutableListOf<Instant>()
+
+    override suspend fun attributeOutcomes(now: Instant) {
+        attributions += now
+    }
+
     override suspend fun log(decision: NewDecision) {
         decisions += decision
     }

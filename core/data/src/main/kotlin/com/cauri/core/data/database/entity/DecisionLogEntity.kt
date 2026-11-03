@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.ReminderAction
 import java.time.Instant
 
@@ -22,6 +23,7 @@ import java.time.Instant
  * @property modelVersion Version of the rules or bandit model that decided.
  * @property outcome What happened afterwards, the reward reason; `null` while the decision is still open.
  * @property outcomeAt When the outcome was recorded; `null` while the decision is still open.
+ * @property excluded Why the decision is left out of the training; `null` when it counts.
  */
 @Entity(
     tableName = "decision_log",
@@ -53,4 +55,5 @@ internal data class DecisionLogEntity(
     val modelVersion: String,
     val outcome: DecisionOutcome?,
     val outcomeAt: Instant?,
+    val excluded: DecisionExclusion? = null,
 )

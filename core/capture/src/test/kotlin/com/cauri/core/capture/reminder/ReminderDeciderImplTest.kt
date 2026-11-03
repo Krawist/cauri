@@ -1,6 +1,7 @@
 package com.cauri.core.capture.reminder
 
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReminderAction
@@ -145,6 +146,19 @@ internal class ReminderDeciderImplTest {
         }
 
         @Test
+        fun `should leave out of the training a notification Android did not show`() = runTest {
+            // given
+            notifier.allowed = false
+            transactions.pending.value = listOf(payment(id = 7))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().excluded shouldBe DecisionExclusion.UNSEEN
+        }
+
+        @Test
         fun `should keep for the evening a card come in the quiet hours the user chose`() = runTest {
             // given
             preferences.reminders.value =
@@ -225,9 +239,12 @@ internal class ReminderDeciderImplTest {
     private class RecordingNotifier : ReminderNotifier {
         val shown = mutableListOf<Long>()
 
+        /** Whether Android shows the notifications. */
+        var allowed = true
+
         override suspend fun show(operation: PendingOperation): Boolean {
-            shown += operation.transactionId
-            return true
+            if (allowed) shown += operation.transactionId
+            return allowed
         }
 
         override suspend fun showSummary(count: Int) = true

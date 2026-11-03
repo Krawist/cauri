@@ -539,6 +539,21 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   dark mode with made-up messages: the notification, its tap opening « Ce soir », a line set aside and undone. The
   worker firing at its time and « Tout valider » not seen on a phone. Next: CAU-40.
 
+- [ ] **CAU-40** — the outcomes of the decisions and their rewards. The answers close them as before (`CONFIRMED`,
+  `NOTHING_SPENT`, `DISMISSED`), a late one, such as from the evening summary, now correcting a `TIMEOUT`; a cash count
+  closes those of the visits it settles (`VisitDao.settle`), by decision (to validate): an amount found `MISSED` after a
+  skip, `CONFIRMED` otherwise, the cards it sets aside `TIMEOUT`. `ReminderLearningWorker` (`:core:capture`, once a day,
+  charging and idle, scheduled by `CauriApplication`) has `DecisionLogRepository.attributeOutcomes` give the others
+  theirs (`OutcomeService`, JVM tests), again and again the same: a visit whose card went, paid during it, by decision
+  (to validate), typed by hand `MISSED` after a skip and `CONFIRMED` otherwise, read in a message `NOTHING_SPENT` (no
+  cash); a card waiting 3 days `TIMEOUT`. Left out of the training (`decision_log.excluded`, database v18,
+  `DecisionExclusion`): a notification set aside within 2 seconds (`ACCIDENTAL`), and, by decision, a notification
+  Android did not show, Cauri's notifications being off, as « never seen » (`UNSEEN`, at decision time). The rewards are
+  `RewardTable` (`:core:engine`, « rewards-1 », JVM tests), values from -1 to 1 per action and outcome, applied at
+  training time (CAU-41), by decision (to validate): a notification confirmed 1, set aside or timed out -0.5, the
+  summary quieter (0.7 to -0.3), a skip right when nothing was spent (0.5) and -1 for any expense missed. Checked on the
+  Galaxy S23: the upgrade to v18. Next: CAU-41.
+
 Update this section at the end of each ticket.
 
 ## Way of working

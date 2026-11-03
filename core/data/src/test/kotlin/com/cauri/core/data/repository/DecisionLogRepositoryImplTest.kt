@@ -10,11 +10,13 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.entity.VisitEntity
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.NewDecision
 import com.cauri.core.data.model.PlaceKind
 import com.cauri.core.data.model.ReminderAction
 import com.cauri.core.data.model.ReminderStats
 import com.cauri.core.data.model.VisitHistory
+import com.cauri.core.data.service.OutcomeServiceImpl
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import java.time.Duration
@@ -32,7 +34,7 @@ internal class DecisionLogRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         database = inMemoryDatabase()
-        repository = DecisionLogRepositoryImpl(database.decisionLogDao())
+        repository = DecisionLogRepositoryImpl(database.decisionLogDao(), OutcomeServiceImpl())
     }
 
     @AfterEach
@@ -79,6 +81,83 @@ internal class DecisionLogRepositoryImplTest {
 
             // then
             times shouldBe listOf(NOON + Duration.ofHours(7), NOON + Duration.ofHours(8))
+        }
+    }
+
+    @Nested
+    inner class AttributeOutcomes {
+        @Test
+        fun `should time out a card left waiting three days`() = runTest {
+            // given
+            val card = database.transactionDao().insert(expense(amount = 0, at = NOON, placeId = null))
+            repository.log(decision(transactionId = card, at = NOON, action = ReminderAction.NOTIFY_NOW))
+
+            // when
+            repository.attributeOutcomes(now = NOON + Duration.ofDays(3))
+
+            // then
+            database.decisionLogDao().getSince(Instant.EPOCH).single().outcome shouldBe DecisionOutcome.TIMEOUT
+        }
+
+        @Test
+        fun `should miss a visit skipped whose expense the user typed by hand`() = runTest {
+            // given
+            val placeId = database.placeDao().insert(market())
+            val card = database.transactionDao().insert(
+                expense(amount = 0, at = NOON, placeId = placeId).copy(status = TransactionStatus.DETECTED),
+            )
+            val visitId = database.visitDao().insert(
+                VisitEntity(placeId = placeId, enteredAt = NOON - HALF_HOUR, leftAt = NOON, transactionId = card),
+            )
+            repository.log(
+                decision(transactionId = card, at = NOON, action = ReminderAction.SKIP).copy(visitId = visitId),
+            )
+            database.transactionDao().insert(
+                expense(amount = 1_500, at = NOON - Duration.ofMinutes(15), placeId = placeId),
+            )
+            database.visitDao().removeWaitingCard(
+                VisitEntity(
+                    id = visitId,
+                    placeId = placeId,
+                    enteredAt = NOON - HALF_HOUR,
+                    leftAt = NOON,
+                    transactionId = card,
+                ),
+            )
+
+            // when
+            repository.attributeOutcomes(now = NOON + HALF_HOUR)
+
+            // then
+            database.decisionLogDao().getSince(Instant.EPOCH).single().outcome shouldBe DecisionOutcome.MISSED
+        }
+
+        @Test
+        fun `should leave out a notification set aside within two seconds`() = runTest {
+            // given
+            val card = database.transactionDao().insert(expense(amount = 0, at = NOON, placeId = null))
+            repository.log(decision(transactionId = card, at = NOON, action = ReminderAction.NOTIFY_NOW))
+            database.confirmationDao().closeDecisions(card, DecisionOutcome.DISMISSED, NOON + Duration.ofSeconds(1))
+
+            // when
+            repository.attributeOutcomes(now = NOON + HALF_HOUR)
+
+            // then
+            database.decisionLogDao().getSince(Instant.EPOCH).single().excluded shouldBe DecisionExclusion.ACCIDENTAL
+        }
+
+        @Test
+        fun `should let a late answer correct a time out`() = runTest {
+            // given
+            val card = database.transactionDao().insert(expense(amount = 0, at = NOON, placeId = null))
+            repository.log(decision(transactionId = card, at = NOON, action = ReminderAction.EVENING_SUMMARY))
+            repository.attributeOutcomes(now = NOON + Duration.ofDays(3))
+
+            // when
+            database.confirmationDao().closeDecisions(card, DecisionOutcome.CONFIRMED, NOON + Duration.ofDays(4))
+
+            // then
+            database.decisionLogDao().getSince(Instant.EPOCH).single().outcome shouldBe DecisionOutcome.CONFIRMED
         }
     }
 

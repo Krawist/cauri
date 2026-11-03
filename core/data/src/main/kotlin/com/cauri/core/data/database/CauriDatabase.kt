@@ -53,7 +53,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         StopEntity::class,
         PlaceSuggestionEntity::class,
     ],
-    version = 17,
+    version = 18,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -70,6 +70,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 14, to = 15),
         AutoMigration(from = 15, to = 16),
         AutoMigration(from = 16, to = 17, spec = RemoveVisitOutcome::class),
+        AutoMigration(from = 17, to = 18),
     ],
 )
 @TypeConverters(DatabaseConverters::class)

@@ -14,6 +14,8 @@ import com.cauri.core.data.service.DiscoveryService
 import com.cauri.core.data.service.DiscoveryServiceImpl
 import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.OutcomeService
+import com.cauri.core.data.service.OutcomeServiceImpl
 import com.cauri.core.data.service.PlaceService
 import com.cauri.core.data.service.PlaceServiceImpl
 import com.cauri.core.data.service.ProposalService
@@ -58,6 +60,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindPlaceService(impl: PlaceServiceImpl): PlaceService
+
+    @Binds
+    abstract fun bindOutcomeService(impl: OutcomeServiceImpl): OutcomeService
 
     @Binds
     abstract fun bindVisitService(impl: VisitServiceImpl): VisitService

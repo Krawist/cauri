@@ -113,9 +113,13 @@ internal interface ConfirmationDao {
     )
     suspend fun setTransferStatus(id: Long, status: TransactionStatus)
 
+    /**
+     * Closes the decisions about the transaction [transactionId] still open, or timed out: a late answer, such as from
+     * the evening summary, corrects the outcome.
+     */
     @Query(
         "UPDATE decision_log SET outcome = :outcome, outcomeAt = :at WHERE transactionId = :transactionId " +
-            "AND outcome IS NULL",
+            "AND (outcome IS NULL OR outcome = 'TIMEOUT')",
     )
     suspend fun closeDecisions(transactionId: Long, outcome: DecisionOutcome, at: Instant)
 

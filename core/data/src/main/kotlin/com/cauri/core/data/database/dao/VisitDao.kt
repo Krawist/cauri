@@ -128,6 +128,27 @@ internal interface VisitDao {
     @Query("UPDATE transactions SET amount = :amount, status = 'CONFIRMED' WHERE id = :id AND status = 'DETECTED'")
     suspend fun confirmCard(id: Long, amount: Long)
 
+    /** The cards of the visits still waiting from before [before]. */
+    @Query("SELECT id FROM transactions WHERE origin = 'VISIT' AND status = 'DETECTED' AND occurredAt < :before")
+    suspend fun getWaitingCardsBefore(before: Instant): List<Long>
+
+    /**
+     * Closes the open decisions about the card [transactionId], its amount found in a cash count: missed after a skip,
+     * confirmed late otherwise.
+     */
+    @Query(
+        "UPDATE decision_log SET outcome = CASE WHEN action = 'SKIP' THEN 'MISSED' ELSE 'CONFIRMED' END, " +
+            "outcomeAt = :at WHERE transactionId = :transactionId AND outcome IS NULL",
+    )
+    suspend fun closeFoundInCount(transactionId: Long, at: Instant)
+
+    /** Closes the open decisions about the cards [ids] as timed out: the cash count holds them, unknown. */
+    @Query(
+        "UPDATE decision_log SET outcome = 'TIMEOUT', outcomeAt = :at WHERE transactionId IN (:ids) " +
+            "AND outcome IS NULL",
+    )
+    suspend fun closeTimedOut(ids: List<Long>, at: Instant)
+
     /** Sets aside the cards of the visits still waiting from before [before]: the cash count holds them. */
     @Query(
         "UPDATE transactions SET status = 'DISMISSED' WHERE origin = 'VISIT' AND status = 'DETECTED' " +
@@ -135,10 +156,17 @@ internal interface VisitDao {
     )
     suspend fun dismissCardsBefore(before: Instant)
 
-    /** Confirms the cards of [amounts], by transaction, and sets aside the others from before [at], all or none. */
+    /**
+     * Confirms the cards of [amounts], by transaction, and sets aside the others from before [at], all or none, with
+     * the outcomes of their decisions.
+     */
     @Transaction
     suspend fun settle(amounts: Map<Long, Long>, at: Instant) {
-        amounts.forEach { (id, amount) -> confirmCard(id = id, amount = amount) }
+        amounts.forEach { (id, amount) ->
+            confirmCard(id = id, amount = amount)
+            closeFoundInCount(transactionId = id, at = at)
+        }
+        closeTimedOut(ids = getWaitingCardsBefore(at), at = at)
         dismissCardsBefore(at)
     }
 }

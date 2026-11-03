@@ -13,6 +13,7 @@ import java.time.Instant
  * @property action Action decided.
  * @property probability Probability of [action] under the policy that decided, from 0 to 1.
  * @property modelVersion Rules or model that decided.
+ * @property excluded Why the decision is left out of the training from the start; `null` when it counts.
  */
 data class NewDecision(
     val decidedAt: Instant,
@@ -23,4 +24,5 @@ data class NewDecision(
     val action: ReminderAction,
     val probability: Double,
     val modelVersion: String,
+    val excluded: DecisionExclusion? = null,
 )

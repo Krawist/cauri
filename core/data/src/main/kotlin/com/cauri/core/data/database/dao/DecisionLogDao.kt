@@ -35,6 +35,17 @@ internal interface DecisionLogDao {
     )
     suspend fun getAnswerTimes(since: Instant): List<Instant>
 
+    /** The visit [id]; `null` when it was deleted with its place. */
+    @Query("SELECT * FROM visits WHERE id = :id")
+    suspend fun getVisit(id: Long): VisitEntity?
+
+    /** Whether an expense was typed by hand at the place [placeId] from [from] to [to]. */
+    @Query(
+        "SELECT EXISTS(SELECT 1 FROM transactions WHERE placeId = :placeId AND origin = 'MANUAL' " +
+            "AND type = 'EXPENSE' AND occurredAt BETWEEN :from AND :to)",
+    )
+    suspend fun hasExpenseTypedAt(placeId: Long, from: Instant, to: Instant): Boolean
+
     /** Whether a decision was taken about the transaction [transactionId]: the engine decides once per card. */
     @Query("SELECT EXISTS(SELECT 1 FROM decision_log WHERE transactionId = :transactionId)")
     suspend fun hasDecision(transactionId: Long): Boolean

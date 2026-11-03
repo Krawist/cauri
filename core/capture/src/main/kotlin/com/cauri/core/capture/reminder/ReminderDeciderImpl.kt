@@ -1,6 +1,7 @@
 package com.cauri.core.capture.reminder
 
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.NewDecision
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
@@ -85,8 +86,9 @@ internal class ReminderDeciderImpl @Inject constructor(
                 )
                 // The guardrails first: the rules choose among what they allow.
                 val action = guardrails.restrict(rules.decide(context), guardrails.allowed(context, limits))
-                if (action == ReminderAction.NOTIFY_NOW) {
-                    notifier.show(operation)
+                // A notification Android does not show says nothing of the reminder: it is left out of the training.
+                val shown = action == ReminderAction.NOTIFY_NOW && notifier.show(operation)
+                if (shown) {
                     lastNotifiedAt = now
                     notified++
                 }
@@ -101,6 +103,7 @@ internal class ReminderDeciderImpl @Inject constructor(
                         // The rules decide for sure.
                         probability = 1.0,
                         modelVersion = ReminderRules.VERSION,
+                        excluded = DecisionExclusion.UNSEEN.takeIf { action == ReminderAction.NOTIFY_NOW && !shown },
                     ),
                 )
             }

@@ -19,6 +19,12 @@ interface DecisionLogRepository {
     /** When the user answered a card (confirmed or « Rien dépensé ») since [since], the oldest first. */
     suspend fun answerTimes(since: Instant): List<Instant>
 
+    /**
+     * Gives an outcome to the decisions the user did not answer: a visit paid during it, a card waiting too long; and
+     * leaves out of the training the notifications set aside by mistake. Running it again changes nothing.
+     */
+    suspend fun attributeOutcomes(now: Instant)
+
     /** Logs [decision], its outcome open until the user answers. */
     suspend fun log(decision: NewDecision)
 }
