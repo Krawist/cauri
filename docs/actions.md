@@ -10,7 +10,7 @@ several are plugged in:
 ~/Library/Android/sdk/platform-tools/adb -s <serial> shell am broadcast -a <action> [extras] -p com.cauri.debug
 ```
 
-`adb devices` lists the serials. Extras are passed with `-e <name> <text>` for text and `-ez <name> <true|false>` for
+`adb devices` lists the serials. Extras are passed with `-e <name> <text>` for text and `--ez <name> <true|false>` for
 booleans.
 
 | Action                                     | Module           | Effect                                                     |
@@ -83,7 +83,7 @@ Android first. Accueil reads it each time it comes back to the screen. The daily
 | `on`  | boolean | `true`  | `true` simulates the silence, `false` ends it            |
 
 ```bash
-adb shell am broadcast -a com.cauri.debug.SIMULATE_CAPTURE_SILENCE -ez on false -p com.cauri.debug
+adb shell am broadcast -a com.cauri.debug.SIMULATE_CAPTURE_SILENCE -p com.cauri.debug --ez on false
 ```
 
 The choice is kept until it is changed or Cauri's data is cleared.
