@@ -1,11 +1,9 @@
 package com.cauri.feature.cash
 
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.cauri.core.design.component.PlaceholderScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -35,11 +33,9 @@ fun NavGraphBuilder.cashGraph(navController: NavController, onBack: () -> Unit) 
             )
         }
         composable<GapSplitRoute> {
-            PlaceholderScreen(
-                title = stringResource(R.string.cash_split_title),
-                subtitle = stringResource(R.string.cash_coming_soon),
-                actionLabel = stringResource(R.string.cash_back),
-                onAction = { navController.popBackStack() },
+            GapSplitScreen(
+                onBack = { navController.popBackStack() },
+                onSaved = { navController.popBackStack<CashGraph>(inclusive = true) },
             )
         }
     }

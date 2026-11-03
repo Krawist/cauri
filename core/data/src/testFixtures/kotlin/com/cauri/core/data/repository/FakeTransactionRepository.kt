@@ -1,5 +1,6 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
 
@@ -24,6 +25,9 @@ class FakeTransactionRepository : TransactionRepository {
 
     val withdrawals = mutableListOf<Withdrawal>()
     val cashExpenses = mutableListOf<CashExpense>()
+
+    /** Expenses recorded by [recordReconciliation], with the time of their count. */
+    val reconciliations = mutableListOf<Pair<List<ReconciledExpense>, Instant>>()
     private var nextId = 1L
 
     override suspend fun recordWithdrawal(withdrawal: Withdrawal) {
@@ -35,6 +39,10 @@ class FakeTransactionRepository : TransactionRepository {
         cashExpenses +=
             CashExpense(id = id, amount = amount, categoryId = categoryId, note = note, occurredAt = occurredAt)
         return id
+    }
+
+    override suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant) {
+        reconciliations += expenses to countedAt
     }
 
     override suspend fun deleteTransaction(id: Long) {

@@ -2,10 +2,7 @@
 <resources>
     <string name="home_cash_label">Cash in your pocket</string>
     <string name="home_count_cash">Count my cash</string>
-    <string name="home_counted_date">Counted on %1$s</string>
-    <string name="home_counted_today">Counted today at %1$s</string>
-    <string name="home_counted_weekday">Counted on %1$s at %2$s</string>
-    <string name="home_counted_yesterday">Counted yesterday at %1$s</string>
+    <string name="home_counted">Counted %1$s</string>
     <plurals name="home_expenses_since">
         <item quantity="one">%d expense since</item>
         <item quantity="other">%d expenses since</item>
@@ -29,8 +26,6 @@
     <string name="home_habits_title">My habits</string>
     <string name="home_other_cash_expense">Other cash expense</string>
     <string name="home_settings">Settings</string>
-    <string name="home_time_pattern">h:mm a</string>
-    <string name="home_time_pattern_hour">h a</string>
     <string name="home_title">Hello</string>
     <string name="home_undo">Undo</string>
 </resources>

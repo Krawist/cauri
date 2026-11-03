@@ -40,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.NewCategory
 import com.cauri.core.design.component.CauriTextField
+import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
@@ -49,7 +50,6 @@ import com.cauri.feature.onboarding.FirstHabit
 import com.cauri.feature.onboarding.MissingAnswer
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.R
-import com.cauri.feature.onboarding.dashedBorder
 
 private const val CATEGORIES_STEP = 3
 private val ChipHeight = 44.dp

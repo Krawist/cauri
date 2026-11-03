@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="cash_amount" translatable="false">%1$s F</string>
     <string name="cash_back">Retour</string>
-    <string name="cash_coming_soon">Écran à venir</string>
     <string name="cash_count_add">Ajouter un %1$s</string>
     <string name="cash_count_by_denomination">Compter billet par billet</string>
     <string name="cash_count_clear">Tout effacer</string>
@@ -21,5 +21,18 @@
     <string name="cash_count_total_question">Combien as-tu en poche ?</string>
     <string name="cash_count_type_total">Saisir le total directement</string>
     <string name="cash_currency" translatable="false">F</string>
-    <string name="cash_split_title">Répartir l\'écart</string>
+    <string name="cash_split_add">+ Autre dépense</string>
+    <string name="cash_split_added">Ajoutée par toi</string>
+    <string name="cash_split_amount_of">Montant pour %1$s</string>
+    <string name="cash_split_assigned">Réparti %1$s F</string>
+    <string name="cash_split_from_habit">Une de tes habitudes</string>
+    <string name="cash_split_hint" translatable="false">≈ %1$s</string>
+    <string name="cash_split_noticed">Cauri a repéré ces moments</string>
+    <string name="cash_split_of">sur %1$s F</string>
+    <string name="cash_split_pick_category">Dans quelle catégorie ?</string>
+    <string name="cash_split_rest">Reste non identifié</string>
+    <string name="cash_split_rest_hint">Enregistré comme « Divers cash ». Tu pourras le reclasser plus tard.</string>
+    <string name="cash_split_save">Enregistrer</string>
+    <string name="cash_split_since">Depuis ton comptage %1$s</string>
+    <string name="cash_split_title_amount">Où sont partis %1$s F ?</string>
 </resources>

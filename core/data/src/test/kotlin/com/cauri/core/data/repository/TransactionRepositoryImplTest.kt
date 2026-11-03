@@ -12,6 +12,7 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
@@ -207,6 +208,36 @@ internal class TransactionRepositoryImplTest {
                     note = "Moto",
                 ),
             )
+        }
+    }
+
+    @Nested
+    inner class RecordReconciliation {
+        @Test
+        fun `should record confirmed cash expenses at the time of the count, which the balance leaves out`() = runTest {
+            // given
+            val cashCounts = CashCountRepositoryImpl(
+                cashCountDao = database.cashCountDao(),
+                transactionDao = database.transactionDao(),
+                cashBalanceService = CashBalanceServiceImpl(),
+            )
+            cashCounts.addCount(amount = 3_000, countedAt = Instant.ofEpochSecond(2_000), expectedAmount = 7_500)
+
+            // when
+            repository.recordReconciliation(
+                expenses = listOf(
+                    ReconciledExpense(amount = 2_000, categoryId = null, note = "Moto"),
+                    ReconciledExpense(amount = 2_500, categoryId = null, note = null),
+                ),
+                countedAt = Instant.ofEpochSecond(2_000),
+            )
+
+            // then
+            recorded().map { Triple(it.origin, it.amount, it.note) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionOrigin.RECONCILIATION, 2_000L, "Moto"),
+                Triple(TransactionOrigin.RECONCILIATION, 2_500L, null),
+            )
+            cashCounts.balance.first().shouldNotBeNull().amount shouldBe 3_000
         }
     }
 

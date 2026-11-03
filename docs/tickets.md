@@ -179,7 +179,8 @@ Size: M. Dependencies: CAU-12. Mockup: « Compter mon cash » (interactive).
 
 ### CAU-16 · Build the gap split screen
 
-List of the moments Cauri noticed since the last count (visits, habits), each with an amount to type. Suggestions stay grey placeholders until typed; only typed amounts count. The rest is recorded as « Divers cash ».
+List of the moments Cauri noticed since the last count (visits, habits), each with an amount to type. 
+Suggestions stay grey placeholders until typed; only typed amounts count. The rest is recorded as « Divers cash ».
 
 - A bar shows how much of the gap is split.
 - « + Autre dépense » adds a free line with a category.

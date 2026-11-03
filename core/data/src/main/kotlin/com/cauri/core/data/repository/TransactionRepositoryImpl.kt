@@ -6,6 +6,7 @@ import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
+import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
 import java.util.UUID
@@ -56,6 +57,27 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
                 note = note,
             ),
         )
+
+    override suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant) {
+        transactionDao.insertAll(
+            expenses.map {
+                TransactionEntity(
+                    accountId = CASH_ACCOUNT_ID,
+                    type = TransactionType.EXPENSE,
+                    status = TransactionStatus.CONFIRMED,
+                    origin = TransactionOrigin.RECONCILIATION,
+                    amount = it.amount,
+                    occurredAt = countedAt,
+                    categoryId = it.categoryId,
+                    placeId = null,
+                    rawSignalId = null,
+                    transferGroup = null,
+                    counterparty = null,
+                    note = it.note,
+                )
+            },
+        )
+    }
 
     override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }

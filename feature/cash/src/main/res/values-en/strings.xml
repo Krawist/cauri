@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="cash_back">Back</string>
-    <string name="cash_coming_soon">Coming soon</string>
     <string name="cash_count_add">Add a %1$s</string>
     <string name="cash_count_by_denomination">Count note by note</string>
     <string name="cash_count_clear">Clear all</string>
@@ -19,5 +18,17 @@
     <string name="cash_count_total">Total counted</string>
     <string name="cash_count_total_question">How much do you have on you?</string>
     <string name="cash_count_type_total">Type the total instead</string>
-    <string name="cash_split_title">Split the gap</string>
+    <string name="cash_split_add">+ Other expense</string>
+    <string name="cash_split_added">Added by you</string>
+    <string name="cash_split_amount_of">Amount for %1$s</string>
+    <string name="cash_split_assigned">Split %1$s F</string>
+    <string name="cash_split_from_habit">One of your habits</string>
+    <string name="cash_split_noticed">Cauri noticed these moments</string>
+    <string name="cash_split_of">of %1$s F</string>
+    <string name="cash_split_pick_category">In which category?</string>
+    <string name="cash_split_rest">Not placed</string>
+    <string name="cash_split_rest_hint">Recorded as “Miscellaneous cash”. You can file it later.</string>
+    <string name="cash_split_save">Save</string>
+    <string name="cash_split_since">Since your count %1$s</string>
+    <string name="cash_split_title_amount">Where did %1$s F go?</string>
 </resources>

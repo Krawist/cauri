@@ -1,4 +1,4 @@
-package com.cauri.feature.onboarding
+package com.cauri.core.design.component
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -13,7 +13,7 @@ private val DashWidth = 6.dp
 private val DashedBorderWidth = 1.5.dp
 
 /** Dashed border of the « + Ajouter » actions, as in the mockups; [radius] `null` draws a pill. */
-internal fun Modifier.dashedBorder(color: Color, radius: Dp? = null): Modifier = drawBehind {
+fun Modifier.dashedBorder(color: Color, radius: Dp? = null): Modifier = drawBehind {
     val dash = DashWidth.toPx()
     val corner = radius?.toPx() ?: (size.height / 2)
     drawRoundRect(

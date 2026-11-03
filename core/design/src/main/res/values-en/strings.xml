@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="moment_date">on %1$s</string>
+    <string name="moment_time_pattern">h:mm a</string>
+    <string name="moment_time_pattern_hour">h a</string>
+    <string name="moment_today">today at %1$s</string>
+    <string name="moment_weekday">on %1$s at %2$s</string>
+    <string name="moment_yesterday">yesterday at %1$s</string>
+</resources>

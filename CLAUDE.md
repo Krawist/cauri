@@ -193,7 +193,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   « Tout effacer », « Saisir le total directement », « Total compté », « Attendu ≈ » and the gap, updated on every
   tap. No gap or a surplus: « Valider le comptage » saves the count, `CashCountRepository.addCount` recording a surplus
   as found money (income, at the time of the count). Money missing: « Répartir l'écart » opens `GapSplitRoute`, a
-  placeholder until CAU-16. Checked on a phone. Next: CAU-16.
+  placeholder until CAU-16. Checked on a phone.
+- [ ] **CAU-16** — `GapSplitScreen` (`:feature:cash`): « Où sont partis 4 500 F ? » since the previous count, the habits
+  as moments Cauri noticed (hint grey until typed), « + Autre dépense » in a category, the bar of what is split and
+  « Reste non identifié ». « Enregistrer » records one confirmed cash expense per typed line and the rest, without
+  category nor note (shown « Divers cash »), at the time of the count (`TransactionRepository.recordReconciliation`),
+  then the count. Visits join the moments with the places tickets (CAU-33+). `formatMoment` and `dashedBorder` moved
+  to `:core:design`. Checked on a phone. Next: CAU-17.
 
 Update this section at the end of each ticket.
 

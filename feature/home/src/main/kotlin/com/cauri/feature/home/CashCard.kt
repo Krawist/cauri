@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.design.format.formatFcfa
+import com.cauri.core.design.format.formatMoment
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
@@ -114,7 +115,7 @@ private fun CashAmount(amount: Long) {
 // « Compté hier à 20 h · 3 dépenses depuis »: the expenses only once there are some.
 @Composable
 private fun countedLine(cash: CashBalance): String {
-    val counted = countedAtLabel(cash.countedAt)
+    val counted = stringResource(R.string.home_counted, formatMoment(cash.countedAt))
     if (cash.expensesSinceCount == 0) return counted
     val expenses = pluralStringResource(R.plurals.home_expenses_since, cash.expensesSinceCount, cash.expensesSinceCount)
     return stringResource(R.string.home_counted_and_expenses, counted, expenses)

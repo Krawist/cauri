@@ -36,6 +36,7 @@ import com.cauri.core.data.model.MobileMoney
 import com.cauri.core.data.model.NewAccount
 import com.cauri.core.data.model.knownBanks
 import com.cauri.core.data.model.knownMobileMoney
+import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
@@ -44,7 +45,6 @@ import com.cauri.feature.onboarding.ChoiceSurface
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.QuestionLabel
 import com.cauri.feature.onboarding.R
-import com.cauri.feature.onboarding.dashedBorder
 
 private const val ACCOUNTS_STEP = 4
 private const val ACCOUNT_CURRENCY = "XAF"

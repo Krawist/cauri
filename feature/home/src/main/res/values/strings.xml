@@ -3,11 +3,8 @@
     <string name="home_amount" translatable="false">%1$s F</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>
+    <string name="home_counted">Compté %1$s</string>
     <string name="home_counted_and_expenses" translatable="false">%1$s · %2$s</string>
-    <string name="home_counted_date">Compté le %1$s</string>
-    <string name="home_counted_today">Compté aujourd\'hui à %1$s</string>
-    <string name="home_counted_weekday">Compté %1$s à %2$s</string>
-    <string name="home_counted_yesterday">Compté hier à %1$s</string>
     <string name="home_currency" translatable="false">F</string>
     <plurals name="home_expenses_since">
         <item quantity="one">%d dépense depuis</item>
@@ -33,8 +30,6 @@
     <string name="home_habits_title">Mes habitudes</string>
     <string name="home_other_cash_expense">Autre dépense cash</string>
     <string name="home_settings">Réglages</string>
-    <string name="home_time_pattern">H \'h\' mm</string>
-    <string name="home_time_pattern_hour">H \'h\'</string>
     <string name="home_title">Bonjour</string>
     <string name="home_undo">Annuler</string>
 </resources>

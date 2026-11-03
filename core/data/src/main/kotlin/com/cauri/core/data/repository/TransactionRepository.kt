@@ -1,5 +1,6 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
 
@@ -18,6 +19,12 @@ interface TransactionRepository {
      * and returns its id.
      */
     suspend fun recordCashExpense(amount: Long, categoryId: Long?, note: String, occurredAt: Instant): Long
+
+    /**
+     * Records [expenses], the split of a count's gap, as confirmed cash expenses made at [countedAt], the time of the
+     * count, which already takes them into account. All or nothing.
+     */
+    suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant)
 
     /** Deletes the transaction [id], such as an expense the user undid right away. */
     suspend fun deleteTransaction(id: Long)
