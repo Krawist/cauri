@@ -603,6 +603,21 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   available amount (CAU-46). Checked on the Galaxy S23 in dark mode: the upgrade to v20, the tab before four weeks; a
   suggestion not seen on a phone (too little history). Next: CAU-47.
 
+- [ ] **CAU-47** — « Analyses » as the mockup, for the current month (`InsightsRepository`, `InsightsService` with JVM
+  tests, `InsightsDao`), every figure computed by code: « 61 % de tes dépenses en cash » and the total, one bar with the
+  cash identified in gold, the rest of the counts no expense explained in pale gold (« Non identifié 4 100 F », the
+  expenses of a count without category) and the digital in lagoon; « Dépenses par catégorie », each category spent on or
+  budgeted, the costliest first, « 48 000 / 55 000 », one bar on a common scale with the budget marked, in coral once
+  over it; the budget gone over the most, or else the one the month will go over the most at the pace of the days gone
+  (« Transport déjà dépassé de 3 500 F », « Au rythme actuel, le mois finira autour de 52 500 F. »); the costliest habit
+  over a year at the pace of its taps of the last 30 days, 4 at least (« Beignets : ≈ 122 000 F par an »); then the
+  budgets suggested (CAU-45). Counted as in « Activité »: the waiting operations and the fees in, what was set aside or
+  merged out. By decision, the month chip shows the current month only (no other month yet) and the button « Fixer une
+  limite » of the mockup is left out. No language model words anything yet. Read again each time the tab comes back.
+  Checked on the Galaxy S23 in dark mode with made-up data: the share of cash with its rest unidentified, the
+  categories; a budget, an overrun and a habit not seen on a phone (none on it). Next: CAU-43, CAU-44, CAU-46, CAU-48
+  and CAU-50, to clarify.
+
 Update this section at the end of each ticket.
 
 ## Way of working

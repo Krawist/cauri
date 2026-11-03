@@ -2,8 +2,11 @@ package com.cauri.feature.insights
 
 import com.cauri.core.data.model.BudgetSuggestion
 import com.cauri.core.data.repository.FakeBudgetRepository
+import com.cauri.core.data.repository.FakeInsightsRepository
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
+import java.time.Clock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -17,13 +20,14 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class InsightsViewModelTest {
     private val budgets = FakeBudgetRepository()
+    private val insights = FakeInsightsRepository()
     private lateinit var viewModel: InsightsViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         budgets.suggested = listOf(food(), transport())
-        viewModel = InsightsViewModel(budgets)
+        viewModel = InsightsViewModel(budgets = budgets, insights = insights, clock = Clock.systemUTC())
     }
 
     @AfterEach
@@ -42,6 +46,18 @@ internal class InsightsViewModelTest {
             budgets.set shouldContainExactly
                 listOf(FakeBudgetRepository.Set(categoryId = 1, amount = 52_000, suggested = 52_000))
             viewModel.uiState.value.suggestions shouldContainExactly listOf(transport())
+        }
+    }
+
+    @Nested
+    inner class Refresh {
+        @Test
+        fun `should read the figures of the month`() {
+            // when
+            viewModel.refresh()
+
+            // then
+            viewModel.uiState.value.insights shouldBe insights.figures
         }
     }
 

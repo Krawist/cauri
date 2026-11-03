@@ -22,6 +22,8 @@ import com.cauri.core.data.repository.DiscoveryRepository
 import com.cauri.core.data.repository.DiscoveryRepositoryImpl
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.HabitRepositoryImpl
+import com.cauri.core.data.repository.InsightsRepository
+import com.cauri.core.data.repository.InsightsRepositoryImpl
 import com.cauri.core.data.repository.PlaceRepository
 import com.cauri.core.data.repository.PlaceRepositoryImpl
 import com.cauri.core.data.repository.ProposalRepository
@@ -44,6 +46,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class RepositoryModule {
+    @Binds
+    abstract fun bindInsightsRepository(impl: InsightsRepositoryImpl): InsightsRepository
+
     @Binds
     abstract fun bindBudgetRepository(impl: BudgetRepositoryImpl): BudgetRepository
 

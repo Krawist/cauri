@@ -14,6 +14,7 @@ import com.cauri.core.data.database.dao.ConfirmationDao
 import com.cauri.core.data.database.dao.DecisionLogDao
 import com.cauri.core.data.database.dao.DiscoveryDao
 import com.cauri.core.data.database.dao.HabitDao
+import com.cauri.core.data.database.dao.InsightsDao
 import com.cauri.core.data.database.dao.PlaceDao
 import com.cauri.core.data.database.dao.RawSignalDao
 import com.cauri.core.data.database.dao.TransactionDao
@@ -110,6 +111,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun banditModelDao(): BanditModelDao
 
     abstract fun budgetDao(): BudgetDao
+
+    abstract fun insightsDao(): InsightsDao
 
     abstract fun habitDao(): HabitDao
 

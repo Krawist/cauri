@@ -18,6 +18,8 @@ import com.cauri.core.data.service.DiscoveryService
 import com.cauri.core.data.service.DiscoveryServiceImpl
 import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.InsightsService
+import com.cauri.core.data.service.InsightsServiceImpl
 import com.cauri.core.data.service.OutcomeService
 import com.cauri.core.data.service.OutcomeServiceImpl
 import com.cauri.core.data.service.PlaceService
@@ -38,6 +40,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class ServiceModule {
+    @Binds
+    abstract fun bindInsightsService(impl: InsightsServiceImpl): InsightsService
+
     @Binds
     abstract fun bindBudgetService(impl: BudgetServiceImpl): BudgetService
 

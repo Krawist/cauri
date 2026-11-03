@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="insights_amount">%1$s F</string>
+    <string name="insights_budget">budget</string>
     <string name="insights_budget_accept">Accept</string>
     <string name="insights_budget_adjust">Adjust</string>
     <string name="insights_budget_cancel">Cancel</string>
@@ -9,6 +11,21 @@
     <string name="insights_budget_suggested_amount">%1$s F a month, from your spending of the last weeks</string>
     <string name="insights_budgets_later">After four weeks of spending, Cauri suggests a budget for each category.</string>
     <string name="insights_budgets_suggested">Suggested budgets</string>
+    <string name="insights_cash_identified">Cash identified</string>
+    <string name="insights_cash_share">%1$d%% of your spending in cash</string>
+    <string name="insights_cash_unidentified">Unidentified %1$s F</string>
+    <string name="insights_categories">Spending by category</string>
+    <string name="insights_digital">Digital</string>
+    <plurals name="insights_habit_uses">
+        <item quantity="one">%1$d time in the last 30 days, at the same pace all year.</item>
+        <item quantity="other">%1$d times in the last 30 days, at the same pace all year.</item>
+    </plurals>
+    <string name="insights_habit_yearly">%1$s: ≈ %2$s F a year</string>
+    <string name="insights_nothing_spent">Nothing spent this month yet.</string>
+    <string name="insights_of_budget"> / %1$s</string>
+    <string name="insights_overrun">%1$s already over by %2$s F</string>
+    <string name="insights_overrun_coming">%1$s will go over its budget</string>
+    <string name="insights_overrun_projection">At this pace, the month will end around %1$s F.</string>
     <string name="insights_per_month">F / month</string>
     <string name="insights_title">Insights</string>
 </resources>
