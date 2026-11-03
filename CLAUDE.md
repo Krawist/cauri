@@ -226,7 +226,19 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   matches, case and spaces ignored, amounts in minor units (`readAmount`), the date in the given zone or else the time
   of the notification. A message no template reads, or with a value that cannot be read, gives nothing and stays a raw
   signal to replay. The implementations are public for the app's Hilt modules; nothing uses them yet: the real
-  templates come with CAU-20, the replay and the transactions with CAU-21. Next: CAU-20.
+  templates come with CAU-20, the replay and the transactions with CAU-21.
+- [ ] **CAU-20** — `message_templates.json` (`:core:parsing` resources, catalogue 2026.11.03): 19 Orange Money templates
+  (transfers sent and received, money received, international transfers, from and to the bank, cash deposits and
+  withdrawals, merchant, bundle, airtime, ENEO and other payments, virtual card payments and top-ups) and 2 UBA ones
+  (card payment, transfer to Orange Money), written from the 1 610 SMS of the four watched senders on a Galaxy S25
+  (Orange SIM): they read all 826 operations there, none of the other messages (promotions, failures, prompts, codes).
+  `collected_messages.json` keeps 257 of them anonymised (names, numbers, references, amounts and dates replaced) with
+  what must be read, tested by `MessageTemplatesTest`. The engine now rounds the cents Orange Money writes
+  (« 94.07 FCFA » → 94 F) and reads a `currency` group (card payments in USD or EUR). Not covered: MTN MoMo (no MTN
+  SIM), UBA credits and other UBA debits (only two operation SMS seen), bank mails, and the creation of the virtual
+  card (one SMS, whose amount may be a fee or a first top-up). For CAU-21: the ENEO payment and
+  the airtime top-up each come with a second SMS left unrecognised on purpose; the virtual card has its own balance,
+  and its top-up has no Orange Money debit SMS. Next: CAU-21.
 
 Update this section at the end of each ticket.
 

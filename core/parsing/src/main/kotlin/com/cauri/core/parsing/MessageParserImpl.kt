@@ -44,11 +44,15 @@ class MessageParserImpl @Inject constructor() : MessageParser {
         patterns.getOrPut(template.pattern) { Regex(template.pattern, RegexOption.IGNORE_CASE) }
 
     private fun read(template: MessageTemplate, match: MatchResult, receivedAt: Instant, zone: ZoneId): ParsedMessage? {
-        val digits = Currency.getInstance(template.currency).defaultFractionDigits
         val group = { name: String -> match.value(template = template, name = name) }
-        val amount = group(AMOUNT)?.let { readAmount(it, template.decimalSeparator, digits) }
-        val fees = group(FEES)?.let { readAmount(it, template.decimalSeparator, digits) }
-        val balance = group(BALANCE)?.let { readAmount(it, template.decimalSeparator, digits) }
+        val currency = (group(CURRENCY) ?: template.currency).uppercase()
+        val digits = runCatching { Currency.getInstance(currency).defaultFractionDigits }.getOrNull()
+        val amountOf = { name: String ->
+            digits?.let { group(name)?.let { text -> readAmount(text, template.decimalSeparator, digits) } }
+        }
+        val amount = amountOf(AMOUNT)
+        val fees = amountOf(FEES)
+        val balance = amountOf(BALANCE)
         val date = group(DATE)?.let { readDate(text = it, template = template, zone = zone) }
         // A value the pattern found but that cannot be read makes the whole message unrecognised: no number is guessed.
         val readable = listOf(group(FEES) to fees, group(BALANCE) to balance, group(DATE) to date)
@@ -60,7 +64,7 @@ class MessageParserImpl @Inject constructor() : MessageParser {
                 kind = template.kind,
                 direction = template.direction,
                 amount = it,
-                currency = template.currency,
+                currency = currency,
                 fees = fees,
                 balance = balance,
                 counterparty = group(COUNTERPARTY),
@@ -90,6 +94,7 @@ class MessageParserImpl @Inject constructor() : MessageParser {
         const val AMOUNT = "amount"
         const val BALANCE = "balance"
         const val COUNTERPARTY = "counterparty"
+        const val CURRENCY = "currency"
         const val DATE = "date"
         const val FEES = "fees"
         const val REFERENCE = "reference"

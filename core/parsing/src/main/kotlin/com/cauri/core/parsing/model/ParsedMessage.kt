@@ -10,7 +10,7 @@ import java.time.Instant
  * @property kind What the message reports.
  * @property direction Whether the money leaves the account or comes into it.
  * @property amount Amount of the operation, fees excluded.
- * @property currency ISO 4217 code of the amounts.
+ * @property currency ISO 4217 code of the amount, the fees and the balance.
  * @property fees Fees of the operation; `null` when the message gives none.
  * @property balance Balance of the account after the operation; `null` when the message gives none.
  * @property counterparty Merchant or person on the other side, as written; `null` when the message names none.

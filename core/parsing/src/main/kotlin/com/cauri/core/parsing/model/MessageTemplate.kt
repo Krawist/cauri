@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * One message format of one sender. [pattern] is a regular expression, matched case-insensitively against the
  * message with its spaces collapsed, whose named groups give the values: `amount` (required), and optionally `fees`,
- * `balance`, `counterparty`, `reference` and `date`.
+ * `balance`, `counterparty`, `reference`, `date` and `currency`.
  *
  * @property id Stable identifier, `<sender>.<message>` (« orange-money.payment »).
  * @property version Version of this template, raised at each change of its pattern or values.
@@ -13,7 +13,8 @@ import kotlinx.serialization.Serializable
  *   names of apps.
  * @property kind What the message reports.
  * @property direction Whether the money leaves the account or comes into it.
- * @property currency ISO 4217 code of the amounts (« XAF »).
+ * @property currency ISO 4217 code of the amounts (« XAF »), unless the `currency` group gives it, as for card payments
+ *   abroad (« 9.99 USD »).
  * @property pattern Regular expression with the named groups.
  * @property decimalSeparator Separator of the decimals in the amounts; `null` when they are written without decimals.
  *   Every other character than digits is taken as a thousands separator.

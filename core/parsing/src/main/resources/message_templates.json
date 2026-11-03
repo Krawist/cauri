@@ -1,0 +1,259 @@
+{
+  "version": "2026.11.03",
+  "templates": [
+    {
+      "id": "orange-money.transfer-sent",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Transfert de \\d+ .+? vers \\d+ ?(?<counterparty>.*?) reussi\\. ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Montant Transaction ?: ?(?<amount>[\\d.,]+) ?FCFA, Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, .*Nouveau Solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.transfer-received",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Transfert de \\d+ ?(?<counterparty>.*?) vers \\d+ .+? reussi\\. Details ?: ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Montant Transaction ?: ?(?<amount>[\\d.,]+) ?FCFA, Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, .*Nouveau Solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.money-received",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Vous avez recu avec succes (?<amount>[\\d.,]+) ?FCFA de (?<counterparty>\\+?\\d+(?: ?\\(.+?\\))?)\\. Votre nouveau solde est de (?<balance>[\\d.,]+) ?FCFA, Reference de transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.international-received",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Transfert d.argent de (?<amount>[\\d.,]+) ?FCFA re[cç]u du (?<counterparty>.+?) le \\S+ \\S+\\. Nouveau solde OM ?: ?(?<balance>[\\d.,]+) ?FCFA, Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, ID ?: ?(?<reference>\\w+)",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.international-received-from",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Transfert d.argent de (?<amount>[\\d.,]+) ?FCFA re[cç]u de (?<counterparty>.+?) provenant du pays \\w+ le .+?\\. Nouveau solde OM ?: ?(?<balance>[\\d.,]+) ?FCFA, Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.international-sent",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Vous avez transfere avec succes (?<amount>[\\d.,]+) ?FCFA a (?<counterparty>.+?)\\. Cette transaction vous a coute (?<fees>[\\d.,]+) ?FCFA, .*votre nouveau solde est de ?: ?(?<balance>[\\d.,]+) ?FCFA\\. Reference de transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.from-bank",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Votre transfert de (?<amount>[\\d.,]+) ?FCFA sur votre compte Orange Money depuis votre compte (?<counterparty>.+?) est reussi\\. Frais ?: ?(?<fees>[\\d.,]+) ?FCFA\\. Votre nouveau solde Orange Money ?: ?(?<balance>[\\d.,]+) ?FCFA\\. (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.to-bank",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Votre transfert de (?<amount>[\\d.,]+) ?FCFA de votre compte Orange Money vers votre compte (?<counterparty>.+?) est reussi\\. Frais ?: ?(?<fees>[\\d.,]+) ?FCFA\\. Votre nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA\\. (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.deposit",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Depot effectue par \\d+ ?(?<counterparty>.*?) to \\d+ .+?\\. Informations detaillees ?: Montant de transaction ?: ?(?<amount>[\\d.,]+) ?FCFA, ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, .*Nouveau Solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.withdrawal",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Retrait d'argent reussi par le \\d+ avec le Code ?: ?\\d+\\. Informations detaillees ?: Montant ?: ?(?<amount>[\\d.,]+) ?FCFA, Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, No de transaction (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), .*Nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.merchant-payment",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Paiement de (?<counterparty>.+?) reussi par \\d+ .+?\\. ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Montant ?: ?(?<amount>[\\d.,]+) ?FCFA\\. Solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.bundle-payment",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Paiement de (?<counterparty>.+?) en succes par \\d+\\. ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Montant ?: ?(?<amount>[\\d.,]+) ?FCFA\\. Nouveau solde ?: ?(?:NA|(?<balance>[\\d.,]+)) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.bundle-purchase",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Felicitations, vous venez d'effectuer un payement de (?<amount>[\\d.,]+) ?FCFA pour (?<counterparty>.+?)\\. N° de transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})\\. Nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.airtime",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Rechargement reussi\\. Montant de la transaction ?: ?(?<amount>[\\d.,]+) ?FCFA, ID transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}), Frais ?: ?(?<fees>[\\d.,]+) ?FCFA, .*Nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.eneo-payment",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Paiement (?<counterparty>ENEO) PREPAID r[ée]ussi par \\d+\\. ID Transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}); .*?Montant ?: ?(?<amount>[\\d.,]+) ?FCFA; .*?Frais ?: ?(?<fees>[\\d.,]+)? ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.eneo-payment-en",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Payment (?<counterparty>ENEO) PREPAID successful by \\d+\\. transaction ID ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}); .*?Amount ?: ?(?<amount>[\\d.,]+);? ?FCFA; .*?Fees ?: ?(?<fees>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.payment",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Votre paiement de (?<amount>[\\d.,]+) ?FCFA a ete effectue avec succes\\. Frais ?: ?(?<fees>[\\d.,]+) ?FCFA\\. ID de transaction ?: ?(?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5}) Nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.card-payment",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^Cher client, votre paiement de (?<amount>[\\d.,]+) (?<currency>[A-Z]{3}) chez (?<counterparty>.+?) a été effectué avec succès\\. Nouveau solde (?:XAF )?[\\d.,]+(?: XAF)?\\. ?ID ?: ?(?<reference>\\d+)",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "orange-money.card-top-up",
+      "version": 1,
+      "senders": [
+        "OrangeMoney"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^Votre carte prépayée virtuelle a été rechargée de (?<amount>[\\d.,]+) XAF\\. Nouveau solde ?: ?(?<balance>[\\d.,]+) XAF",
+      "decimalSeparator": "."
+    },
+    {
+      "id": "uba.card-payment",
+      "version": 1,
+      "senders": [
+        "UBA"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?\\S*POS PUR @?(?<counterparty>.+?)(?: >\\S*)? Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.transfer-to-orange-money",
+      "version": 1,
+      "senders": [
+        "UBA"
+      ],
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    }
+  ]
+}

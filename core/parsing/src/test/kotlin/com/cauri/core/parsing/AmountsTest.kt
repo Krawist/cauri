@@ -46,19 +46,29 @@ internal class AmountsTest {
             amount shouldBe expected
         }
 
-        @Test
-        fun `should not read decimals that the currency cannot hold`() {
+        @ParameterizedTest
+        @CsvSource("'2 500,50', 2501", "'94,07', 94", "'8,49', 8")
+        fun `should round the decimals that the currency cannot hold`(text: String, expected: Long) {
             // when
-            val amount = readAmount(text = "2 500,50", decimalSeparator = ',', fractionDigits = 0)
+            val amount = readAmount(text = text, decimalSeparator = ',', fractionDigits = 0)
 
             // then
-            amount.shouldBeNull()
+            amount shouldBe expected
         }
 
         @Test
         fun `should not read an amount without digits`() {
             // when
             val amount = readAmount(text = "FCFA", decimalSeparator = null, fractionDigits = 0)
+
+            // then
+            amount.shouldBeNull()
+        }
+
+        @Test
+        fun `should not read an amount too large for a long`() {
+            // when
+            val amount = readAmount(text = "99999999999999999999", decimalSeparator = null, fractionDigits = 0)
 
             // then
             amount.shouldBeNull()

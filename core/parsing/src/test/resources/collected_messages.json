@@ -1,0 +1,3784 @@
+[
+  {
+    "sender": "UBA",
+    "text": "DEBIT \n Montant: XAF30,848.00 \n Compte: 912XXXXXXX83 \n Desc: MSC-POS PUR @ABENA ONANA              >C \n Date: 03-03-2026 05:10:12 \n Solde: XAF6,825,575.00 .",
+    "expected": {
+      "templateId": "uba.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 30848,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 6825575,
+      "counterparty": "ABENA ONANA",
+      "reference": null,
+      "occurredAt": "2026-03-03T04:10:12Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 4.87 USD chez SHOP*3PR1HBEV a été effectué avec succès. Nouveau solde 75,017.00 XAF. ID: 339440. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 487,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*3PR1HBEV",
+      "reference": "339440",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 2.53 USD chez NETFLIX.COM a été effectué avec succès. Nouveau solde 73,709.00 XAF. ID: 820281. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 253,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "NETFLIX.COM",
+      "reference": "820281",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 10.32 USD chez SHOP*8G6GYJMX a été effectué avec succès. Nouveau solde 15,493.00 XAF. ID: 697795. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1032,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*8G6GYJMX",
+      "reference": "697795",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 7,371.00 XAF chez Nana Kamga a été effectué avec succès. Nouveau solde 91,189.00 XAF. ID: 560555. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7371,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Nana Kamga",
+      "reference": "560555",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 1.55 USD chez SHOP*UX8HT5TJ a été effectué avec succès. Nouveau solde 42,425.00 XAF. ID: 770306. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 155,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*UX8HT5TJ",
+      "reference": "770306",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 48.72 EUR chez Ekotto Dibongo a été effectué avec succès. Nouveau solde 69,073.00 XAF. ID: 719636. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4872,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Ekotto Dibongo",
+      "reference": "719636",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 7.00 EUR chez Clinique Amana a été effectué avec succès. Nouveau solde 29,866.00 XAF. ID: 318187. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 700,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Clinique Amana",
+      "reference": "318187",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 1.48 EUR chez SHOP*HU9L9137 a été effectué avec succès. Nouveau solde 54,680.00 XAF. ID: 200879. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 148,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*HU9L9137",
+      "reference": "200879",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 3.00 EUR chez Supermarche Du Centre a été effectué avec succès. Nouveau solde 29,425.00 XAF. ID: 695111. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 300,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Supermarche Du Centre",
+      "reference": "695111",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 6.62 USD chez SHOP*R63G7B9Y a été effectué avec succès. Nouveau solde 68,175.00 XAF. ID: 347793. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 662,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*R63G7B9Y",
+      "reference": "347793",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 7,698.00 XAF chez Quincaillerie Moderne a été effectué avec succès. Nouveau solde 18,547.00 XAF. ID: 429818. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7698,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Quincaillerie Moderne",
+      "reference": "429818",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 9.00 EUR chez Mvondo a été effectué avec succès. Nouveau solde 25,006.00 XAF. ID: 999448. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 900,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Mvondo",
+      "reference": "999448",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 9.15 USD chez Spotify a été effectué avec succès. Nouveau solde 7,098.00 XAF. ID: 363678. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 915,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Spotify",
+      "reference": "363678",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 8.52 USD chez Netflix.com a été effectué avec succès. Nouveau solde 47,624.00 XAF. ID: 707006. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 852,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Netflix.com",
+      "reference": "707006",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 94.00 USD chez SHOP*WJ9AEBZ6 a été effectué avec succès. Nouveau solde 22,773.00 XAF. ID: 928661. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9400,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*WJ9AEBZ6",
+      "reference": "928661",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 17.94 USD chez SHOP*W95CWUDE a été effectué avec succès. Nouveau solde 25,213.00 XAF. ID: 685798. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1794,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*W95CWUDE",
+      "reference": "685798",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 1.88 USD chez SHOP*CNJ2Q3XD a été effectué avec succès. Nouveau solde 8,509.00 XAF. ID: 645087. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 188,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "SHOP*CNJ2Q3XD",
+      "reference": "645087",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 6.23 USD chez Tamba Eyoum a été effectué avec succès. Nouveau solde 3,635.00 XAF. ID: 845718. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 623,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Tamba Eyoum",
+      "reference": "845718",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 82.53 EUR chez CLINIQUE AMANA a été effectué avec succès. Nouveau solde 631.00 XAF. ID: 798826. Orange Money vous remercie. N'oubliez pas de recharger votre carte pour vos prochains paiements",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 8253,
+      "currency": "EUR",
+      "fees": null,
+      "balance": null,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "798826",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, votre paiement de 8.11 USD chez Netflix.com a été effectué avec succès. Nouveau solde XAF 3,731.00.ID: 423030. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 811,
+      "currency": "USD",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Netflix.com",
+      "reference": "423030",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 993697486.\n ID Transaction: PS416022.6529.C27266;\n N' Compteur: 5047336093542;\n Montant: 4565 FCFA;\n Balance/generer Kwh: 67.0;\n TVA: 0 FCFA; Frais: 419 FCFA;\n Dette: 0 FCFA;\n Token: 4895-1517-9492-6012-9116.\n Appeler le 7838 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4565,
+      "currency": "XAF",
+      "fees": 419,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS416022.6529.C27266",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 819461838.\n ID Transaction: PS639944.0287.D29093;\n N' Compteur: 5681415915439;\n Montant: 1591 FCFA;\n Balance/generer Kwh: 54.4;\n TVA: 0 FCFA; Frais: 604 FCFA;\n Dette: 0 FCFA;\n Token: 5224-4268-3439-9123-2852.\n Appeler le 1081 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1591,
+      "currency": "XAF",
+      "fees": 604,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS639944.0287.D29093",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 109775958.\n ID Transaction: PS870914.1949.A18358;\n N' Compteur: 7087526397722;\n Montant: 7652 FCFA;\n Balance/generer Kwh: 51.0;\n TVA: 0 FCFA; Frais: 798 FCFA;\n Dette: 0 FCFA;\n Token: 8029-5003-8264-5729-4913.\n Appeler le 5833 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7652,
+      "currency": "XAF",
+      "fees": 798,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS870914.1949.A18358",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 472648120.\n ID Transaction: PS998657.0828.B58680;\n N' Compteur: 7443522329661;\n Montant: 2490 FCFA;\n Balance/generer Kwh: 88.0;\n TVA: 0 FCFA; Frais: 733 FCFA;\n Dette: 0 FCFA;\n Token: 8985-7318-9535-3118-1031.\n Appeler le 5614 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 2490,
+      "currency": "XAF",
+      "fees": 733,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS998657.0828.B58680",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 741120159.\n ID Transaction: PP236642.6016.C19608;\n N' Compteur: 7248037333434;\n Montant: 9495 FCFA;\n Balance/generer Kwh: 99.0;\n TVA: 0 FCFA; Frais: 850 FCFA;\n Dette: 0 FCFA;\n Token: 8074-9834-1609-6199-8368.\n Appeler le 7314 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9495,
+      "currency": "XAF",
+      "fees": 850,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PP236642.6016.C19608",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 644980450.\n ID Transaction: PP756180.3417.D97839;\n N' Compteur: 5051942187577;\n Montant: 9529 FCFA;\n Balance/generer Kwh: 38.0;\n TVA: 0 FCFA; Frais: 249 FCFA;\n Dette: 0 FCFA;\n Token: 8506-6277-7885-6518-1511.\n Appeler le 4387 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9529,
+      "currency": "XAF",
+      "fees": 249,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PP756180.3417.D97839",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 525730000.\n ID Transaction: PP581839.6539.B60922;\n N' Compteur: 6192881110799;\n Montant: 1940 FCFA;\n Balance/generer Kwh: 33.0;\n TVA: 0 FCFA; Frais: 682 FCFA;\n Dette: 0 FCFA;\n Token: 9112-3642-1096-1500-3231.\n Appeler le 1747 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1940,
+      "currency": "XAF",
+      "fees": 682,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PP581839.6539.B60922",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 811465275.\n ID Transaction: PP592734.9918.A10269;\n N' Compteur: 3016116928279;\n Montant: 6675 FCFA;\n Balance/generer Kwh: 12.0;\n TVA: 0 FCFA; Frais: 165 FCFA;\n Dette: 0 FCFA;\n Token: 3454-4835-4295-4305-4192.\n Appeler le 4242 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6675,
+      "currency": "XAF",
+      "fees": 165,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PP592734.9918.A10269",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID reussi par 210144528.\n ID Transaction: MP664259.7925.B44150;\n N' Compteur: 5405967284319;\n Montant: 4061 FCFA;\n Balance/generer Kwh: 32.0;\n TVA: 0 FCFA; Frais: 125 FCFA;\n Dette: 0 FCFA;\n Token: 7783-3825-2107-4426-4886.\n Appeler le 3356 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4061,
+      "currency": "XAF",
+      "fees": 125,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "MP664259.7925.B44150",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID reussi par 135169632.\n ID Transaction: MP531866.9659.A48899;\n N' Compteur: 5447551488785;\n Montant: 3986 FCFA;\n Balance/generer Kwh: 76.0;\n TVA: 0 FCFA; Frais: 501 FCFA;\n Dette: 0 FCFA;\n Token: 9029-6382-1994-2329-2674.\n Appeler le 1506 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3986,
+      "currency": "XAF",
+      "fees": 501,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "MP531866.9659.A48899",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID reussi par 621664117.\n ID Transaction: MP234213.8395.C70781;\n N' Compteur: 4111305748530;\n Montant: 3280 FCFA;\n Balance/generer Kwh: 17.0;\n TVA: 0 FCFA; Frais: 305 FCFA;\n Dette: 0 FCFA;\n Token: 1982-9536-2926-8455-8648.\n Appeler le 9851 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3280,
+      "currency": "XAF",
+      "fees": 305,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "MP234213.8395.C70781",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 582398033. ID transaction: MP952577.6902.A66825; No Compteur: 8823613125621; Montant: 9122 FCFA; Solde/Kwh généré: 18.0; TVA: 0 FCFA; Frais:  FCFA; Token:68734046633780766492; Dette: 0 FCFA. Appeler au 1932 pour le support. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9122,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "MP952577.6902.A66825",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 868629070.\n ID Transaction: PS631459.4772.C96184;\n N' Compteur: 1139432806766;\n Montant: 3836 FCFA;\n Balance/generer Kwh: 65.8;\n TVA: 0 FCFA; Frais: 341 FCFA;\n Dette: 0 FCFA;\n Token: 2384-3484-6287-4534-5228.\n Appeler le 3719 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3836,
+      "currency": "XAF",
+      "fees": 341,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS631459.4772.C96184",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 374957120.\n ID Transaction: PS711423.6636.D59469;\n N' Compteur: 2823229967789;\n Montant: 5072 FCFA;\n Balance/generer Kwh: 70.0;\n TVA: 0 FCFA; Frais: 666 FCFA;\n Dette: 0 FCFA;\n Token: 4215-5560-6542-5079-4981.\n Appeler le 1523 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 5072,
+      "currency": "XAF",
+      "fees": 666,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS711423.6636.D59469",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 288601585.\n ID Transaction: PS377060.7641.D17862;\n N' Compteur: 8911763899864;\n Montant: 5841 FCFA;\n Balance/generer Kwh: 64.8;\n TVA: 0 FCFA; Frais: 387 FCFA;\n Dette: 0 FCFA;\n Token: 1326-3571-3497-4287-7157.\n Appeler le 7610 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 5841,
+      "currency": "XAF",
+      "fees": 387,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS377060.7641.D17862",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 325618321.\n ID Transaction: PS236681.6433.B86907;\n N' Compteur: 2464482616500;\n Montant: 7969 FCFA;\n Balance/generer Kwh: 44.0;\n TVA: 0 FCFA; Frais: 516 FCFA;\n Dette: 0 FCFA;\n Token: 7770-4258-5440-7410-7509.\n Appeler le 4297 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7969,
+      "currency": "XAF",
+      "fees": 516,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS236681.6433.B86907",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 637652179.\n ID Transaction: PS225694.6427.A34030;\n N' Compteur: 6010581666707;\n Montant: 8950 FCFA;\n Balance/generer Kwh: 92.0;\n TVA: 0 FCFA; Frais: 292 FCFA;\n Dette: 0 FCFA;\n Token: 6832-6314-4892-9536-1835.\n Appeler le 4596 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 8950,
+      "currency": "XAF",
+      "fees": 292,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS225694.6427.A34030",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 848426840.\n ID Transaction: PS939796.8453.A23037;\n N' Compteur: 1964475361796;\n Montant: 9527 FCFA;\n Balance/generer Kwh: 42.0;\n TVA: 0 FCFA; Frais: 931 FCFA;\n Dette: 0 FCFA;\n Token: 5156-2057-7222-3863-5998.\n Appeler le 9755 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9527,
+      "currency": "XAF",
+      "fees": 931,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS939796.8453.A23037",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 282983414.\n ID Transaction: PS194322.8144.D26374;\n N' Compteur: 7150542603161;\n Montant: 3608 FCFA;\n Balance/generer Kwh: 49.3;\n TVA: 0 FCFA; Frais: 686 FCFA;\n Dette: 0 FCFA;\n Token: 8754-7726-6531-8758-6085.\n Appeler le 4407 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3608,
+      "currency": "XAF",
+      "fees": 686,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS194322.8144.D26374",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement ENEO PREPAID réussi par 587462636.\n ID Transaction: PS902441.1823.B39378;\n N' Compteur: 9196278762056;\n Montant: 1930 FCFA;\n Balance/generer Kwh: 86.0;\n TVA: 0 FCFA; Frais: 824 FCFA;\n Dette: 0 FCFA;\n Token: 8394-1043-3598-3692-6177.\n Appeler le 6923 pour le support.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1930,
+      "currency": "XAF",
+      "fees": 824,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "PS902441.1823.B39378",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, vous venez d'effectuer un achat de token pour la recharge du compteur N° 5585902262482 d'un montant de 1784 FCFA. Cette transaction vous a couté: 779 FCFA et est en cours de traitement. Référence de la transaction: PS361193.9516.C39235. Orange vous remercie de votre confiance.",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Save time in 7603 with UBA! Carry out your banking transactions from your phone using our digital services. https://bit.ly/2tLao0w",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher(e) client(e), Consultez sur http://bit.ly/cgu_om les Conditions Specifiques Orange Money. Pour les valider composez le code #842*33#",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "La fidelite paie: souscris au nouveau programme de fidelite OM via Max it, scanne, paie et tente d'etre millionnaire chaque semaine: bit.ly/OMFidelite",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "En 4327, gagnez du temps avec UBA ! Réalisez vos opérations bancaires depuis votre téléphone grace à nos services digitaux. https://bit.ly/9tLao0w",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Soyez vigilant! Ne communiquez jamais votre mot de passe Orange Money a une tierce personne. C'est une information strictement confidentielle",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Dear Customer, simplify your banking with UBA! Use our digital solutions for payments, transfers and top-ups. https://bit.ly/1tLao0w",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher Client, simplifiez vos opérations bancaires avec UBA ! Utilisez nos solutions digitales pour vos paiements, transferts et recharges. https://bit.ly/8tLao0w",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Dear Valued Customer, to ensure uninterrupted use of your Visa Prepaid Card outside the CEMAC zone, kindly send us the following documents before your departure: a copy of your passport, visa, and airline ticket, to cardsupportCMR@ubagroup.com. Thank you for your trust, and we wish you a pleasant trip!",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher(e) client(e), afin d'assurer une utilisation sans interruption de votre carte Visa Prépayée hors de la zone CEMAC, nous vous invitons à nous faire parvenir: une copie du passeport, le Visa et le billet d'avion à cardsupportCMR@ubagroup.com avant votre départ.\nMerci pour votre confiance et bon voyage !",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Vous venez de recevoir 2421 FCFA U du numero 979825817. Pour recevoir 209% de bonus, effectuez votre prochaine recharge via l'appli Orange Money Afrique.",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher(e) Client(e), afin d'assurer une utilisation sans interruption de votre carte Visa Prépayée hors de la zone CEMAC, nous vous invitons à nous faire parvenir: une copie du passeport, le Visa, billet d'avion et votre NIU à cardsupportCMR@ubagroup.com avant votre départ.\nMerci pour votre confiance et bon voyage !",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Avec Orange Money, vous effectuez votre reabonnement Canal+ gratuitement 88/9. En plus, vous beneficiez de 37 jours de la formule superieure pour vos reabonnements avant echeance.#324*97#",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher Client, votre avis compte ! Évaluez votre expérience avec votre carte UBA et aidez-nous à améliorer nos services.\nRépondez à notre enquete : https://bit.ly/0hKChCb",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Dear Customer, your feedback matters! Please rate your experience with your UBA card and help us improve our services.\nTake our survey: https://bit.ly/2hKChCb",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre fidelite a peut-etre paye avec OM Fidelite. RDV sur Max it pour verifier si vous avez un cadeau : bit.ly/OMFidelite",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Dear Customer, \nThe UBA Debit VISA Card is ready for your payments, even abroad. Same look, 765% operational and available. Visit any UBA branch today to replace yours.\nThank you for your loyalty",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher(e) Client(e), \nLa Carte Debit VISA UBA est prete pour vos paiements, jusqu'à l'étranger. Meme look, 776% opérationnelle et disponible. Rdv en agence dès aujourd'hui pour remplacer la votre.\nMerci pour votre fidelité",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, Veuillez utiliser L'OTP 548125 pour effectuer la transaction sur M-Login (S avec 0.00 EUR. Il sera valable pendant 6 minutes.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, Veuillez utiliser L'OTP 112989 pour effectuer la transaction sur nextbike avec 1.00 EUR. Il sera valable pendant 5 minutes.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, Veuillez utiliser L'OTP 212364 pour effectuer la transaction sur OEBB Perso avec 2.00 EUR. Il sera valable pendant 3 minutes.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, Veuillez utiliser L'OTP 394019 pour effectuer la transaction sur Skrill avec 44.19 EUR. Il sera valable pendant 9 minutes.",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Cher Client, suite à l'amélioration de notre système technique, votre nouvelle carte de débit Visa est désormais disponible.\nRDV à l'agence la plus proche.",
+    "expected": null
+  },
+  {
+    "sender": "UBACameroon",
+    "text": "Dear Customer, following an upgrade to our technical system, your new Visa debit card is now available.\nPlease visit your nearest branch.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Cher client, Veuillez utiliser L'OTP 776800 pour effectuer la transaction sur Probiller avec 15.06 USD. Il sera valable pendant 1 minutes.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert vers la carte virtuelle prépayée Orange Money a échoué. Réf : MP907429.9257.D24370. Date : 49 août 53 60:16. Merci d'utiliser Orange Money.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Le transfert de 59062FCFA vers 199484916 du 3076-61-65 avec l'ID de tranfert CO448045.3427.A19930 n'a pas ete accepte par le destinataire.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Le transfert de 12778FCFA vers 299612734 du 8706-37-13 avec l'ID de tranfert CO624113.7119.D88029 n'a pas ete accepte par le destinataire.",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transaction Failed. Motif: Le solde du compte du payeur est insuffisant. Transaction ID: CO418545.9361.D81302",
+    "expected": null
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transaction Failed. Motif: Le solde du compte du payeur est insuffisant. Transaction ID: CO900258.1072.A96352",
+    "expected": null
+  },
+  {
+    "sender": "UBA",
+    "text": "DEBIT \n Montant: XAF30,286.00 \n Compte: 825XXXXXXX24 \n Desc: B2W/OR424581GH86CH/740324840211/ORANGEMONEYCM \n Date: 03-08-2026 04:17:58 \n Solde: XAF8,723,469.00 .",
+    "expected": {
+      "templateId": "uba.transfer-to-orange-money",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 30286,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 8723469,
+      "counterparty": "ORANGEMONEYCM",
+      "reference": "OR424581GH86CH",
+      "occurredAt": "2026-08-03T03:17:58Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 74121 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 221--407 est reussi. Frais: 693 FCFA. Votre nouveau solde Orange Money : 2410 FCFA. CI263585.5817.A11480. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 74121,
+      "currency": "XAF",
+      "fees": 693,
+      "balance": 2410,
+      "counterparty": "UBA UBA 221--407",
+      "reference": "CI263585.5817.A11480",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 692582 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 965--415 est reussi. Frais: 7485 FCFA. Votre nouveau solde Orange Money : 600929 FCFA. CI726377.5755.A70125. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 692582,
+      "currency": "XAF",
+      "fees": 7485,
+      "balance": 600929,
+      "counterparty": "UBA UBA 965--415",
+      "reference": "CI726377.5755.A70125",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 15017 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 145--198 est reussi. Frais: 499 FCFA. Votre nouveau solde Orange Money : 10950 FCFA. CI757690.2723.D20454. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 15017,
+      "currency": "XAF",
+      "fees": 499,
+      "balance": 10950,
+      "counterparty": "UBA UBA 145--198",
+      "reference": "CI757690.2723.D20454",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 647018 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 495--567 est reussi. Frais: 5208 FCFA. Votre nouveau solde Orange Money : 153467 FCFA. CI562298.5641.B34268. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 647018,
+      "currency": "XAF",
+      "fees": 5208,
+      "balance": 153467,
+      "counterparty": "UBA UBA 495--567",
+      "reference": "CI562298.5641.B34268",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 312390 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 518--756 est reussi. Frais: 6538 FCFA. Votre nouveau solde Orange Money : 327219 FCFA. CI876567.1228.C55060. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 312390,
+      "currency": "XAF",
+      "fees": 6538,
+      "balance": 327219,
+      "counterparty": "UBA UBA 518--756",
+      "reference": "CI876567.1228.C55060",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 16366 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 558--446 est reussi. Frais: 791 FCFA. Votre nouveau solde Orange Money : 95638 FCFA. CI536897.8669.A97603. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 16366,
+      "currency": "XAF",
+      "fees": 791,
+      "balance": 95638,
+      "counterparty": "UBA UBA 558--446",
+      "reference": "CI536897.8669.A97603",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 169535 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 930--335 est reussi. Frais: 5405 FCFA. Votre nouveau solde Orange Money : 315201 FCFA. CI898947.8342.A36179. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 169535,
+      "currency": "XAF",
+      "fees": 5405,
+      "balance": 315201,
+      "counterparty": "UBA UBA 930--335",
+      "reference": "CI898947.8342.A36179",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 282389.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 950--966 est reussi. Frais: 3078 FCFA. Votre nouveau solde Orange Money : 766553.84 FCFA. CI186475.3739.D48025. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 282389,
+      "currency": "XAF",
+      "fees": 3078,
+      "balance": 766554,
+      "counterparty": "UBA UBA 950--966",
+      "reference": "CI186475.3739.D48025",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 11714.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 738--509 est reussi. Frais: 333 FCFA. Votre nouveau solde Orange Money : 69934.06 FCFA. CI421763.7056.C88278. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 11714,
+      "currency": "XAF",
+      "fees": 333,
+      "balance": 69934,
+      "counterparty": "UBA UBA 738--509",
+      "reference": "CI421763.7056.C88278",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 49669.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 861--197 est reussi. Frais: 718 FCFA. Votre nouveau solde Orange Money : 58061.74 FCFA. CI210624.0866.L77859. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 49669,
+      "currency": "XAF",
+      "fees": 718,
+      "balance": 58062,
+      "counterparty": "UBA UBA 861--197",
+      "reference": "CI210624.0866.L77859",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 56985.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 513--301 est reussi. Frais: 760 FCFA. Votre nouveau solde Orange Money : 49641.59 FCFA. CI712895.2272.C21558. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 56985,
+      "currency": "XAF",
+      "fees": 760,
+      "balance": 49642,
+      "counterparty": "UBA UBA 513--301",
+      "reference": "CI712895.2272.C21558",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 8522.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 714--854 est reussi. Frais: 95 FCFA. Votre nouveau solde Orange Money : 1024.34 FCFA. CI740253.3556.B25851. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 8522,
+      "currency": "XAF",
+      "fees": 95,
+      "balance": 1024,
+      "counterparty": "UBA UBA 714--854",
+      "reference": "CI740253.3556.B25851",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 35813.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 362--948 est reussi. Frais: 180 FCFA. Votre nouveau solde Orange Money : 76591.68 FCFA. CI255434.5760.C31298. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 35813,
+      "currency": "XAF",
+      "fees": 180,
+      "balance": 76592,
+      "counterparty": "UBA UBA 362--948",
+      "reference": "CI255434.5760.C31298",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 8072.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 763--672 est reussi. Frais: 95 FCFA. Votre nouveau solde Orange Money : 9953.97 FCFA. CI766262.2369.A11033. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 8072,
+      "currency": "XAF",
+      "fees": 95,
+      "balance": 9954,
+      "counterparty": "UBA UBA 763--672",
+      "reference": "CI766262.2369.A11033",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 233305.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 474--375 est reussi. Frais: 9678 FCFA. Votre nouveau solde Orange Money : 967814.9 FCFA. CI775160.9560.A50379. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 233305,
+      "currency": "XAF",
+      "fees": 9678,
+      "balance": 967815,
+      "counterparty": "UBA UBA 474--375",
+      "reference": "CI775160.9560.A50379",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 80165.00 FCFA sur votre compte Orange Money depuis votre compte UBA UBA 200--217 est reussi. Frais: 329 FCFA. Votre nouveau solde Orange Money : 70221.4 FCFA. CI938712.2547.B66786. Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.from-bank",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 80165,
+      "currency": "XAF",
+      "fees": 329,
+      "balance": 70221,
+      "counterparty": "UBA UBA 200--217",
+      "reference": "CI938712.2547.B66786",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 113472572 ATANGANA MBALLA vers 278530174 ABENA ONANA reussi. ID transaction: PP424988.9775.A35057, Montant Transaction: 95161 FCFA, Frais: 90.04 FCFA, Commission: 0 FCFA, Montant Net: 49023.29 FCFA, Nouveau Solde: 7.86 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 95161,
+      "currency": "XAF",
+      "fees": 90,
+      "balance": 8,
+      "counterparty": "ABENA ONANA",
+      "reference": "PP424988.9775.A35057",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 808642188 ATANGANA MBALLA vers 328733522 SUPERMARCHE DU CENTRE reussi. ID transaction: PP805531.1270.C51471, Montant Transaction: 91963 FCFA, Frais: 33 FCFA, Commission: 0 FCFA, Montant Net: 51071 FCFA, Nouveau Solde: 94550.27 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 91963,
+      "currency": "XAF",
+      "fees": 33,
+      "balance": 94550,
+      "counterparty": "SUPERMARCHE DU CENTRE",
+      "reference": "PP805531.1270.C51471",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 404145094 ATANGANA MBALLA vers 803887599 NJOYA PEFOURA reussi. ID transaction: PP804414.4192.C84331, Montant Transaction: 6016 FCFA, Frais: 7.1 FCFA, Commission: 0 FCFA, Montant Net: 3309.9 FCFA, Nouveau Solde: 57555.52 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 6016,
+      "currency": "XAF",
+      "fees": 7,
+      "balance": 57556,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP804414.4192.C84331",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 290024419 ATANGANA MBALLA vers 243114499 QUINCAILLERIE MODERNE reussi. ID transaction: PP301252.5846.B77673, Montant Transaction: 13193 FCFA, Frais: 83.88 FCFA, Commission: 0 FCFA, Montant Net: 29080.11 FCFA, Nouveau Solde: 88905.69 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 13193,
+      "currency": "XAF",
+      "fees": 84,
+      "balance": 88906,
+      "counterparty": "QUINCAILLERIE MODERNE",
+      "reference": "PP301252.5846.B77673",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 453594188 ATANGANA MBALLA vers 114354262 FOUDA NKOLO reussi. ID transaction: PP503913.8090.B10448, Montant Transaction: 8209 FCFA, Frais: 64.0 FCFA, Commission: 0 FCFA, Montant Net: 8377.0 FCFA, Nouveau Solde: 35291.25 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 8209,
+      "currency": "XAF",
+      "fees": 64,
+      "balance": 35291,
+      "counterparty": "FOUDA NKOLO",
+      "reference": "PP503913.8090.B10448",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 915866655 ATANGANA MBALLA vers 696430171 NJOYA PEFOURA reussi. ID transaction: PP316260.5684.D15840, Montant Transaction: 3968 FCFA, Frais: 4.8 FCFA, Commission: 0 FCFA, Montant Net: 4815.1 FCFA, Nouveau Solde: 568479.98 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 3968,
+      "currency": "XAF",
+      "fees": 5,
+      "balance": 568480,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP316260.5684.D15840",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 416390307 ATANGANA MBALLA vers 117874650 FOUDA NKOLO reussi. ID transaction: PP562518.8648.A30137, Montant Transaction: 3291 FCFA, Frais: 74.9 FCFA, Commission: 0 FCFA, Montant Net: 1416.0 FCFA, Nouveau Solde: 75630.98 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 3291,
+      "currency": "XAF",
+      "fees": 75,
+      "balance": 75631,
+      "counterparty": "FOUDA NKOLO",
+      "reference": "PP562518.8648.A30137",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 451170830 ATANGANA MBALLA vers 833120102 STATION BONAMOUSSADI reussi. ID transaction: PP311741.2098.A90599, Montant Transaction: 6033 FCFA, Frais: 1 FCFA, Commission: 0 FCFA, Montant Net: 9377 FCFA, Nouveau Solde: 62272.10 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 6033,
+      "currency": "XAF",
+      "fees": 1,
+      "balance": 62272,
+      "counterparty": "STATION BONAMOUSSADI",
+      "reference": "PP311741.2098.A90599",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 322735450 ATANGANA MBALLA vers 683742550 NANA KAMGA reussi. ID transaction: PP337087.3515.D88114, Montant Transaction: 3022 FCFA, Frais: 73.84 FCFA, Commission: 0 FCFA, Montant Net: 5433.92 FCFA, Nouveau Solde: 120.85 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 3022,
+      "currency": "XAF",
+      "fees": 74,
+      "balance": 121,
+      "counterparty": "NANA KAMGA",
+      "reference": "PP337087.3515.D88114",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 138039797 ATANGANA MBALLA vers 332490608 SALON BEAUTE PLUS reussi. ID transaction: PP869827.1740.B50008, Montant Transaction: 92888 FCFA, Frais: 85.65 FCFA, Commission: 0 FCFA, Montant Net: 55236.67 FCFA, Nouveau Solde: 868768.26 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 92888,
+      "currency": "XAF",
+      "fees": 86,
+      "balance": 868768,
+      "counterparty": "SALON BEAUTE PLUS",
+      "reference": "PP869827.1740.B50008",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 871844808 ATANGANA MBALLA vers 948808683 EKOTTO DIBONGO reussi. ID transaction: PP440908.6078.C16579, Montant Transaction: 41279 FCFA, Frais: 88.98 FCFA, Commission: 0 FCFA, Montant Net: 27404.15 FCFA, Nouveau Solde: 36128.89 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 41279,
+      "currency": "XAF",
+      "fees": 89,
+      "balance": 36129,
+      "counterparty": "EKOTTO DIBONGO",
+      "reference": "PP440908.6078.C16579",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 645463760 ATANGANA MBALLA vers 824105247 CLINIQUE AMANA reussi. ID transaction: PP318521.0313.B85222, Montant Transaction: 6887 FCFA, Frais: 76 FCFA, Commission: 0 FCFA, Montant Net: 2242 FCFA, Nouveau Solde: 1130.94 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 6887,
+      "currency": "XAF",
+      "fees": 76,
+      "balance": 1131,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "PP318521.0313.B85222",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 248579711 ATANGANA MBALLA vers 284253792 NGO BIKOK reussi. ID transaction: PP356482.0927.D55897, Montant Transaction: 798 FCFA, Frais: 28 FCFA, Commission: 0 FCFA, Montant Net: 672 FCFA, Nouveau Solde: 8074.83 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 798,
+      "currency": "XAF",
+      "fees": 28,
+      "balance": 8075,
+      "counterparty": "NGO BIKOK",
+      "reference": "PP356482.0927.D55897",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 960553015 ATANGANA MBALLA vers 150444732 SHOP*KK3J8V1B reussi. ID transaction: PP168305.6816.D33460, Montant Transaction: 1987 FCFA, Frais: 26 FCFA, Commission: 0 FCFA, Montant Net: 8686 FCFA, Nouveau Solde: 3518.22 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 1987,
+      "currency": "XAF",
+      "fees": 26,
+      "balance": 3518,
+      "counterparty": "SHOP*KK3J8V1B",
+      "reference": "PP168305.6816.D33460",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 748557989 ATANGANA MBALLA vers 629239335 DJOUMESSI reussi. ID transaction: PP266672.6884.A53430, Montant Transaction: 4959 FCFA, Frais: 8.2 FCFA, Commission: 0 FCFA, Montant Net: 2546.6 FCFA, Nouveau Solde: 8852.18 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 4959,
+      "currency": "XAF",
+      "fees": 8,
+      "balance": 8852,
+      "counterparty": "DJOUMESSI",
+      "reference": "PP266672.6884.A53430",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 796880547 ATANGANA MBALLA vers 104039120 Quincaillerie Moderne reussi. ID transaction: PP960268.9231.B63690, Montant Transaction: 2319 FCFA, Frais: 51 FCFA, Commission: 0 FCFA, Montant Net: 9726 FCFA, Nouveau Solde: 45.5 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 2319,
+      "currency": "XAF",
+      "fees": 51,
+      "balance": 46,
+      "counterparty": "Quincaillerie Moderne",
+      "reference": "PP960268.9231.B63690",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 418210317 ATANGANA MBALLA vers 744313920 MVONDO reussi. ID transaction: PP797912.6937.A69207, Montant Transaction: 3757 FCFA, Frais: 21 FCFA, Commission: 0 FCFA, Montant Net: 3120 FCFA, Nouveau Solde: 989036 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 3757,
+      "currency": "XAF",
+      "fees": 21,
+      "balance": 989036,
+      "counterparty": "MVONDO",
+      "reference": "PP797912.6937.A69207",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 979194611 ATANGANA MBALLA vers 464530342 STATION BONAMOUSSADI reussi. ID transaction: PP733513.7059.C61482, Montant Transaction: 308 FCFA, Frais: 6 FCFA, Commission: 0 FCFA, Montant Net: 790 FCFA, Nouveau Solde: 967 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 308,
+      "currency": "XAF",
+      "fees": 6,
+      "balance": 967,
+      "counterparty": "STATION BONAMOUSSADI",
+      "reference": "PP733513.7059.C61482",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 875773931 ATANGANA MBALLA vers 335551439 FOTSO KENGNE reussi. ID transaction: PP426420.2045.A88003, Montant Transaction: 79763 FCFA, Frais: 71 FCFA, Commission: 0 FCFA, Montant Net: 67282 FCFA, Nouveau Solde: 572.60 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 79763,
+      "currency": "XAF",
+      "fees": 71,
+      "balance": 573,
+      "counterparty": "FOTSO KENGNE",
+      "reference": "PP426420.2045.A88003",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 738568442 ATANGANA MBALLA vers 572825194 SALON BEAUTE PLUS reussi. ID transaction: PP393048.9192.B29810, Montant Transaction: 46370 FCFA, Frais: 17.69 FCFA, Commission: 0 FCFA, Montant Net: 63380.60 FCFA, Nouveau Solde: 821236.38 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 46370,
+      "currency": "XAF",
+      "fees": 18,
+      "balance": 821236,
+      "counterparty": "SALON BEAUTE PLUS",
+      "reference": "PP393048.9192.B29810",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 843420774 CALLBOX to 809895811 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 30741 FCFA, ID transaction : CI948485.5778.C22702, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 25371 FCFA, Nouveau Solde : 63620.18 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 30741,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 63620,
+      "counterparty": "CALLBOX",
+      "reference": "CI948485.5778.C22702",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 750127297 CALLBOX to 929736636 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 3307 FCFA, ID transaction : CI694044.2517.A44823, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 8774 FCFA, Nouveau Solde : 3350.81 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 3307,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 3351,
+      "counterparty": "CALLBOX",
+      "reference": "CI694044.2517.A44823",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 489865554 CALLBOX to 560536423 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 60682 FCFA, ID transaction : CI179701.9868.D16936, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 35475 FCFA, Nouveau Solde : 83020.28 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 60682,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 83020,
+      "counterparty": "CALLBOX",
+      "reference": "CI179701.9868.D16936",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 253292405 TAMBA EYOUM to 489441203 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 8799 FCFA, ID transaction : CI788402.3352.A47436, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 5587 FCFA, Nouveau Solde : 4616.54 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 8799,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 4617,
+      "counterparty": "TAMBA EYOUM",
+      "reference": "CI788402.3352.A47436",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 399252242 CLINIQUE AMANA to 198952450 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 8017 FCFA, ID transaction : CI821055.8939.A73506, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 3044 FCFA, Nouveau Solde : 2578.10 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 8017,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 2578,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "CI821055.8939.A73506",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 924594648 CALLBOX to 424606040 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 4163 FCFA, ID transaction : CI883206.4427.B51704, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 1711 FCFA, Nouveau Solde : 9051.10 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 4163,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 9051,
+      "counterparty": "CALLBOX",
+      "reference": "CI883206.4427.B51704",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 898079354 ABENA ONANA to 375184908 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 488941 FCFA, ID transaction : CI873395.4806.D59217, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 901398 FCFA, Nouveau Solde : 520740.26 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 488941,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 520740,
+      "counterparty": "ABENA ONANA",
+      "reference": "CI873395.4806.D59217",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 241754104 SHOP*KWYWWAC4 to 708924179 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 38656 FCFA, ID transaction : CI741578.3325.B71208, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 82806 FCFA, Nouveau Solde : 86175.60 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 38656,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 86176,
+      "counterparty": "SHOP*KWYWWAC4",
+      "reference": "CI741578.3325.B71208",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 110905346 NJOYA PEFOURA to 952682699 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 90824 FCFA, ID transaction : CI598488.8650.C98874, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 95537 FCFA, Nouveau Solde : 21931.10 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 90824,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 21931,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "CI598488.8650.C98874",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 582475552 QUINCAILLERIE MODERNE to 766870621 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 80796 FCFA, ID transaction : CI604011.4820.D12137, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 61076 FCFA, Nouveau Solde : 84063.72 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 80796,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 84064,
+      "counterparty": "QUINCAILLERIE MODERNE",
+      "reference": "CI604011.4820.D12137",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 884969408 FOUDA NKOLO to 150916859 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 56888 FCFA, ID transaction : CI607165.5887.B40147, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 36341 FCFA, Nouveau Solde : 54323.84 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 56888,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 54324,
+      "counterparty": "FOUDA NKOLO",
+      "reference": "CI607165.5887.B40147",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 250242380 Station Bonamoussadi to 267027490 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 37991 FCFA, ID transaction : CI423220.7612.D12063, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 58591 FCFA, Nouveau Solde : 20755.35 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 37991,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 20755,
+      "counterparty": "Station Bonamoussadi",
+      "reference": "CI423220.7612.D12063",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 880239245 NANA KAMGA to 369715744 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 7510 FCFA, ID transaction : CI481131.8591.B53308, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 2535 FCFA, Nouveau Solde : 30038.25 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 7510,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 30038,
+      "counterparty": "NANA KAMGA",
+      "reference": "CI481131.8591.B53308",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 122664698 SALON BEAUTE PLUS to 670221582 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 72709 FCFA, ID transaction : CI764521.3748.A34980, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 15983 FCFA, Nouveau Solde : 70950.01 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 72709,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 70950,
+      "counterparty": "SALON BEAUTE PLUS",
+      "reference": "CI764521.3748.A34980",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 511553283 EKOTTO DIBONGO to 444554150 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 9747 FCFA, ID transaction : CI991368.0729.B85787, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 6336 FCFA, Nouveau Solde : 7888.5 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 9747,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 7889,
+      "counterparty": "EKOTTO DIBONGO",
+      "reference": "CI991368.0729.B85787",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 634745418 CLINIQUE AMANA to 806217841 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 1339 FCFA, ID transaction : CI787843.1590.C65161, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 3229 FCFA, Nouveau Solde : 9619.3 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 1339,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 9619,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "CI787843.1590.C65161",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 728428960 CLINIQUE AMANA to 747461508 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 4142 FCFA, ID transaction : CI763636.2676.D79752, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 2181 FCFA, Nouveau Solde : 2422.5 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 4142,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 2423,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "CI763636.2676.D79752",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 865976643 EKOTTO DIBONGO to 260314007 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 6946 FCFA, ID transaction : CI766275.6110.C78691, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 1879 FCFA, Nouveau Solde : 8418.42 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 6946,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 8418,
+      "counterparty": "EKOTTO DIBONGO",
+      "reference": "CI766275.6110.C78691",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 190580138 Ngo Bikok to 111225178 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 9001 FCFA, ID transaction : CI228406.0554.D42636, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 2689 FCFA, Nouveau Solde : 25247.65 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 9001,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 25248,
+      "counterparty": "Ngo Bikok",
+      "reference": "CI228406.0554.D42636",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Depot effectue par 598428648 Supermarche Du Centre to 146973700 ATANGANA MBALLA. Informations detaillees: Montant de transaction : 48450 FCFA, ID transaction : CI929098.1480.A99251, Frais : 0 FCFA, Commission : 0 FCFA, Montant Net du Credit : 72036 FCFA, Nouveau Solde : 13895.64 FCFA.",
+    "expected": {
+      "templateId": "orange-money.deposit",
+      "kind": "DEPOSIT",
+      "direction": "CREDIT",
+      "amount": 48450,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 13896,
+      "counterparty": "Supermarche Du Centre",
+      "reference": "CI929098.1480.A99251",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 8462 FCFA, ID transaction: RC968090.0032.C32166, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 11833.41 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 8462,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 11833,
+      "counterparty": null,
+      "reference": "RC968090.0032.C32166",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 165 FCFA, ID transaction: RC571741.8983.D25190, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 4581.16 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 165,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 4581,
+      "counterparty": null,
+      "reference": "RC571741.8983.D25190",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 5709 FCFA, ID transaction: RC918766.6756.A71600, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 85937.77 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 5709,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 85938,
+      "counterparty": null,
+      "reference": "RC918766.6756.A71600",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 139 FCFA, ID transaction: RC206128.2010.B13130, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 42021.96 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 139,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 42022,
+      "counterparty": null,
+      "reference": "RC206128.2010.B13130",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction : 917 FCFA, ID transaction : RC917404.0033.C61254, Frais : 0 FCFA, Commission : 0   FCFA, Nouveau Solde : 4061.58FCFA Other msisdn 463467486.",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 917,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 4062,
+      "counterparty": null,
+      "reference": "RC917404.0033.C61254",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction : 505 FCFA, ID transaction : RC257401.1101.B32736, Frais : 0 FCFA, Commission : 0   FCFA, Nouveau Solde : 312.8FCFA Other msisdn 369092872.",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 505,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 313,
+      "counterparty": null,
+      "reference": "RC257401.1101.B32736",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction : 383 FCFA, ID transaction : RC770816.7044.A76195, Frais : 0 FCFA, Commission : 0   FCFA, Nouveau Solde : 164.6FCFA Other msisdn 830359083.",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 383,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 165,
+      "counterparty": null,
+      "reference": "RC770816.7044.A76195",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 1152 FCFA, ID transaction: RC858821.8325.A55664, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 2983.88 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1152,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 2984,
+      "counterparty": null,
+      "reference": "RC858821.8325.A55664",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 3067 FCFA, ID transaction: RC395403.5217.C74042, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 989.70 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3067,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 990,
+      "counterparty": null,
+      "reference": "RC395403.5217.C74042",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 414 FCFA, ID transaction: RC419361.6477.C69828, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 999.75 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 414,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 1000,
+      "counterparty": null,
+      "reference": "RC419361.6477.C69828",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 6627 FCFA, ID transaction: RC200921.6655.D79142, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 8505.24 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6627,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 8505,
+      "counterparty": null,
+      "reference": "RC200921.6655.D79142",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 264 FCFA, ID transaction: RC917059.0425.C89705, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 6900.25 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 264,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 6900,
+      "counterparty": null,
+      "reference": "RC917059.0425.C89705",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 829 FCFA, ID transaction: RC634101.8359.D79151, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 8762.13 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 829,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 8762,
+      "counterparty": null,
+      "reference": "RC634101.8359.D79151",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 897 FCFA, ID transaction: RC483484.9521.C66485, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 7283.04 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 897,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 7283,
+      "counterparty": null,
+      "reference": "RC483484.9521.C66485",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 511 FCFA, ID transaction: RC949896.5895.D43633, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 6102.57 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 511,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 6103,
+      "counterparty": null,
+      "reference": "RC949896.5895.D43633",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 631 FCFA, ID transaction: RC934255.5982.C42290, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 287.27 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 631,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 287,
+      "counterparty": null,
+      "reference": "RC934255.5982.C42290",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 412 FCFA, ID transaction: RC965651.0653.B99525, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 5515.02 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 412,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 5515,
+      "counterparty": null,
+      "reference": "RC965651.0653.B99525",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 608 FCFA, ID transaction: RC275120.9526.C50774, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 9487.57 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 608,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 9488,
+      "counterparty": null,
+      "reference": "RC275120.9526.C50774",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 626 FCFA, ID transaction: RC893304.2428.A16081, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 5905.7 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 626,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 5906,
+      "counterparty": null,
+      "reference": "RC893304.2428.A16081",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Rechargement reussi. Montant de la transaction: 270 FCFA, ID transaction: RC211313.8180.C80375, Frais: 0 FCFA, Commission: 0 FCFA, Nouveau solde: 8871.4 FCFA",
+    "expected": {
+      "templateId": "orange-money.airtime",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 270,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 8871,
+      "counterparty": null,
+      "reference": "RC211313.8180.C80375",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre paiement de 3,000FCFA a ete effectue avec succes.\nFrais: 0FCFA.\nID de transaction: PS254007.8875.D38029\nNouveau solde: 81475.60FCFA.\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3000,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 81476,
+      "counterparty": null,
+      "reference": "PS254007.8875.D38029",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre paiement de 7,000FCFA a ete effectue avec succes.\nFrais: 0FCFA.\nID de transaction: PS449418.5784.C21886\nNouveau solde: 5030.33FCFA.\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7000,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 5030,
+      "counterparty": null,
+      "reference": "PS449418.5784.C21886",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre paiement de 5,000FCFA a ete effectue avec succes.\nFrais: 0FCFA.\nID de transaction: PS460145.3030.B74435\nNouveau solde: 614811.76FCFA.\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 5000,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 614812,
+      "counterparty": null,
+      "reference": "PS460145.3030.B74435",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre paiement de 2,000FCFA a ete effectue avec succes.\nFrais: 0FCFA.\nID de transaction: PS697179.4450.D10225\nNouveau solde: 67733.40FCFA.\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 2000,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 67733,
+      "counterparty": null,
+      "reference": "PS697179.4450.D10225",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre paiement de 8,000FCFA a ete effectue avec succes.\nFrais: 0FCFA.\nID de transaction: PS338251.9739.D47061\nNouveau solde: 2894.51FCFA.\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 8000,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 2895,
+      "counterparty": null,
+      "reference": "PS338251.9739.D47061",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 821722735 avec le Code : 712908. Informations detaillees : Montant: 70701 FCFA, Frais: 807 FCFA, No de transaction CO104336.5689.B69784, montant net debite 24205 FCFA, Nouveau solde: 63347.85 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 70701,
+      "currency": "XAF",
+      "fees": 807,
+      "balance": 63348,
+      "counterparty": null,
+      "reference": "CO104336.5689.B69784",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 552318526 avec le Code : 398142. Informations detaillees : Montant: 884551 FCFA, Frais: 9379 FCFA, No de transaction CO526141.2568.B13396, montant net debite 614963 FCFA, Nouveau solde: 72138.18 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 884551,
+      "currency": "XAF",
+      "fees": 9379,
+      "balance": 72138,
+      "counterparty": null,
+      "reference": "CO526141.2568.B13396",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 346991142 avec le Code : 9981584. Informations detaillees : Montant: 73667 FCFA, Frais: 153 FCFA, No de transaction CO742264.5886.D79129, montant net debite 92398 FCFA, Nouveau solde: 803828.70 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 73667,
+      "currency": "XAF",
+      "fees": 153,
+      "balance": 803829,
+      "counterparty": null,
+      "reference": "CO742264.5886.D79129",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 991916344 avec le Code : 130233. Informations detaillees : Montant: 41368 FCFA, Frais: 772 FCFA, No de transaction CO236398.0348.A66289, montant net debite 62773 FCFA, Nouveau solde: 9481.63 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 41368,
+      "currency": "XAF",
+      "fees": 772,
+      "balance": 9482,
+      "counterparty": null,
+      "reference": "CO236398.0348.A66289",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 636067337 avec le Code : 107695. Informations detaillees : Montant: 84756 FCFA, Frais: 484 FCFA, No de transaction CO445023.8320.D77982, montant net debite 54426 FCFA, Nouveau solde: 38022.33 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 84756,
+      "currency": "XAF",
+      "fees": 484,
+      "balance": 38022,
+      "counterparty": null,
+      "reference": "CO445023.8320.D77982",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 864584621 avec le Code : 435991. Informations detaillees : Montant: 60127 FCFA, Frais: 813 FCFA, No de transaction CO680972.5184.B23766, montant net debite 33110 FCFA, Nouveau solde: 813686.90 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 60127,
+      "currency": "XAF",
+      "fees": 813,
+      "balance": 813687,
+      "counterparty": null,
+      "reference": "CO680972.5184.B23766",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 946392561 avec le Code : 728804. Informations detaillees : Montant: 13282 FCFA, Frais: 812 FCFA, No de transaction CO452192.4369.D15600, montant net debite 11516 FCFA, Nouveau solde: 3993.15 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 13282,
+      "currency": "XAF",
+      "fees": 812,
+      "balance": 3993,
+      "counterparty": null,
+      "reference": "CO452192.4369.D15600",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 821655416 avec le Code : 332774. Informations detaillees : Montant: 48154 FCFA, Frais: 460 FCFA, No de transaction CO104005.2027.B62588, montant net debite 93253 FCFA, Nouveau solde: 1980.16 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 48154,
+      "currency": "XAF",
+      "fees": 460,
+      "balance": 1980,
+      "counterparty": null,
+      "reference": "CO104005.2027.B62588",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 683866393 avec le Code : 741132. Informations detaillees : Montant: 2101 FCFA, Frais: 72 FCFA, No de transaction CO192004.8747.D29758, montant net debite 3999 FCFA, Nouveau solde: 566.80 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 2101,
+      "currency": "XAF",
+      "fees": 72,
+      "balance": 567,
+      "counterparty": null,
+      "reference": "CO192004.8747.D29758",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 505638868 avec le Code : 504953. Informations detaillees : Montant: 57756 FCFA, Frais: 7237 FCFA, No de transaction CO690224.8024.D72756, montant net debite 11624 FCFA, Nouveau solde: 2361.22 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 57756,
+      "currency": "XAF",
+      "fees": 7237,
+      "balance": 2361,
+      "counterparty": null,
+      "reference": "CO690224.8024.D72756",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 590344048 avec le Code : 340648. Informations detaillees : Montant: 45042 FCFA, Frais: 100 FCFA, No de transaction CO799969.9634.D71354, montant net debite 18608 FCFA, Nouveau solde: 1641.98 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 45042,
+      "currency": "XAF",
+      "fees": 100,
+      "balance": 1642,
+      "counterparty": null,
+      "reference": "CO799969.9634.D71354",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 436928988 avec le Code : 627130. Informations detaillees : Montant: 2938 FCFA, Frais: 26 FCFA, No de transaction CO625981.3739.A71356, montant net debite 1276 FCFA, Nouveau solde: 72526.53 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 2938,
+      "currency": "XAF",
+      "fees": 26,
+      "balance": 72527,
+      "counterparty": null,
+      "reference": "CO625981.3739.A71356",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 846678221 avec le Code : 411689. Informations detaillees : Montant: 4182 FCFA, Frais: 98 FCFA, No de transaction CO423209.4810.C33036, montant net debite 8683 FCFA, Nouveau solde: 2199.52 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 4182,
+      "currency": "XAF",
+      "fees": 98,
+      "balance": 2200,
+      "counterparty": null,
+      "reference": "CO423209.4810.C33036",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 630379100 avec le Code : 735653. Informations detaillees : Montant: 2996 FCFA, Frais: 80 FCFA, No de transaction CO936338.5432.A99877, montant net debite 8947 FCFA, Nouveau solde: 95.14 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 2996,
+      "currency": "XAF",
+      "fees": 80,
+      "balance": 95,
+      "counterparty": null,
+      "reference": "CO936338.5432.A99877",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 289578097 avec le Code : 185243. Informations detaillees : Montant: 58711 FCFA, Frais: 501 FCFA, No de transaction CO205865.7103.A22860, montant net debite 20643 FCFA, Nouveau solde: 2612.29 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 58711,
+      "currency": "XAF",
+      "fees": 501,
+      "balance": 2612,
+      "counterparty": null,
+      "reference": "CO205865.7103.A22860",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 264183041 avec le Code : 693517. Informations detaillees : Montant: 97153 FCFA, Frais: 365 FCFA, No de transaction CO822830.2348.B98749, montant net debite 34587 FCFA, Nouveau solde: 8300.26 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 97153,
+      "currency": "XAF",
+      "fees": 365,
+      "balance": 8300,
+      "counterparty": null,
+      "reference": "CO822830.2348.B98749",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 526536893 avec le Code : 424767. Informations detaillees : Montant: 18806 FCFA, Frais: 301 FCFA, No de transaction CO616590.0335.D34901, montant net debite 66614 FCFA, Nouveau solde: 73.60 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 18806,
+      "currency": "XAF",
+      "fees": 301,
+      "balance": 74,
+      "counterparty": null,
+      "reference": "CO616590.0335.D34901",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 798322729 avec le Code : 104593. Informations detaillees : Montant: 82716 FCFA, Frais: 902 FCFA, No de transaction CO906425.2037.C62406, montant net debite 50968 FCFA, Nouveau solde: 7680.53 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 82716,
+      "currency": "XAF",
+      "fees": 902,
+      "balance": 7681,
+      "counterparty": null,
+      "reference": "CO906425.2037.C62406",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 977264425 avec le Code : 209693. Informations detaillees : Montant: 7145 FCFA, Frais: 30 FCFA, No de transaction CO418030.3336.A58091, montant net debite 2333 FCFA, Nouveau solde: 6403.22 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 7145,
+      "currency": "XAF",
+      "fees": 30,
+      "balance": 6403,
+      "counterparty": null,
+      "reference": "CO418030.3336.A58091",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Retrait d'argent reussi par le 974337468 avec le Code : 592180. Informations detaillees : Montant: 29133 FCFA, Frais: 966 FCFA, No de transaction CO760689.3935.C46200, montant net debite 72989 FCFA, Nouveau solde: 87557.83 FCFA.",
+    "expected": {
+      "templateId": "orange-money.withdrawal",
+      "kind": "WITHDRAWAL",
+      "direction": "DEBIT",
+      "amount": 29133,
+      "currency": "XAF",
+      "fees": 966,
+      "balance": 87558,
+      "counterparty": null,
+      "reference": "CO760689.3935.C46200",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de QUINCAILLERIE MODERNE reussi par 426594279 ATANGANA MBALLA. ID transaction:MP381741.9706.B39683, Montant:96174 FCFA. Solde: 10620.17 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 96174,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 10620,
+      "counterparty": "QUINCAILLERIE MODERNE",
+      "reference": "MP381741.9706.B39683",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Djoumessi reussi par 798903124 ATANGANA MBALLA. ID transaction:MP604739.7735.D60575, Montant:62916 FCFA. Solde: 9983.37 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 62916,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 9983,
+      "counterparty": "Djoumessi",
+      "reference": "MP604739.7735.D60575",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Quincaillerie Moderne reussi par 883216158 ATANGANA MBALLA. ID transaction:MP268373.8377.D47371, Montant:39931 FCFA. Solde: 4843.45 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 39931,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4843,
+      "counterparty": "Quincaillerie Moderne",
+      "reference": "MP268373.8377.D47371",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Djoumessi reussi par 387781925 ATANGANA MBALLA. ID transaction:MP435704.2484.B75473, Montant:44081 FCFA. Solde: 6619.94 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 44081,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 6620,
+      "counterparty": "Djoumessi",
+      "reference": "MP435704.2484.B75473",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de SHOP*D115LUQ6 reussi par 188744995 ATANGANA MBALLA. ID transaction:MP724174.8393.B62358, Montant:526 FCFA. Solde: 95503.96 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 526,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 95504,
+      "counterparty": "SHOP*D115LUQ6",
+      "reference": "MP724174.8393.B62358",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Djoumessi reussi par 157572897 ATANGANA MBALLA. ID transaction:MP908543.4391.C63568, Montant:32649 FCFA. Solde: 72.57 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 32649,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 73,
+      "counterparty": "Djoumessi",
+      "reference": "MP908543.4391.C63568",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de STATION BONAMOUSSADI reussi par 707069379 ATANGANA MBALLA. ID transaction:MP889206.2237.C16744, Montant:17379 FCFA. Solde: 33778.43 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 17379,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 33778,
+      "counterparty": "STATION BONAMOUSSADI",
+      "reference": "MP889206.2237.C16744",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Djoumessi reussi par 109814618 ATANGANA MBALLA. ID transaction:MP885694.8938.A95658, Montant:15185 FCFA. Solde: 4167.09 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 15185,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4167,
+      "counterparty": "Djoumessi",
+      "reference": "MP885694.8938.A95658",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de FOTSO KENGNE reussi par 446262123 ATANGANA MBALLA. ID transaction:MP355577.5315.C40346, Montant:21748 FCFA. Solde: 903647.73 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 21748,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 903648,
+      "counterparty": "FOTSO KENGNE",
+      "reference": "MP355577.5315.C40346",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de SALON BEAUTE PLUS reussi par 732727690 ATANGANA MBALLA. ID transaction:MP386483.1805.D70724, Montant:22953 FCFA. Solde: 854.08 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 22953,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 854,
+      "counterparty": "SALON BEAUTE PLUS",
+      "reference": "MP386483.1805.D70724",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de OBMONTHDATA17 reussi par 363684281 ATANGANA MBALLA. ID transaction:MP314904.0380.D17750, Montant:3440 FCFA. Solde: 1388.45 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3440,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 1388,
+      "counterparty": "OBMONTHDATA17",
+      "reference": "MP314904.0380.D17750",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de OBMONTHDATA42 reussi par 677831156 ATANGANA MBALLA. ID transaction:MP420481.2424.A32204, Montant:6348 FCFA. Solde: 49335.43 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6348,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 49335,
+      "counterparty": "OBMONTHDATA42",
+      "reference": "MP420481.2424.A32204",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de OBMONTHDATA27 reussi par 734259305 ATANGANA MBALLA. ID transaction:MP168592.2689.B87745, Montant:6988 FCFA. Solde: 73020.78 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6988,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 73021,
+      "counterparty": "OBMONTHDATA27",
+      "reference": "MP168592.2689.B87745",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de TAMBA EYOUM reussi par 901364278 ATANGANA MBALLA. ID transaction:MP401447.6085.C52124, Montant:77824 FCFA. Solde: 8730.47 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 77824,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 8730,
+      "counterparty": "TAMBA EYOUM",
+      "reference": "MP401447.6085.C52124",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de CAMPOST reussi par 196113826 ATANGANA MBALLA. ID transaction:MP333486.7883.B36447, Montant:80240 FCFA. Solde: 3966.80 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 80240,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 3967,
+      "counterparty": "CAMPOST",
+      "reference": "MP333486.7883.B36447",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de CAMPOST reussi par 639929132 ATANGANA MBALLA. ID transaction:MP420408.9783.D13549, Montant:66315 FCFA. Solde: 135.2 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 66315,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 135,
+      "counterparty": "CAMPOST",
+      "reference": "MP420408.9783.D13549",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de CLINIQUE AMANA reussi par 569023862 ATANGANA MBALLA. ID transaction:MP933678.6693.D86304, Montant:7768 FCFA. Solde: 163.9 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7768,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 164,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "MP933678.6693.D86304",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de ABENA ONANA reussi par 960362506 ATANGANA MBALLA. ID transaction:MP303319.7672.C26399, Montant:6470 FCFA. Solde: 455.4 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6470,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 455,
+      "counterparty": "ABENA ONANA",
+      "reference": "MP303319.7672.C26399",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de CLINIQUE AMANA reussi par 980925542 ATANGANA MBALLA. ID transaction:MP992477.4027.A34433, Montant:7713 FCFA. Solde: 8845.62 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 7713,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 8846,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "MP992477.4027.A34433",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de OBMONTHDATA51 reussi par 841022462 ATANGANA MBALLA. ID transaction:MP302010.8654.C98174, Montant:6828 FCFA. Solde: 2287.71 FCFA.",
+    "expected": {
+      "templateId": "orange-money.merchant-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6828,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 2288,
+      "counterparty": "OBMONTHDATA51",
+      "reference": "MP302010.8654.C98174",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 936738885 SUPERMARCHE DU CENTRE vers 917330381 ATANGANA MBALLA reussi. Details: ID transaction: PP106902.8223.C42482, Montant Transaction: 96183FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 88992 FCFA, Nouveau Solde: 860285.61 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 96183,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 860286,
+      "counterparty": "SUPERMARCHE DU CENTRE",
+      "reference": "PP106902.8223.C42482",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 496909583 NJOYA PEFOURA vers 826636260 ATANGANA MBALLA reussi. Details: ID transaction: PP540576.7356.B76640, Montant Transaction: 63504FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 50380 FCFA, Nouveau Solde: 181378.13 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 63504,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 181378,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP540576.7356.B76640",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 778797964 NJOYA PEFOURA vers 490446308 ATANGANA MBALLA reussi. Details: ID transaction: PP521585.2006.D27308, Montant Transaction: 224672FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 754882 FCFA, Nouveau Solde: 420779.90 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 224672,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 420780,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP521585.2006.D27308",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 440405041 QUINCAILLERIE MODERNE vers 109278421 ATANGANA MBALLA reussi. Details: ID transaction: PP697973.8193.B33781, Montant Transaction: 36632FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 13965 FCFA, Nouveau Solde: 55047.29 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 36632,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 55047,
+      "counterparty": "QUINCAILLERIE MODERNE",
+      "reference": "PP697973.8193.B33781",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 873630098 FOUDA NKOLO vers 210829023 ATANGANA MBALLA reussi. Details: ID transaction: PP167814.6631.A83279, Montant Transaction: 46723FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 58278 FCFA, Nouveau Solde: 76468.54 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 46723,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 76469,
+      "counterparty": "FOUDA NKOLO",
+      "reference": "PP167814.6631.A83279",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 527818373 NJOYA PEFOURA vers 827035028 ATANGANA MBALLA reussi. Details: ID transaction: PP755881.6070.C89103, Montant Transaction: 2456FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 9521 FCFA, Nouveau Solde: 6771.09 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 2456,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 6771,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP755881.6070.C89103",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 366751316 SUPERMARCHE DU CENTRE vers 827342090 ATANGANA MBALLA reussi. Details: ID transaction: PP505313.5241.A57025, Montant Transaction: 21506FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 79519 FCFA, Nouveau Solde: 915607.25 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 21506,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 915607,
+      "counterparty": "SUPERMARCHE DU CENTRE",
+      "reference": "PP505313.5241.A57025",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 972101728 QUINCAILLERIE MODERNE vers 917832479 ATANGANA MBALLA reussi. Details: ID transaction: PP400061.3645.D61228, Montant Transaction: 7348FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 6071 FCFA, Nouveau Solde: 9910.03 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 7348,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 9910,
+      "counterparty": "QUINCAILLERIE MODERNE",
+      "reference": "PP400061.3645.D61228",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 321459834 STATION BONAMOUSSADI vers 562231582 ATANGANA MBALLA reussi. Details: ID transaction: PP234079.5044.B27209, Montant Transaction: 942FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 913 FCFA, Nouveau Solde: 31417.87 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 942,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 31418,
+      "counterparty": "STATION BONAMOUSSADI",
+      "reference": "PP234079.5044.B27209",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 771920748 DJOUMESSI vers 477808867 ATANGANA MBALLA reussi. Details: ID transaction: PP789593.3657.A63438, Montant Transaction: 3140FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 2928 FCFA, Nouveau Solde: 9019.82 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 3140,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 9020,
+      "counterparty": "DJOUMESSI",
+      "reference": "PP789593.3657.A63438",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 851159700 NANA KAMGA vers 936064764 ATANGANA MBALLA reussi. Details: ID transaction: PP383753.5294.A36979, Montant Transaction: 15093FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 67304 FCFA, Nouveau Solde: 66729.66 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 15093,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 66730,
+      "counterparty": "NANA KAMGA",
+      "reference": "PP383753.5294.A36979",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 364636295 SHOP*E2GJGT3E vers 290406724 ATANGANA MBALLA reussi. Details: ID transaction: PP127495.4085.C67595, Montant Transaction: 1173FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 9021 FCFA, Nouveau Solde: 3194.1 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 1173,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 3194,
+      "counterparty": "SHOP*E2GJGT3E",
+      "reference": "PP127495.4085.C67595",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 908479138 EKOTTO DIBONGO vers 420190611 ATANGANA MBALLA reussi. Details: ID transaction: PP256387.5406.C90516, Montant Transaction: 3285FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 3464 FCFA, Nouveau Solde: 4773 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 3285,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 4773,
+      "counterparty": "EKOTTO DIBONGO",
+      "reference": "PP256387.5406.C90516",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 612301846 CLINIQUE AMANA vers 634875978 ATANGANA MBALLA reussi. Details: ID transaction: PP611748.5667.B57447, Montant Transaction: 99197FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 64899 FCFA, Nouveau Solde: 54787 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 99197,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 54787,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "PP611748.5667.B57447",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 286001538 SHOP*ZQPFH1WM vers 555682646 ATANGANA MBALLA reussi. Details: ID transaction: PP906186.2389.B25249, Montant Transaction: 6517FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 6131 FCFA, Nouveau Solde: 2564 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 6517,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 2564,
+      "counterparty": "SHOP*ZQPFH1WM",
+      "reference": "PP906186.2389.B25249",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 461041649 SUPERMARCHE DU CENTRE vers 720881890 ATANGANA MBALLA reussi. Details: ID transaction: PP535053.6845.C28757, Montant Transaction: 5306FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 4741 FCFA, Nouveau Solde: 8492 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 5306,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 8492,
+      "counterparty": "SUPERMARCHE DU CENTRE",
+      "reference": "PP535053.6845.C28757",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 409687040 CLINIQUE AMANA vers 319350391 ATANGANA MBALLA reussi. Details: ID transaction: PP358027.0350.A82741, Montant Transaction: 73413FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 75307 FCFA, Nouveau Solde: 49240 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 73413,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 49240,
+      "counterparty": "CLINIQUE AMANA",
+      "reference": "PP358027.0350.A82741",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 926431281 NJOYA PEFOURA vers 456567728 ATANGANA MBALLA reussi. Details: ID transaction: PP397430.3306.C37690, Montant Transaction: 53682FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 81714 FCFA, Nouveau Solde: 95550.94 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 53682,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 95551,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP397430.3306.C37690",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 607029439 NJOYA PEFOURA vers 415501845 ATANGANA MBALLA reussi. Details: ID transaction: PP190689.7344.B43707, Montant Transaction: 64503FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 56774 FCFA, Nouveau Solde: 95822.54 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 64503,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 95823,
+      "counterparty": "NJOYA PEFOURA",
+      "reference": "PP190689.7344.B43707",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert de 921629769 DJOUMESSI vers 695271762 ATANGANA MBALLA reussi. Details: ID transaction: PP915626.1906.B22027, Montant Transaction: 31938FCFA, Frais: 0 FCFA, Commission: 0 FCFA, Montant Net: 15074 FCFA, Nouveau Solde: 19519.57 FCFA.",
+    "expected": {
+      "templateId": "orange-money.transfer-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 31938,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 19520,
+      "counterparty": "DJOUMESSI",
+      "reference": "PP915626.1906.B22027",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 85h en succes  par 157623803.\nID transaction: MP426741.1268.D87126, Montant: 451 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 451,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 85h",
+      "reference": "MP426741.1268.D87126",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 50h en succes  par 728714355.\nID transaction: MP266817.4613.B71935, Montant: 134 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 134,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 50h",
+      "reference": "MP266817.4613.B71935",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 29 jrs en succes  par 223839369.\nID transaction: MP340458.8533.B24489, Montant: 1612 FCFA.\nNouveau solde: 87633 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 1612,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 87633,
+      "counterparty": "Orange Bonus 29 jrs",
+      "reference": "MP340458.8533.B24489",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 3 jrs en succes  par 542702744.\nID transaction: MP606597.2303.C33645, Montant: 5834 FCFA.\nNouveau solde: 776 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 5834,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 776,
+      "counterparty": "Orange Bonus 3 jrs",
+      "reference": "MP606597.2303.C33645",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 0 jrs en succes  par 901515747.\nID transaction: MP872578.9197.A66058, Montant: 6847 FCFA.\nNouveau solde: 9126 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6847,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 9126,
+      "counterparty": "Orange Bonus 0 jrs",
+      "reference": "MP872578.9197.A66058",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 33h en succes  par 699344434.\nID transaction: MP464229.9280.A50358, Montant: 650 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 650,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 33h",
+      "reference": "MP464229.9280.A50358",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 56 jrs en succes  par 368258004.\nID transaction: MP964551.0647.D56658, Montant: 3669 FCFA.\nNouveau solde: 6278 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3669,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 6278,
+      "counterparty": "Orange Bonus 56 jrs",
+      "reference": "MP964551.0647.D56658",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 33h en succes  par 626668655.\nID transaction: MP390975.6708.C70736, Montant: 184 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 184,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 33h",
+      "reference": "MP390975.6708.C70736",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 32 jrs en succes  par 135455942.\nID transaction: MP143284.7905.N26973, Montant: 9826 FCFA.\nNouveau solde: 4347 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9826,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4347,
+      "counterparty": "Orange Bonus 32 jrs",
+      "reference": "MP143284.7905.N26973",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Quincaillerie Moderne en succes  par 274415132.\nID transaction: MP530880.6535.B94714, Montant: 3638 FCFA.\nNouveau solde: 7275 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 3638,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 7275,
+      "counterparty": "Quincaillerie Moderne",
+      "reference": "MP530880.6535.B94714",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de MVONDO en succes  par 538737115.\nID transaction: MP799090.8040.B90252, Montant: 377 FCFA.\nNouveau solde: 4056.6 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 377,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4057,
+      "counterparty": "MVONDO",
+      "reference": "MP799090.8040.B90252",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 16h en succes  par 816046372.\nID transaction: MP915383.6488.B76431, Montant: 684 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 684,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 16h",
+      "reference": "MP915383.6488.B76431",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 21 jrs en succes  par 440821824.\nID transaction: MP178120.7850.C92999, Montant: 4010 FCFA.\nNouveau solde: 9807 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4010,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 9807,
+      "counterparty": "Orange Bonus 21 jrs",
+      "reference": "MP178120.7850.C92999",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 49h en succes  par 834404221.\nID transaction: MP610204.8791.B89171, Montant: 976 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 976,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 49h",
+      "reference": "MP610204.8791.B89171",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 69h en succes  par 931421385.\nID transaction: MP457561.8565.B34046, Montant: 498 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 498,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 69h",
+      "reference": "MP457561.8565.B34046",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 41 jrs en succes  par 180009865.\nID transaction: MP535262.6503.D94955, Montant: 2095 FCFA.\nNouveau solde: 81 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 2095,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 81,
+      "counterparty": "Orange Bonus 41 jrs",
+      "reference": "MP535262.6503.D94955",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 40 jrs en succes  par 419977185.\nID transaction: MP187507.7540.C54590, Montant: 6013 FCFA.\nNouveau solde: 5545 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 6013,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 5545,
+      "counterparty": "Orange Bonus 40 jrs",
+      "reference": "MP187507.7540.C54590",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 73 jrs en succes  par 700799448.\nID transaction: MP862169.8721.D84184, Montant: 8757 FCFA.\nNouveau solde: 4747 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 8757,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4747,
+      "counterparty": "Orange Bonus 73 jrs",
+      "reference": "MP862169.8721.D84184",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Orange Bonus 99 jrs en succes  par 899435005.\nID transaction: MP728360.6000.B16152, Montant: 9222 FCFA.\nNouveau solde: 55827 FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 9222,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 55827,
+      "counterparty": "Orange Bonus 99 jrs",
+      "reference": "MP728360.6000.B16152",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Paiement de Forfaits 23h en succes  par 838973295.\nID transaction: MP346082.3826.A40721, Montant: 379 FCFA.\nNouveau solde: NA FCFA.",
+    "expected": {
+      "templateId": "orange-money.bundle-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 379,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "Forfaits 23h",
+      "reference": "MP346082.3826.A40721",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 42592 XAF. Nouveau solde : 80412.86 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 42592,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 80413,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 63525 XAF. Nouveau solde : 985.72 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 63525,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 986,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 73263 XAF. Nouveau solde : 9375.17 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 73263,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 9375,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 48638 XAF. Nouveau solde : 20247.46 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 48638,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 20247,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 34378 XAF. Nouveau solde : 55567.98 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 34378,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 55568,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 7569 XAF. Nouveau solde : 868669.63 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 7569,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 868670,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 4192 XAF. Nouveau solde : 363888.13 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 4192,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 363888,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 7905 XAF. Nouveau solde : 954798.53 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 7905,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 954799,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 40377 XAF. Nouveau solde : 9969.96 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 40377,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 9970,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 36555 XAF. Nouveau solde : 8972.76 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 36555,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 8973,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 1396 XAF. Nouveau solde : 72667.76 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 1396,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 72668,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 1553 XAF. Nouveau solde : 5154.91 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 1553,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 5155,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre carte prépayée virtuelle a été rechargée de 8266 XAF. Nouveau solde : 410.34 XAF. Merci d'utiliser Orange Money.",
+    "expected": {
+      "templateId": "orange-money.card-top-up",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 8266,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 410,
+      "counterparty": null,
+      "reference": null,
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert d argent de 90326 FCFA recu du +18675595589 (France) le 2663-25-91 49:53:71. Nouveau solde OM : 67627.53 FCFA, Frais : 0 FCFA, ID : 3259e999\nOrange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.international-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 90326,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 67628,
+      "counterparty": "+18675595589 (France)",
+      "reference": "3259e999",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Vous avez transfere avec succes 2056 FCFA a 405350185 (Airtel GABON). Cette transaction vous a coute 224 FCFA, Le montant net debite de votre compte est de 3542 FCFA, votre nouveau solde est de: 3798.54 FCFA. Reference de transaction: CO581326.6261.D90525 . Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.international-sent",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 2056,
+      "currency": "XAF",
+      "fees": 224,
+      "balance": 3799,
+      "counterparty": "405350185 (Airtel GABON)",
+      "reference": "CO581326.6261.D90525",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Felicitations, vous venez d'effectuer un payement de 508 FCFA pour 804U = 415Mo/24H + 984Mo/3J. N° de transaction : MP659674.2268.D89136. Nouveau solde : 95458.11 FCFA. Plus de service au #304#",
+    "expected": {
+      "templateId": "orange-money.bundle-purchase",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 508,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 95458,
+      "counterparty": "804U = 415Mo/24H + 984Mo/3J",
+      "reference": "MP659674.2268.D89136",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Felicitations, vous venez d'effectuer un payement de 814 FCFA pour 702U = 536Mo/74H + 400Mo/9J. N° de transaction : MP913027.1664.D52421. Nouveau solde : 19884.71 FCFA. Plus de service au #400#",
+    "expected": {
+      "templateId": "orange-money.bundle-purchase",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 814,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 19885,
+      "counterparty": "702U = 536Mo/74H + 400Mo/9J",
+      "reference": "MP913027.1664.D52421",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Felicitations, vous venez d'effectuer un payement de 764 FCFA pour 662U = 173Mo/28H + 385Mo/2J. N° de transaction : MP487868.5136.D54649. Nouveau solde : 5526.71 FCFA. Plus de service au #196#",
+    "expected": {
+      "templateId": "orange-money.bundle-purchase",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 764,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 5527,
+      "counterparty": "662U = 173Mo/28H + 385Mo/2J",
+      "reference": "MP487868.5136.D54649",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Vous avez recu avec succes 5213 FCFA de 340241171603. Votre nouveau solde est de 7672.33 FCFA, Reference de transaction: CI729967.0398.D86288 Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.money-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 5213,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 7672,
+      "counterparty": "340241171603",
+      "reference": "CI729967.0398.D86288",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Vous avez recu avec succes 74194 FCFA de 317460221877(Mtn Cameroon). Votre nouveau solde est de 24725.0 FCFA, Reference de transaction: CI290150.4240.B81476 Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.money-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 74194,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 24725,
+      "counterparty": "317460221877(Mtn Cameroon)",
+      "reference": "CI290150.4240.B81476",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Vous avez recu avec succes 58153 FCFA de 325578. Votre nouveau solde est de 51857.02 FCFA, Reference de transaction: CI714509.5777.D79866 Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.money-received",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 58153,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 51857,
+      "counterparty": "325578",
+      "reference": "CI714509.5777.D79866",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Transfert d'argent de 802550 FCFA reçu de Supermarche Du Centre provenant du pays CAN le 48/13/8552 à 52:41:31. Nouveau solde OM : 528294.01 FCFA, Frais : 0 FCFA, CI524869.7097.B94521 Orange Money vous remercie",
+    "expected": {
+      "templateId": "orange-money.international-received-from",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 802550,
+      "currency": "XAF",
+      "fees": 0,
+      "balance": 528294,
+      "counterparty": "Supermarche Du Centre",
+      "reference": "CI524869.7097.B94521",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Payment ENEO PREPAID successful by 475506438. transaction ID: MP645728.8902.A61174; Meter N': 2370676600425; Amount: 2834; FCFA; Balance/generated Kwh: in progress,\n FCFA; Fees: 257 FCFA; Token:  in progress, please wait.\nView your latest token via #273*184# or call 4795 for support. \nCher client, votre reabonnement Canal+ totalement rembourse avec OM en cash ou en bonus appels et internet chaque heure. Composez le #434*497# pour payer et tenter d'en profiter.\nOrange Money thanks you.",
+    "expected": {
+      "templateId": "orange-money.eneo-payment-en",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 2834,
+      "currency": "XAF",
+      "fees": 257,
+      "balance": null,
+      "counterparty": "ENEO",
+      "reference": "MP645728.8902.A61174",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  },
+  {
+    "sender": "OrangeMoney",
+    "text": "Votre transfert de 4796.00 FCFA de votre compte Orange Money vers votre compte UBA 399--842 UBA est reussi. Frais: 27 FCFA. Votre nouveau solde : 7395.3 FCFA. CO146292.4246.C98808. Orange Money vous remercie.",
+    "expected": {
+      "templateId": "orange-money.to-bank",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 4796,
+      "currency": "XAF",
+      "fees": 27,
+      "balance": 7395,
+      "counterparty": "UBA 399--842 UBA",
+      "reference": "CO146292.4246.C98808",
+      "occurredAt": "2026-01-15T10:00:00Z"
+    }
+  }
+]

@@ -171,6 +171,34 @@ internal class MessageParserImplTest {
         }
 
         @Test
+        fun `should read the currency of the amount when the message gives it`() {
+            // given
+            val template =
+                template(pattern = "Paiement de (?<amount>[\\d.]+) (?<currency>[A-Z]{3})", decimalSeparator = '.')
+            val message = message(text = "Paiement de 9.99 USD")
+
+            // when
+            val parsed = parser.parse(message = message, catalog = catalog(template), zone = DOUALA)
+
+            // then
+            parsed?.currency shouldBe "USD"
+            parsed?.amount shouldBe 999
+        }
+
+        @Test
+        fun `should not recognise a message whose currency is unknown`() {
+            // given
+            val template = template(pattern = "Paiement de (?<amount>\\d+) (?<currency>[A-Z]+)")
+            val message = message(text = "Paiement de 2500 FCFA")
+
+            // when
+            val parsed = parser.parse(message = message, catalog = catalog(template), zone = DOUALA)
+
+            // then
+            parsed.shouldBeNull()
+        }
+
+        @Test
         fun `should read the names of the months in the language of the template`() {
             // given
             val template = template(
@@ -193,6 +221,7 @@ internal class MessageParserImplTest {
         senders: List<String> = listOf("TestMoney"),
         kind: MessageKind = MessageKind.PAYMENT,
         pattern: String,
+        decimalSeparator: Char? = null,
         dateFormat: String? = null,
         dateLocale: String = "fr",
     ) = MessageTemplate(
@@ -203,6 +232,7 @@ internal class MessageParserImplTest {
         direction = Direction.DEBIT,
         currency = "XAF",
         pattern = pattern,
+        decimalSeparator = decimalSeparator,
         dateFormat = dateFormat,
         dateLocale = dateLocale,
     )
