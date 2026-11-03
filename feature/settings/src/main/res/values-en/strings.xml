@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="reminders_after_visits">Reminders after a visit</string>
+    <string name="reminders_after_visits_text">Only in your shops</string>
+    <string name="reminders_daily_cap">Reminders a day</string>
+    <string name="reminders_daily_cap_text">At most</string>
+    <string name="reminders_hint">Beyond the maximum, at home, at work or during the quiet hours, the reminders wait for the evening summary.</string>
+    <string name="reminders_hour">%1$02d:00</string>
+    <string name="reminders_less">Fewer</string>
+    <string name="reminders_more">More</string>
+    <string name="reminders_quiet_from">Start</string>
+    <string name="reminders_quiet_hours">Quiet hours</string>
+    <string name="reminders_quiet_hours_none">None</string>
+    <string name="reminders_quiet_hours_text">No reminder at night</string>
+    <string name="reminders_quiet_hours_value">%1$02d:00 – %2$02d:00</string>
+    <string name="reminders_quiet_hours_why">During these hours, Cauri keeps its reminders for the evening summary.</string>
+    <string name="reminders_quiet_places">Places without reminders</string>
+    <string name="reminders_quiet_places_none">None</string>
+    <string name="reminders_quiet_until">End</string>
+    <string name="reminders_settings">Settings</string>
+    <string name="reminders_title">Smart reminders</string>
     <string name="settings_allowed">Allowed</string>
     <string name="settings_back">Back</string>
     <string name="settings_battery">Cauri\'s battery</string>
@@ -41,5 +60,7 @@
     <string name="settings_places_text">The shops where to remind you of an expense, your home and your work.</string>
     <string name="settings_refused">Refused</string>
     <string name="settings_reminders">Reminders</string>
+    <string name="settings_smart_reminders">Smart reminders</string>
+    <string name="settings_smart_reminders_text">Quiet hours, reminders a day and after your visits.</string>
     <string name="settings_title">Settings</string>
 </resources>

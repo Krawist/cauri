@@ -40,6 +40,8 @@ internal class VisitRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun atHomeOrWork(): Boolean = visitDao.isAtHomeOrWork()
+
     override suspend fun enter(placeId: Long, at: Instant) = visitDao.enter(placeId = placeId, enteredAt = at)
 
     override suspend fun leave(placeId: Long, at: Instant) {

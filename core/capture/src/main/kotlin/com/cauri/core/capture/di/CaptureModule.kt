@@ -30,6 +30,8 @@ import com.cauri.core.capture.signal.WatchedSenderRepository
 import com.cauri.core.capture.signal.WatchedSenderRepositoryImpl
 import com.cauri.core.engine.FeatureEncoder
 import com.cauri.core.engine.FeatureEncoderImpl
+import com.cauri.core.engine.ReminderGuardrails
+import com.cauri.core.engine.ReminderGuardrailsImpl
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderRulesImpl
 import com.cauri.core.parsing.MessageParser
@@ -78,6 +80,9 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindReminderRules(impl: ReminderRulesImpl): ReminderRules
+
+    @Binds
+    abstract fun bindReminderGuardrails(impl: ReminderGuardrailsImpl): ReminderGuardrails
 
     @Binds
     abstract fun bindFeatureEncoder(impl: FeatureEncoderImpl): FeatureEncoder

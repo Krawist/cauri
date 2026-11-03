@@ -71,5 +71,6 @@ internal class FeatureEncoderImplTest {
         minutesSinceNotification = null,
         notificationsToday = 1,
         cashBalance = 5_000,
+        atHomeOrWork = false,
     )
 }

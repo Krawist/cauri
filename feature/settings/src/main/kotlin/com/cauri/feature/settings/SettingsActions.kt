@@ -17,6 +17,9 @@ internal interface SettingsActions {
     /** Opens « Mes lieux ». */
     fun onPlaces()
 
+    /** Opens « Rappels intelligents ». */
+    fun onSmartReminders()
+
     /** Opens or closes the sheet of the cash count reminders. */
     fun onCountReminder(open: Boolean)
 

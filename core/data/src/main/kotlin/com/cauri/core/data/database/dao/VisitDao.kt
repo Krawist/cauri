@@ -29,6 +29,13 @@ internal interface VisitDao {
     @Query("SELECT EXISTS(SELECT 1 FROM visits WHERE placeId = :placeId AND leftAt IS NULL)")
     suspend fun isOngoing(placeId: Long): Boolean
 
+    /** Whether the user is at home or at work now, a visit there not left yet. */
+    @Query(
+        "SELECT EXISTS(SELECT 1 FROM visits JOIN places ON places.id = visits.placeId " +
+            "WHERE visits.leftAt IS NULL AND places.kind IN ('HOME', 'WORK'))",
+    )
+    suspend fun isAtHomeOrWork(): Boolean
+
     /**
      * Opens a visit to the place [placeId] from [enteredAt], unless one is open there already: Android may tell the
      * same stay twice, such as after a restart.

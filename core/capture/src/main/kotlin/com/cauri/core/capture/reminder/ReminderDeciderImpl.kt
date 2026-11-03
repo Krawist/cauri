@@ -5,12 +5,16 @@ import com.cauri.core.data.model.NewDecision
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReminderAction as LoggedAction
+import com.cauri.core.data.preferences.UserPreferencesRepository
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.DecisionLogRepository
 import com.cauri.core.data.repository.TransactionRepository
+import com.cauri.core.data.repository.VisitRepository
 import com.cauri.core.engine.FeatureEncoder
 import com.cauri.core.engine.ReminderAction
 import com.cauri.core.engine.ReminderContext
+import com.cauri.core.engine.ReminderGuardrails
+import com.cauri.core.engine.ReminderLimits
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderTrigger
 import java.time.Clock
@@ -24,13 +28,17 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 /** Default implementation for [ReminderDecider]. */
-// Injected: the cards, the past, the cash, the rules, their numbers, the notification and the clock.
+// Injected: the cards, the past, the cash, where the user is, their limits, the guardrails, the rules, their
+// numbers, the notification and the clock.
 @Suppress("LongParameterList")
 @Singleton
 internal class ReminderDeciderImpl @Inject constructor(
     private val transactions: TransactionRepository,
     private val log: DecisionLogRepository,
     private val cashCounts: CashCountRepository,
+    private val visits: VisitRepository,
+    private val preferences: UserPreferencesRepository,
+    private val guardrails: ReminderGuardrails,
     private val rules: ReminderRules,
     private val encoder: FeatureEncoder,
     private val notifier: ReminderNotifier,
@@ -46,6 +54,15 @@ internal class ReminderDeciderImpl @Inject constructor(
         var lastNotifiedAt = stats.lastNotifiedAt
         var notified = stats.notificationsToday
         val cash = cashCounts.balance.first()?.amount
+        val atHomeOrWork = visits.atHomeOrWork()
+        val limits = preferences.reminders.first().let {
+            ReminderLimits(
+                quietFrom = it.quietFrom,
+                quietUntil = it.quietUntil,
+                dailyCap = it.dailyCap,
+                visitReminders = it.visitReminders,
+            )
+        }
         // The oldest first, so that the spacing between notifications holds; an old card is no news to remind.
         transactions.pending.first()
             .filter { !it.occurredAt.isBefore(now - RECENT) && !log.hasDecision(it.transactionId) }
@@ -64,8 +81,10 @@ internal class ReminderDeciderImpl @Inject constructor(
                     minutesSinceNotification = lastNotifiedAt?.let { minutes(it, now) },
                     notificationsToday = notified,
                     cashBalance = cash,
+                    atHomeOrWork = atHomeOrWork,
                 )
-                val action = rules.decide(context)
+                // The guardrails first: the rules choose among what they allow.
+                val action = guardrails.restrict(rules.decide(context), guardrails.allowed(context, limits))
                 if (action == ReminderAction.NOTIFY_NOW) {
                     notifier.show(operation)
                     lastNotifiedAt = now

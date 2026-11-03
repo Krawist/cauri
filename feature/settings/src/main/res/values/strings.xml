@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="reminders_after_visits">Rappels après une visite</string>
+    <string name="reminders_after_visits_text">Seulement dans tes commerces</string>
+    <string name="reminders_daily_cap">Rappels par jour</string>
+    <string name="reminders_daily_cap_text">Au maximum</string>
+    <string name="reminders_hint">Au-delà du maximum, à la maison, au travail ou pendant les heures de silence, les rappels attendent le récapitulatif du soir.</string>
+    <string name="reminders_hour">%1$02d:00</string>
+    <string name="reminders_less">Moins</string>
+    <string name="reminders_more">Plus</string>
+    <string name="reminders_quiet_from">Début</string>
+    <string name="reminders_quiet_hours">Heures de silence</string>
+    <string name="reminders_quiet_hours_none">Aucune</string>
+    <string name="reminders_quiet_hours_text">Aucun rappel la nuit</string>
+    <string name="reminders_quiet_hours_value">%1$02d:00 – %2$02d:00</string>
+    <string name="reminders_quiet_hours_why">Pendant ces heures, Cauri garde ses rappels pour le récapitulatif du soir.</string>
+    <string name="reminders_quiet_places">Lieux sans rappel</string>
+    <string name="reminders_quiet_places_none">Aucun</string>
+    <string name="reminders_quiet_until">Fin</string>
+    <string name="reminders_settings">Réglages</string>
+    <string name="reminders_title">Rappels intelligents</string>
     <string name="settings_allowed">Autorisé</string>
     <string name="settings_back">Retour</string>
     <string name="settings_battery">Batterie de Cauri</string>
@@ -41,5 +60,7 @@
     <string name="settings_places_text">Les commerces où te rappeler une dépense, ta maison et ton travail.</string>
     <string name="settings_refused">Refusé</string>
     <string name="settings_reminders">Rappels</string>
+    <string name="settings_smart_reminders">Rappels intelligents</string>
+    <string name="settings_smart_reminders_text">Heures de silence, rappels par jour et après tes visites.</string>
     <string name="settings_title">Réglages</string>
 </resources>

@@ -13,6 +13,7 @@ import com.cauri.core.data.model.CountReminderSettings
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
+import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.UserProfile
 import java.time.Instant
 import java.time.LocalDate
@@ -22,6 +23,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 /** Default implementation for [UserPreferencesRepository], on DataStore. */
+// One function per setting saved.
+@Suppress("TooManyFunctions")
 @Singleton
 internal class UserPreferencesRepositoryImpl @Inject constructor(private val dataStore: DataStore<Preferences>) :
     UserPreferencesRepository {
@@ -34,6 +37,15 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
             frequency =
             it[ReminderFrequency]?.let(CountReminderFrequency::valueOf) ?: CountReminderFrequency.WHEN_USEFUL,
             hour = it[ReminderHour] ?: DEFAULT_REMINDER_HOUR,
+        )
+    }
+
+    override val reminders: Flow<ReminderSettings> = dataStore.data.map {
+        ReminderSettings(
+            quietFrom = it[QuietFrom] ?: DEFAULT_QUIET_FROM,
+            quietUntil = it[QuietUntil] ?: DEFAULT_QUIET_UNTIL,
+            dailyCap = it[DailyCap] ?: DEFAULT_DAILY_CAP,
+            visitReminders = it[VisitReminders] ?: true,
         )
     }
 
@@ -66,6 +78,15 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         dataStore.edit {
             it[ReminderFrequency] = settings.frequency.name
             it[ReminderHour] = settings.hour
+        }
+    }
+
+    override suspend fun saveReminders(settings: ReminderSettings) {
+        dataStore.edit {
+            it[QuietFrom] = settings.quietFrom
+            it[QuietUntil] = settings.quietUntil
+            it[DailyCap] = settings.dailyCap
+            it[VisitReminders] = settings.visitReminders
         }
     }
 
@@ -130,6 +151,13 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val ProposedAccounts = stringSetPreferencesKey("accounts_proposed")
         val IgnoredAccounts = stringSetPreferencesKey("accounts_ignored")
         val LastCaptureWarning = longPreferencesKey("capture_last_warning")
+        val QuietFrom = intPreferencesKey("reminders_quiet_from")
+        val QuietUntil = intPreferencesKey("reminders_quiet_until")
+        val DailyCap = intPreferencesKey("reminders_daily_cap")
+        val VisitReminders = booleanPreferencesKey("reminders_after_visits")
         const val DEFAULT_REMINDER_HOUR = 20
+        const val DEFAULT_QUIET_FROM = 22
+        const val DEFAULT_QUIET_UNTIL = 7
+        const val DEFAULT_DAILY_CAP = 4
     }
 }

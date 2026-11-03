@@ -193,7 +193,11 @@ private fun NavGraphBuilder.cauriGraphs(
     activityGraph(onEditTransaction = onEditTransaction)
     placeholderTabs()
     cashGraph(navController = navController, onBack = { navController.popBackStack() })
-    settingsGraph(onBack = { navController.popBackStack() }, onOpenPlaces = { navController.navigateToPlaces() })
+    settingsGraph(
+        navController = navController,
+        onBack = { navController.popBackStack() },
+        onOpenPlaces = { navController.navigateToPlaces() },
+    )
     placesGraph(navController = navController, onBack = { navController.popBackStack() })
 }
 

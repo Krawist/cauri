@@ -88,7 +88,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:home`         | Home screen, one-tap habits, cards to confirm             | 14, 25, 27     |
 | `:feature:cash`         | Cash count, split of the gap                              | 15, 16         |
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
-| `:feature:settings`     | Settings: permission and battery statuses                 | 10, 11         |
+| `:feature:settings`     | Settings: permission and battery statuses, reminders      | 10, 11, 38     |
 | `:feature:places`       | « Mes lieux », the screen of a place                      | 33             |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
@@ -509,6 +509,18 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   com.cauri.debug.SHOW_REMINDER -p com.cauri.debug -e transaction 12`). Checked on the Galaxy S23 at night with made-up
   messages and a made-up shop: decisions logged « EVENING_SUMMARY » by the rules, the two notifications, a category and
   an amount typed confirming their card. A notification decided by day not seen yet. Next: CAU-38.
+
+- [ ] **CAU-38** — the guardrails of the reminders (`ReminderGuardrails`, `:core:engine`, JVM tests), applied before the
+  rules decide, which choose among what they allow (rules now « rules-2 », without the night and the spacing): never a
+  notification in the quiet hours, past the daily cap, within 30 minutes of the last one, nor, by decision (to
+  validate), while the user is at home or at work (an open visit there, `VisitRepository.atHomeOrWork`): the evening
+  summary instead; with « Rappels après une visite » off, by decision (to validate), a visit is skipped, its card still
+  waiting in « À confirmer ». « Rappels intelligents » (`RemindersScreen`, `RemindersViewModel`, `:feature:settings`),
+  opened from a row of Réglages: the switch, « Heures de silence » (a sheet, start and end an hour a step, 22:00 – 07:00
+  by default), « Rappels par jour » from 1 to 10 (4 by default, as the mockup), « Lieux sans rappel » listing home, work
+  and the shops without reminder, a tap opening « Mes lieux ». Saved in DataStore (`ReminderSettings`). The rows «
+  Récapitulatif du soir » and « Ce que Cauri a appris » come with CAU-39 and CAU-41. Checked on the Galaxy S23 in dark
+  mode: the screen, the sheet, the cap; a guardrail at work on a real decision not seen on a phone. Next: CAU-39.
 
 Update this section at the end of each ticket.
 

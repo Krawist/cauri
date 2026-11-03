@@ -1,6 +1,7 @@
 package com.cauri.core.data.preferences
 
 import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.UserProfile
 import java.time.Instant
 import java.time.LocalDate
@@ -16,6 +17,9 @@ interface UserPreferencesRepository {
 
     /** The user's choice for the cash count reminders; « Quand c'est utile » from 20 h until changed. */
     val countReminder: Flow<CountReminderSettings>
+
+    /** The user's limits on the smart reminders; quiet from 22 h to 7 h, 4 a day and after visits until changed. */
+    val reminders: Flow<ReminderSettings>
 
     /** Day of the last cash count reminder; `null` when none was sent. */
     val lastCountReminder: Flow<LocalDate?>
@@ -37,6 +41,8 @@ interface UserPreferencesRepository {
     suspend fun saveCountReminder(settings: CountReminderSettings)
 
     /** Remembers that a cash count reminder was sent on [day]. */
+    suspend fun saveReminders(settings: ReminderSettings)
+
     suspend fun setLastCountReminder(day: LocalDate)
 
     /** Remembers that the user was warned at [at] that Cauri receives no more messages. */

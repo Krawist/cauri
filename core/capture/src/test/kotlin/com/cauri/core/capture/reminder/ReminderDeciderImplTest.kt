@@ -4,13 +4,17 @@ import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReminderAction
+import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.ReminderStats
 import com.cauri.core.data.model.VisitHistory
+import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeDecisionLogRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
+import com.cauri.core.data.repository.FakeVisitRepository
 import com.cauri.core.engine.FeatureEncoder
 import com.cauri.core.engine.FeatureEncoderImpl
+import com.cauri.core.engine.ReminderGuardrailsImpl
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderRulesImpl
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -28,15 +32,20 @@ import org.junit.jupiter.api.Test
 internal class ReminderDeciderImplTest {
     private val transactions = FakeTransactionRepository()
     private val log = FakeDecisionLogRepository()
+    private val visits = FakeVisitRepository()
+    private val preferences = FakeUserPreferencesRepository()
     private val notifier = RecordingNotifier()
     private val decider = ReminderDeciderImpl(
-        transactions,
-        log,
-        FakeCashCountRepository(),
-        ReminderRulesImpl(),
-        FeatureEncoderImpl(),
-        notifier,
-        Clock.fixed(NOW, ZoneId.of("Africa/Douala")),
+        transactions = transactions,
+        log = log,
+        cashCounts = FakeCashCountRepository(),
+        visits = visits,
+        preferences = preferences,
+        guardrails = ReminderGuardrailsImpl(),
+        rules = ReminderRulesImpl(),
+        encoder = FeatureEncoderImpl(),
+        notifier = notifier,
+        clock = Clock.fixed(NOW, ZoneId.of("Africa/Douala")),
     )
 
     @Nested
@@ -133,6 +142,67 @@ internal class ReminderDeciderImplTest {
 
             // then
             log.decisions.single().action shouldBe ReminderAction.EVENING_SUMMARY
+        }
+
+        @Test
+        fun `should keep for the evening a card come in the quiet hours the user chose`() = runTest {
+            // given
+            preferences.reminders.value =
+                ReminderSettings(quietFrom = 10, quietUntil = 12, dailyCap = 4, visitReminders = true)
+            transactions.pending.value = listOf(payment(id = 7))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().action shouldBe ReminderAction.EVENING_SUMMARY
+            notifier.shown.shouldBeEmpty()
+        }
+
+        @Test
+        fun `should keep for the evening a card come past the daily cap`() = runTest {
+            // given
+            preferences.reminders.value =
+                ReminderSettings(quietFrom = 22, quietUntil = 7, dailyCap = 2, visitReminders = true)
+            log.stats = ReminderStats(
+                notificationsToday = 2,
+                lastNotifiedAt = NOW - Duration.ofHours(2),
+                lastTransactionAt = null,
+            )
+            transactions.pending.value = listOf(payment(id = 7))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().action shouldBe ReminderAction.EVENING_SUMMARY
+        }
+
+        @Test
+        fun `should keep for the evening a card come while the user is at home`() = runTest {
+            // given
+            visits.homeOrWork = true
+            transactions.pending.value = listOf(payment(id = 7))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().action shouldBe ReminderAction.EVENING_SUMMARY
+        }
+
+        @Test
+        fun `should skip a visit when the user turned the visit reminders off`() = runTest {
+            // given
+            preferences.reminders.value =
+                ReminderSettings(quietFrom = 22, quietUntil = 7, dailyCap = 4, visitReminders = false)
+            transactions.pending.value = listOf(payment(id = 7).copy(stayMinutes = 25))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().action shouldBe ReminderAction.SKIP
         }
     }
 

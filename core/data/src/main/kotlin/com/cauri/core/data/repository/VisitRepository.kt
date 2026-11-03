@@ -12,6 +12,9 @@ interface VisitRepository {
     /** The visits whose card still waits, left after the last cash count, the latest first, again after changes. */
     val waiting: Flow<List<PendingVisit>>
 
+    /** Whether the user is at home or at work now, by the visits not left yet: no reminder comes there. */
+    suspend fun atHomeOrWork(): Boolean
+
     /** The user has stayed at the place [placeId] since [at]; a stay already open there goes on. */
     suspend fun enter(placeId: Long, at: Instant)
 

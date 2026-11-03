@@ -25,6 +25,11 @@ class FakeVisitRepository : VisitRepository {
     /** The amounts confirmed by [settle], by card, one map per call. */
     val settled = mutableListOf<Map<Long, Long>>()
 
+    /** What [atHomeOrWork] answers. */
+    var homeOrWork = false
+
+    override suspend fun atHomeOrWork() = homeOrWork
+
     override suspend fun enter(placeId: Long, at: Instant) {
         moves += Move(placeId = placeId, at = at, entered = true)
     }

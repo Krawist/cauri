@@ -2,6 +2,7 @@ package com.cauri.core.data.preferences
 
 import com.cauri.core.data.model.CountReminderFrequency
 import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.UserProfile
 import java.time.Instant
 import java.time.LocalDate
@@ -13,6 +14,9 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val profile = MutableStateFlow<UserProfile?>(null)
     override val countReminder = MutableStateFlow(
         CountReminderSettings(frequency = CountReminderFrequency.WHEN_USEFUL, hour = 20),
+    )
+    override val reminders = MutableStateFlow(
+        ReminderSettings(quietFrom = 22, quietUntil = 7, dailyCap = 4, visitReminders = true),
     )
     override val lastCountReminder = MutableStateFlow<LocalDate?>(null)
     override val lastCaptureWarning = MutableStateFlow<Instant?>(null)
@@ -29,6 +33,10 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     override suspend fun saveCountReminder(settings: CountReminderSettings) {
         countReminder.value = settings
+    }
+
+    override suspend fun saveReminders(settings: ReminderSettings) {
+        reminders.value = settings
     }
 
     override suspend fun setLastCountReminder(day: LocalDate) {

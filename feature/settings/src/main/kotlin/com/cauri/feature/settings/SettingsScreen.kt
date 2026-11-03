@@ -35,6 +35,7 @@ import com.cauri.core.design.theme.CauriTheme
 internal fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPlaces: () -> Unit,
+    onOpenReminders: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -45,7 +46,7 @@ internal fun SettingsScreen(
     }
     // Named apart from the action it backs, which shares its name.
     val back = onBack
-    val actions = remember(viewModel, context, back, onOpenPlaces) {
+    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders) {
         object : SettingsActions {
             override fun onBack() = back()
 
@@ -58,6 +59,8 @@ internal fun SettingsScreen(
             override fun onBattery() = context.startActivity(viewModel.batterySettings())
 
             override fun onPlaces() = onOpenPlaces()
+
+            override fun onSmartReminders() = onOpenReminders()
 
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
@@ -157,9 +160,18 @@ private fun IgnoredAccountsGroup(accounts: List<NewAccount>, actions: SettingsAc
     }
 }
 
+// « Rappels intelligents », then the cash count reminders.
 @Composable
 private fun RemindersGroup(settings: CountReminderSettings, actions: SettingsActions) {
     RowGroup {
+        SettingRow(
+            icon = DesignR.drawable.ic_bell,
+            title = stringResource(R.string.settings_smart_reminders),
+            text = stringResource(R.string.settings_smart_reminders_text),
+            status = null,
+            onClick = actions::onSmartReminders,
+        )
+        Separator()
         SettingRow(
             icon = DesignR.drawable.ic_clock,
             title = stringResource(R.string.settings_count_reminder),
@@ -245,6 +257,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onBattery() = Unit
 
     override fun onPlaces() = Unit
+
+    override fun onSmartReminders() = Unit
 
     override fun onCountReminder(open: Boolean) = Unit
 

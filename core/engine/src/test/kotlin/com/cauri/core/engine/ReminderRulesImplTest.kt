@@ -62,27 +62,6 @@ internal class ReminderRulesImplTest {
             // then
             action shouldBe ReminderAction.EVENING_SUMMARY
         }
-
-        @ParameterizedTest
-        @CsvSource("22", "23", "3", "6")
-        fun `should never notify at night`(hour: Int) {
-            // when
-            val action = rules.decide(context(ReminderTrigger.DETECTED_OPERATION, expense = true, hour = hour))
-
-            // then
-            action shouldBe ReminderAction.EVENING_SUMMARY
-        }
-
-        @Test
-        fun `should leave 30 minutes between two notifications`() {
-            // when
-            val action = rules.decide(
-                context(ReminderTrigger.DETECTED_OPERATION, expense = true).copy(minutesSinceNotification = 12),
-            )
-
-            // then
-            action shouldBe ReminderAction.EVENING_SUMMARY
-        }
     }
 
     @Nested
@@ -104,9 +83,9 @@ internal class ReminderRulesImplTest {
         expense = true,
     ).copy(stayMinutes = stay, placeVisits = visits, placeSpendRate = rate)
 
-    private fun context(trigger: ReminderTrigger, expense: Boolean, hour: Int = 11) = ReminderContext(
+    private fun context(trigger: ReminderTrigger, expense: Boolean) = ReminderContext(
         trigger = trigger,
-        at = ZonedDateTime.of(2026, 11, 3, hour, 15, 0, 0, ZoneId.of("Africa/Douala")),
+        at = ZonedDateTime.of(2026, 11, 3, 11, 15, 0, 0, ZoneId.of("Africa/Douala")),
         expense = expense,
         stayMinutes = null,
         placeVisits = 0,
@@ -115,5 +94,6 @@ internal class ReminderRulesImplTest {
         minutesSinceNotification = null,
         notificationsToday = 0,
         cashBalance = null,
+        atHomeOrWork = false,
     )
 }

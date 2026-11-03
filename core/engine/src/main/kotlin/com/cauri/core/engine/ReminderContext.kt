@@ -15,6 +15,7 @@ import java.time.ZonedDateTime
  * @property minutesSinceNotification Minutes since the last reminder notified; `null` before the first.
  * @property notificationsToday Reminders notified since midnight.
  * @property cashBalance Cash estimated in the pocket, in minor units; `null` before the first count.
+ * @property atHomeOrWork Whether the user is at home or at work now, by their geofences.
  */
 data class ReminderContext(
     val trigger: ReminderTrigger,
@@ -27,4 +28,5 @@ data class ReminderContext(
     val minutesSinceNotification: Long?,
     val notificationsToday: Int,
     val cashBalance: Long?,
+    val atHomeOrWork: Boolean,
 )
