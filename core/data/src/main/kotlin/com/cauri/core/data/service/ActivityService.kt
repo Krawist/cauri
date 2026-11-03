@@ -4,8 +4,6 @@ import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.CashCountEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.model.ActivityLine
-import com.cauri.core.data.model.MonthSpending
-import java.time.Instant
 
 /** Builds « Activité » out of the transactions and the cash counts. */
 internal interface ActivityService {
@@ -20,10 +18,4 @@ internal interface ActivityService {
         accounts: Map<Long, AccountEntity>,
         categories: Map<Long, String>,
     ): List<ActivityLine>
-
-    /**
-     * What [lines] spent from [from] on, cash apart from digital: the expenses and the fees of the transfers, the money
-     * set aside left out.
-     */
-    fun spending(lines: List<ActivityLine>, from: Instant): MonthSpending
 }

@@ -370,6 +370,15 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   S23 in dark mode: upgrade to v10, the lines of the mockup (set aside, waiting, habits, deposits, a count with a
   surplus, fees), « Mobile », a line opening the sheet. A split line, light mode and a long history on an entry-level
   phone not checked. Next: CAU-31.
+- [ ] **CAU-55** — « Activité » searches, narrows to a period and sorts (`ActivityQueryService`, public in
+  `:core:data`, JVM tests): the search button opens a field in place of the title, by decision, keyboard up, the lines
+  following as the user types (merchant, note, category or account, accents and case ignored; « 5000 » and « 5 000 »
+  find an amount), a cross closing it. Under the filters, by decision, one chip « Tout l'historique · Par date » opens a
+  sheet: « Tout l'historique », « Cette semaine » (from Monday), « Ce mois », « Le mois dernier », « Choisir les dates…
+  » (a range up to today), and « Par date » or « Par montant » (one card, no days, the cash counts left out). The whole
+  history stays the default, totalling the current month; a period narrows the lines and the totals, the filters and the
+  search narrow the lines only. `MonthSpending` became `Spending`, computed by the view model. Checked on the Galaxy S23
+  in light mode: a search, the sheet, the sort by amount. The range of dates not tried on a phone. Next: CAU-52.
 
 Update this section at the end of each ticket.
 

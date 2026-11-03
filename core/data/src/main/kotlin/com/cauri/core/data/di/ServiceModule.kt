@@ -1,5 +1,7 @@
 package com.cauri.core.data.di
 
+import com.cauri.core.data.service.ActivityQueryService
+import com.cauri.core.data.service.ActivityQueryServiceImpl
 import com.cauri.core.data.service.ActivityService
 import com.cauri.core.data.service.ActivityServiceImpl
 import com.cauri.core.data.service.CashBalanceService
@@ -22,6 +24,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class ServiceModule {
+    @Binds
+    abstract fun bindActivityQueryService(impl: ActivityQueryServiceImpl): ActivityQueryService
+
     @Binds
     abstract fun bindActivityService(impl: ActivityServiceImpl): ActivityService
 

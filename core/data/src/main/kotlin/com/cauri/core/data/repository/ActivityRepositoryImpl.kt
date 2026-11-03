@@ -5,15 +5,11 @@ import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.CategoryDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.model.ActivityLine
-import com.cauri.core.data.model.MonthSpending
 import com.cauri.core.data.service.ActivityService
-import java.time.Clock
-import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 
 /** Default implementation for [ActivityRepository]. */
 @Singleton
@@ -23,7 +19,6 @@ internal class ActivityRepositoryImpl @Inject constructor(
     accountDao: AccountDao,
     categoryDao: CategoryDao,
     private val activity: ActivityService,
-    private val clock: Clock,
 ) : ActivityRepository {
     override val lines: Flow<List<ActivityLine>> = combine(
         transactionDao.observeHistory(),
@@ -38,10 +33,5 @@ internal class ActivityRepositoryImpl @Inject constructor(
             accounts = accounts.associateBy { it.id },
             categories = categories.associate { it.id to it.name },
         )
-    }
-
-    override val monthSpending: Flow<MonthSpending> = lines.map { lines ->
-        val month = LocalDate.now(clock).withDayOfMonth(1).atStartOfDay(clock.zone).toInstant()
-        activity.spending(lines = lines, from = month)
     }
 }

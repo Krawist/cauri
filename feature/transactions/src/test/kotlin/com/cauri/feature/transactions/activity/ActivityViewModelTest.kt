@@ -2,10 +2,15 @@ package com.cauri.feature.transactions.activity
 
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.ActivityLine
+import com.cauri.core.data.model.ActivityPeriod
+import com.cauri.core.data.model.ActivitySort
 import com.cauri.core.data.model.ActivityStatus
 import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.model.Spending
 import com.cauri.core.data.repository.FakeActivityRepository
+import com.cauri.core.data.service.FakeActivityQueryService
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
 import java.time.LocalDate
@@ -26,13 +31,14 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class ActivityViewModelTest {
     private val activity = FakeActivityRepository()
+    private val queries = FakeActivityQueryService()
     private val clock = Clock.fixed(Instant.parse("2026-11-03T12:00:00Z"), ZoneOffset.UTC)
     private lateinit var viewModel: ActivityViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = ActivityViewModel(activity, clock)
+        viewModel = ActivityViewModel(activity, queries, clock)
     }
 
     @AfterEach
@@ -78,6 +84,73 @@ internal class ActivityViewModelTest {
             val state = viewModel.uiState.first { it.filter == ActivityFilter.CASH }
             state.days.flatMap { it.lines }.map { (it as ActivityLine.Operation).transactionId } shouldContainExactly
                 listOf(2L)
+        }
+    }
+
+    @Nested
+    inner class OnQuery {
+        @Test
+        fun `should show only the lines that answer the search`() = runTest {
+            // given
+            viewModel.uiState.launchIn(backgroundScope)
+            activity.lines.value = listOf(
+                payment(id = 1, at = "2026-11-03T08:00:00Z", kind = AccountKind.CASH).copy(counterparty = "SAKER"),
+                payment(id = 2, at = "2026-11-03T09:00:00Z", kind = AccountKind.CASH).copy(counterparty = "MOKOLO"),
+            )
+            viewModel.onSearch(open = true)
+
+            // when
+            viewModel.onQuery("SAKER")
+
+            // then
+            val state = viewModel.uiState.first { it.query == "SAKER" }
+            state.days.flatMap { it.lines }.map { (it as ActivityLine.Operation).transactionId } shouldContainExactly
+                listOf(1L)
+        }
+    }
+
+    @Nested
+    inner class OnPeriod {
+        @Test
+        fun `should show the days of the period and total them`() = runTest {
+            // given
+            viewModel.uiState.launchIn(backgroundScope)
+            queries.periods[ActivityPeriod.LastMonth] = LocalDate.of(2026, 10, 1)..LocalDate.of(2026, 10, 31)
+            activity.lines.value = listOf(
+                payment(id = 1, at = "2026-11-03T08:00:00Z", kind = AccountKind.CASH),
+                payment(id = 2, at = "2026-10-20T08:00:00Z", kind = AccountKind.CASH),
+            )
+
+            // when
+            viewModel.onPeriod(ActivityPeriod.LastMonth)
+
+            // then
+            val state = viewModel.uiState.first { it.period == ActivityPeriod.LastMonth }
+            state.days.map { it.date } shouldContainExactly listOf(LocalDate.of(2026, 10, 20))
+            state.spending shouldBe Spending(cash = 2_500, digital = 0)
+        }
+    }
+
+    @Nested
+    inner class OnSort {
+        @Test
+        fun `should show the largest amount first, without days`() = runTest {
+            // given
+            viewModel.uiState.launchIn(backgroundScope)
+            activity.lines.value = listOf(
+                payment(id = 1, at = "2026-11-03T08:00:00Z", kind = AccountKind.CASH),
+                payment(id = 2, at = "2026-11-02T08:00:00Z", kind = AccountKind.CASH).copy(amount = 9_000),
+            )
+
+            // when
+            viewModel.onSort(ActivitySort.AMOUNT)
+
+            // then
+            val days = viewModel.uiState.first { it.sort == ActivitySort.AMOUNT }.days
+            days.map { day ->
+                day.date to day.lines.map { (it as ActivityLine.Operation).transactionId }
+            } shouldContainExactly
+                listOf(null to listOf(2L, 1L))
         }
     }
 

@@ -2,7 +2,6 @@ package com.cauri.feature.transactions.activity
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,13 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -38,9 +34,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.ActivityLine
+import com.cauri.core.data.model.ActivityPeriod
+import com.cauri.core.data.model.ActivitySort
 import com.cauri.core.data.model.ActivityStatus
-import com.cauri.core.data.model.MonthSpending
 import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.model.Spending
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
@@ -69,15 +67,11 @@ private val BottomSpace = 120.dp
 @Composable
 internal fun ActivityScreen(onEditTransaction: (Long) -> Unit, viewModel: ActivityViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    ActivityContent(state = state, onFilter = viewModel::onFilter, onEditTransaction = onEditTransaction)
+    ActivityContent(state = state, actions = viewModel, onEditTransaction = onEditTransaction)
 }
 
 @Composable
-private fun ActivityContent(
-    state: ActivityUiState,
-    onFilter: (ActivityFilter) -> Unit,
-    onEditTransaction: (Long) -> Unit,
-) {
+private fun ActivityContent(state: ActivityUiState, actions: ActivityActions, onEditTransaction: (Long) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize().safeDrawingPadding(),
         contentPadding = PaddingValues(
@@ -88,47 +82,26 @@ private fun ActivityContent(
         ),
         verticalArrangement = Arrangement.spacedBy(CauriSpacing.l),
     ) {
-        item { Header() }
-        item { Filters(selected = state.filter, onFilter = onFilter) }
+        item { ActivityHeader(query = state.query, actions = actions) }
+        item { Filters(selected = state.filter, onFilter = actions::onFilter) }
+        item { ActivityOptionsChip(period = state.period, sort = state.sort, actions = actions) }
         item { Spending(spending = state.spending) }
         if (state.days.isEmpty()) {
             item {
+                // Nothing yet, or nothing that answers the search and the period.
+                val narrowed = !state.query.isNullOrBlank() || state.period != ActivityPeriod.All
                 Text(
-                    text = stringResource(R.string.transactions_activity_empty),
+                    text = stringResource(
+                        if (narrowed) R.string.transactions_activity_no_match else R.string.transactions_activity_empty,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = CauriTheme.palette.muted,
                     modifier = Modifier.padding(top = CauriSpacing.s),
                 )
             }
         }
-        items(items = state.days, key = { it.date.toEpochDay() }) { day ->
+        items(items = state.days, key = { it.date?.toEpochDay() ?: Long.MIN_VALUE }) { day ->
             Day(day = day, today = state.today, onEditTransaction = onEditTransaction)
-        }
-    }
-}
-
-// « Activité » and the search of the mockup, which does nothing yet: searching and sorting come with CAU-55.
-@Composable
-private fun Header() {
-    val palette = CauriTheme.palette
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = stringResource(R.string.transactions_activity_title),
-            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-            color = palette.ink,
-            modifier = Modifier.weight(1f),
-        )
-        GlassSurface(
-            shape = CircleShape,
-            modifier = Modifier.size(CauriSpacing.touchTarget),
-            interaction = Modifier.clickable(role = Role.Button, onClick = {}),
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_search),
-                contentDescription = stringResource(R.string.transactions_activity_search),
-                tint = palette.ink,
-                modifier = Modifier.align(Alignment.Center),
-            )
         }
     }
 }
@@ -172,7 +145,7 @@ private fun Filters(selected: ActivityFilter, onFilter: (ActivityFilter) -> Unit
 
 // « Cash dépensé » in gold and « Numérique dépensé », side by side.
 @Composable
-private fun Spending(spending: MonthSpending) {
+private fun Spending(spending: Spending) {
     val palette = CauriTheme.palette
     Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
         listOf(
@@ -200,23 +173,27 @@ private fun Spending(spending: MonthSpending) {
     }
 }
 
-// « Aujourd'hui », « Hier » or « Lundi 2 novembre », over the day's lines on one glass card.
+// « Aujourd'hui », « Hier » or « Lundi 2 novembre », over the day's lines on one glass card; no day when sorted by
+// amount.
 @Composable
 private fun Day(day: ActivityDay, today: LocalDate?, onEditTransaction: (Long) -> Unit) {
     val palette = CauriTheme.palette
     val locale = LocalConfiguration.current.locales[0]
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s + 2.dp)) {
-        Text(
-            text = when (day.date) {
-                today -> stringResource(R.string.transactions_activity_today)
-                today?.minusDays(1) -> stringResource(R.string.transactions_activity_yesterday)
-                else -> DateTimeFormatter.ofPattern("EEEE d MMMM", locale).format(day.date)
-                    .replaceFirstChar { it.titlecase(locale) }
-            },
-            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-            color = palette.muted,
-            modifier = Modifier.padding(top = CauriSpacing.xs),
-        )
+        // Sorted by amount, the lines have no day.
+        day.date?.let { date ->
+            Text(
+                text = when (date) {
+                    today -> stringResource(R.string.transactions_activity_today)
+                    today?.minusDays(1) -> stringResource(R.string.transactions_activity_yesterday)
+                    else -> DateTimeFormatter.ofPattern("EEEE d MMMM", locale).format(date)
+                        .replaceFirstChar { it.titlecase(locale) }
+                },
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                color = palette.muted,
+                modifier = Modifier.padding(top = CauriSpacing.xs),
+            )
+        }
         GlassSurface(shape = RoundedCornerShape(GroupRadius), modifier = Modifier.fillMaxWidth()) {
             Column {
                 day.lines.forEachIndexed { index, line ->
@@ -282,10 +259,10 @@ private fun ActivityContentPreview() {
                             ),
                         ),
                     ),
-                    spending = MonthSpending(cash = 86_400, digital = 55_900),
+                    spending = Spending(cash = 86_400, digital = 55_900),
                     today = today,
                 ),
-                onFilter = {},
+                actions = PreviewActivityActions,
                 onEditTransaction = {},
             )
         }
@@ -310,3 +287,16 @@ private fun previewOperation(at: Instant, note: String?, category: String?) = Ac
     fee = false,
     reconciled = false,
 )
+
+/** Actions that do nothing, for previews. */
+private object PreviewActivityActions : ActivityActions {
+    override fun onFilter(filter: ActivityFilter) = Unit
+
+    override fun onSearch(open: Boolean) = Unit
+
+    override fun onQuery(query: String) = Unit
+
+    override fun onPeriod(period: ActivityPeriod) = Unit
+
+    override fun onSort(sort: ActivitySort) = Unit
+}

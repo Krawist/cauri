@@ -20,9 +20,23 @@
     <string name="transactions_activity_fee">Frais</string>
     <string name="transactions_activity_fees">dont %1$s F de frais</string>
     <string name="transactions_activity_mobile">Mobile</string>
+    <string name="transactions_activity_no_match">Aucune opération ne correspond</string>
+    <string name="transactions_activity_options" translatable="false">%1$s · %2$s</string>
     <string name="transactions_activity_pending">À confirmer</string>
+    <string name="transactions_activity_period">Période</string>
+    <string name="transactions_activity_period_all">Tout l\'historique</string>
+    <string name="transactions_activity_period_choose">Choisir les dates…</string>
+    <string name="transactions_activity_period_days" translatable="false">%1$s – %2$s</string>
+    <string name="transactions_activity_period_last_month">Le mois dernier</string>
+    <string name="transactions_activity_period_month">Ce mois</string>
+    <string name="transactions_activity_period_week">Cette semaine</string>
     <string name="transactions_activity_search">Rechercher</string>
+    <string name="transactions_activity_search_close">Fermer la recherche</string>
+    <string name="transactions_activity_search_hint">Marchand, note, catégorie, montant</string>
     <string name="transactions_activity_set_aside">Mis de côté</string>
+    <string name="transactions_activity_sort">Trier</string>
+    <string name="transactions_activity_sort_amount">Par montant</string>
+    <string name="transactions_activity_sort_date">Par date</string>
     <string name="transactions_activity_split">Réparti en %1$d</string>
     <string name="transactions_activity_title">Activité</string>
     <string name="transactions_activity_today">Aujourd\'hui</string>

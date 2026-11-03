@@ -6,12 +6,9 @@ import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
-import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.ActivityLine
 import com.cauri.core.data.model.ActivityStatus
-import com.cauri.core.data.model.MonthSpending
 import com.cauri.core.data.model.PendingType
-import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -68,21 +65,6 @@ internal class ActivityServiceImpl @Inject constructor() : ActivityService {
         }
         // A count comes first among what happened at its time: the expenses of its gap follow it.
         return (countLines + operations).sortedByDescending { it.at }
-    }
-
-    override fun spending(lines: List<ActivityLine>, from: Instant): MonthSpending {
-        val spent = lines.filterIsInstance<ActivityLine.Operation>().filter {
-            it.status != ActivityStatus.SET_ASIDE && !it.at.isBefore(from)
-        }
-
-        // A transfer is never spending, its fees are.
-        fun ActivityLine.Operation.spending() = when (type) {
-            PendingType.EXPENSE -> amount
-            PendingType.TRANSFER -> fees
-            PendingType.INCOME -> 0
-        }
-        val (cash, digital) = spent.partition { it.accountKind == AccountKind.CASH }
-        return MonthSpending(cash = cash.sumOf { it.spending() }, digital = digital.sumOf { it.spending() })
     }
 }
 

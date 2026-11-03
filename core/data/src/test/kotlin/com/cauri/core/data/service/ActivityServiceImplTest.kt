@@ -10,7 +10,6 @@ import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.ActivityLine
 import com.cauri.core.data.model.ActivityStatus
-import com.cauri.core.data.model.MonthSpending
 import com.cauri.core.data.model.PendingType
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -114,50 +113,6 @@ internal class ActivityServiceImplTest {
             lines.map { it::class } shouldContainExactly
                 listOf(ActivityLine.CashCount::class, ActivityLine.Operation::class)
             (lines.first() as ActivityLine.CashCount).expenses shouldBe 1
-        }
-    }
-
-    @Nested
-    inner class Spending {
-        @Test
-        fun `should add up cash apart from digital, leaving out what was set aside or before`() {
-            // given
-            val transactions = listOf(
-                transaction(id = 1, accountId = 1, type = TransactionType.EXPENSE),
-                transaction(id = 2, accountId = 2, type = TransactionType.EXPENSE),
-                transaction(id = 3, accountId = 2, type = TransactionType.EXPENSE)
-                    .copy(status = TransactionStatus.DISMISSED),
-                transaction(id = 4, accountId = 1, type = TransactionType.EXPENSE)
-                    .copy(occurredAt = Instant.ofEpochSecond(10)),
-                transaction(id = 5, accountId = 2, type = TransactionType.INCOME),
-            )
-            val lines = service.lines(transactions, emptyList(), accounts(), emptyMap())
-
-            // when
-            val spending = service.spending(lines = lines, from = Instant.ofEpochSecond(500))
-
-            // then
-            spending shouldBe MonthSpending(cash = 2_500, digital = 2_500)
-        }
-
-        @Test
-        fun `should count the fee of a transfer, never the transfer`() {
-            // given
-            val out = transaction(id = 1, accountId = 2, type = TransactionType.TRANSFER_OUT).copy(transferGroup = "t")
-            val into = transaction(id = 2, accountId = 1, type = TransactionType.TRANSFER_IN)
-                .copy(transferGroup = "t", rawSignalId = null)
-            val fee = transaction(
-                id = 3,
-                accountId = 2,
-                type = TransactionType.EXPENSE,
-            ).copy(amount = 150, rawSignalId = null)
-            val lines = service.lines(listOf(out, into, fee), emptyList(), accounts(), emptyMap())
-
-            // when
-            val spending = service.spending(lines = lines, from = Instant.EPOCH)
-
-            // then
-            spending shouldBe MonthSpending(cash = 0, digital = 150)
         }
     }
 
