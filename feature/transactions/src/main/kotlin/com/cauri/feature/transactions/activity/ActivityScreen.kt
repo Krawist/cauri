@@ -40,6 +40,7 @@ import com.cauri.core.data.model.ActivitySort
 import com.cauri.core.data.model.ActivityStatus
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.Spending
+import com.cauri.core.design.component.HelpBubble
 import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.pressScale
 import com.cauri.core.design.component.rememberCauriHaptics
@@ -57,6 +58,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 private val FilterHeight = 36.dp
+
+// The help bubble of the lines: a tap opens the edit sheet.
+private const val HELP_LINES = "activity_lines"
 private val FilterRadius = 22.dp
 private val GroupRadius = 22.dp
 
@@ -103,6 +107,9 @@ private fun ActivityContent(state: ActivityUiState, actions: ActivityActions, on
                     modifier = Modifier.padding(top = CauriSpacing.s),
                 )
             }
+        }
+        if (state.days.isNotEmpty()) {
+            item { HelpBubble(id = HELP_LINES, text = stringResource(R.string.transactions_help_lines)) }
         }
         items(items = state.days, key = { it.date?.toEpochDay() ?: Long.MIN_VALUE }) { day ->
             // A day that comes or goes with a filter or a search fades, the others move into place.

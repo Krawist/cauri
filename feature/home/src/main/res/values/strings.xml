@@ -74,6 +74,8 @@
     <string name="home_habits_hint">Fais glisser une habitude par sa poignée pour changer l\'ordre de la ligne.</string>
     <string name="home_habits_reorder">Réorganiser</string>
     <string name="home_habits_title">Mes habitudes</string>
+    <string name="home_help_cards">Glisse une carte à droite pour la valider, à gauche si tu n\'as rien dépensé. Touche-la pour la modifier.</string>
+    <string name="home_help_habits">Touche une habitude pour noter la dépense en cash, appuie longtemps pour la modifier.</string>
     <string name="home_mark_mtn" translatable="false">MTN</string>
     <string name="home_mark_orange" translatable="false">OM</string>
     <string name="home_pending_title">À confirmer</string>

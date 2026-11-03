@@ -50,6 +50,7 @@ import com.cauri.core.design.component.AnimatedItems
 import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.CauriHaptics
 import com.cauri.core.design.component.CauriTextField
+import com.cauri.core.design.component.HelpBubble
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.component.pressScale
 import com.cauri.core.design.component.rememberCauriHaptics
@@ -60,6 +61,9 @@ import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 
 private const val SWIPE_THRESHOLD = 0.75f
+
+// The help bubble of the cards: the swipes, the tap.
+private const val HELP_CARDS = "cards"
 
 // As the sections of the home screen.
 private val CardGap = 14.dp
@@ -107,6 +111,7 @@ internal fun PendingSection(onEdit: (Long) -> Unit, viewModel: ConfirmationViewM
             }
             // A card answered fades and its place closes; a new one grows in. Keyed by operation: a swipe belongs to
             // its card.
+            HelpBubble(id = HELP_CARDS, text = stringResource(R.string.home_help_cards))
             Column(verticalArrangement = Arrangement.spacedBy(CardGap)) {
                 AnimatedItems(items = state.cards, key = { it.operation.transactionId }) { card ->
                     PendingCard(card = card, viewModel = viewModel, onEdit = onEdit)

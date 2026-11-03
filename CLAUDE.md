@@ -584,6 +584,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   `ProposalRepository.acceptance` (CAU-29); no screen shows it yet. Checked on the Galaxy S23: the cards load; a
   prediction on real habits not seen on a phone. Next: phase 3, CAU-43.
 
+- [ ] **CAU-49** — help bubbles (`HelpBubble` in `:core:design`): a lagoon bubble with its text and a cross, placed by a
+  screen next to what it explains; of those on screen, the first asked for that the user never closed shows, one at a
+  time, until closed, then never again (`HelpBubbles`, `LocalHelpBubbles`, provided by `HelpBubblesViewModel` in `:app`,
+  JVM tests; `seenHelp` in DataStore). By decision, three bubbles for now: the swipes and the tap of the cards « À
+  confirmer », the tap and the long press of the habits, the tap on a line of « Activité ». Checked on the Galaxy S23 in
+  dark mode: the bubble of the cards, closed, gone after a restart; the two others not seen on a phone. Next: CAU-45.
+
 Update this section at the end of each ticket.
 
 ## Way of working

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -32,6 +34,7 @@ import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.BottomBarTab
 import com.cauri.core.design.component.CauriBottomBar
+import com.cauri.core.design.component.LocalHelpBubbles
 import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
@@ -78,12 +81,15 @@ internal fun CauriApp(
     }
     // The preferences load in a few milliseconds: the launch screen covers it.
     if (launchShown && uiState is MainUiState.Ready) {
-        CauriNavHost(
-            onboardingCompleted = uiState.onboardingCompleted,
-            onOnboardingCompleted = onOnboardingCompleted,
-            notificationTarget = notificationTarget,
-            onNotificationTargetShown = onNotificationTargetShown,
-        )
+        // One help bubble at a time, whatever the screen.
+        CompositionLocalProvider(LocalHelpBubbles provides hiltViewModel<HelpBubblesViewModel>()) {
+            CauriNavHost(
+                onboardingCompleted = uiState.onboardingCompleted,
+                onOnboardingCompleted = onOnboardingCompleted,
+                notificationTarget = notificationTarget,
+                onNotificationTargetShown = onNotificationTargetShown,
+            )
+        }
     } else {
         LaunchScreen()
     }

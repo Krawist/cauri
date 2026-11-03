@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.Habit
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.HelpBubble
 import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.component.pressScale
 import com.cauri.core.design.component.rememberCauriHaptics
@@ -47,6 +48,9 @@ private val AddIconSize = 18.dp
 
 // Three habits a line, as in the mockup; two lines at most, the others scroll inside them.
 private const val HABITS_PER_LINE = 3
+
+// The help bubble of the habits: a tap records, a long press opens the sheet.
+private const val HELP_HABITS = "habits"
 private const val VISIBLE_LINES = 2
 
 /**
@@ -81,6 +85,7 @@ internal fun HabitsRow(habits: List<Habit>, actions: HabitActions) {
                     }
                 }
             }
+            HelpBubble(id = HELP_HABITS, text = stringResource(R.string.home_help_habits))
         }
         AddHabitButton(onClick = { actions.onEditHabit(null) })
     }

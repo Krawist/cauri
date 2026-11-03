@@ -67,6 +67,8 @@
     <string name="home_habits_hint">Drag a habit by its handle to change the order of the row.</string>
     <string name="home_habits_reorder">Reorder</string>
     <string name="home_habits_title">My habits</string>
+    <string name="home_help_cards">Swipe a card right to confirm it, left if you spent nothing. Tap it to change it.</string>
+    <string name="home_help_habits">Tap a habit to note the cash expense, press and hold to change it.</string>
     <string name="home_pending_title">To confirm</string>
     <string name="home_settings">Settings</string>
     <string name="home_summary_all_done">Everything is confirmed for today.</string>

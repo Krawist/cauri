@@ -53,6 +53,12 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         )
     }
 
+    override val seenHelp: Flow<Set<String>> = dataStore.data.map { it[SeenHelp].orEmpty() }
+
+    override suspend fun markHelpSeen(id: String) {
+        dataStore.edit { it[SeenHelp] = it[SeenHelp].orEmpty() + id }
+    }
+
     override val learningSince: Flow<Instant?> = dataStore.data.map { it[LearningSince]?.let(Instant::ofEpochMilli) }
 
     override val lastEveningSummary: Flow<LocalDate?> = dataStore.data.map {
@@ -182,6 +188,7 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val SummaryMinutes = intPreferencesKey("reminders_summary_minutes")
         val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
         val LearningSince = longPreferencesKey("reminders_learning_since")
+        val SeenHelp = stringSetPreferencesKey("help_seen")
         const val DEFAULT_REMINDER_HOUR = 20
         const val DEFAULT_QUIET_FROM = 22
         const val DEFAULT_QUIET_UNTIL = 7

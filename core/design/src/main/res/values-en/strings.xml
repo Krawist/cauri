@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="help_close">Close the help</string>
     <string name="keypad_clear">Clear all</string>
     <string name="keypad_delete">Delete</string>
     <string name="moment_date">on %1$s</string>

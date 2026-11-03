@@ -23,6 +23,11 @@ interface UserPreferencesRepository {
     /** The user's limits on the smart reminders; quiet from 22 h to 7 h, 4 a day and after visits until changed. */
     val reminders: Flow<ReminderSettings>
 
+    /** The help bubbles the user closed, by identifier: they never show again. */
+    val seenHelp: Flow<Set<String>>
+
+    suspend fun markHelpSeen(id: String)
+
     /** From when the reminders learn, after the user chose to start again from zero; `null` for the whole log. */
     val learningSince: Flow<Instant?>
 

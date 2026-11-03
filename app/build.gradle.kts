@@ -80,4 +80,5 @@ dependencies {
     implementation(libs.androidx.work.runtime)
 
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(testFixtures(projects.core.data))
 }

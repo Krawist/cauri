@@ -18,6 +18,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
     override val reminders = MutableStateFlow(
         ReminderSettings(quietFrom = 22, quietUntil = 7, dailyCap = 4, visitReminders = true),
     )
+    override val seenHelp = MutableStateFlow<Set<String>>(emptySet())
     override val learningSince = MutableStateFlow<Instant?>(null)
     override val lastEveningSummary = MutableStateFlow<LocalDate?>(null)
     override val lastCountReminder = MutableStateFlow<LocalDate?>(null)
@@ -39,6 +40,10 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     override suspend fun saveReminders(settings: ReminderSettings) {
         reminders.value = settings
+    }
+
+    override suspend fun markHelpSeen(id: String) {
+        seenHelp.value += id
     }
 
     override suspend fun setLearningSince(at: Instant) {

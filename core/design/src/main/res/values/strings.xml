@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="help_close">Fermer l\'aide</string>
     <string name="keypad_clear">Tout effacer</string>
     <string name="keypad_delete">Effacer</string>
     <string name="moment_date">le %1$s</string>

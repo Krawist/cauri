@@ -67,6 +67,7 @@
     <string name="transactions_edit_separate">Separate</string>
     <string name="transactions_edit_split">Split across several categories</string>
     <string name="transactions_from">From</string>
+    <string name="transactions_help_lines">Tap a line to change it, split it or separate what Cauri joined.</string>
     <string name="transactions_merged">Merged with an operation from a message</string>
     <string name="transactions_other_category">Other…</string>
     <string name="transactions_quick_entry_title">New operation</string>

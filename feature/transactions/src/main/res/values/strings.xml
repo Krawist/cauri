@@ -73,6 +73,7 @@
     <string name="transactions_edit_split">Répartir sur plusieurs catégories</string>
     <string name="transactions_foreign_amount" translatable="false">%1$s %2$s</string>
     <string name="transactions_from">De</string>
+    <string name="transactions_help_lines">Touche une ligne pour la modifier, la répartir ou séparer ce que Cauri a réuni.</string>
     <string name="transactions_merged">Fusionné avec une opération reçue par message</string>
     <string name="transactions_other_category">Autre…</string>
     <string name="transactions_quick_entry_title">Nouvelle opération</string>
