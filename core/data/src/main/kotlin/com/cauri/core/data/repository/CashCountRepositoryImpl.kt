@@ -4,7 +4,10 @@ import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.CashCountEntity
+import com.cauri.core.data.database.entity.TransactionEntity
+import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
+import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.service.CashBalanceService
 import java.time.Instant
@@ -40,5 +43,23 @@ internal class CashCountRepositoryImpl @Inject constructor(
 
     override suspend fun addCount(amount: Long, countedAt: Instant, expectedAmount: Long?) {
         cashCountDao.insert(CashCountEntity(countedAt = countedAt, amount = amount, expectedAmount = expectedAmount))
+        if (expectedAmount != null && amount > expectedAmount) {
+            transactionDao.insert(
+                TransactionEntity(
+                    accountId = CASH_ACCOUNT_ID,
+                    type = TransactionType.INCOME,
+                    status = TransactionStatus.CONFIRMED,
+                    origin = TransactionOrigin.RECONCILIATION,
+                    amount = amount - expectedAmount,
+                    occurredAt = countedAt,
+                    categoryId = null,
+                    placeId = null,
+                    rawSignalId = null,
+                    transferGroup = null,
+                    counterparty = null,
+                    note = null,
+                ),
+            )
+        }
     }
 }

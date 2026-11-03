@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cash_count_title">Count my cash</string>
-    <string name="cash_coming_soon">Screen coming soon</string>
     <string name="cash_back">Back</string>
+    <string name="cash_coming_soon">Coming soon</string>
+    <string name="cash_count_add">Add a %1$s</string>
+    <string name="cash_count_by_denomination">Count note by note</string>
+    <string name="cash_count_clear">Clear all</string>
+    <string name="cash_count_coins">Coins</string>
+    <string name="cash_count_confirm">Confirm the count</string>
+    <string name="cash_count_expected">Expected ≈ %1$s F</string>
+    <string name="cash_count_missing">%1$s F missing</string>
+    <string name="cash_count_none">none</string>
+    <string name="cash_count_notes">Notes</string>
+    <string name="cash_count_remove">Remove a %1$s</string>
+    <string name="cash_count_right">it adds up</string>
+    <string name="cash_count_split">Split the gap</string>
+    <string name="cash_count_surplus">%1$s F more</string>
+    <string name="cash_count_title">Count my cash</string>
+    <string name="cash_count_total">Total counted</string>
+    <string name="cash_count_total_question">How much do you have on you?</string>
+    <string name="cash_count_type_total">Type the total instead</string>
+    <string name="cash_split_title">Split the gap</string>
 </resources>

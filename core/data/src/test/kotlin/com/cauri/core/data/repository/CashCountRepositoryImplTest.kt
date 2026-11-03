@@ -10,6 +10,8 @@ import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.service.CashBalanceServiceImpl
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -99,6 +101,27 @@ internal class CashCountRepositoryImplTest {
                 CashCountEntity(countedAt = Instant.ofEpochMilli(1_000), amount = 7_500, expectedAmount = null),
                 CashCountEntity::id,
             )
+        }
+
+        @Test
+        fun `should record the surplus as found money, already in the count`() = runTest {
+            // when
+            repository.addCount(amount = 8_000, countedAt = Instant.ofEpochSecond(1_000), expectedAmount = 7_500)
+
+            // then
+            database.transactionDao().observeByStatus(TransactionStatus.CONFIRMED).first().map {
+                Triple(it.type, it.origin, it.amount)
+            } shouldContainExactly listOf(Triple(TransactionType.INCOME, TransactionOrigin.RECONCILIATION, 500L))
+            repository.balance.first()?.amount shouldBe 8_000
+        }
+
+        @Test
+        fun `should record no found money when less was counted than expected`() = runTest {
+            // when
+            repository.addCount(amount = 7_000, countedAt = Instant.ofEpochSecond(1_000), expectedAmount = 7_500)
+
+            // then
+            database.transactionDao().observeByStatus(TransactionStatus.CONFIRMED).first().shouldBeEmpty()
         }
     }
 }

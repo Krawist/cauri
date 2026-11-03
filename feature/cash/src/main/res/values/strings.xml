@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cash_count_title">Compter mon cash</string>
-    <string name="cash_coming_soon">Écran à venir</string>
     <string name="cash_back">Retour</string>
+    <string name="cash_coming_soon">Écran à venir</string>
+    <string name="cash_count_add">Ajouter un %1$s</string>
+    <string name="cash_count_by_denomination">Compter billet par billet</string>
+    <string name="cash_count_clear">Tout effacer</string>
+    <string name="cash_count_coins">Pièces</string>
+    <string name="cash_count_confirm">Valider le comptage</string>
+    <string name="cash_count_expected">Attendu ≈ %1$s F</string>
+    <string name="cash_count_missing">il manque %1$s F</string>
+    <string name="cash_count_none">aucun</string>
+    <string name="cash_count_notes">Billets</string>
+    <string name="cash_count_remove">Retirer un %1$s</string>
+    <string name="cash_count_right">le compte est bon</string>
+    <string name="cash_count_split">Répartir l\'écart</string>
+    <string name="cash_count_surplus">%1$s F de plus</string>
+    <string name="cash_count_times" translatable="false">× %1$d</string>
+    <string name="cash_count_title">Compter mon cash</string>
+    <string name="cash_count_total">Total compté</string>
+    <string name="cash_count_total_question">Combien as-tu en poche ?</string>
+    <string name="cash_count_type_total">Saisir le total directement</string>
+    <string name="cash_currency" translatable="false">F</string>
+    <string name="cash_split_title">Répartir l\'écart</string>
 </resources>

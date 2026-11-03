@@ -107,7 +107,7 @@ private fun CauriNavHost(
             )
             activityGraph()
             placeholderTabs()
-            cashGraph(onBack = { navController.popBackStack() })
+            cashGraph(navController = navController, onBack = { navController.popBackStack() })
             settingsGraph(onBack = { navController.popBackStack() })
         }
     }

@@ -187,7 +187,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   long-press opens the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by
   dragging the handles. The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « + »
   opens the quick entry; Cash preselected comes with CAU-26, and so do the suggestions from frequent manual entries.
-  `CauriTextField` moved to `:core:design`. Not checked on a phone yet (the phone was not reachable). Next: CAU-15.
+  `CauriTextField` moved to `:core:design`. On a phone: the upgrade to v2 and the empty row (« Ajouter une
+  habitude »); taps, undo, the sheets and dragging not checked yet.
+- [ ] **CAU-15** — `CashCountScreen` (`:feature:cash`): banknotes and coins with « − » and « + » (gold once counted),
+  « Tout effacer », « Saisir le total directement », « Total compté », « Attendu ≈ » and the gap, updated on every
+  tap. No gap or a surplus: « Valider le comptage » saves the count, `CashCountRepository.addCount` recording a surplus
+  as found money (income, at the time of the count). Money missing: « Répartir l'écart » opens `GapSplitRoute`, a
+  placeholder until CAU-16. Checked on a phone. Next: CAU-16.
 
 Update this section at the end of each ticket.
 

@@ -14,17 +14,32 @@ data object CashGraph
 @Serializable
 internal data object CashCountRoute
 
+/**
+ * Split of the money missing after a count (CAU-16).
+ *
+ * @property counted Amount counted, in FCFA.
+ * @property expected Estimated cash before the count, in FCFA.
+ */
+@Serializable
+internal data class GapSplitRoute(val counted: Long, val expected: Long)
+
 fun NavController.navigateToCashCount() = navigate(CashGraph)
 
-/** Cash count and split of the gap (CAU-15, CAU-16). */
-fun NavGraphBuilder.cashGraph(onBack: () -> Unit) {
+/** Cash count (CAU-15) and split of the gap (CAU-16). [onBack] leaves the cash screens. */
+fun NavGraphBuilder.cashGraph(navController: NavController, onBack: () -> Unit) {
     navigation<CashGraph>(startDestination = CashCountRoute) {
         composable<CashCountRoute> {
+            CashCountScreen(
+                onBack = onBack,
+                onSplitGap = { counted, expected -> navController.navigate(GapSplitRoute(counted, expected)) },
+            )
+        }
+        composable<GapSplitRoute> {
             PlaceholderScreen(
-                title = stringResource(R.string.cash_count_title),
+                title = stringResource(R.string.cash_split_title),
                 subtitle = stringResource(R.string.cash_coming_soon),
                 actionLabel = stringResource(R.string.cash_back),
-                onAction = onBack,
+                onAction = { navController.popBackStack() },
             )
         }
     }
