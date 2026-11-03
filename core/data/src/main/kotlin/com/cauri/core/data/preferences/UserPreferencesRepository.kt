@@ -8,6 +8,8 @@ import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
 /** Small user settings that are not business data. The Room database holds everything else. */
+// One function per setting saved.
+@Suppress("TooManyFunctions")
 interface UserPreferencesRepository {
     /** Whether the user went through the onboarding. */
     val onboardingCompleted: Flow<Boolean>
@@ -20,6 +22,9 @@ interface UserPreferencesRepository {
 
     /** The user's limits on the smart reminders; quiet from 22 h to 7 h, 4 a day and after visits until changed. */
     val reminders: Flow<ReminderSettings>
+
+    /** From when the reminders learn, after the user chose to start again from zero; `null` for the whole log. */
+    val learningSince: Flow<Instant?>
 
     /** Day of the last evening summary; `null` when none was sent. */
     val lastEveningSummary: Flow<LocalDate?>
@@ -45,6 +50,8 @@ interface UserPreferencesRepository {
 
     /** Remembers that a cash count reminder was sent on [day]. */
     suspend fun saveReminders(settings: ReminderSettings)
+
+    suspend fun setLearningSince(at: Instant)
 
     suspend fun setLastEveningSummary(day: LocalDate)
 

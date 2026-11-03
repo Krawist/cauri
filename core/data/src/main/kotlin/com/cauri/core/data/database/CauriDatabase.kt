@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cauri.core.data.database.dao.AccountBalanceDao
 import com.cauri.core.data.database.dao.AccountDao
+import com.cauri.core.data.database.dao.BanditModelDao
 import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.CategoryDao
 import com.cauri.core.data.database.dao.ConfirmationDao
@@ -20,6 +21,7 @@ import com.cauri.core.data.database.dao.TransferLinkDao
 import com.cauri.core.data.database.dao.VisitDao
 import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
+import com.cauri.core.data.database.entity.BanditModelEntity
 import com.cauri.core.data.database.entity.CashCountEntity
 import com.cauri.core.data.database.entity.CategoryEntity
 import com.cauri.core.data.database.entity.DecisionLogEntity
@@ -52,8 +54,9 @@ import com.cauri.core.data.database.entity.VisitEntity
         AccountBalanceEntity::class,
         StopEntity::class,
         PlaceSuggestionEntity::class,
+        BanditModelEntity::class,
     ],
-    version = 18,
+    version = 19,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -71,6 +74,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 15, to = 16),
         AutoMigration(from = 16, to = 17, spec = RemoveVisitOutcome::class),
         AutoMigration(from = 17, to = 18),
+        AutoMigration(from = 18, to = 19),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -98,6 +102,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun cashCountDao(): CashCountDao
 
     abstract fun decisionLogDao(): DecisionLogDao
+
+    abstract fun banditModelDao(): BanditModelDao
 
     abstract fun habitDao(): HabitDao
 

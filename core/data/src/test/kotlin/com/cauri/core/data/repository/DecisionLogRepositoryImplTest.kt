@@ -13,7 +13,9 @@ import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.NewDecision
 import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.model.PlaceSpendRate
 import com.cauri.core.data.model.ReminderAction
+import com.cauri.core.data.model.ReminderOutcome
 import com.cauri.core.data.model.ReminderStats
 import com.cauri.core.data.model.VisitHistory
 import com.cauri.core.data.service.OutcomeServiceImpl
@@ -158,6 +160,63 @@ internal class DecisionLogRepositoryImplTest {
 
             // then
             database.decisionLogDao().getSince(Instant.EPOCH).single().outcome shouldBe DecisionOutcome.CONFIRMED
+        }
+    }
+
+    @Nested
+    inner class TrainingSet {
+        @Test
+        fun `should give the decisions closed and counted, since the start`() = runTest {
+            // given
+            val cards = (1..4).map {
+                database.transactionDao().insert(expense(amount = 1_000, at = NOON, placeId = null))
+            }
+            cards.forEach { repository.log(decision(transactionId = it, at = NOON, action = ReminderAction.SKIP)) }
+            repository.log(
+                decision(transactionId = cards[3], at = NOON - Duration.ofDays(100), action = ReminderAction.SKIP),
+            )
+            val confirmations = database.confirmationDao()
+            confirmations.closeDecisions(cards[0], DecisionOutcome.CONFIRMED, NOON + HALF_HOUR)
+            confirmations.closeDecisions(cards[1], DecisionOutcome.DISMISSED, NOON + Duration.ofSeconds(1))
+            confirmations.closeDecisions(cards[3], DecisionOutcome.NOTHING_SPENT, NOON + HALF_HOUR)
+            database.decisionLogDao().getSince(Instant.EPOCH).filter { it.transactionId == cards[1] }.forEach {
+                database.decisionLogDao().update(it.copy(excluded = DecisionExclusion.ACCIDENTAL))
+            }
+
+            // when
+            val training = repository.trainingSet(since = NOON - Duration.ofDays(90))
+
+            // then
+            training.map { it.outcome } shouldBe listOf(ReminderOutcome.CONFIRMED, ReminderOutcome.NOTHING_SPENT)
+        }
+    }
+
+    @Nested
+    inner class PlaceSpendRates {
+        @Test
+        fun `should tell how often the visits to each shop led to an expense there`() = runTest {
+            // given
+            val placeId = database.placeDao().insert(market())
+            listOf(1L, 2L, 3L).forEach { day ->
+                val entered = NOON - Duration.ofDays(day)
+                database.visitDao().insert(
+                    VisitEntity(
+                        placeId = placeId,
+                        enteredAt = entered,
+                        leftAt =
+                        entered + HALF_HOUR,
+                    ),
+                )
+            }
+            database.transactionDao().insert(
+                expense(amount = 2_000, at = NOON - Duration.ofDays(2) + HALF_HOUR, placeId = placeId),
+            )
+
+            // when
+            val rates = repository.placeSpendRates(since = NOON - Duration.ofDays(30))
+
+            // then
+            rates shouldBe listOf(PlaceSpendRate(name = "Marché Mokolo", visits = 3, withExpense = 1))
         }
     }
 

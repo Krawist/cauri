@@ -18,6 +18,8 @@ import com.cauri.core.capture.reminder.EveningSummarySender
 import com.cauri.core.capture.reminder.EveningSummarySenderImpl
 import com.cauri.core.capture.reminder.ReminderDecider
 import com.cauri.core.capture.reminder.ReminderDeciderImpl
+import com.cauri.core.capture.reminder.ReminderLearner
+import com.cauri.core.capture.reminder.ReminderLearnerImpl
 import com.cauri.core.capture.reminder.ReminderNotifier
 import com.cauri.core.capture.reminder.ReminderNotifierImpl
 import com.cauri.core.capture.signal.DetectionService
@@ -30,12 +32,16 @@ import com.cauri.core.capture.signal.TemplateCatalogRepository
 import com.cauri.core.capture.signal.TemplateCatalogRepositoryImpl
 import com.cauri.core.capture.signal.WatchedSenderRepository
 import com.cauri.core.capture.signal.WatchedSenderRepositoryImpl
+import com.cauri.core.engine.Bandit
+import com.cauri.core.engine.BanditImpl
 import com.cauri.core.engine.FeatureEncoder
 import com.cauri.core.engine.FeatureEncoderImpl
 import com.cauri.core.engine.ReminderGuardrails
 import com.cauri.core.engine.ReminderGuardrailsImpl
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderRulesImpl
+import com.cauri.core.engine.RewardTable
+import com.cauri.core.engine.RewardTableImpl
 import com.cauri.core.engine.SummaryTime
 import com.cauri.core.engine.SummaryTimeImpl
 import com.cauri.core.parsing.MessageParser
@@ -87,6 +93,15 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindReminderGuardrails(impl: ReminderGuardrailsImpl): ReminderGuardrails
+
+    @Binds
+    abstract fun bindBandit(impl: BanditImpl): Bandit
+
+    @Binds
+    abstract fun bindRewardTable(impl: RewardTableImpl): RewardTable
+
+    @Binds
+    abstract fun bindReminderLearner(impl: ReminderLearnerImpl): ReminderLearner
 
     @Binds
     abstract fun bindSummaryTime(impl: SummaryTimeImpl): SummaryTime

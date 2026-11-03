@@ -554,6 +554,25 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   summary quieter (0.7 to -0.3), a skip right when nothing was spent (0.5) and -1 for any expense missed. Checked on the
   Galaxy S23: the upgrade to v18. Next: CAU-41.
 
+- [ ] **CAU-41** — the contextual bandit: `Bandit` (`:core:engine`, JVM tests), linear Thompson sampling over the three
+  actions, one Bayesian linear regression of the reward per action (λ 1, the weights drawn with a spread of 0.5),
+  choosing among what the guardrails allow and logging how often it would choose so (200 draws, the first deciding).
+  `ReminderLearningWorker` (nightly, charging and idle) now has `ReminderLearner` (`:core:capture`, JVM tests) attribute
+  the outcomes, then train on the valid decisions (closed, not left out, same layout of the features) of the last 90
+  days and since the last start from zero (`learningSince` in DataStore), the rewards of `RewardTable` applied then, and
+  publish the model in one write as the next version (`bandit_models`, database v19, `BanditRepository`); the same log
+  publishes nothing new, and a model can be rebuilt from the log at any time. By decision (to validate), the bandit
+  takes over once 150 decisions are valid, 15 of each action; the rules decide until then, and their score stays a
+  feature. `ReminderDecider` logs « bandit-3 » and the probability when the bandit decides. « Rappels intelligents »
+  shows « Ce que Cauri a appris » (`LessonsCard`, gold, as the mockup), by decision told from the log rather than from
+  the weights: the two hours the user answers most in (10 answers at least), the shop where a visit leads to an expense
+  7 times in 10 or more, the one 2 in 10 or less (5 visits at least), « Appris sur 214 réponses en 6 semaines », «
+  Repartir de zéro » (a dialog) forgetting the models and the decisions before it; « Cauri apprend de tes réponses… »
+  while nothing is learnt. Debug builds run the nightly learning on demand (`adb shell am broadcast -a
+  com.cauri.debug.LEARN_REMINDERS -p com.cauri.debug`). Checked on the Galaxy S23 in dark mode: the upgrade to v19, the
+  card while learning, the dialog, the learning on demand without error. A model trained on real answers not seen: the
+  phone has 3. Next: CAU-42.
+
 Update this section at the end of each ticket.
 
 ## Way of working

@@ -13,11 +13,16 @@ import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeDecisionLogRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
 import com.cauri.core.data.repository.FakeVisitRepository
+import com.cauri.core.engine.BanditArm
+import com.cauri.core.engine.BanditImpl
+import com.cauri.core.engine.BanditModel
 import com.cauri.core.engine.FeatureEncoder
 import com.cauri.core.engine.FeatureEncoderImpl
+import com.cauri.core.engine.ReminderAction as ReminderEngineAction
 import com.cauri.core.engine.ReminderGuardrailsImpl
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderRulesImpl
+import com.cauri.core.engine.RewardTable
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
@@ -26,6 +31,7 @@ import java.time.Clock
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.random.Random
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -36,6 +42,7 @@ internal class ReminderDeciderImplTest {
     private val visits = FakeVisitRepository()
     private val preferences = FakeUserPreferencesRepository()
     private val notifier = RecordingNotifier()
+    private val learner = FixedLearner()
     private val decider = ReminderDeciderImpl(
         transactions = transactions,
         log = log,
@@ -44,9 +51,12 @@ internal class ReminderDeciderImplTest {
         preferences = preferences,
         guardrails = ReminderGuardrailsImpl(),
         rules = ReminderRulesImpl(),
+        bandit = BanditImpl(),
+        learner = learner,
         encoder = FeatureEncoderImpl(),
         notifier = notifier,
         clock = Clock.fixed(NOW, ZoneId.of("Africa/Douala")),
+        random = Random(1),
     )
 
     @Nested
@@ -146,6 +156,44 @@ internal class ReminderDeciderImplTest {
         }
 
         @Test
+        fun `should let the bandit decide once it learnt, logging how often it would`() = runTest {
+            // given
+            val size = FeatureEncoder.SIZE
+            val arm = BanditArm(
+                precision = List(size * size) {
+                    if (it / size ==
+                        it % size
+                    ) {
+                        1.0
+                    } else {
+                        0.0
+                    }
+                },
+                rewards = List(size) { 0.0 },
+                decisions = 200,
+            )
+            learner.published = PublishedModel(
+                version = 3,
+                model = BanditModel(
+                    arms = ReminderEngineAction.entries.associateWith {
+                        if (it == ReminderEngineAction.SKIP) arm.copy(rewards = List(size) { 50.0 }) else arm
+                    },
+                    featureVersion = FeatureEncoder.VERSION,
+                    rewardVersion = RewardTable.VERSION,
+                ),
+            )
+            transactions.pending.value = listOf(payment(id = 7))
+
+            // when
+            decider.decidePending()
+
+            // then
+            log.decisions.single().let { Triple(it.action, it.modelVersion, it.probability) } shouldBe
+                Triple(ReminderAction.SKIP, "bandit-3", 1.0)
+            notifier.shown.shouldBeEmpty()
+        }
+
+        @Test
         fun `should leave out of the training a notification Android did not show`() = runTest {
             // given
             notifier.allowed = false
@@ -235,6 +283,17 @@ internal class ReminderDeciderImplTest {
         counterparty = "BOULANGERIE SAKER",
         occurredAt = at,
     )
+
+    // Gives the model the test sets, and learns nothing.
+    private class FixedLearner : ReminderLearner {
+        var published: PublishedModel? = null
+
+        override suspend fun learn(now: Instant) = Unit
+
+        override suspend fun current() = published
+
+        override suspend fun reset(now: Instant) = Unit
+    }
 
     private class RecordingNotifier : ReminderNotifier {
         val shown = mutableListOf<Long>()

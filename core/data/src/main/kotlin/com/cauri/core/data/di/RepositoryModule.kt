@@ -6,6 +6,8 @@ import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.AccountRepositoryImpl
 import com.cauri.core.data.repository.ActivityRepository
 import com.cauri.core.data.repository.ActivityRepositoryImpl
+import com.cauri.core.data.repository.BanditRepository
+import com.cauri.core.data.repository.BanditRepositoryImpl
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CashCountRepositoryImpl
 import com.cauri.core.data.repository.CategoryRepository
@@ -40,6 +42,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class RepositoryModule {
+    @Binds
+    abstract fun bindBanditRepository(impl: BanditRepositoryImpl): BanditRepository
+
     @Binds
     abstract fun bindActivityRepository(impl: ActivityRepositoryImpl): ActivityRepository
 

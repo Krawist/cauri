@@ -1,7 +1,9 @@
 package com.cauri.feature.settings.reminders
 
+import com.cauri.core.capture.reminder.FakeReminderLearner
 import com.cauri.core.data.model.Place
 import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.model.PlaceSpendRate
 import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.repository.FakeDecisionLogRepository
@@ -32,18 +34,13 @@ internal class RemindersViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val places = FakePlaceRepository()
     private val log = FakeDecisionLogRepository()
+    private val learner = FakeReminderLearner()
     private lateinit var viewModel: RemindersViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = RemindersViewModel(
-            preferences = preferences,
-            places = places,
-            log = log,
-            summaryTime = SummaryTimeImpl(),
-            clock = Clock.fixed(Instant.parse("2026-11-03T12:00:00Z"), ZoneOffset.UTC),
-        )
+        viewModel = viewModel()
     }
 
     @AfterEach
@@ -98,6 +95,72 @@ internal class RemindersViewModelTest {
 
             // then
             viewModel.uiState.value.summaryTime shouldBe LocalTime.of(20, 30)
+        }
+    }
+
+    @Nested
+    inner class Lessons {
+        @Test
+        fun `should tell the shops where a visit leads to an expense often, and rarely`() {
+            // given
+            log.rates = listOf(
+                PlaceSpendRate(name = "Marché Mokolo", visits = 10, withExpense = 9),
+                PlaceSpendRate(name = "Station Total", visits = 8, withExpense = 1),
+                PlaceSpendRate(name = "Boulangerie", visits = 3, withExpense = 3),
+            )
+
+            // when
+            val viewModel = viewModel()
+
+            // then
+            viewModel.uiState.value.lessons shouldContainExactly listOf(
+                Lesson.OftenSpends(place = "Marché Mokolo", timesInTen = 9),
+                Lesson.RarelySpends(place = "Station Total"),
+            )
+        }
+
+        @Test
+        fun `should tell the two hours the user answers most in`() {
+            // given
+            log.answers = List(6) { Instant.parse("2026-11-01T19:10:00Z") } +
+                List(5) { Instant.parse("2026-11-02T20:40:00Z") } + Instant.parse("2026-11-02T08:00:00Z")
+
+            // when
+            val viewModel = viewModel()
+
+            // then
+            viewModel.uiState.value.lessons shouldContainExactly listOf(Lesson.AnswerHours(from = 19, until = 21))
+        }
+    }
+
+    @Nested
+    inner class Weeks {
+        @Test
+        fun `should count the weeks from the first answer`() {
+            // given
+            log.answers = listOf(Instant.parse("2026-10-19T19:00:00Z"), Instant.parse("2026-11-02T19:00:00Z"))
+
+            // when
+            val viewModel = viewModel()
+
+            // then
+            viewModel.uiState.value.weeks shouldBe 2
+        }
+    }
+
+    @Nested
+    inner class OnReset {
+        @Test
+        fun `should forget what was learnt`() {
+            // given
+            viewModel.onAskReset(open = true)
+
+            // when
+            viewModel.onReset()
+
+            // then
+            learner.resets shouldContainExactly listOf(Instant.parse("2026-11-03T12:00:00Z"))
+            viewModel.uiState.value.confirmingReset.shouldBeFalse()
         }
     }
 
@@ -168,6 +231,15 @@ internal class RemindersViewModelTest {
             preferences.reminders.value.dailyCap shouldBe expected
         }
     }
+
+    private fun viewModel() = RemindersViewModel(
+        preferences = preferences,
+        places = places,
+        log = log,
+        summaryTime = SummaryTimeImpl(),
+        learner = learner,
+        clock = Clock.fixed(Instant.parse("2026-11-03T12:00:00Z"), ZoneOffset.UTC),
+    )
 
     private fun place(id: Long, name: String, kind: PlaceKind, remind: Boolean) = Place(
         id = id,

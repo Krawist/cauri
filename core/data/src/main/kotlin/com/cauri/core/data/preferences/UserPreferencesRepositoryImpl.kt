@@ -53,6 +53,8 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         )
     }
 
+    override val learningSince: Flow<Instant?> = dataStore.data.map { it[LearningSince]?.let(Instant::ofEpochMilli) }
+
     override val lastEveningSummary: Flow<LocalDate?> = dataStore.data.map {
         it[LastSummaryDay]?.let(LocalDate::ofEpochDay)
     }
@@ -102,6 +104,10 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
                 it[SummaryMinutes] = time.hour * MINUTES_PER_HOUR + time.minute
             }
         }
+    }
+
+    override suspend fun setLearningSince(at: Instant) {
+        dataStore.edit { it[LearningSince] = at.toEpochMilli() }
     }
 
     override suspend fun setLastEveningSummary(day: LocalDate) {
@@ -175,6 +181,7 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val VisitReminders = booleanPreferencesKey("reminders_after_visits")
         val SummaryMinutes = intPreferencesKey("reminders_summary_minutes")
         val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
+        val LearningSince = longPreferencesKey("reminders_learning_since")
         const val DEFAULT_REMINDER_HOUR = 20
         const val DEFAULT_QUIET_FROM = 22
         const val DEFAULT_QUIET_UNTIL = 7

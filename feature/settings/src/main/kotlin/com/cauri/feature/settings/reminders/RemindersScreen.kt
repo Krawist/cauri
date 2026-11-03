@@ -79,6 +79,10 @@ internal fun RemindersScreen(
 
             override fun onDailyCap(step: Int) = viewModel.onDailyCap(step)
 
+            override fun onAskReset(open: Boolean) = viewModel.onAskReset(open)
+
+            override fun onReset() = viewModel.onReset()
+
             override fun onPlaces() = onOpenPlaces()
         }
     }
@@ -102,9 +106,13 @@ private fun RemindersContent(state: RemindersUiState, actions: RemindersActions)
             text = stringResource(R.string.reminders_title),
             style = MaterialTheme.typography.headlineLarge,
             color = palette.ink,
-            modifier = Modifier.padding(top = CauriSpacing.xl, bottom = CauriSpacing.xxl),
+            modifier = Modifier.padding(top = CauriSpacing.xl, bottom = CauriSpacing.xl),
         )
-        SectionLabel(stringResource(R.string.reminders_settings))
+        LessonsCard(state = state, actions = actions)
+        SectionLabel(
+            stringResource(R.string.reminders_settings),
+            modifier = Modifier.padding(top = CauriSpacing.xl),
+        )
         SettingsGroup(state = state, actions = actions)
         Text(
             text = stringResource(R.string.reminders_hint),
@@ -256,7 +264,16 @@ private fun RemindersContentPreview() {
     CauriTheme {
         Box(Modifier.background(CauriTheme.palette.background)) {
             RemindersContent(
-                state = RemindersUiState(quietPlaces = listOf("Maison", "Travail")),
+                state = RemindersUiState(
+                    quietPlaces = listOf("Maison", "Travail"),
+                    lessons = listOf(
+                        Lesson.AnswerHours(from = 19, until = 21),
+                        Lesson.OftenSpends(place = "Marché Mokolo", timesInTen = 9),
+                        Lesson.RarelySpends(place = "Station Total"),
+                    ),
+                    answers = 214,
+                    weeks = 6,
+                ),
                 actions = PreviewRemindersActions,
             )
         }
@@ -264,6 +281,8 @@ private fun RemindersContentPreview() {
 }
 
 /** Actions that do nothing, for previews. */
+// One function per gesture of the screen.
+@Suppress("TooManyFunctions")
 private object PreviewRemindersActions : RemindersActions {
     override fun onBack() = Unit
 
@@ -280,6 +299,10 @@ private object PreviewRemindersActions : RemindersActions {
     override fun onQuietUntil(hours: Int) = Unit
 
     override fun onDailyCap(step: Int) = Unit
+
+    override fun onAskReset(open: Boolean) = Unit
+
+    override fun onReset() = Unit
 
     override fun onPlaces() = Unit
 }

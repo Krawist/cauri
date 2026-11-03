@@ -23,6 +23,7 @@ booleans.
 | `com.cauri.debug.PLACE_STOP`               | `:feature:places` | Makes up a stop, then looks for frequent places           |
 | `com.cauri.debug.SHOW_REMINDER`            | `:core:capture`  | Shows the reminder notification of a card, at any hour     |
 | `com.cauri.debug.SHOW_EVENING_SUMMARY`     | `:core:capture`  | Shows the evening summary of the cards waiting, at any hour |
+| `com.cauri.debug.LEARN_REMINDERS`          | `:core:capture`  | Runs the nightly learning of the reminders at once         |
 
 ## Show a cash count reminder
 
@@ -172,3 +173,14 @@ adb shell am broadcast -a com.cauri.debug.SHOW_EVENING_SUMMARY -p com.cauri.debu
 Shows the evening summary notification at once (CAU-39), « Récapitulatif : n éléments à confirmer » with the cards
 waiting in « À confirmer », whatever its time, the day already sent, or nothing waiting. A tap or « Ouvrir » opens
 « Ce soir ». No extra. Needs Cauri's notifications allowed.
+
+## Run the nightly learning of the reminders
+
+```bash
+adb shell am broadcast -a com.cauri.debug.LEARN_REMINDERS -p com.cauri.debug
+```
+
+Runs at once what `ReminderLearningWorker` does at night, charging and idle (CAU-40, CAU-41): the outcomes of the
+decisions not answered (a visit paid during it, a card waiting 3 days, a tap by mistake), then the bandit trained on the
+valid decisions of the last 90 days, published as a new version once 150 are valid with 15 of each action. Running it
+again on the same log publishes nothing new. No extra.

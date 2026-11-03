@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.cauri.core.data.database.entity.DecisionLogEntity
 import com.cauri.core.data.database.entity.VisitEntity
+import com.cauri.core.data.model.PlaceSpendRate
 import java.time.Instant
 
 // One function per read of the decisions and of the context they are taken in.
@@ -34,6 +35,27 @@ internal interface DecisionLogDao {
             "AND outcomeAt >= :since ORDER BY outcomeAt",
     )
     suspend fun getAnswerTimes(since: Instant): List<Instant>
+
+    /** The decisions closed and not left out, taken since [since], oldest first: what the bandit learns from. */
+    @Query(
+        "SELECT * FROM decision_log WHERE outcome IS NOT NULL AND excluded IS NULL AND decidedAt >= :since " +
+            "ORDER BY id",
+    )
+    suspend fun getTrainingSet(since: Instant): List<DecisionLogEntity>
+
+    /**
+     * How often the visits to each shop left since [since] were followed by an expense confirmed there, up to 15
+     * minutes after the exit (in milliseconds, as the instants are stored).
+     */
+    @Query(
+        "SELECT places.name AS name, COUNT(*) AS visits, SUM(CASE WHEN EXISTS (SELECT 1 FROM transactions " +
+            "WHERE transactions.placeId = visits.placeId AND transactions.type = 'EXPENSE' " +
+            "AND transactions.status = 'CONFIRMED' AND transactions.amount > 0 " +
+            "AND transactions.occurredAt >= visits.enteredAt AND transactions.occurredAt <= visits.leftAt + 900000) " +
+            "THEN 1 ELSE 0 END) AS withExpense FROM visits JOIN places ON places.id = visits.placeId " +
+            "WHERE places.kind = 'SHOP' AND visits.leftAt >= :since GROUP BY places.id ORDER BY places.name",
+    )
+    suspend fun getPlaceSpendRates(since: Instant): List<PlaceSpendRate>
 
     /** The visit [id]; `null` when it was deleted with its place. */
     @Query("SELECT * FROM visits WHERE id = :id")

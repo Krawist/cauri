@@ -4,7 +4,10 @@ import com.cauri.core.data.database.dao.DecisionLogDao
 import com.cauri.core.data.database.entity.DecisionLogEntity
 import com.cauri.core.data.model.DecisionExclusion
 import com.cauri.core.data.model.NewDecision
+import com.cauri.core.data.model.PlaceSpendRate
+import com.cauri.core.data.model.ReminderOutcome
 import com.cauri.core.data.model.ReminderStats
+import com.cauri.core.data.model.TrainingDecision
 import com.cauri.core.data.model.VisitHistory
 import com.cauri.core.data.service.OutcomeService
 import com.cauri.core.data.service.VisitService
@@ -46,6 +49,21 @@ internal class DecisionLogRepositoryImpl @Inject constructor(
             decisionLogDao.update(it.copy(excluded = DecisionExclusion.ACCIDENTAL))
         }
     }
+
+    override suspend fun trainingSet(since: Instant): List<TrainingDecision> =
+        decisionLogDao.getTrainingSet(since).mapNotNull { decision ->
+            val outcome = decision.outcome ?: return@mapNotNull null
+            TrainingDecision(
+                id = decision.id,
+                features = decision.features,
+                featureVersion = decision.featureVersion,
+                action = decision.action,
+                outcome = ReminderOutcome.valueOf(outcome.name),
+            )
+        }
+
+    override suspend fun placeSpendRates(since: Instant): List<PlaceSpendRate> =
+        decisionLogDao.getPlaceSpendRates(since)
 
     // Whether the visit of [decision] was paid by an expense typed there, from its entry to just after its exit.
     private suspend fun paidByHand(decision: DecisionLogEntity): Boolean {

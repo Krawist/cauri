@@ -57,5 +57,14 @@
                 <action android:name="com.cauri.debug.SHOW_EVENING_SUMMARY" />
             </intent-filter>
         </receiver>
+        <!-- Debug builds only: runs the nightly learning of the reminders at once, charging or not.
+             adb shell am broadcast -a com.cauri.debug.LEARN_REMINDERS -p com.cauri.debug -->
+        <receiver
+            android:name=".reminder.DebugLearnRemindersReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.LEARN_REMINDERS" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

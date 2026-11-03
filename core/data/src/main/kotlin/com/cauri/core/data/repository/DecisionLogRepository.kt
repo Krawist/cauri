@@ -1,7 +1,9 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.NewDecision
+import com.cauri.core.data.model.PlaceSpendRate
 import com.cauri.core.data.model.ReminderStats
+import com.cauri.core.data.model.TrainingDecision
 import com.cauri.core.data.model.VisitHistory
 import java.time.Instant
 
@@ -24,6 +26,12 @@ interface DecisionLogRepository {
      * leaves out of the training the notifications set aside by mistake. Running it again changes nothing.
      */
     suspend fun attributeOutcomes(now: Instant)
+
+    /** The decisions answered or attributed, not left out, taken since [since], oldest first. */
+    suspend fun trainingSet(since: Instant): List<TrainingDecision>
+
+    /** How often the visits to each shop since [since] led to an expense there, by name. */
+    suspend fun placeSpendRates(since: Instant): List<PlaceSpendRate>
 
     /** Logs [decision], its outcome open until the user answers. */
     suspend fun log(decision: NewDecision)

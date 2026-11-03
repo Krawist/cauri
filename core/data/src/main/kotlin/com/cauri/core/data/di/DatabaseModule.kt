@@ -61,5 +61,8 @@ internal object DatabaseModule {
     fun provideDecisionLogDao(database: CauriDatabase) = database.decisionLogDao()
 
     @Provides
+    fun provideBanditModelDao(database: CauriDatabase) = database.banditModelDao()
+
+    @Provides
     fun provideHabitDao(database: CauriDatabase) = database.habitDao()
 }

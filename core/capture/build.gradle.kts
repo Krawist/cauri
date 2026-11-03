@@ -25,6 +25,7 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
 
     testFixturesImplementation(projects.core.data)
+    testFixturesImplementation(projects.core.engine)
     testFixturesImplementation(libs.kotlinx.coroutines.core)
 
     testImplementation(testFixtures(projects.core.data))

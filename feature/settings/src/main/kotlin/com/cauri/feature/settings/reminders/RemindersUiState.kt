@@ -12,6 +12,10 @@ import java.time.LocalTime
  * @property choosingQuietHours Whether the sheet of the quiet hours is open.
  * @property summaryTime When the evening summary comes: the time chosen, or the one that follows the user's answers.
  * @property choosingSummary Whether the sheet of the time of the evening summary is open.
+ * @property lessons What Cauri learnt of the user, in plain words.
+ * @property answers Answers Cauri learnt from, since it last started from zero.
+ * @property weeks Weeks those answers span; 0 within the first week.
+ * @property confirmingReset Whether the user is asked to confirm starting again from zero.
  */
 internal data class RemindersUiState(
     val settings: ReminderSettings = ReminderSettings(
@@ -24,6 +28,10 @@ internal data class RemindersUiState(
     val choosingQuietHours: Boolean = false,
     val summaryTime: LocalTime = SummaryTime.DEFAULT,
     val choosingSummary: Boolean = false,
+    val lessons: List<Lesson> = emptyList(),
+    val answers: Int = 0,
+    val weeks: Int = 0,
+    val confirmingReset: Boolean = false,
 )
 
 // Until the stored choice is read; the same defaults as the preferences.
