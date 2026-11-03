@@ -3,14 +3,20 @@ package com.cauri.core.data.repository
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.CategoryStatus
+import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.NewCategory
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.service.CategoryPredictionServiceImpl
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -32,7 +38,12 @@ internal class CategoryRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         database = inMemoryDatabase()
-        repository = CategoryRepositoryImpl(database.categoryDao(), CategorySuggestionServiceImpl(), CLOCK)
+        repository = CategoryRepositoryImpl(
+            database.categoryDao(),
+            CategorySuggestionServiceImpl(),
+            CategoryPredictionServiceImpl(),
+            CLOCK,
+        )
     }
 
     @AfterEach
@@ -146,6 +157,87 @@ internal class CategoryRepositoryImplTest {
             suggested.map { it.name } shouldContainExactly listOf("Salaire")
         }
     }
+
+    @Nested
+    inner class Predicted {
+        @Test
+        fun `should put first what the user chose before with the merchant, case ignored`() = runTest {
+            // given
+            val (foodId, snacksId) = repository.createCategories(
+                listOf(
+                    NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Snacks", nature = CategoryNature.EXPENSE),
+                ),
+            )
+            database.transactionDao().insert(
+                cashExpense(
+                    categoryId = snacksId,
+                    at = "2026-10-20T12:00:00Z",
+                ).copy(counterparty = "BOULANGERIE SAKER"),
+            )
+            database.transactionDao().insert(cashExpense(categoryId = foodId, at = "2026-11-02T08:00:00Z"))
+
+            // when
+            val predicted = repository.predicted(
+                operation = expenseToConfirm(counterparty = "Boulangerie Saker ", placeId = null, categoryId = null),
+                limit = 2,
+            )
+
+            // then
+            predicted.map { it.name } shouldContainExactly listOf("Snacks", "Alimentation")
+        }
+
+        @Test
+        fun `should put what was chosen at the place before its own category`() = runTest {
+            // given
+            val (foodId, snacksId) = repository.createCategories(
+                listOf(
+                    NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Snacks", nature = CategoryNature.EXPENSE),
+                ),
+            )
+            val placeId = database.placeDao().insert(
+                PlaceEntity(
+                    name = "Marché Mokolo",
+                    latitude = 3.88,
+                    longitude = 11.5,
+                    radiusMeters = 80f,
+                    kind = PlaceKind.SHOP,
+                    defaultCategoryId = foodId,
+                ),
+            )
+            database.transactionDao().insert(
+                cashExpense(categoryId = snacksId, at = "2026-10-30T12:00:00Z").copy(placeId = placeId),
+            )
+
+            // when
+            val predicted = repository.predicted(
+                operation = expenseToConfirm(counterparty = null, placeId = placeId, categoryId = foodId),
+                limit = 2,
+            )
+
+            // then
+            predicted.map { it.name } shouldContainExactly listOf("Snacks", "Alimentation")
+        }
+    }
+
+    private fun expenseToConfirm(counterparty: String?, placeId: Long?, categoryId: Long?) = PendingOperation(
+        transactionId = 99,
+        accountId = CASH_ACCOUNT_ID,
+        type = PendingType.EXPENSE,
+        amount = 0,
+        fees = 0,
+        foreignAmount = null,
+        foreignCurrency = null,
+        accountName = "Cash",
+        accountKind = AccountKind.CASH,
+        toAccountName = null,
+        toAccountKind = null,
+        counterparty = counterparty,
+        occurredAt = CLOCK.instant(),
+        categoryId = categoryId,
+        placeId = placeId,
+    )
 
     private fun cashExpense(categoryId: Long, at: String) = TransactionEntity(
         accountId = CASH_ACCOUNT_ID,

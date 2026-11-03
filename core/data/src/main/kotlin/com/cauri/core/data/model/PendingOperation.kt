@@ -29,6 +29,7 @@ import java.time.Instant
  *   shop visited; `null` for none.
  * @property stayMinutes How long the visit lasted, in minutes, for the card of a visit; `null` for an operation read
  *   in a message.
+ * @property placeId Place it was made at, the shop for a visit; `null` when unknown.
  */
 data class PendingOperation(
     val transactionId: Long,
@@ -47,4 +48,5 @@ data class PendingOperation(
     val categoryId: Long? = null,
     val proposedAmount: Long? = null,
     val stayMinutes: Long? = null,
+    val placeId: Long? = null,
 )

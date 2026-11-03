@@ -6,6 +6,8 @@ import com.cauri.core.data.service.ActivityService
 import com.cauri.core.data.service.ActivityServiceImpl
 import com.cauri.core.data.service.CashBalanceService
 import com.cauri.core.data.service.CashBalanceServiceImpl
+import com.cauri.core.data.service.CategoryPredictionService
+import com.cauri.core.data.service.CategoryPredictionServiceImpl
 import com.cauri.core.data.service.CategorySuggestionService
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import com.cauri.core.data.service.CountReminderService
@@ -34,6 +36,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class ServiceModule {
+    @Binds
+    abstract fun bindCategoryPredictionService(impl: CategoryPredictionServiceImpl): CategoryPredictionService
+
     @Binds
     abstract fun bindActivityQueryService(impl: ActivityQueryServiceImpl): ActivityQueryService
 

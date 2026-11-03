@@ -573,6 +573,17 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   card while learning, the dialog, the learning on demand without error. A model trained on real answers not seen: the
   phone has 3. Next: CAU-42.
 
+- [ ] **CAU-42** — the category of a card is now predicted per merchant and per place (`CategoryRepository.predicted`,
+  `CategoryPredictionService` with JVM tests): the categories the user confirmed before with the same merchant (case and
+  spaces around ignored), then at the same place, over 180 days, each choice weighing half as much every 30 days, so
+  that a correction wins within weeks over an old habit; then the category the card has (a shop's own), then the ones
+  used on the account at this hour (CAU-26). The cards of « À confirmer », of « Ce soir » and the categories of the
+  reminder notifications use it, the first chosen and kept as the proposal (`PendingOperation.placeId`). The amount
+  stays the one read in the message, and for a visit the median of what was confirmed at the place (CAU-36), corrections
+  included, by decision. The share of proposals confirmed unchanged per place and per merchant is
+  `ProposalRepository.acceptance` (CAU-29); no screen shows it yet. Checked on the Galaxy S23: the cards load; a
+  prediction on real habits not seen on a phone. Next: phase 3, CAU-43.
+
 Update this section at the end of each ticket.
 
 ## Way of working

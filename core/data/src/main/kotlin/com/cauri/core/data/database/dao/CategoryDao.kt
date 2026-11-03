@@ -34,6 +34,24 @@ internal interface CategoryDao {
     )
     suspend fun getUses(accountId: Long, type: TransactionType, since: Instant): List<CategoryUse>
 
+    /**
+     * The categories chosen for the confirmed transactions of [type] with the merchant [counterparty], case and spaces
+     * around ignored, since [since].
+     */
+    @Query(
+        "SELECT categoryId, occurredAt FROM transactions " +
+            "WHERE LOWER(TRIM(counterparty)) = LOWER(TRIM(:counterparty)) AND type = :type " +
+            "AND status = 'CONFIRMED' AND categoryId IS NOT NULL AND occurredAt >= :since",
+    )
+    suspend fun getUsesWith(counterparty: String, type: TransactionType, since: Instant): List<CategoryUse>
+
+    /** The categories chosen for the confirmed transactions of [type] at the place [placeId] since [since]. */
+    @Query(
+        "SELECT categoryId, occurredAt FROM transactions WHERE placeId = :placeId AND type = :type " +
+            "AND status = 'CONFIRMED' AND categoryId IS NOT NULL AND occurredAt >= :since",
+    )
+    suspend fun getUsesAt(placeId: Long, type: TransactionType, since: Instant): List<CategoryUse>
+
     /** Every category, hidden ones too. */
     @Query("SELECT * FROM categories")
     fun observeAll(): Flow<List<CategoryEntity>>

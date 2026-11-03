@@ -3,9 +3,7 @@ package com.cauri.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cauri.core.data.model.Category
-import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.PendingOperation
-import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.ConfirmationRepository
 import com.cauri.core.data.repository.TransactionRepository
@@ -16,7 +14,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -136,24 +133,10 @@ internal class ConfirmationViewModel @Inject constructor(
 
     fun onUndoShown() = state.update { it.copy(answered = null) }
 
-    // The categories suggested for the account and the hour; the one the operation has, a shop's default, first.
-    private suspend fun suggestions(operation: PendingOperation): List<Category> {
-        val suggested = when (operation.type) {
-            PendingType.EXPENSE -> categories.suggested(
-                accountId = operation.accountId,
-                type = EntryType.EXPENSE,
-                limit = SUGGESTIONS,
-            )
-            PendingType.INCOME -> categories.suggested(
-                accountId = operation.accountId,
-                type = EntryType.INCOME,
-                limit = SUGGESTIONS,
-            )
-            PendingType.TRANSFER -> return emptyList()
-        }
-        val own = operation.categoryId?.let { id -> categories.categories.first().firstOrNull { it.id == id } }
-        return (listOfNotNull(own) + suggested).distinctBy { it.id }.take(SUGGESTIONS)
-    }
+    // What the merchant or the place led to before, then the one the operation has, a shop's default, then the
+    // categories used on the account at this hour.
+    private suspend fun suggestions(operation: PendingOperation): List<Category> =
+        categories.predicted(operation = operation, limit = SUGGESTIONS)
 
     // The card leaves at once; the list follows once the answer is saved.
     private fun answer(transactionId: Long, confirmed: Boolean) = state.update { current ->

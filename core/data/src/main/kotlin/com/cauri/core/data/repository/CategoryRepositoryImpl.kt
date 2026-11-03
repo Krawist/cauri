@@ -8,6 +8,9 @@ import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.NewCategory
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.service.CategoryPredictionService
 import com.cauri.core.data.service.CategorySuggestionService
 import java.time.Clock
 import javax.inject.Inject
@@ -21,6 +24,7 @@ import kotlinx.coroutines.flow.map
 internal class CategoryRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
     private val suggestions: CategorySuggestionService,
+    private val predictions: CategoryPredictionService,
     private val clock: Clock,
 ) : CategoryRepository {
     override val categories: Flow<List<Category>> = categoryDao.observeActive().map { categories ->
@@ -51,4 +55,34 @@ internal class CategoryRepositoryImpl @Inject constructor(
             limit = limit,
         )
     }
+
+    override suspend fun predicted(operation: PendingOperation, limit: Int): List<Category> {
+        val type = when (operation.type) {
+            PendingType.EXPENSE -> EntryType.EXPENSE
+            PendingType.INCOME -> EntryType.INCOME
+            PendingType.TRANSFER -> return emptyList()
+        }
+        val now = clock.instant()
+        val since = now - CategoryPredictionService.HISTORY
+        val transactionType = type.toTransactionType()
+        val merchant = operation.counterparty?.takeIf { it.isNotBlank() }
+            ?.let { predictions.predict(categoryDao.getUsesWith(it, transactionType, since), now) }.orEmpty()
+        val place = operation.placeId
+            ?.let { predictions.predict(categoryDao.getUsesAt(it, transactionType, since), now) }.orEmpty()
+        val byId = categories.first().filter { it.nature == type.toNature() }.associateBy { it.id }
+        val learnt = (merchant + place + listOfNotNull(operation.categoryId)).mapNotNull { byId[it] }
+        return (learnt + suggested(accountId = operation.accountId, type = type, limit = limit))
+            .distinctBy { it.id }
+            .take(limit)
+    }
+}
+
+private fun EntryType.toTransactionType() = when (this) {
+    EntryType.EXPENSE -> TransactionType.EXPENSE
+    EntryType.INCOME -> TransactionType.INCOME
+}
+
+private fun EntryType.toNature() = when (this) {
+    EntryType.EXPENSE -> CategoryNature.EXPENSE
+    EntryType.INCOME -> CategoryNature.INCOME
 }

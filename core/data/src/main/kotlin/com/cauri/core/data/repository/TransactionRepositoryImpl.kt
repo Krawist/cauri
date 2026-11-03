@@ -336,6 +336,7 @@ private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: 
     occurredAt = occurredAt,
     categoryId = categoryId,
     proposedAmount = proposedAmount.takeIf { amount == 0L },
+    placeId = placeId,
 )
 
 private fun TransactionType.toPendingType() = when (this) {

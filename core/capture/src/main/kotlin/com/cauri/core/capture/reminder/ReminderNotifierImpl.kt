@@ -13,7 +13,6 @@ import androidx.core.app.RemoteInput
 import androidx.core.content.ContextCompat
 import com.cauri.core.capture.R
 import com.cauri.core.data.model.Category
-import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.design.R as DesignR
@@ -110,8 +109,7 @@ internal class ReminderNotifierImpl @Inject constructor(
             name?.let { context.getString(R.string.reminder_payment_title, amount, it) }
                 ?: context.getString(R.string.reminder_payment_title_alone, amount),
         ).setContentText(context.getString(R.string.reminder_payment_text, operation.accountName))
-        val likely: List<Category> =
-            categories.suggested(accountId = operation.accountId, type = EntryType.EXPENSE, limit = CATEGORIES)
+        val likely: List<Category> = categories.predicted(operation = operation, limit = CATEGORIES)
         likely.forEachIndexed { index, category ->
             builder.addAction(
                 0,

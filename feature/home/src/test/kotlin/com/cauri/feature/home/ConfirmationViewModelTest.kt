@@ -58,6 +58,24 @@ internal class ConfirmationViewModelTest {
     }
 
     @Nested
+    inner class Predictions {
+        @Test
+        fun `should propose first what the merchant led to before`() {
+            // given
+            categories.predictions["BOULANGERIE"] = listOf(snacks())
+
+            // when
+            transactions.pending.value = listOf(payment(amount = 5_000))
+
+            // then
+            viewModel.uiState.value.cards.single().let { card ->
+                card.suggested.map { it.id } to card.categoryId
+            } shouldBe
+                (listOf(11L, 10L) to 11L)
+        }
+    }
+
+    @Nested
     inner class OnConfirm {
         @Test
         fun `should confirm the card with the category chosen, next to the proposal`() {
