@@ -175,13 +175,15 @@ private fun kindLabel(operation: PendingOperation) = when {
     else -> R.string.home_card_kind_transfer
 }
 
-// « 5 000 F », or the amount in its own currency for a payment abroad, until the user types what it cost.
+// « 5 000 F », fees included, or the amount in its own currency for a payment abroad, until the user types what it
+// cost.
 @Composable
 private fun amount(card: ConfirmationCard): String {
     val foreign = card.operation.foreignAmount
     val currency = card.operation.foreignCurrency
     if (card.amount > 0 || foreign == null || currency == null) {
-        return stringResource(R.string.home_amount, formatFcfa(card.amount))
+        // What left the account: the fees of its message included.
+        return stringResource(R.string.home_amount, formatFcfa(card.amount + card.operation.fees))
     }
     val digits = Currency.getInstance(currency).defaultFractionDigits.coerceAtLeast(0)
     val format = NumberFormat.getNumberInstance(LocalConfiguration.current.locales[0]).apply {

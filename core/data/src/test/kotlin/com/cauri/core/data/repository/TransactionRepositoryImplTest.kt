@@ -438,6 +438,7 @@ internal class TransactionRepositoryImplTest {
                     accountId = momoId,
                     type = PendingType.EXPENSE,
                     amount = 2_500,
+                    fees = 50,
                     foreignAmount = null,
                     foreignCurrency = null,
                     accountName = "MTN MoMo",

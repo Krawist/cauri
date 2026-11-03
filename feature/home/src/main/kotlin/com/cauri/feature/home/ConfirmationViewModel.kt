@@ -84,11 +84,17 @@ internal class ConfirmationViewModel @Inject constructor(
     /** Opens the field of the amount of the card [transactionId], or closes it with `null`. */
     fun onEditAmount(transactionId: Long?) = state.update { it.copy(editingAmount = transactionId) }
 
-    /** Keeps [amount], in FCFA, for the card being edited. */
-    fun onAmount(amount: Long) {
+    /**
+     * Keeps [total], in FCFA, for the card being edited: the card shows its fees in it, the operation keeps the rest. A
+     * total not above the fees is refused.
+     */
+    fun onAmount(total: Long) {
         val transactionId = state.value.editingAmount ?: return
-        updateCard(transactionId) { it.copy(amount = amount) }
-        state.update { it.copy(editingAmount = null) }
+        val fees = card(transactionId)?.operation?.fees ?: 0
+        if (total > fees) {
+            updateCard(transactionId) { it.copy(amount = total - fees) }
+            state.update { it.copy(editingAmount = null) }
+        }
     }
 
     /** Undoes the last answer: the card waits again, as read in its message. */

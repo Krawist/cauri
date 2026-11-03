@@ -47,9 +47,17 @@ internal class TransactionRepositoryImpl @Inject constructor(
         accountDao.observeAll(),
     ) { detected, accounts ->
         val byId = accounts.associateBy { it.id }
-        // A fee or the Cash side of a withdrawal has no signal of its own: it rides with the operation read.
+        // A fee or the Cash side of a withdrawal has no signal of its own: it rides with the operation read. A fee is
+        // on its account and at its time.
         val (transfers, others) = detected.partition { it.transferGroup != null }
-        val single = others.filter { it.rawSignalId != null }.map { it.toPending(byId, to = null) }
+        val fees = others.filter { it.rawSignalId == null && it.type == TransactionType.EXPENSE }
+            .groupBy({ it.accountId to it.occurredAt }, { it.amount })
+            .mapValues { (_, amounts) -> amounts.sum() }
+        fun feesOf(vararg sides: TransactionEntity?) =
+            sides.filterNotNull().sumOf { fees[it.accountId to it.occurredAt] ?: 0 }
+        val single = others.filter { it.rawSignalId != null }.map {
+            it.toPending(byId, to = null, fees = if (it.type == TransactionType.EXPENSE) feesOf(it) else 0)
+        }
         val paired = transfers.groupBy { it.transferGroup }.values.mapNotNull { sides ->
             val out = sides.firstOrNull { it.type == TransactionType.TRANSFER_OUT }
             val into = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN }
@@ -57,7 +65,8 @@ internal class TransactionRepositoryImpl @Inject constructor(
             out?.takeIf { read.isNotEmpty() }?.let { side ->
                 // One message names the agent of a withdrawal or a deposit; two messages, a transfer between the user's
                 // accounts, name only the other account, already shown.
-                side.copy(counterparty = read.singleOrNull()?.counterparty).toPending(byId, to = into?.accountId)
+                side.copy(counterparty = read.singleOrNull()?.counterparty)
+                    .toPending(byId, to = into?.accountId, fees = feesOf(out, into))
             }
         }
         (single + paired).sortedByDescending { it.occurredAt }
@@ -291,12 +300,13 @@ internal class TransactionRepositoryImpl @Inject constructor(
     override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }
 
-// The card of [this], an operation read in a message, with the names and kinds of its accounts.
-private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: Long?) = PendingOperation(
+// The card of [this], an operation read in a message, with the names and kinds of its accounts and its [fees].
+private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: Long?, fees: Long) = PendingOperation(
     transactionId = id,
     accountId = accountId,
     type = type.toPendingType(),
     amount = amount,
+    fees = fees,
     foreignAmount = foreignAmount,
     foreignCurrency = foreignCurrency,
     accountName = accounts.getValue(accountId).name,

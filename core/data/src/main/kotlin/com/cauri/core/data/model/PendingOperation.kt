@@ -9,7 +9,10 @@ import java.time.Instant
  * @property transactionId Transaction read in the message; for a transfer, its outgoing side.
  * @property accountId Account the money left, or arrived on for an income.
  * @property type Expense, income or transfer.
- * @property amount Amount in minor units of the account's currency; 0 for an operation in another currency.
+ * @property amount Amount in minor units of the account's currency, without [fees]; 0 for an operation in another
+ *   currency.
+ * @property fees Fees its message gave, or an operator kept on a transfer, in the same unit: separate expenses, shown
+ *   with the operation; 0 for none.
  * @property foreignAmount Amount in minor units of [foreignCurrency] for an operation in another currency; `null`
  *   otherwise.
  * @property foreignCurrency ISO 4217 code of [foreignAmount]; `null` when the operation was in the account's currency.
@@ -26,6 +29,7 @@ data class PendingOperation(
     val accountId: Long,
     val type: PendingType,
     val amount: Long,
+    val fees: Long,
     val foreignAmount: Long?,
     val foreignCurrency: String?,
     val accountName: String,

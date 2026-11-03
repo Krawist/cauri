@@ -104,6 +104,20 @@ internal class ConfirmationViewModelTest {
             // then
             confirmations.confirmed.single().amount shouldBe 6_500L
         }
+
+        @Test
+        fun `should keep the typed total without the fees the card shows in it`() {
+            // given
+            transactions.pending.value = listOf(payment(amount = 5_000).copy(fees = 100))
+            viewModel.onEditAmount(7)
+            viewModel.onAmount(6_100)
+
+            // when
+            viewModel.onConfirm(7)
+
+            // then
+            confirmations.confirmed.single().amount shouldBe 6_000L
+        }
     }
 
     @Nested
@@ -143,6 +157,7 @@ internal class ConfirmationViewModelTest {
         accountId = 2,
         type = PendingType.EXPENSE,
         amount = amount,
+        fees = 0,
         foreignAmount = null,
         foreignCurrency = null,
         accountName = "Orange Money",

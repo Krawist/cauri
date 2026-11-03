@@ -105,7 +105,8 @@ internal fun PendingSection(onEdit: (Long) -> Unit, viewModel: ConfirmationViewM
     }
     state.cards.firstOrNull { it.operation.transactionId == state.editingAmount }?.let { card ->
         AmountDialog(
-            amount = card.amount,
+            // The total the card shows, fees included.
+            amount = card.amount.takeIf { it > 0 }?.let { it + card.operation.fees } ?: 0,
             onAmount = viewModel::onAmount,
             onDismiss = { viewModel.onEditAmount(null) },
         )
