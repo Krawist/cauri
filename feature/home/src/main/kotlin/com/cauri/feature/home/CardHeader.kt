@@ -24,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.AccountKind
@@ -105,8 +104,7 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
     }
 }
 
-// « − 1 500 F » in coral, « + 25 000 F » in green, a transfer without sign; underlined with dots, as in the mockup: a
-// tap types another amount.
+// « − 1 500 F » in coral, « + 25 000 F » in green, a transfer without sign; a tap types another amount.
 @Composable
 private fun Amount(card: ConfirmationCard, tint: Color, onEditAmount: () -> Unit) {
     val amount = amount(card)
@@ -116,10 +114,7 @@ private fun Amount(card: ConfirmationCard, tint: Color, onEditAmount: () -> Unit
             PendingType.INCOME -> stringResource(R.string.home_sign_in, amount)
             PendingType.TRANSFER -> amount
         },
-        style = MaterialTheme.typography.titleMedium.copy(
-            fontWeight = FontWeight.SemiBold,
-            textDecoration = TextDecoration.Underline,
-        ),
+        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
         color = tint,
         maxLines = 1,
         modifier = Modifier.clickable(
