@@ -11,7 +11,9 @@ import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeConfirmationRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
+import com.cauri.core.data.repository.FakeTransferRepository
 import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -32,6 +34,7 @@ internal class EditViewModelTest {
     private val categories = FakeCategoryRepository()
     private val transactions = FakeTransactionRepository()
     private val confirmations = FakeConfirmationRepository()
+    private val transfers = FakeTransferRepository()
     private lateinit var viewModel: EditViewModel
 
     @BeforeEach
@@ -39,7 +42,7 @@ internal class EditViewModelTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         categories.categories.value = listOf(food(), family())
         categories.suggestions[EntryType.EXPENSE] = listOf(food())
-        viewModel = EditViewModel(accounts, categories, transactions, confirmations)
+        viewModel = EditViewModel(accounts, categories, transactions, confirmations, transfers)
     }
 
     @AfterEach
@@ -189,6 +192,50 @@ internal class EditViewModelTest {
         }
     }
 
+    @Nested
+    inner class OnSeparate {
+        @Test
+        fun `should undo the merge with the entry typed`() {
+            // given
+            transactions.editable[7] = payment().copy(mergeId = 3)
+            viewModel.onOpen(7)
+
+            // when
+            viewModel.onSeparate()
+
+            // then
+            transactions.undoneMerges shouldContainExactly listOf(3L)
+            viewModel.uiState.value.closed.shouldBeTrue()
+        }
+
+        @Test
+        fun `should undo the link of two messages into a transfer`() {
+            // given
+            transactions.editable[7] = payment().copy(type = PendingType.TRANSFER, transferLinkId = 4)
+            viewModel.onOpen(7)
+
+            // when
+            viewModel.onSeparate()
+
+            // then
+            transfers.unlinked shouldContainExactly listOf(4L)
+        }
+
+        @Test
+        fun `should do nothing for an operation Cauri did not join`() {
+            // given
+            transactions.editable[7] = payment()
+            viewModel.onOpen(7)
+
+            // when
+            viewModel.onSeparate()
+
+            // then
+            transactions.undoneMerges.shouldBeEmpty()
+            viewModel.uiState.value.closed.shouldBeFalse()
+        }
+    }
+
     private fun payment() = EditableTransaction(
         transactionId = 7,
         type = PendingType.EXPENSE,
@@ -204,6 +251,8 @@ internal class EditViewModelTest {
         occurredAt = Instant.ofEpochSecond(1_000),
         read = true,
         pending = true,
+        mergeId = null,
+        transferLinkId = null,
     )
 
     private fun food() = Category(id = 10, name = "Alimentation", nature = CategoryNature.EXPENSE)

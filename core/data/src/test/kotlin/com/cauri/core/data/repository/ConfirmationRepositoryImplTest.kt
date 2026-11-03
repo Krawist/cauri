@@ -44,6 +44,7 @@ internal class ConfirmationRepositoryImplTest {
         transactions = TransactionRepositoryImpl(
             database.transactionDao(),
             database.transactionMergeDao(),
+            database.transferLinkDao(),
             database.accountDao(),
             DuplicateServiceImpl(),
             CLOCK,

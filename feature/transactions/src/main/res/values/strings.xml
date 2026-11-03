@@ -55,6 +55,8 @@
     <string name="transactions_edit_confirm">Valider</string>
     <string name="transactions_edit_date">Date</string>
     <string name="transactions_edit_ignore">Ignorer</string>
+    <string name="transactions_edit_linked">Deux messages liés en un transfert entre tes comptes</string>
+    <string name="transactions_edit_merged">Fusionné avec une opération que tu as saisie</string>
     <string name="transactions_edit_next">Suivant</string>
     <string name="transactions_edit_note">Note</string>
     <string name="transactions_edit_note_hint">Ajouter une note</string>
@@ -67,6 +69,7 @@
     <string name="transactions_edit_read">Lu dans un message</string>
     <string name="transactions_edit_rest">Reste dans %1$s : %2$s F</string>
     <string name="transactions_edit_rest_none">Reste sans catégorie : %1$s F</string>
+    <string name="transactions_edit_separate">Séparer</string>
     <string name="transactions_edit_split">Répartir sur plusieurs catégories</string>
     <string name="transactions_foreign_amount" translatable="false">%1$s %2$s</string>
     <string name="transactions_from">De</string>

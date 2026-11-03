@@ -42,6 +42,7 @@ import com.cauri.feature.transactions.edit.EditDetails
 import com.cauri.feature.transactions.edit.EditHeader
 import com.cauri.feature.transactions.edit.EditUiState
 import com.cauri.feature.transactions.edit.EditViewModel
+import com.cauri.feature.transactions.edit.Separate
 import com.cauri.feature.transactions.edit.SplitParts
 
 private val ButtonHeight = 56.dp
@@ -49,8 +50,8 @@ private const val CONFIRM_WEIGHT = 1.4f
 
 /**
  * Edit sheet of the transaction [transactionId], opened by a tap on a card to confirm: amount, category (« Proposée par
- * Cauri »), account, date, note and the split across several categories; « Rien dépensé » and « Valider » at the
- * bottom. Back or a swipe down closes it through [onDismiss] without answering.
+ * Cauri »), account, date, note and the split across several categories, « Séparer » for what Cauri joined; « Rien
+ * dépensé » and « Valider » at the bottom. Back or a swipe down closes it through [onDismiss] without answering.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,6 +99,7 @@ private fun EditContent(state: EditUiState, actions: EditActions) {
         EditCategories(state = state, actions = actions)
         EditDetails(state = state, actions = actions)
         SplitParts(state = state, actions = actions)
+        Separate(state = state, actions = actions)
         Answers(state = state, actions = actions)
     }
 }

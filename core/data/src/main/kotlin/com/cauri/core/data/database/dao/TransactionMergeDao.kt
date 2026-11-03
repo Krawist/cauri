@@ -51,16 +51,22 @@ internal interface TransactionMergeDao {
         return insertMerge(merge.copy(mergedId = entryId))
     }
 
-    /** Undoes [merge]: the kept transaction gets its values back and the manual entry counts again. */
+    /**
+     * Undoes [merge]: the kept transaction gets its values back, the amount read in its message and no parts when the
+     * user split it since, and the manual entry counts again.
+     */
     @Transaction
     suspend fun undoMerge(merge: TransactionMergeEntity, undoneAt: Instant) {
         getTransaction(merge.keptId)?.let {
+            it.splitGroup?.let { group -> deleteParts(splitGroup = group, keptId = it.id) }
             updateTransaction(
                 it.copy(
                     status = merge.keptStatus,
+                    amount = it.proposedAmount ?: it.amount,
                     categoryId = merge.keptCategoryId,
                     note = merge.keptNote,
                     placeId = merge.keptPlaceId,
+                    splitGroup = null,
                 ),
             )
         }
@@ -70,6 +76,14 @@ internal interface TransactionMergeDao {
 
     @Query("SELECT * FROM transaction_merges WHERE id = :id")
     suspend fun getMerge(id: Long): TransactionMergeEntity?
+
+    /** The merge that holds on the kept transaction [keptId]; `null` when none does. */
+    @Query("SELECT id FROM transaction_merges WHERE keptId = :keptId AND undoneAt IS NULL")
+    suspend fun getHeldMergeId(keptId: Long): Long?
+
+    /** Deletes the parts of the split [splitGroup], all but the transaction [keptId] that keeps the rest. */
+    @Query("DELETE FROM transactions WHERE splitGroup = :splitGroup AND id != :keptId")
+    suspend fun deleteParts(splitGroup: String, keptId: Long)
 
     /** Inserts [transactions] and returns their generated ids in order. */
     @Insert

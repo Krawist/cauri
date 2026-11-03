@@ -40,6 +40,7 @@ internal class TransferRepositoryImplTest {
         transactions = TransactionRepositoryImpl(
             database.transactionDao(),
             database.transactionMergeDao(),
+            database.transferLinkDao(),
             database.accountDao(),
             DuplicateServiceImpl(),
             CLOCK,
@@ -142,6 +143,49 @@ internal class TransferRepositoryImplTest {
                 Triple(orangeId, TransactionType.INCOME, 99_000L),
             )
             linkedAgain shouldBe 0
+        }
+
+        @Test
+        fun `should put both sides back waiting for a confirmation, with the amounts of their messages`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(account(name = "UBA", provider = "UBA"))
+            val orangeId = database.accountDao().insert(account(name = "Orange Money", provider = "ORANGE_MONEY"))
+            detect(accountId = ubaId, type = DetectedType.EXPENSE, amount = 10_000)
+            detect(accountId = orangeId, type = DetectedType.INCOME, amount = 10_000)
+            repository.linkTransfers()
+            recorded().forEach {
+                database.transactionDao().update(it.copy(status = TransactionStatus.CONFIRMED, amount = 9_000))
+            }
+
+            // when
+            repository.unlinkTransfer(1)
+
+            // then
+            recorded().map { Triple(it.type, it.status, it.amount) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionType.EXPENSE, TransactionStatus.DETECTED, 10_000L),
+                Triple(TransactionType.INCOME, TransactionStatus.DETECTED, 10_000L),
+            )
+        }
+    }
+
+    @Nested
+    inner class GetEditable {
+        @Test
+        fun `should give the link that holds on a transfer made of two messages`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(account(name = "UBA", provider = "UBA"))
+            val orangeId = database.accountDao().insert(account(name = "Orange Money", provider = "ORANGE_MONEY"))
+            detect(accountId = ubaId, type = DetectedType.EXPENSE, amount = 10_000)
+            detect(accountId = orangeId, type = DetectedType.INCOME, amount = 10_000)
+            repository.linkTransfers()
+            val pending = transactions.pending.first().single()
+
+            // when
+            val editable = transactions.getEditable(pending.transactionId)
+
+            // then
+            editable.shouldNotBeNull()
+            listOf(editable.transferLinkId, editable.mergeId) shouldBe listOf(1L, null)
         }
     }
 

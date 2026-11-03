@@ -57,6 +57,7 @@ internal class TransactionRepositoryImplTest {
         repository = TransactionRepositoryImpl(
             database.transactionDao(),
             database.transactionMergeDao(),
+            database.transferLinkDao(),
             database.accountDao(),
             DuplicateServiceImpl(),
             CLOCK,
@@ -408,6 +409,42 @@ internal class TransactionRepositoryImplTest {
         }
 
         @Test
+        fun `should give the merge that holds on an operation joined with an entry typed`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+
+            // when
+            val editable = repository.getEditable(recorded.transactionId)
+
+            // then
+            editable.shouldNotBeNull()
+            listOf(editable.mergeId, editable.transferLinkId) shouldBe listOf(recorded.mergeId, null)
+        }
+
+        @Test
+        fun `should give no merge once it is undone`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+            repository.undoMerge(recorded.mergeId.shouldNotBeNull())
+
+            // when
+            val editable = repository.getEditable(recorded.transactionId)
+
+            // then
+            editable.shouldNotBeNull().mergeId.shouldBeNull()
+        }
+
+        @Test
         fun `should give nothing for a transaction that does not exist`() = runTest {
             // when
             val editable = repository.getEditable(42)
@@ -622,6 +659,31 @@ internal class TransactionRepositoryImplTest {
             )
             database.transactionMergeDao().getMerge(recorded.mergeId.shouldNotBeNull())?.undoneAt shouldBe
                 CLOCK.instant()
+        }
+
+        @Test
+        fun `should give back the amount read and drop the parts split since`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+            val kept = database.transactionDao().getById(recorded.transactionId).shouldNotBeNull()
+            database.transactionDao().update(kept.copy(amount = 1_500, splitGroup = "split"))
+            database.transactionDao().insert(
+                kept.copy(id = 0, amount = 1_000, rawSignalId = null, proposedAmount = null, splitGroup = "split"),
+            )
+
+            // when
+            repository.undoMerge(recorded.mergeId.shouldNotBeNull())
+
+            // then
+            recorded().map { Triple(it.origin, it.amount, it.splitGroup) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionOrigin.SIGNAL, 2_500L, null),
+                Triple(TransactionOrigin.MANUAL, 2_500L, null),
+            )
         }
     }
 

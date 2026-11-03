@@ -22,6 +22,10 @@ import java.time.Instant
  * @property occurredAt When the money moved.
  * @property read Whether Cauri read it in a message: the message then proves its account, which cannot be changed.
  * @property pending Whether it still waits for the user's confirmation.
+ * @property mergeId Merge that joined it with an entry the user typed, to undo with « Séparer »; `null` when none
+ *   holds.
+ * @property transferLinkId Link that made it a transfer out of two messages, to undo with « Séparer »; `null` when
+ *   none holds.
  */
 data class EditableTransaction(
     val transactionId: Long,
@@ -38,4 +42,6 @@ data class EditableTransaction(
     val occurredAt: Instant,
     val read: Boolean,
     val pending: Boolean,
+    val mergeId: Long?,
+    val transferLinkId: Long?,
 )

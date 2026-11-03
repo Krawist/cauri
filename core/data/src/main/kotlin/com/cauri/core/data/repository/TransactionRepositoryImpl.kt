@@ -3,6 +3,7 @@ package com.cauri.core.data.repository
 import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
+import com.cauri.core.data.database.dao.TransferLinkDao
 import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
@@ -38,6 +39,7 @@ import kotlinx.coroutines.flow.combine
 internal class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
     private val mergeDao: TransactionMergeDao,
+    private val transferLinkDao: TransferLinkDao,
     accountDao: AccountDao,
     private val duplicates: DuplicateService,
     private val clock: Clock,
@@ -96,6 +98,8 @@ internal class TransactionRepositoryImpl @Inject constructor(
             // A side of a withdrawal or a deposit has no signal of its own: the message is on the other side.
             read = sides.any { it.rawSignalId != null },
             pending = transaction.status == TransactionStatus.DETECTED,
+            mergeId = mergeDao.getHeldMergeId(transaction.id),
+            transferLinkId = transferLinkDao.getHeldLinkId(sides.map { it.id }),
         )
     }
 

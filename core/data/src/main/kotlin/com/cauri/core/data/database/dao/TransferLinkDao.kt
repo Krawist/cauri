@@ -6,11 +6,14 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.cauri.core.data.database.entity.TransactionEntity
+import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.entity.TransferLinkEntity
 import java.time.Instant
 
 /** The transfers between the user's accounts that Cauri links, each write all or none. */
+// One function per statement of these writes, and the reads of the edit sheet.
+@Suppress("TooManyFunctions")
 @Dao
 internal interface TransferLinkDao {
     /**
@@ -38,16 +41,17 @@ internal interface TransferLinkDao {
         insertLink(link.copy(feeId = feeId))
     }
 
-    /** Undoes [link]: the debit and the credit count apart again, with their amounts, and the fee goes. */
+    /**
+     * Undoes [link]: the debit and the credit count apart again with the amounts of their messages, waiting for the
+     * user's confirmation as before the link, and the fee goes.
+     */
     @Transaction
     suspend fun unlink(link: TransferLinkEntity, undoneAt: Instant) {
         getTransaction(link.debitId)?.let {
-            updateTransaction(
-                it.copy(type = TransactionType.EXPENSE, amount = link.debitAmount, transferGroup = null),
-            )
+            updateTransaction(it.apart(type = TransactionType.EXPENSE, amount = link.debitAmount))
         }
         getTransaction(link.creditId)?.let {
-            updateTransaction(it.copy(type = TransactionType.INCOME, transferGroup = null))
+            updateTransaction(it.apart(type = TransactionType.INCOME, amount = it.proposedAmount ?: it.amount))
         }
         link.feeId?.let { deleteTransaction(it) }
         updateLink(link.copy(undoneAt = undoneAt))
@@ -55,6 +59,10 @@ internal interface TransferLinkDao {
 
     @Query("SELECT * FROM transfer_links WHERE id = :id")
     suspend fun getLink(id: Long): TransferLinkEntity?
+
+    /** The link that holds on one of the transactions [ids]; `null` when none does. */
+    @Query("SELECT id FROM transfer_links WHERE (debitId IN (:ids) OR creditId IN (:ids)) AND undoneAt IS NULL")
+    suspend fun getHeldLinkId(ids: List<Long>): Long?
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransaction(id: Long): TransactionEntity?
@@ -75,3 +83,7 @@ internal interface TransferLinkDao {
     @Update
     suspend fun updateLink(link: TransferLinkEntity)
 }
+
+// A side of an undone link, an operation of its own again.
+private fun TransactionEntity.apart(type: TransactionType, amount: Long) =
+    copy(type = type, status = TransactionStatus.DETECTED, amount = amount, transferGroup = null)

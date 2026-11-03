@@ -12,6 +12,7 @@ import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.ConfirmationRepository
 import com.cauri.core.data.repository.TransactionRepository
+import com.cauri.core.data.repository.TransferRepository
 import com.cauri.feature.transactions.entry.QuickEntryViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Instant
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Edit sheet of a transaction: its amount, category (Cauri's proposal first), account, time and note, and the parts
- * split to other categories. « Valider » confirms it as edited, « Rien dépensé » sets it aside.
+ * split to other categories. « Valider » confirms it as edited, « Rien dépensé » sets it aside, « Séparer » undoes the
+ * merge or the link Cauri made.
  */
 // One function per gesture of the sheet.
 @Suppress("TooManyFunctions")
@@ -35,6 +37,7 @@ internal class EditViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository,
     private val transactions: TransactionRepository,
     private val confirmations: ConfirmationRepository,
+    private val transfers: TransferRepository,
 ) : ViewModel(),
     EditActions {
     private val state = MutableStateFlow(EditUiState())
@@ -151,6 +154,18 @@ internal class EditViewModel @Inject constructor(
         change { it.copy(closed = true) }
         viewModelScope.launch {
             confirmations.dismiss(transactionId = transaction.transactionId, type = transaction.type)
+        }
+    }
+
+    override fun onSeparate() {
+        val transaction = state.value.transaction ?: return
+        val mergeId = transaction.mergeId
+        val linkId = transaction.transferLinkId
+        if (mergeId == null && linkId == null) return
+        change { it.copy(closed = true) }
+        viewModelScope.launch {
+            if (mergeId != null) transactions.undoMerge(mergeId)
+            if (linkId != null) transfers.unlinkTransfer(linkId)
         }
     }
 

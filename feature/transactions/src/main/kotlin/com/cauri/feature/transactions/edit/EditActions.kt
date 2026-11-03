@@ -41,4 +41,7 @@ internal interface EditActions {
 
     /** Sets the transaction aside: « Rien dépensé » or « Ignorer ». */
     fun onDismiss()
+
+    /** Undoes the merge with an entry typed, or the link of two messages into a transfer: « Séparer ». */
+    fun onSeparate()
 }

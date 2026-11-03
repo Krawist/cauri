@@ -415,6 +415,15 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   threshold of a swipe. Checked on the Galaxy S23 in light mode: a card confirmed shrinking while « Confirmé » rises,
   the tabs, the balances. « Supprimer les animations » (a system setting, left to the user) and the smoothness on an
   entry-level phone not checked. Next: CAU-54.
+- [ ] **CAU-54** — « Séparer » in the edit sheet (`Separate`, `EditViewModel.onSeparate`), shown only for what
+  Cauri joined: « Fusionné avec une opération que tu as saisie » for a merge, « Deux messages liés en un transfert entre
+  tes comptes » for a linked transfer (`EditableTransaction.mergeId` and `transferLinkId`, the merge or link that still
+  holds). A tap undoes it (`undoMerge`, `unlinkTransfer`) and closes the sheet. Both operations come back as before: an
+  undone merge gives the detected one back the amount read in its message and drops the parts split since; an undone
+  link puts the debit and the credit back « à confirmer » with the amounts of their messages, never linked again.
+  Checked on the Galaxy S23 in light mode with made-up messages: a UBA → Orange Money transfer separated from « À
+  confirmer », a payment merged with a quick entry separated from « Activité », each showing again on its own line. Dark
+  mode not tried. Next: CAU-31 (blocked by CAU-36) or CAU-32 (deferred).
 
 Update this section at the end of each ticket.
 
