@@ -3,12 +3,10 @@ package com.cauri.feature.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,34 +37,51 @@ import com.cauri.core.design.theme.CauriTheme
 
 private val PlusTileWidth = 52.dp
 private val TileGap = CauriSpacing.s
+private val TileHeight = 56.dp
 
-// Three habits fill the row, as in the mockup; more scroll sideways.
-private const val VISIBLE_HABITS = 3
+// Three habits a line, as in the mockup; two lines at most, the others scroll inside them.
+private const val HABITS_PER_LINE = 3
+private const val VISIBLE_LINES = 2
 
 /**
- * Row of one-tap cash expenses: a tap records one, a long-press opens it in the habit sheet. « + » at the end opens
- * the sheet of a new habit. Without habits, a tile across the row invites to add the first one.
+ * One-tap cash expenses, three a line on two lines at most, more scrolling inside them: a tap records one, a
+ * long-press opens it in the habit sheet. « + », at the right and always in reach, opens the sheet of a new habit.
+ * Without habits, a tile across the row invites to add the first one.
  */
 @Composable
 internal fun HabitsRow(habits: List<Habit>, actions: HabitActions) {
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val tileWidth = (maxWidth - PlusTileWidth - TileGap * VISIBLE_HABITS) / VISIBLE_HABITS
-        val addTileWidth = maxWidth
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()).height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(TileGap),
+    if (habits.isEmpty()) {
+        AddHabitTile(onClick = { actions.onEditHabit(null) }, modifier = Modifier.fillMaxWidth().height(TileHeight))
+        return
+    }
+    val lines = habits.chunked(HABITS_PER_LINE)
+    val visible = minOf(lines.size, VISIBLE_LINES)
+    Row(horizontalArrangement = Arrangement.spacedBy(TileGap)) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .height(TileHeight * visible + TileGap * (visible - 1))
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(TileGap),
         ) {
-            if (habits.isEmpty()) {
-                AddHabitTile(
-                    onClick = { actions.onEditHabit(null) },
-                    modifier = Modifier.width(addTileWidth),
-                )
+            lines.forEach { line ->
+                Row(horizontalArrangement = Arrangement.spacedBy(TileGap)) {
+                    line.forEach { habit ->
+                        HabitTile(
+                            habit = habit,
+                            actions = actions,
+                            modifier = Modifier.weight(1f).height(TileHeight),
+                        )
+                    }
+                    // A short last line keeps the width of the others.
+                    repeat(HABITS_PER_LINE - line.size) { Spacer(Modifier.weight(1f)) }
+                }
             }
-            habits.forEach { habit ->
-                HabitTile(habit = habit, actions = actions, modifier = Modifier.width(tileWidth))
-            }
-            if (habits.isNotEmpty()) PlusTile(onClick = { actions.onEditHabit(null) })
         }
+        PlusTile(
+            onClick = { actions.onEditHabit(null) },
+            modifier = Modifier.height(TileHeight * visible + TileGap * (visible - 1)),
+        )
     }
 }
 
@@ -127,11 +143,11 @@ private fun AddHabitTile(onClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun PlusTile(onClick: () -> Unit) {
+private fun PlusTile(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val description = stringResource(R.string.home_habit_add)
     GlassSurface(
         shape = RoundedCornerShape(CauriRadius.control),
-        modifier = Modifier.width(PlusTileWidth).fillMaxHeight(),
+        modifier = modifier.width(PlusTileWidth),
         interaction = Modifier.clickable(onClickLabel = description, role = Role.Button, onClick = onClick),
     ) {
         Icon(
