@@ -24,7 +24,6 @@
     <string name="home_foreign_amount" translatable="false">%1$s %2$s</string>
     <string name="home_greeting">Bonjour, %1$s</string>
     <string name="home_habit_add">Ajouter une habitude</string>
-    <string name="home_habit_add_hint">Une dépense cash en un tap</string>
     <string name="home_habit_amount">Montant</string>
     <string name="home_habit_amount_hint">500</string>
     <string name="home_habit_category">Catégorie</string>

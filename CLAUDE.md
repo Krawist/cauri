@@ -183,13 +183,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   is confirmed. The cash balance goes up by the amount withdrawn (tested). Nothing creates withdrawals yet: parsing
   comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30).
 - [ ] **CAU-14** — habits (`HabitEntity`, `HabitRepository`, database v2 by auto-migration): glass tiles on Accueil,
-  three a line on two lines at most, more scrolling inside them, « + » fixed at the right; a tap records a confirmed
-  cash expense (named after the habit, in its category) with « Annuler » for 4 s; a long-press opens the habit sheet
-  (name, amount, category, delete), which leads to « Mes habitudes », reordered by dragging the handles. The first
-  habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « + » at the end of the row opens the sheet
-  of a new habit (the quick entry is the « + » of the bottom bar). `CauriTextField` moved to `:core:design`. On a phone:
-  the upgrade to v2 and the empty row (« Ajouter une habitude »), the habit sheet and « Mes habitudes », two drags in a
-  row (each line keyed, the dragged one opaque); taps and undo not checked yet.
+  three a line on two lines at most, more scrolling inside them, and « Ajouter une habitude », dashed, under them; a tap
+  records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a long-press opens
+  the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by dragging the handles.
+  The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « Ajouter une habitude » opens the
+  sheet of a new habit (the quick entry is the « + » of the bottom bar). `CauriTextField` moved to `:core:design`. On a
+  phone: the upgrade to v2 and the empty row, the habit sheet and « Mes habitudes », two drags in a row (each line
+  keyed, the dragged one opaque); taps and undo not checked yet.
 - [ ] **CAU-15** — `CashCountScreen` (`:feature:cash`): banknotes and coins with « − » and « + » (gold once counted),
   « Tout effacer », « Saisir le total directement », « Total compté », « Attendu ≈ » and the gap, updated on every
   tap. No gap or a surplus: « Valider le comptage » saves the count, `CashCountRepository.addCount` recording a surplus

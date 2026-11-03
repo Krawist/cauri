@@ -19,7 +19,6 @@
     </plurals>
     <string name="home_greeting">Hello, %1$s</string>
     <string name="home_habit_add">Add a habit</string>
-    <string name="home_habit_add_hint">A cash expense in one tap</string>
     <string name="home_habit_amount">Amount</string>
     <string name="home_habit_amount_hint">500</string>
     <string name="home_habit_category">Category</string>
