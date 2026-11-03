@@ -217,7 +217,16 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   SIM. MobileMoney (MTN MoMo) was seen there but sends no operation to that user: to confirm on a phone with an MTN
   SIM, as the banks' mail senders. Debug builds log the senders seen, never the text (`adb logcat -s CauriCapture`).
   Checked on two phones: listener bound, other notifications ignored; a kept signal and the rebind after a reboot not
-  seen yet. Next: CAU-19.
+  seen yet.
+- [ ] **CAU-19** — `:core:parsing` (pure Kotlin, JVM tests on made-up messages): `MessageTemplate` (one format of one
+  sender: identifier and version, senders by SMS or mail name or app package, kind and direction, currency, regular
+  expression with the named groups `amount`, `fees`, `balance`, `counterparty`, `reference` and `date`, decimal
+  separator, date format and language) in a versioned `TemplateCatalog` read from JSON by `TemplateCatalogReader`,
+  which refuses unusable templates. `MessageParser` reads a message with the first template of its sender that
+  matches, case and spaces ignored, amounts in minor units (`readAmount`), the date in the given zone or else the time
+  of the notification. A message no template reads, or with a value that cannot be read, gives nothing and stays a raw
+  signal to replay. The implementations are public for the app's Hilt modules; nothing uses them yet: the real
+  templates come with CAU-20, the replay and the transactions with CAU-21. Next: CAU-20.
 
 Update this section at the end of each ticket.
 

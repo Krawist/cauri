@@ -53,6 +53,7 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 sqlite-bundled-jvm = { module = "androidx.sqlite:sqlite-bundled-jvm", version.ref = "sqlite" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+javax-inject = { module = "javax.inject:javax.inject", version = "1" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
