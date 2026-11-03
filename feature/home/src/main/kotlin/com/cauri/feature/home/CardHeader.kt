@@ -33,6 +33,7 @@ import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.format.formatMoment
+import com.cauri.core.design.format.readableName
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
@@ -56,7 +57,7 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
     val kind = stringResource(kindLabel(operation))
     val title = operation.toAccountName?.let {
         stringResource(R.string.home_pending_transfer, operation.accountName, it)
-    } ?: operation.counterparty?.let(::readable) ?: kind
+    } ?: operation.counterparty?.let(::readableName) ?: kind
     Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.m), verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier.size(IconBoxSize).background(background, RoundedCornerShape(CauriRadius.icon)),
@@ -149,7 +150,7 @@ private fun Details(operation: PendingOperation, kind: String?) {
                 maxLines = 1,
             )
         }
-        val rest = listOfNotNull(kind, operation.counterparty?.takeIf { transfer }?.let(::readable))
+        val rest = listOfNotNull(kind, operation.counterparty?.takeIf { transfer }?.let(::readableName))
             .plus(formatMoment(operation.occurredAt))
             .joinToString(separator = stringResource(R.string.home_separator))
         Text(
@@ -177,13 +178,6 @@ private fun kindLabel(operation: PendingOperation) = when {
     operation.toAccountKind == AccountKind.CASH -> R.string.home_card_kind_withdrawal
     operation.accountKind == AccountKind.CASH -> R.string.home_card_kind_deposit
     else -> R.string.home_card_kind_transfer
-}
-
-// « BOUTIQUE BETA1 » as « Boutique Beta1 »: messages often shout the names; a name already in mixed case is kept.
-private fun readable(name: String) = if (name != name.uppercase()) {
-    name
-} else {
-    name.lowercase().split(' ').joinToString(separator = " ") { word -> word.replaceFirstChar(Char::titlecase) }
 }
 
 // « 5 000 F », or the amount in its own currency for a payment abroad, until the user types what it cost.

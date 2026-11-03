@@ -13,6 +13,7 @@
     <string name="home_card_amount_ok">OK</string>
     <string name="home_card_confirm">Confirm</string>
     <string name="home_card_confirmed">Confirmed</string>
+    <string name="home_card_edit">Edit</string>
     <string name="home_card_edit_amount">Edit the amount</string>
     <string name="home_card_ignore">Ignore</string>
     <string name="home_card_kind_deposit">Deposit</string>

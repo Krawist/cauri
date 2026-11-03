@@ -39,6 +39,7 @@ import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.settings.navigateToSettings
 import com.cauri.feature.settings.settingsGraph
 import com.cauri.feature.transactions.ActivityGraph
+import com.cauri.feature.transactions.EditTransactionSheet
 import com.cauri.feature.transactions.QuickEntryMergeBar
 import com.cauri.feature.transactions.QuickEntrySheet
 import com.cauri.feature.transactions.activityGraph
@@ -93,6 +94,7 @@ private fun CauriNavHost(
     // Chosen once: a new start destination would rebuild the graph under the back stack when the onboarding completes.
     val startDestination = remember { if (onboardingCompleted) HomeGraph else OnboardingGraph }
     var quickEntryOpen by rememberSaveable { mutableStateOf(false) }
+    var editedTransaction by rememberSaveable { mutableStateOf<Long?>(null) }
     // A notification opens its screen, once the onboarding is done.
     LaunchedEffect(notificationTarget) {
         if (onboardingCompleted) {
@@ -137,6 +139,7 @@ private fun CauriNavHost(
             homeGraph(
                 onCountCash = { navController.navigateToCashCount() },
                 onOpenSettings = { navController.navigateToSettings() },
+                onEditTransaction = { editedTransaction = it },
             )
             activityGraph()
             placeholderTabs()
@@ -147,6 +150,7 @@ private fun CauriNavHost(
     if (quickEntryOpen) {
         QuickEntrySheet(onDismiss = { quickEntryOpen = false })
     }
+    editedTransaction?.let { EditTransactionSheet(transactionId = it, onDismiss = { editedTransaction = null }) }
 }
 
 // Where a bar floats over the screens: above the bottom bar, inside the screen's margins.

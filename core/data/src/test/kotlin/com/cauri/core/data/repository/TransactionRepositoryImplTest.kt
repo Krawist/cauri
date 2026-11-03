@@ -345,6 +345,37 @@ internal class TransactionRepositoryImplTest {
     }
 
     @Nested
+    inner class GetEditable {
+        @Test
+        fun `should give a withdrawal from its account to Cash, as read in its message`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.WITHDRAWAL, fee = null),
+            )
+            val pending = repository.pending.first().single()
+
+            // when
+            val editable = repository.getEditable(pending.transactionId)
+
+            // then
+            editable.shouldNotBeNull()
+            listOf(editable.type, editable.accountId, editable.toAccountId, editable.read, editable.pending) shouldBe
+                listOf(PendingType.TRANSFER, momoId, CASH_ACCOUNT_ID, true, true)
+        }
+
+        @Test
+        fun `should give nothing for a transaction that does not exist`() = runTest {
+            // when
+            val editable = repository.getEditable(42)
+
+            // then
+            editable.shouldBeNull()
+        }
+    }
+
+    @Nested
     inner class Pending {
         @Test
         fun `should list an operation read in a message, its fee riding with it`() = runTest {

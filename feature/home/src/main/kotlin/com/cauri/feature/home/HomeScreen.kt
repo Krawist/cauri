@@ -62,6 +62,7 @@ private val UndoBarBottom = 100.dp
 internal fun HomeScreen(
     onCountCash: () -> Unit,
     onOpenSettings: () -> Unit,
+    onEditTransaction: (Long) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -74,7 +75,7 @@ internal fun HomeScreen(
             CaptureHealth(onCheck = onOpenSettings)
             AccountProposal()
         },
-        pending = { PendingSection() },
+        pending = { PendingSection(onEdit = onEditTransaction) },
     )
     state.editing?.let { draft ->
         HabitSheet(

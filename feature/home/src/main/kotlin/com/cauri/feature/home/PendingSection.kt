@@ -3,6 +3,7 @@ package com.cauri.feature.home
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -68,11 +69,11 @@ private const val MAX_AMOUNT_DIGITS = 8
 
 /**
  * « À confirmer » and its count, then one card per operation Cauri read in a message, newest first, pre-filled with its
- * proposal. ✓ or a swipe right confirms, a swipe left sets aside (« Rien dépensé »), a tap on the amount edits it. The
- * visits come first with the places (CAU-33+); a tap on the card opens the edit sheet with CAU-28.
+ * proposal. ✓ or a swipe right confirms, a swipe left sets aside (« Rien dépensé »), a tap on the amount edits it and a
+ * tap on the card opens the edit sheet through [onEdit]. The visits come first with the places (CAU-33+).
  */
 @Composable
-internal fun PendingSection(viewModel: ConfirmationViewModel = hiltViewModel()) {
+internal fun PendingSection(onEdit: (Long) -> Unit, viewModel: ConfirmationViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     if (state.cards.isEmpty()) return
     val palette = CauriTheme.palette
@@ -99,7 +100,7 @@ internal fun PendingSection(viewModel: ConfirmationViewModel = hiltViewModel()) 
     Column(modifier = Modifier.animateContentSize(), verticalArrangement = Arrangement.spacedBy(CardGap)) {
         state.cards.forEach { card ->
             // Keyed by operation: a swipe belongs to its card, whatever leaves the list.
-            key(card.operation.transactionId) { PendingCard(card = card, viewModel = viewModel) }
+            key(card.operation.transactionId) { PendingCard(card = card, viewModel = viewModel, onEdit = onEdit) }
         }
     }
     state.cards.firstOrNull { it.operation.transactionId == state.editingAmount }?.let { card ->
@@ -130,7 +131,7 @@ internal fun ConfirmationUndoBar(modifier: Modifier = Modifier, viewModel: Confi
 // The two swipe directions never do the same thing: right confirms, left sets aside. The answer is given once the card
 // has left the screen, and a tick is felt as the finger crosses the point where letting go answers.
 @Composable
-private fun PendingCard(card: ConfirmationCard, viewModel: ConfirmationViewModel) {
+private fun PendingCard(card: ConfirmationCard, viewModel: ConfirmationViewModel, onEdit: (Long) -> Unit) {
     val id = card.operation.transactionId
     val haptic = LocalHapticFeedback.current
     val swipe = rememberSwipeToDismissBoxState(
@@ -166,7 +167,15 @@ private fun PendingCard(card: ConfirmationCard, viewModel: ConfirmationViewModel
             )
         },
     ) {
-        GlassSurface(shape = RoundedCornerShape(CauriRadius.card), modifier = Modifier.fillMaxWidth()) {
+        GlassSurface(
+            shape = RoundedCornerShape(CauriRadius.card),
+            modifier = Modifier.fillMaxWidth(),
+            interaction = Modifier.clickable(
+                onClickLabel = stringResource(R.string.home_card_edit),
+                role = Role.Button,
+                onClick = { onEdit(id) },
+            ),
+        ) {
             Column(
                 modifier = Modifier.padding(CauriSpacing.l),
                 verticalArrangement = Arrangement.spacedBy(CauriSpacing.m + 2.dp),

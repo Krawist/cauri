@@ -11,6 +11,8 @@ import com.cauri.core.data.service.ProposalOutcome
 import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 
+// One query per read or write the repositories need on the transactions.
+@Suppress("TooManyFunctions")
 @Dao
 internal interface TransactionDao {
     /**
@@ -26,6 +28,9 @@ internal interface TransactionDao {
 
     @Update
     suspend fun update(transaction: TransactionEntity)
+
+    @Query("SELECT * FROM transactions WHERE id = :id")
+    suspend fun getById(id: Long): TransactionEntity?
 
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun delete(id: Long)
@@ -73,10 +78,15 @@ internal interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE status = :status ORDER BY occurredAt DESC")
     fun observeByStatus(status: TransactionStatus): Flow<List<TransactionEntity>>
 
-    /** The confirmed transactions that came with a proposal of Cauri, next to what the user kept. */
+    /**
+     * The confirmed transactions that came with a proposal of Cauri, next to what the user kept; a split operation
+     * counts its parts in its amount.
+     */
     @Query(
         "SELECT t.placeId, t.counterparty, r.templateVersion, t.proposedCategoryId, t.categoryId, " +
-            "t.proposedAmount, t.amount FROM transactions AS t LEFT JOIN raw_signals AS r ON r.id = t.rawSignalId " +
+            "t.proposedAmount, t.amount + COALESCE((SELECT SUM(s.amount) FROM transactions AS s " +
+            "WHERE s.splitGroup = t.splitGroup AND s.id != t.id), 0) AS amount " +
+            "FROM transactions AS t LEFT JOIN raw_signals AS r ON r.id = t.rawSignalId " +
             "WHERE t.status = 'CONFIRMED' AND (t.proposedCategoryId IS NOT NULL OR t.proposedAmount IS NOT NULL)",
     )
     suspend fun getProposalOutcomes(): List<ProposalOutcome>

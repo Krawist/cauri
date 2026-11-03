@@ -1,13 +1,18 @@
 package com.cauri.core.data.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.cauri.core.data.database.entity.DecisionOutcome
+import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionStatus
 import java.time.Instant
 
 /** The answers of the user to the cards to confirm, each write all or none with its decision log. */
+// Each answer and the queries it is made of, all in one transaction.
+@Suppress("TooManyFunctions")
 @Dao
 internal interface ConfirmationDao {
     /**
@@ -29,6 +34,31 @@ internal interface ConfirmationDao {
         closeDecisions(transactionId = id, outcome = outcome, at = at)
     }
 
+    /**
+     * Confirms [transaction] as edited in the sheet, with the [parts] split from it and, for a transfer, the amount and
+     * time on its other side; closes its open decisions as [outcome] at [at].
+     */
+    @Transaction
+    suspend fun confirmEdited(
+        transaction: TransactionEntity,
+        parts: List<TransactionEntity>,
+        outcome: DecisionOutcome,
+        at: Instant,
+    ) {
+        update(transaction)
+        insertAll(parts)
+        transaction.transferGroup?.let {
+            updateOtherSide(
+                id = transaction.id,
+                transferGroup = it,
+                amount = transaction.amount,
+                occurredAt = transaction.occurredAt,
+            )
+        }
+        setTransferStatus(id = transaction.id, status = TransactionStatus.CONFIRMED)
+        closeDecisions(transactionId = transaction.id, outcome = outcome, at = at)
+    }
+
     /** Sets the transaction [id] aside, with the other side of its transfer, and closes its decisions as [outcome]. */
     @Transaction
     suspend fun dismiss(id: Long, outcome: DecisionOutcome, at: Instant) {
@@ -43,6 +73,21 @@ internal interface ConfirmationDao {
         setTransferStatus(id = id, status = TransactionStatus.DETECTED)
         openDecisions(id)
     }
+
+    @Query("SELECT * FROM transactions WHERE id = :id")
+    suspend fun getTransaction(id: Long): TransactionEntity?
+
+    @Update
+    suspend fun update(transaction: TransactionEntity)
+
+    @Insert
+    suspend fun insertAll(transactions: List<TransactionEntity>)
+
+    @Query(
+        "UPDATE transactions SET amount = :amount, occurredAt = :occurredAt WHERE transferGroup = :transferGroup " +
+            "AND id != :id",
+    )
+    suspend fun updateOtherSide(id: Long, transferGroup: String, amount: Long, occurredAt: Instant)
 
     @Query(
         "UPDATE transactions SET categoryId = :categoryId, proposedCategoryId = :proposedCategoryId, " +

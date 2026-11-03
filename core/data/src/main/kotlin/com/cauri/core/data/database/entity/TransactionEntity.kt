@@ -31,6 +31,8 @@ import java.time.Instant
  *   it proposed none.
  * @property proposedAmount Amount Cauri proposed (the one read in the message), kept next to [amount]; `null` when it
  *   proposed none, such as for an amount the user typed.
+ * @property splitGroup Identifier shared by the parts of an operation split across several categories, the first one
+ *   keeping the signal and the proposal; `null` when not split.
  */
 @Entity(
     tableName = "transactions",
@@ -47,6 +49,7 @@ import java.time.Instant
         Index("rawSignalId", unique = true),
         Index("transferGroup"),
         Index("occurredAt"),
+        Index("splitGroup"),
     ],
 )
 internal data class TransactionEntity(
@@ -67,4 +70,5 @@ internal data class TransactionEntity(
     val foreignCurrency: String?,
     val proposedCategoryId: Long? = null,
     val proposedAmount: Long? = null,
+    val splitGroup: String? = null,
 )

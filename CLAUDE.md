@@ -337,6 +337,23 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   operation back as read. A fee stays detected, counted, without card. A tap on the card opens the edit sheet with
   CAU-28. Checked on the Galaxy S23 in dark mode: ✓, « Annuler », both swipes, the amount field; the haptic tick not
   felt by me. Next: CAU-28.
+- [ ] **CAU-28** — `EditTransactionSheet` (`:feature:transactions`, `EditViewModel`), opened by a tap on a card to
+  confirm (`homeGraph(onEditTransaction)`, the sheet shown by `:app`): « Lu dans un message » over the merchant (or the
+  two accounts of a transfer), the amount (a payment abroad shows its amount in its own currency until the user types
+  what it cost), the suggested categories and « Toutes… » with « Proposée par Cauri » while the proposal is chosen, the
+  account, the date (day then hour, never later than now) and the note, « Répartir sur plusieurs catégories », « Rien
+  dépensé » (« Ignorer » for what is not an expense) and « Valider ». By decision every card opens it, a transfer
+  without category nor split; the account of an operation read in a message, or of a transfer, is shown and never
+  changed (it can be for an entry, once « Activité » opens the sheet, CAU-30); the parts each take a category and an
+  amount and the rest stays in the category chosen above, the parts never taking all of it; the place row waits for the
+  places (CAU-33+). `ConfirmationRepository.confirm(TransactionEdit)` writes it all or none: one confirmed transaction
+  per part, without signal nor proposal, sharing a `splitGroup` with the edited one (database v10); a transfer is
+  confirmed on both sides with the amount and time typed. The proposals count a split operation with its parts
+  (`getProposalOutcomes`). `readableName` moved to `:core:design`. What was typed survives a change of theme or a
+  rotation, and is forgotten once the sheet closes. Checked on the Galaxy S25 (with the user's go-ahead, the S23
+  unplugged) with made-up Orange Money payments, in light mode: the sheet, a part of 1 000 F out of 2 500 F, « Valider
+  », the date moved to yesterday, « Rien dépensé ». Dark mode, an income, a transfer and a payment abroad not tried on a
+  phone. Next: CAU-30.
 
 Update this section at the end of each ticket.
 

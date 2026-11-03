@@ -1,6 +1,7 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.DetectedOperation
+import com.cauri.core.data.model.EditableTransaction
 import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.ReconciledExpense
@@ -29,6 +30,11 @@ class FakeTransactionRepository : TransactionRepository {
     )
 
     override val pending = MutableStateFlow(emptyList<PendingOperation>())
+
+    /** Transactions [getEditable] answers, by id. */
+    val editable = mutableMapOf<Long, EditableTransaction>()
+
+    override suspend fun getEditable(transactionId: Long) = editable[transactionId]
 
     val withdrawals = mutableListOf<Withdrawal>()
     val detected = mutableListOf<DetectedOperation>()

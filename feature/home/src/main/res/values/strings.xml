@@ -14,6 +14,7 @@
     <string name="home_card_amount_ok">OK</string>
     <string name="home_card_confirm">Valider</string>
     <string name="home_card_confirmed">Confirmé</string>
+    <string name="home_card_edit">Modifier</string>
     <string name="home_card_edit_amount">Modifier le montant</string>
     <string name="home_card_ignore">Ignorer</string>
     <string name="home_card_kind_deposit">Dépôt</string>

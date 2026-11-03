@@ -117,7 +117,7 @@ internal class ConfirmationViewModelTest {
             viewModel.onDismiss(7)
 
             // then
-            confirmations.dismissed shouldContainExactly listOf(payment(amount = 5_000))
+            confirmations.dismissed shouldContainExactly listOf(7L)
             viewModel.uiState.value.answered shouldBe AnsweredCard(transactionId = 7, confirmed = false)
         }
     }

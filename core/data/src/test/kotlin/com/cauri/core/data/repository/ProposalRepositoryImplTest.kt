@@ -51,6 +51,24 @@ internal class ProposalRepositoryImplTest {
             // then
             acceptance shouldBe mapOf("BOULANGERIE" to 0.5)
         }
+
+        @Test
+        fun `should count the parts of a split operation in its amount`() = runTest {
+            // given
+            database.transactionDao().insertAll(
+                listOf(
+                    expense(status = TransactionStatus.CONFIRMED, amount = 1_500).copy(splitGroup = "split"),
+                    expense(status = TransactionStatus.CONFIRMED, amount = 1_000)
+                        .copy(splitGroup = "split", proposedAmount = null),
+                ),
+            )
+
+            // when
+            val acceptance = repository.acceptance(ProposalSource.MERCHANT)
+
+            // then
+            acceptance shouldBe mapOf("BOULANGERIE" to 1.0)
+        }
     }
 
     // A cash expense with Boulangerie, for which Cauri proposed 2 500.

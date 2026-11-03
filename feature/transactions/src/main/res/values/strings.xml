@@ -6,12 +6,36 @@
     <string name="transactions_coming_soon">Écran à venir</string>
     <string name="transactions_currency" translatable="false">F</string>
     <string name="transactions_delete">Effacer</string>
+    <string name="transactions_edit_account">Compte</string>
+    <string name="transactions_edit_all_categories">Toutes…</string>
+    <string name="transactions_edit_amount">Montant</string>
+    <string name="transactions_edit_cancel">Annuler</string>
+    <string name="transactions_edit_category">Catégorie</string>
+    <string name="transactions_edit_choose">Choisir</string>
+    <string name="transactions_edit_confirm">Valider</string>
+    <string name="transactions_edit_date">Date</string>
+    <string name="transactions_edit_ignore">Ignorer</string>
+    <string name="transactions_edit_next">Suivant</string>
+    <string name="transactions_edit_note">Note</string>
+    <string name="transactions_edit_note_hint">Ajouter une note</string>
+    <string name="transactions_edit_nothing_spent">Rien dépensé</string>
+    <string name="transactions_edit_ok">OK</string>
+    <string name="transactions_edit_part_add">Ajouter une part</string>
+    <string name="transactions_edit_part_remove">Retirer cette part</string>
+    <string name="transactions_edit_parts_too_high">Les parts doivent laisser un reste</string>
+    <string name="transactions_edit_proposed">Proposée par Cauri</string>
+    <string name="transactions_edit_read">Lu dans un message</string>
+    <string name="transactions_edit_rest">Reste dans %1$s : %2$s F</string>
+    <string name="transactions_edit_rest_none">Reste sans catégorie : %1$s F</string>
+    <string name="transactions_edit_split">Répartir sur plusieurs catégories</string>
+    <string name="transactions_foreign_amount" translatable="false">%1$s %2$s</string>
     <string name="transactions_from">De</string>
     <string name="transactions_merged">Fusionné avec une opération reçue par message</string>
     <string name="transactions_other_category">Autre…</string>
     <string name="transactions_quick_entry_title">Nouvelle opération</string>
     <string name="transactions_save">Enregistrer</string>
     <string name="transactions_to">Vers</string>
+    <string name="transactions_transfer" translatable="false">%1$s → %2$s</string>
     <string name="transactions_type_expense">Dépense</string>
     <string name="transactions_type_income">Revenu</string>
     <string name="transactions_type_transfer">Transfert</string>

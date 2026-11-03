@@ -78,7 +78,7 @@ internal class ConfirmationViewModel @Inject constructor(
     fun onDismiss(transactionId: Long) {
         val card = card(transactionId) ?: return
         answer(transactionId = transactionId, confirmed = false)
-        viewModelScope.launch { confirmations.dismiss(card.operation) }
+        viewModelScope.launch { confirmations.dismiss(transactionId = transactionId, type = card.operation.type) }
     }
 
     /** Opens the field of the amount of the card [transactionId], or closes it with `null`. */

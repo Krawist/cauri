@@ -1,6 +1,7 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.DetectedOperation
+import com.cauri.core.data.model.EditableTransaction
 import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.ReconciledExpense
@@ -13,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 interface TransactionRepository {
     /** The operations read in messages and waiting for the user's confirmation, newest first. */
     val pending: Flow<List<PendingOperation>>
+
+    /** The transaction [transactionId] as the edit sheet shows it; `null` when it does not exist. */
+    suspend fun getEditable(transactionId: Long): EditableTransaction?
 
     /**
      * Records [withdrawal] as a transfer from its account to the Cash account, two transactions sharing a transfer

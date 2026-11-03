@@ -13,6 +13,7 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
+import com.cauri.core.data.model.EditableTransaction
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.PendingOperation
@@ -30,6 +31,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 /** Default implementation for [TransactionRepository]. */
+// One function per way the money moves on the accounts, and the edit sheet's read.
+@Suppress("TooManyFunctions")
 @Singleton
 internal class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
@@ -57,6 +60,28 @@ internal class TransactionRepositoryImpl @Inject constructor(
             }
         }
         (single + paired).sortedByDescending { it.occurredAt }
+    }
+
+    override suspend fun getEditable(transactionId: Long): EditableTransaction? {
+        val transaction = transactionDao.getById(transactionId) ?: return null
+        val sides = transaction.transferGroup?.let { transactionDao.getByTransferGroup(it) } ?: listOf(transaction)
+        return EditableTransaction(
+            transactionId = transaction.id,
+            type = transaction.type.toPendingType(),
+            amount = transaction.amount,
+            foreignAmount = transaction.foreignAmount,
+            foreignCurrency = transaction.foreignCurrency,
+            accountId = transaction.accountId,
+            toAccountId = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN && it.id != transaction.id }
+                ?.accountId,
+            categoryId = transaction.categoryId,
+            counterparty = sides.firstNotNullOfOrNull { it.counterparty },
+            note = transaction.note,
+            occurredAt = transaction.occurredAt,
+            // A side of a withdrawal or a deposit has no signal of its own: the message is on the other side.
+            read = sides.any { it.rawSignalId != null },
+            pending = transaction.status == TransactionStatus.DETECTED,
+        )
     }
 
     override suspend fun recordWithdrawal(withdrawal: Withdrawal) {
@@ -264,11 +289,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
 private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: Long?) = PendingOperation(
     transactionId = id,
     accountId = accountId,
-    type = when (type) {
-        TransactionType.EXPENSE -> PendingType.EXPENSE
-        TransactionType.INCOME -> PendingType.INCOME
-        TransactionType.TRANSFER_OUT, TransactionType.TRANSFER_IN -> PendingType.TRANSFER
-    },
+    type = type.toPendingType(),
     amount = amount,
     foreignAmount = foreignAmount,
     foreignCurrency = foreignCurrency,
@@ -279,6 +300,12 @@ private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: 
     counterparty = counterparty,
     occurredAt = occurredAt,
 )
+
+private fun TransactionType.toPendingType() = when (this) {
+    TransactionType.EXPENSE -> PendingType.EXPENSE
+    TransactionType.INCOME -> PendingType.INCOME
+    TransactionType.TRANSFER_OUT, TransactionType.TRANSFER_IN -> PendingType.TRANSFER
+}
 
 // The balance the message gave after the operation; `null` when it gave none.
 private fun DetectedOperation.balanceRead() = balance?.let {

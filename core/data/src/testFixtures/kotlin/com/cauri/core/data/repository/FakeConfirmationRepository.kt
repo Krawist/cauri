@@ -1,6 +1,8 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.model.TransactionEdit
 
 /** In-memory [ConfirmationRepository] for tests: it keeps the answers given. */
 class FakeConfirmationRepository : ConfirmationRepository {
@@ -20,7 +22,10 @@ class FakeConfirmationRepository : ConfirmationRepository {
     )
 
     val confirmed = mutableListOf<Confirmed>()
-    val dismissed = mutableListOf<PendingOperation>()
+    val edited = mutableListOf<TransactionEdit>()
+
+    /** Transactions set aside by [dismiss]. */
+    val dismissed = mutableListOf<Long>()
     val reopened = mutableListOf<Long>()
 
     override suspend fun confirm(
@@ -37,8 +42,12 @@ class FakeConfirmationRepository : ConfirmationRepository {
         )
     }
 
-    override suspend fun dismiss(operation: PendingOperation) {
-        dismissed += operation
+    override suspend fun confirm(edit: TransactionEdit) {
+        edited += edit
+    }
+
+    override suspend fun dismiss(transactionId: Long, type: PendingType) {
+        dismissed += transactionId
     }
 
     override suspend fun reopen(transactionId: Long) {
