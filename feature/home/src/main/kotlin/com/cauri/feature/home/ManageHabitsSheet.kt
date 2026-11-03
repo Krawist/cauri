@@ -1,5 +1,6 @@
 package com.cauri.feature.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +24,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -97,8 +100,10 @@ internal fun ManageHabitsSheet(habits: List<Habit>, actions: HabitActions) {
 // the finger lifts.
 @Composable
 private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Unit) {
-    var order by remember(habits) { mutableStateOf(habits) }
+    // One state for the sheet's lifetime, which the drags read: it follows the habits once they are saved.
+    var order by remember { mutableStateOf(habits) }
     var dragged by remember { mutableStateOf<Long?>(null) }
+    LaunchedEffect(habits) { if (dragged == null) order = habits }
     var offset by remember { mutableFloatStateOf(0f) }
     val step = with(LocalDensity.current) { (RowHeight + RowGap).toPx() }
     val drop = {
@@ -108,38 +113,41 @@ private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Un
     }
     Column(verticalArrangement = Arrangement.spacedBy(RowGap)) {
         order.forEach { habit ->
-            val moving = habit.id == dragged
-            HabitLine(
-                habit = habit,
-                moving = moving,
-                modifier = Modifier
-                    .zIndex(if (moving) 1f else 0f)
-                    .graphicsLayer {
-                        translationY = if (moving) offset else 0f
-                        scaleX = if (moving) DRAGGED_SCALE else 1f
-                        scaleY = if (moving) DRAGGED_SCALE else 1f
+            // Keyed by habit: once the order changes, each line keeps its own drag and offset.
+            key(habit.id) {
+                val moving = habit.id == dragged
+                HabitLine(
+                    habit = habit,
+                    moving = moving,
+                    modifier = Modifier
+                        .zIndex(if (moving) 1f else 0f)
+                        .graphicsLayer {
+                            translationY = if (moving) offset else 0f
+                            scaleX = if (moving) DRAGGED_SCALE else 1f
+                            scaleY = if (moving) DRAGGED_SCALE else 1f
+                        },
+                    handle = Modifier.pointerInput(habit.id) {
+                        detectDragGestures(
+                            onDragStart = {
+                                dragged = habit.id
+                                offset = 0f
+                            },
+                            onDragEnd = drop,
+                            onDragCancel = drop,
+                            onDrag = { change, amount ->
+                                change.consume()
+                                offset += amount.y
+                                val from = order.indexOfFirst { it.id == habit.id }
+                                val to = (from + (offset / step).roundToInt()).coerceIn(0, order.lastIndex)
+                                if (to != from) {
+                                    order = order.toMutableList().apply { add(to, removeAt(from)) }
+                                    offset -= (to - from) * step
+                                }
+                            },
+                        )
                     },
-                handle = Modifier.pointerInput(habit.id) {
-                    detectDragGestures(
-                        onDragStart = {
-                            dragged = habit.id
-                            offset = 0f
-                        },
-                        onDragEnd = drop,
-                        onDragCancel = drop,
-                        onDrag = { change, amount ->
-                            change.consume()
-                            offset += amount.y
-                            val from = order.indexOfFirst { it.id == habit.id }
-                            val to = (from + (offset / step).roundToInt()).coerceIn(0, order.lastIndex)
-                            if (to != from) {
-                                order = order.toMutableList().apply { add(to, removeAt(from)) }
-                                offset -= (to - from) * step
-                            }
-                        },
-                    )
-                },
-            )
+                )
+            }
         }
     }
 }
@@ -147,9 +155,17 @@ private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Un
 @Composable
 private fun HabitLine(habit: Habit, moving: Boolean, modifier: Modifier, handle: Modifier) {
     val palette = CauriTheme.palette
+    val shape = RoundedCornerShape(CauriRadius.tile)
     GlassSurface(
-        shape = RoundedCornerShape(CauriRadius.tile),
-        modifier = modifier.fillMaxWidth().height(RowHeight),
+        shape = shape,
+        // The dragged line is opaque: the line it passes over never shows through it.
+        modifier = modifier
+            .fillMaxWidth()
+            .height(RowHeight)
+            .then(
+                if (moving) Modifier.background(palette.sheet.compositeOver(palette.background), shape) else Modifier,
+            ),
+        strong = moving,
         elevation = if (moving) DraggedElevation else 0.dp,
     ) {
         Row(modifier = Modifier.fillMaxHeight(), verticalAlignment = Alignment.CenterVertically) {

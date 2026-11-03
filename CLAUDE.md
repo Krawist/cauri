@@ -188,7 +188,8 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   dragging the handles. The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « + »
   at the end of the row opens the sheet of a new habit (the quick entry is the « + » of the bottom bar).
   `CauriTextField` moved to `:core:design`. On a phone: the upgrade to v2 and the empty row (« Ajouter une
-  habitude »); taps, undo, the sheets and dragging not checked yet.
+  habitude »), the habit sheet and « Mes habitudes », two drags in a row (each line keyed, the dragged one opaque);
+  taps and undo not checked yet.
 - [ ] **CAU-15** — `CashCountScreen` (`:feature:cash`): banknotes and coins with « − » and « + » (gold once counted),
   « Tout effacer », « Saisir le total directement », « Total compté », « Attendu ≈ » and the gap, updated on every
   tap. No gap or a surplus: « Valider le comptage » saves the count, `CashCountRepository.addCount` recording a surplus
