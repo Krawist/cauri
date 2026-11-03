@@ -40,7 +40,6 @@
     <string name="home_habits_hint">Fais glisser une habitude par sa poignée pour changer l\'ordre de la ligne.</string>
     <string name="home_habits_reorder">Réorganiser</string>
     <string name="home_habits_title">Mes habitudes</string>
-    <string name="home_other_cash_expense">Autre dépense cash</string>
     <string name="home_pending_title">À confirmer</string>
     <string name="home_pending_transfer" translatable="false">%1$s → %2$s</string>
     <string name="home_separator" translatable="false">" · "</string>

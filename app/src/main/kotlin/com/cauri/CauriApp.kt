@@ -127,7 +127,6 @@ private fun CauriNavHost(
             )
             homeGraph(
                 onCountCash = { navController.navigateToCashCount() },
-                onAddExpense = { quickEntryOpen = true },
                 onOpenSettings = { navController.navigateToSettings() },
             )
             activityGraph()

@@ -44,13 +44,13 @@ private const val VISIBLE_HABITS = 3
 
 /**
  * Row of one-tap cash expenses: a tap records one, a long-press opens it in the habit sheet. « + » at the end opens
- * the quick entry, through [onAddExpense]. Without habits, a tile invites to add the first one.
+ * the sheet of a new habit. Without habits, a tile across the row invites to add the first one.
  */
 @Composable
-internal fun HabitsRow(habits: List<Habit>, actions: HabitActions, onAddExpense: () -> Unit) {
+internal fun HabitsRow(habits: List<Habit>, actions: HabitActions) {
     BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
         val tileWidth = (maxWidth - PlusTileWidth - TileGap * VISIBLE_HABITS) / VISIBLE_HABITS
-        val addTileWidth = maxWidth - PlusTileWidth - TileGap
+        val addTileWidth = maxWidth
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()).height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(TileGap),
@@ -64,7 +64,7 @@ internal fun HabitsRow(habits: List<Habit>, actions: HabitActions, onAddExpense:
             habits.forEach { habit ->
                 HabitTile(habit = habit, actions = actions, modifier = Modifier.width(tileWidth))
             }
-            PlusTile(onClick = onAddExpense)
+            if (habits.isNotEmpty()) PlusTile(onClick = { actions.onEditHabit(null) })
         }
     }
 }
@@ -128,7 +128,7 @@ private fun AddHabitTile(onClick: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 private fun PlusTile(onClick: () -> Unit) {
-    val description = stringResource(R.string.home_other_cash_expense)
+    val description = stringResource(R.string.home_habit_add)
     GlassSurface(
         shape = RoundedCornerShape(CauriRadius.control),
         modifier = Modifier.width(PlusTileWidth).fillMaxHeight(),

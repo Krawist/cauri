@@ -35,7 +35,6 @@
     <string name="home_habits_hint">Drag a habit by its handle to change the order of the row.</string>
     <string name="home_habits_reorder">Reorder</string>
     <string name="home_habits_title">My habits</string>
-    <string name="home_other_cash_expense">Other cash expense</string>
     <string name="home_pending_title">To confirm</string>
     <string name="home_settings">Settings</string>
     <string name="home_title">Hello</string>

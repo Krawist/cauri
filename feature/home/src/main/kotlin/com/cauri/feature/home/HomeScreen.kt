@@ -61,7 +61,6 @@ private val UndoBarBottom = 100.dp
 @Composable
 internal fun HomeScreen(
     onCountCash: () -> Unit,
-    onAddExpense: () -> Unit,
     onOpenSettings: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -70,7 +69,6 @@ internal fun HomeScreen(
         state = state,
         actions = viewModel,
         onCountCash = onCountCash,
-        onAddExpense = onAddExpense,
         onOpenSettings = onOpenSettings,
         notices = {
             CaptureHealth(onCheck = onOpenSettings)
@@ -93,7 +91,6 @@ private fun HomeContent(
     state: HomeUiState,
     actions: HabitActions,
     onCountCash: () -> Unit,
-    onAddExpense: () -> Unit,
     onOpenSettings: () -> Unit,
     notices: @Composable () -> Unit = {},
 ) {
@@ -115,7 +112,7 @@ private fun HomeContent(
             }
             CashCard(cash = state.cash, onCountCash = onCountCash)
             notices()
-            HabitsRow(habits = state.habits, actions = actions, onAddExpense = onAddExpense)
+            HabitsRow(habits = state.habits, actions = actions)
             BalancesCard(balances = state.balances)
             PendingSection(pending = state.pending)
         }
@@ -240,7 +237,6 @@ private fun HomeContentPreview() {
             ),
             actions = PreviewHabitActions,
             onCountCash = {},
-            onAddExpense = {},
             onOpenSettings = {},
         )
     }

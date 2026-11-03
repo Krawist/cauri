@@ -186,7 +186,7 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   Accueil, a tap records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a
   long-press opens the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by
   dragging the handles. The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « + »
-  opens the quick entry; Cash preselected comes with CAU-26, and so do the suggestions from frequent manual entries.
+  at the end of the row opens the sheet of a new habit (the quick entry is the « + » of the bottom bar).
   `CauriTextField` moved to `:core:design`. On a phone: the upgrade to v2 and the empty row (« Ajouter une
   habitude »); taps, undo, the sheets and dragging not checked yet.
 - [ ] **CAU-15** — `CashCountScreen` (`:feature:cash`): banknotes and coins with « − » and « + » (gold once counted),
