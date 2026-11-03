@@ -1,6 +1,7 @@
 package com.cauri.core.design.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,9 +32,12 @@ private val KeyShape = RoundedCornerShape(16.dp)
 // The keys row by row, « 000 » left of « 0 » as in the mockup; the last key erases.
 private val Rows = listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("7", "8", "9"), listOf("000", "0"))
 
-/** Numeric keypad of the amount: [onDigits] gets a digit or « 000 », [onDelete] erases the last digit. */
+/**
+ * Numeric keypad of the amount: [onDigits] gets a digit or « 000 », [onDelete] erases the last digit, and a long press
+ * on the erase key clears the whole amount through [onClear].
+ */
 @Composable
-fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
+fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit, onClear: () -> Unit) {
     // Each key answers with the light tap of a keyboard.
     val haptics = rememberCauriHaptics()
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
@@ -46,10 +50,16 @@ fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
                     })
                 }
                 if (keys.size < Rows.first().size) {
-                    DeleteKey(onClick = {
-                        haptics.key()
-                        onDelete()
-                    })
+                    DeleteKey(
+                        onClick = {
+                            haptics.key()
+                            onDelete()
+                        },
+                        onLongClick = {
+                            haptics.hold()
+                            onClear()
+                        },
+                    )
                 }
             }
         }
@@ -76,7 +86,7 @@ private fun RowScope.DigitKey(label: String, onClick: () -> Unit) {
 }
 
 @Composable
-private fun RowScope.DeleteKey(onClick: () -> Unit) {
+private fun RowScope.DeleteKey(onClick: () -> Unit, onLongClick: () -> Unit) {
     val description = stringResource(R.string.keypad_delete)
     Box(
         modifier = Modifier
@@ -84,7 +94,12 @@ private fun RowScope.DeleteKey(onClick: () -> Unit) {
             .height(KeyHeight)
             .pressScale()
             .semantics { contentDescription = description }
-            .clickable(role = Role.Button, onClick = onClick),
+            .combinedClickable(
+                role = Role.Button,
+                onLongClickLabel = stringResource(R.string.keypad_clear),
+                onLongClick = onLongClick,
+                onClick = onClick,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

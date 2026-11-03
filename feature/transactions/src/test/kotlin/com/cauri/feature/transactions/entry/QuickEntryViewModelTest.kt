@@ -66,6 +66,21 @@ internal class QuickEntryViewModelTest {
     }
 
     @Nested
+    inner class OnClear {
+        @Test
+        fun `should clear the whole amount`() {
+            // given
+            listOf("1", "5", "000").forEach(viewModel::onDigits)
+
+            // when
+            viewModel.onClear()
+
+            // then
+            viewModel.uiState.value.amount shouldBe ""
+        }
+    }
+
+    @Nested
     inner class OnDigits {
         @Test
         fun `should add the digits typed and never keep a leading zero`() {

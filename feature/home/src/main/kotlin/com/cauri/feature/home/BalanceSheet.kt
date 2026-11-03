@@ -110,6 +110,7 @@ internal fun BalanceSheet(
                 Keypad(
                     onDigits = { key -> digits = (digits + key).trimStart('0').take(MAX_AMOUNT_DIGITS) },
                     onDelete = { digits = digits.dropLast(1) },
+                    onClear = { digits = "" },
                 )
                 Answers(
                     typed = typed,

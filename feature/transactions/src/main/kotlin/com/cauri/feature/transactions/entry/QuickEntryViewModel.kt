@@ -105,6 +105,8 @@ internal class QuickEntryViewModel @Inject constructor(
 
     override fun onDelete() = change { it.copy(amount = it.amount.dropLast(1), amountTooHigh = false) }
 
+    override fun onClear() = change { it.copy(amount = "", amountTooHigh = false) }
+
     override fun onCategory(id: Long) = change { it.copy(categoryId = id.takeIf { chosen -> chosen != it.categoryId }) }
 
     override fun onShowAllCategories() = change { it.copy(allCategoriesShown = true) }

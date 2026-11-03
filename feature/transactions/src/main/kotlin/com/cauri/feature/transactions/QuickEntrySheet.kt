@@ -158,7 +158,7 @@ private fun QuickEntryContent(state: QuickEntryUiState, actions: QuickEntryActio
         } else {
             CategoryChips(state = state, actions = actions)
         }
-        Keypad(onDigits = actions::onDigits, onDelete = actions::onDelete)
+        Keypad(onDigits = actions::onDigits, onDelete = actions::onDelete, onClear = actions::onClear)
         Button(
             onClick = {
                 haptics.confirm()

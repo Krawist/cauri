@@ -24,6 +24,9 @@ internal interface QuickEntryActions {
     /** Erases the last digit of the amount. */
     fun onDelete()
 
+    /** Clears the whole amount: a long press on the erase key. */
+    fun onClear()
+
     /** Chooses the category [id], or leaves the entry without category when it was chosen already. */
     fun onCategory(id: Long)
 
