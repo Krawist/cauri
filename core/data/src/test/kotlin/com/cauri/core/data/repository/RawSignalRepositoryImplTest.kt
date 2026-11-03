@@ -8,6 +8,8 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import java.time.Duration
 import java.time.Instant
 import kotlinx.coroutines.test.runTest
@@ -151,6 +153,41 @@ internal class RawSignalRepositoryImplTest {
                     receivedAt = Instant.ofEpochSecond(2_000),
                 ),
             )
+        }
+    }
+
+    @Nested
+    inner class LastReceivedAt {
+        @Test
+        fun `should give when the last signal was received`() = runTest {
+            // given
+            repository.record(
+                sender = "test.sms",
+                title = "UBA",
+                text = "Frais",
+                receivedAt = Instant.ofEpochSecond(2_000),
+            )
+            repository.record(
+                sender = "test.sms",
+                title = "UBA",
+                text = "Debit",
+                receivedAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // when
+            val last = repository.lastReceivedAt()
+
+            // then
+            last shouldBe Instant.ofEpochSecond(2_000)
+        }
+
+        @Test
+        fun `should give nothing before the first signal`() = runTest {
+            // when
+            val last = repository.lastReceivedAt()
+
+            // then
+            last.shouldBeNull()
         }
     }
 }

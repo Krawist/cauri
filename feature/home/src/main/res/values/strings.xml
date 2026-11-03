@@ -6,6 +6,10 @@
     <string name="home_account_text">Cauri a reconnu des messages %1$s. Il peut en tirer tes paiements, que tu confirmeras toujours. Tu pourras changer d\'avis dans Réglages.</string>
     <string name="home_account_title">Suivre ton compte %1$s ?</string>
     <string name="home_amount" translatable="false">%1$s F</string>
+    <string name="home_capture_check">Vérifier</string>
+    <string name="home_capture_label">Détection en pause</string>
+    <string name="home_capture_text">Aucun message de tes banques ni de Mobile Money depuis plus d\'un mois. Ton téléphone a peut-être arrêté Cauri, ou retiré la lecture des notifications.</string>
+    <string name="home_capture_title">Cauri ne reçoit plus tes messages</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>
     <string name="home_counted">Compté %1$s</string>

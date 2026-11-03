@@ -11,5 +11,24 @@
                 <action android:name="com.cauri.debug.RECORD_SIGNAL" />
             </intent-filter>
         </receiver>
+        <!-- Debug builds only: shows the warning that the capture stopped, without a month of silence.
+             adb shell am broadcast -a com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug -->
+        <receiver
+            android:name=".health.DebugCaptureWarningReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.SHOW_CAPTURE_WARNING" />
+            </intent-filter>
+        </receiver>
+        <!-- Debug builds only: simulates a month without message, so that Accueil shows its card when it opens again;
+             -ez on false ends it.
+             adb shell am broadcast -a com.cauri.debug.SIMULATE_CAPTURE_SILENCE -p com.cauri.debug -->
+        <receiver
+            android:name=".health.DebugCaptureSilenceReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.SIMULATE_CAPTURE_SILENCE" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

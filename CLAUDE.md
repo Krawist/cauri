@@ -277,7 +277,20 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   `unlinkTransfer` puts both back, never linked again. Withdrawals to Cash were transfers already (CAU-13, CAU-21).
   One line per transfer in « Activité » and the undo come with CAU-30. Checked on the Galaxy S23 with made-up messages:
   the UBA debit « B2W … ORANGEMONEYCM » of 10 000 F and the Orange Money credit « depuis votre compte UBA » linked into
-  one transfer, its 100 F fee kept as an expense. Next: CAU-24.
+  one transfer, its 100 F fee kept as an expense.
+- [ ] **CAU-24** — `CaptureHealthService` (`:core:capture`, JVM tests): the capture is silent a month after the last
+  kept signal, never before the first one; a fixed month by decision, instead of a threshold following the user's
+  rhythm: a month without a digital payment happens, but the banks write at least about their monthly fees, and every
+  message of a watched sender counts, promotions included. `CaptureHealthWorker` (daily, scheduled by
+  `CauriApplication`) shows the notification « Cauri ne reçoit plus tes messages », only when a permission the capture
+  needs is missing (the access to the notifications taken back, or the battery restricted: with every permission given,
+  a silence is the user's own rhythm), once a week at most (`lastCaptureWarning` in DataStore), which opens Réglages
+  (`CaptureHealth.ACTION_OPEN_SETTINGS`, `NotificationTarget` in `:app`); Accueil shows the card « Détection en pause »
+  with « Vérifier » while the silence lasts. Debug builds show the warning on demand (`adb shell am broadcast -a
+  com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of silence for the card (`-a
+  com.cauri.debug.SIMULATE_CAPTURE_SILENCE`, `-ez on false` to end it; `DebugCaptureHealthService` bound in debug only).
+  Checked on the Galaxy S23: the notification, its tap opening Réglages; the card with a simulated silence, « Vérifier »
+  opening Réglages; the daily check not seen firing. Next: CAU-25.
 
 Update this section at the end of each ticket.
 
@@ -286,4 +299,6 @@ Update this section at the end of each ticket.
 - One ticket at a time, on a `cau-0xx-description` branch, ending in one commit named after the ticket
   (`CAU-03 · Glass surface`), committed and merged before the next ticket starts.
 - Reread the ticket's acceptance criteria in `docs/tickets.md` before coding and check them at the end.
+- Debug-only actions (broadcasts of the `src/debug` source sets) are listed in `docs/actions.md`: add each new one
+  there, with its command, what it does and its extras.
 - If a product choice is not settled by the documents, ask rather than decide alone.

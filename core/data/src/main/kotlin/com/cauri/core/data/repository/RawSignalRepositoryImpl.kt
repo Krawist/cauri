@@ -33,6 +33,8 @@ internal class RawSignalRepositoryImpl @Inject constructor(private val rawSignal
         return !repost
     }
 
+    override suspend fun lastReceivedAt(): Instant? = rawSignalDao.getLastReceivedAt()
+
     override suspend fun unparsed(): List<RawSignal> = rawSignalDao.getUnparsed().map {
         RawSignal(id = it.id, sender = it.sender, title = it.title, text = it.text, receivedAt = it.receivedAt)
     }

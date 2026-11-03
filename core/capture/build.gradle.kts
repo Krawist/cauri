@@ -13,10 +13,14 @@ android {
 
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.core.design)
     implementation(projects.core.parsing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime)
+    ksp(libs.androidx.hilt.compiler)
 
     testFixturesImplementation(projects.core.data)
     testFixturesImplementation(libs.kotlinx.coroutines.core)

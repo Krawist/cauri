@@ -10,6 +10,7 @@ import com.cauri.core.data.model.UserProfile
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import java.io.File
+import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -176,6 +177,18 @@ internal class UserPreferencesRepositoryImplTest {
             // then
             repository.proposedAccounts.first() shouldBe emptySet()
             repository.ignoredAccounts.first() shouldBe emptySet()
+        }
+    }
+
+    @Nested
+    inner class SetLastCaptureWarning {
+        @Test
+        fun `should remember when the user was warned`() = scope.runTest {
+            // when
+            repository.setLastCaptureWarning(Instant.parse("2026-11-03T12:00:00Z"))
+
+            // then
+            repository.lastCaptureWarning.first() shouldBe Instant.parse("2026-11-03T12:00:00Z")
         }
     }
 }

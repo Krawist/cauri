@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="capture_health_channel">Reading messages</string>
+    <string name="capture_health_channel_description">Warns you when Cauri no longer receives the messages of your banks and Mobile Money.</string>
+    <string name="capture_health_text">No message from your banks or Mobile Money for a month. Check that Cauri can read your notifications and run in the background.</string>
+    <string name="capture_health_title">Cauri no longer receives your messages</string>
     <string name="notification_listener_label">Cauri · expense detection</string>
 </resources>

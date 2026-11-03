@@ -12,30 +12,29 @@ import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.design.theme.CauriTheme
-import com.cauri.feature.cash.reminder.CountReminders
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 internal class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
-    // Set when a count reminder opened the app, until the cash count is shown.
-    private var openCashCount by mutableStateOf(false)
+    // Set when a notification opened the app, until its screen is shown.
+    private var notificationTarget by mutableStateOf<NotificationTarget?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        // Only a fresh start: a restored activity already showed the count its intent asked for.
-        if (savedInstanceState == null) openCashCount = intent?.action == CountReminders.ACTION_COUNT_CASH
+        // Only a fresh start: a restored activity already showed the screen its intent asked for.
+        if (savedInstanceState == null) notificationTarget = NotificationTarget.of(intent?.action)
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             CauriTheme(glassBlur = (application as CauriApplication).glassBlur) {
                 CauriApp(
                     uiState = uiState,
                     onOnboardingCompleted = viewModel::onOnboardingCompleted,
-                    openCashCount = openCashCount,
-                    onCashCountOpened = { openCashCount = false },
+                    notificationTarget = notificationTarget,
+                    onNotificationTargetShown = { notificationTarget = null },
                 )
             }
         }
@@ -43,6 +42,6 @@ internal class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent.action == CountReminders.ACTION_COUNT_CASH) openCashCount = true
+        NotificationTarget.of(intent.action)?.let { notificationTarget = it }
     }
 }

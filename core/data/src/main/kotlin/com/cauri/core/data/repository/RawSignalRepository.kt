@@ -14,4 +14,7 @@ interface RawSignalRepository {
 
     /** The signals no template read yet, oldest first: to read when they arrive, and again when templates change. */
     suspend fun unparsed(): List<RawSignal>
+
+    /** When the last signal was received; `null` while Cauri kept none. */
+    suspend fun lastReceivedAt(): Instant?
 }

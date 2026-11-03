@@ -23,6 +23,10 @@ internal interface RawSignalDao {
     )
     suspend fun existsSince(sender: String, title: String?, text: String, after: Instant): Boolean
 
+    /** When the last signal was received; `null` while none was kept. */
+    @Query("SELECT MAX(receivedAt) FROM raw_signals")
+    suspend fun getLastReceivedAt(): Instant?
+
     /** The signals no template recognised yet, oldest first, to replay when a template is added. */
     @Query("SELECT * FROM raw_signals WHERE templateVersion IS NULL ORDER BY receivedAt")
     suspend fun getUnparsed(): List<RawSignalEntity>

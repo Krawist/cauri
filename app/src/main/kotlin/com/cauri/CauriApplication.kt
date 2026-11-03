@@ -3,6 +3,7 @@ package com.cauri
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.cauri.core.capture.health.CaptureHealth
 import com.cauri.core.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
 import dagger.hilt.android.HiltAndroidApp
@@ -25,5 +26,6 @@ internal class CauriApplication :
     override fun onCreate() {
         super.onCreate()
         CountReminders.schedule(this)
+        CaptureHealth.schedule(this)
     }
 }

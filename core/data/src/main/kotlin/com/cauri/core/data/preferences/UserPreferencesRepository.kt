@@ -2,6 +2,7 @@ package com.cauri.core.data.preferences
 
 import com.cauri.core.data.model.CountReminderSettings
 import com.cauri.core.data.model.UserProfile
+import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.flow.Flow
 
@@ -19,6 +20,9 @@ interface UserPreferencesRepository {
     /** Day of the last cash count reminder; `null` when none was sent. */
     val lastCountReminder: Flow<LocalDate?>
 
+    /** When the user was last warned that Cauri receives no more messages; `null` when never. */
+    val lastCaptureWarning: Flow<Instant?>
+
     /** Providers whose messages Cauri recognised without an account to record them on: it offers to follow them. */
     val proposedAccounts: Flow<Set<String>>
 
@@ -34,6 +38,9 @@ interface UserPreferencesRepository {
 
     /** Remembers that a cash count reminder was sent on [day]. */
     suspend fun setLastCountReminder(day: LocalDate)
+
+    /** Remembers that the user was warned at [at] that Cauri receives no more messages. */
+    suspend fun setLastCaptureWarning(at: Instant)
 
     /** Offers to follow [provider], unless the user already chose not to. */
     suspend fun proposeAccount(provider: String)

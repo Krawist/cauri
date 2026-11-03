@@ -14,6 +14,7 @@ import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
 import com.cauri.core.data.model.UserProfile
+import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -38,6 +39,10 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
 
     override val lastCountReminder: Flow<LocalDate?> = dataStore.data.map {
         it[LastReminderDay]?.let(LocalDate::ofEpochDay)
+    }
+
+    override val lastCaptureWarning: Flow<Instant?> = dataStore.data.map {
+        it[LastCaptureWarning]?.let(Instant::ofEpochMilli)
     }
 
     override val proposedAccounts: Flow<Set<String>> = dataStore.data.map { it[ProposedAccounts].orEmpty() }
@@ -66,6 +71,10 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
 
     override suspend fun setLastCountReminder(day: LocalDate) {
         dataStore.edit { it[LastReminderDay] = day.toEpochDay() }
+    }
+
+    override suspend fun setLastCaptureWarning(at: Instant) {
+        dataStore.edit { it[LastCaptureWarning] = at.toEpochMilli() }
     }
 
     override suspend fun proposeAccount(provider: String) {
@@ -120,6 +129,7 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val LastReminderDay = longPreferencesKey("count_reminder_last_day")
         val ProposedAccounts = stringSetPreferencesKey("accounts_proposed")
         val IgnoredAccounts = stringSetPreferencesKey("accounts_ignored")
+        val LastCaptureWarning = longPreferencesKey("capture_last_warning")
         const val DEFAULT_REMINDER_HOUR = 20
     }
 }

@@ -59,7 +59,10 @@ internal fun HomeScreen(
         onCountCash = onCountCash,
         onAddExpense = onAddExpense,
         onOpenSettings = onOpenSettings,
-        proposal = { AccountProposal() },
+        notices = {
+            CaptureHealth(onCheck = onOpenSettings)
+            AccountProposal()
+        },
     )
     state.editing?.let { draft ->
         HabitSheet(
@@ -79,7 +82,7 @@ private fun HomeContent(
     onCountCash: () -> Unit,
     onAddExpense: () -> Unit,
     onOpenSettings: () -> Unit,
-    proposal: @Composable () -> Unit = {},
+    notices: @Composable () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -95,7 +98,7 @@ private fun HomeContent(
                 ProfileButton(initial = state.initial, onClick = onOpenSettings)
             }
             CashCard(cash = state.cash, onCountCash = onCountCash)
-            proposal()
+            notices()
             HabitsRow(habits = state.habits, actions = actions, onAddExpense = onAddExpense)
         }
         state.recorded?.let { recorded ->

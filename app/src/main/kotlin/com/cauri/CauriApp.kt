@@ -42,14 +42,15 @@ import kotlinx.coroutines.delay
 /**
  * Root of the app: the launch screen, then the onboarding on first launch or the home screen.
  *
- * @param openCashCount Whether a count reminder asked for the cash count; [onCashCountOpened] once it is shown.
+ * @param notificationTarget Screen a notification asked for; `null` otherwise. [onNotificationTargetShown] once it is
+ *   shown.
  */
 @Composable
 internal fun CauriApp(
     uiState: MainUiState,
     onOnboardingCompleted: () -> Unit,
-    openCashCount: Boolean,
-    onCashCountOpened: () -> Unit,
+    notificationTarget: NotificationTarget?,
+    onNotificationTargetShown: () -> Unit,
 ) {
     // Saved so that a configuration change (rotation, dark mode) does not show the launch screen again.
     var launchShown by rememberSaveable { mutableStateOf(false) }
@@ -62,8 +63,8 @@ internal fun CauriApp(
         CauriNavHost(
             onboardingCompleted = uiState.onboardingCompleted,
             onOnboardingCompleted = onOnboardingCompleted,
-            openCashCount = openCashCount,
-            onCashCountOpened = onCashCountOpened,
+            notificationTarget = notificationTarget,
+            onNotificationTargetShown = onNotificationTargetShown,
         )
     } else {
         LaunchScreen()
@@ -77,17 +78,23 @@ private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsRoute, InsightsRou
 private fun CauriNavHost(
     onboardingCompleted: Boolean,
     onOnboardingCompleted: () -> Unit,
-    openCashCount: Boolean,
-    onCashCountOpened: () -> Unit,
+    notificationTarget: NotificationTarget?,
+    onNotificationTargetShown: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     // Chosen once: a new start destination would rebuild the graph under the back stack when the onboarding completes.
     val startDestination = remember { if (onboardingCompleted) HomeGraph else OnboardingGraph }
     var quickEntryOpen by rememberSaveable { mutableStateOf(false) }
-    // A count reminder opens the cash count, once the onboarding is done.
-    LaunchedEffect(openCashCount) {
-        if (openCashCount && onboardingCompleted) navController.navigateToCashCount()
-        if (openCashCount) onCashCountOpened()
+    // A notification opens its screen, once the onboarding is done.
+    LaunchedEffect(notificationTarget) {
+        if (onboardingCompleted) {
+            when (notificationTarget) {
+                NotificationTarget.CASH_COUNT -> navController.navigateToCashCount()
+                NotificationTarget.SETTINGS -> navController.navigateToSettings()
+                null -> Unit
+            }
+        }
+        if (notificationTarget != null) onNotificationTargetShown()
     }
     val destination = navController.currentBackStackEntryAsState().value?.destination
     val selectedTab = TabRoutes.indexOfFirst { route ->

@@ -20,4 +20,6 @@ class FakeRawSignalRepository : RawSignalRepository {
     }
 
     override suspend fun unparsed(): List<RawSignal> = signals.toList()
+
+    override suspend fun lastReceivedAt(): Instant? = signals.maxOfOrNull { it.receivedAt }
 }
