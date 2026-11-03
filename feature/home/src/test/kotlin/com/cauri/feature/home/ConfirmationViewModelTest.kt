@@ -124,6 +124,23 @@ internal class ConfirmationViewModelTest {
     }
 
     @Nested
+    inner class OnConfirmAll {
+        @Test
+        fun `should confirm every card with an amount, those without waiting`() {
+            // given
+            transactions.pending.value = listOf(payment(amount = 5_000), payment(amount = 0).copy(transactionId = 8))
+
+            // when
+            viewModel.onConfirmAll()
+
+            // then
+            confirmations.confirmed.map { it.operation.transactionId to it.amount } shouldContainExactly
+                listOf(7L to 5_000L)
+            viewModel.uiState.value.cards.map { it.operation.transactionId } shouldContainExactly listOf(8L)
+        }
+    }
+
+    @Nested
     inner class OnDismiss {
         @Test
         fun `should set the card aside`() {

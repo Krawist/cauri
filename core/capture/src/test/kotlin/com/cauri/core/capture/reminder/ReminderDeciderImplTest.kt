@@ -230,6 +230,8 @@ internal class ReminderDeciderImplTest {
             return true
         }
 
+        override suspend fun showSummary(count: Int) = true
+
         override fun dismiss(transactionId: Long) = Unit
     }
 

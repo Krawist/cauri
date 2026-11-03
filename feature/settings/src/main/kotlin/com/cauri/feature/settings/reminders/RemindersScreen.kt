@@ -44,10 +44,14 @@ import com.cauri.feature.settings.R
 import com.cauri.feature.settings.RowGroup
 import com.cauri.feature.settings.SectionLabel
 import com.cauri.feature.settings.Separator
+import java.time.LocalTime
 
 private val RowHeight = 62.dp
 
-/** « Rappels intelligents »: after visits or not, the quiet hours, the reminders a day and the places without any. */
+/**
+ * « Rappels intelligents »: after visits or not, the time of the evening summary, the quiet hours, the reminders a day
+ * and the places without any.
+ */
 @Composable
 internal fun RemindersScreen(
     onBack: () -> Unit,
@@ -63,6 +67,10 @@ internal fun RemindersScreen(
 
             override fun onVisitReminders(on: Boolean) = viewModel.onVisitReminders(on)
 
+            override fun onSummary(open: Boolean) = viewModel.onSummary(open)
+
+            override fun onSummaryTime(time: LocalTime?) = viewModel.onSummaryTime(time)
+
             override fun onQuietHours(open: Boolean) = viewModel.onQuietHours(open)
 
             override fun onQuietFrom(hours: Int) = viewModel.onQuietFrom(hours)
@@ -76,12 +84,12 @@ internal fun RemindersScreen(
     }
     RemindersContent(state = state, actions = actions)
     if (state.choosingQuietHours) QuietHoursSheet(settings = state.settings, actions = actions)
+    if (state.choosingSummary) SummaryTimeSheet(state = state, actions = actions)
 }
 
 @Composable
 private fun RemindersContent(state: RemindersUiState, actions: RemindersActions) {
     val palette = CauriTheme.palette
-    val settings = state.settings
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,42 +105,67 @@ private fun RemindersContent(state: RemindersUiState, actions: RemindersActions)
             modifier = Modifier.padding(top = CauriSpacing.xl, bottom = CauriSpacing.xxl),
         )
         SectionLabel(stringResource(R.string.reminders_settings))
-        RowGroup {
-            VisitRemindersRow(on = settings.visitReminders, onChange = actions::onVisitReminders)
-            Separator()
-            ReminderRow(
-                title = stringResource(R.string.reminders_quiet_hours),
-                text = stringResource(R.string.reminders_quiet_hours_text),
-                onClick = { actions.onQuietHours(open = true) },
-            ) {
-                Value(quietHours(settings))
-            }
-            Separator()
-            ReminderRow(
-                title = stringResource(R.string.reminders_daily_cap),
-                text = stringResource(R.string.reminders_daily_cap_text),
-            ) {
-                Stepper(
-                    value = settings.dailyCap,
-                    canLower = settings.dailyCap > RemindersViewModel.MIN_CAP,
-                    canRaise = settings.dailyCap < RemindersViewModel.MAX_CAP,
-                    onStep = actions::onDailyCap,
-                )
-            }
-            Separator()
-            ReminderRow(
-                title = stringResource(R.string.reminders_quiet_places),
-                text = state.quietPlaces.takeIf { it.isNotEmpty() }?.joinToString()
-                    ?: stringResource(R.string.reminders_quiet_places_none),
-                onClick = actions::onPlaces,
-            ) {}
-        }
+        SettingsGroup(state = state, actions = actions)
         Text(
             text = stringResource(R.string.reminders_hint),
             style = MaterialTheme.typography.bodySmall,
             color = palette.muted,
             modifier = Modifier.padding(start = CauriSpacing.xs, top = CauriSpacing.s, end = CauriSpacing.xs),
         )
+    }
+}
+
+// After visits, the summary, the quiet hours, the cap and the places without reminder.
+@Composable
+private fun SettingsGroup(state: RemindersUiState, actions: RemindersActions) {
+    val settings = state.settings
+    RowGroup {
+        VisitRemindersRow(on = settings.visitReminders, onChange = actions::onVisitReminders)
+        Separator()
+        ReminderRow(
+            title = stringResource(R.string.reminders_summary),
+            text = stringResource(R.string.reminders_summary_text),
+            onClick = { actions.onSummary(open = true) },
+        ) {
+            Value(
+                if (settings.summaryTime == null) {
+                    stringResource(
+                        R.string.reminders_summary_auto,
+                        state.summaryTime.hour,
+                        state.summaryTime.minute,
+                    )
+                } else {
+                    stringResource(R.string.reminders_time, state.summaryTime.hour, state.summaryTime.minute)
+                },
+            )
+        }
+        Separator()
+        ReminderRow(
+            title = stringResource(R.string.reminders_quiet_hours),
+            text = stringResource(R.string.reminders_quiet_hours_text),
+            onClick = { actions.onQuietHours(open = true) },
+        ) {
+            Value(quietHours(settings))
+        }
+        Separator()
+        ReminderRow(
+            title = stringResource(R.string.reminders_daily_cap),
+            text = stringResource(R.string.reminders_daily_cap_text),
+        ) {
+            Stepper(
+                value = settings.dailyCap,
+                canLower = settings.dailyCap > RemindersViewModel.MIN_CAP,
+                canRaise = settings.dailyCap < RemindersViewModel.MAX_CAP,
+                onStep = actions::onDailyCap,
+            )
+        }
+        Separator()
+        ReminderRow(
+            title = stringResource(R.string.reminders_quiet_places),
+            text = state.quietPlaces.takeIf { it.isNotEmpty() }?.joinToString()
+                ?: stringResource(R.string.reminders_quiet_places_none),
+            onClick = actions::onPlaces,
+        ) {}
     }
 }
 
@@ -235,6 +268,10 @@ private object PreviewRemindersActions : RemindersActions {
     override fun onBack() = Unit
 
     override fun onVisitReminders(on: Boolean) = Unit
+
+    override fun onSummary(open: Boolean) = Unit
+
+    override fun onSummaryTime(time: LocalTime?) = Unit
 
     override fun onQuietHours(open: Boolean) = Unit
 

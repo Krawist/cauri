@@ -17,6 +17,7 @@ import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.UserProfile
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +47,14 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
             quietUntil = it[QuietUntil] ?: DEFAULT_QUIET_UNTIL,
             dailyCap = it[DailyCap] ?: DEFAULT_DAILY_CAP,
             visitReminders = it[VisitReminders] ?: true,
+            summaryTime = it[SummaryMinutes]?.let { minutes ->
+                LocalTime.of(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR)
+            },
         )
+    }
+
+    override val lastEveningSummary: Flow<LocalDate?> = dataStore.data.map {
+        it[LastSummaryDay]?.let(LocalDate::ofEpochDay)
     }
 
     override val lastCountReminder: Flow<LocalDate?> = dataStore.data.map {
@@ -87,7 +95,17 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
             it[QuietUntil] = settings.quietUntil
             it[DailyCap] = settings.dailyCap
             it[VisitReminders] = settings.visitReminders
+            val time = settings.summaryTime
+            if (time == null) {
+                it.remove(SummaryMinutes)
+            } else {
+                it[SummaryMinutes] = time.hour * MINUTES_PER_HOUR + time.minute
+            }
         }
+    }
+
+    override suspend fun setLastEveningSummary(day: LocalDate) {
+        dataStore.edit { it[LastSummaryDay] = day.toEpochDay() }
     }
 
     override suspend fun setLastCountReminder(day: LocalDate) {
@@ -155,9 +173,12 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val QuietUntil = intPreferencesKey("reminders_quiet_until")
         val DailyCap = intPreferencesKey("reminders_daily_cap")
         val VisitReminders = booleanPreferencesKey("reminders_after_visits")
+        val SummaryMinutes = intPreferencesKey("reminders_summary_minutes")
+        val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
         const val DEFAULT_REMINDER_HOUR = 20
         const val DEFAULT_QUIET_FROM = 22
         const val DEFAULT_QUIET_UNTIL = 7
         const val DEFAULT_DAILY_CAP = 4
+        const val MINUTES_PER_HOUR = 60
     }
 }

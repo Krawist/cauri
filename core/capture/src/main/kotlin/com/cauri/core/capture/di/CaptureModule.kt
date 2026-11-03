@@ -14,6 +14,8 @@ import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.capture.place.PlaceWatcherImpl
 import com.cauri.core.capture.place.VisitRecorder
 import com.cauri.core.capture.place.VisitRecorderImpl
+import com.cauri.core.capture.reminder.EveningSummarySender
+import com.cauri.core.capture.reminder.EveningSummarySenderImpl
 import com.cauri.core.capture.reminder.ReminderDecider
 import com.cauri.core.capture.reminder.ReminderDeciderImpl
 import com.cauri.core.capture.reminder.ReminderNotifier
@@ -34,6 +36,8 @@ import com.cauri.core.engine.ReminderGuardrails
 import com.cauri.core.engine.ReminderGuardrailsImpl
 import com.cauri.core.engine.ReminderRules
 import com.cauri.core.engine.ReminderRulesImpl
+import com.cauri.core.engine.SummaryTime
+import com.cauri.core.engine.SummaryTimeImpl
 import com.cauri.core.parsing.MessageParser
 import com.cauri.core.parsing.MessageParserImpl
 import com.cauri.core.parsing.TemplateCatalogReader
@@ -83,6 +87,12 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindReminderGuardrails(impl: ReminderGuardrailsImpl): ReminderGuardrails
+
+    @Binds
+    abstract fun bindSummaryTime(impl: SummaryTimeImpl): SummaryTime
+
+    @Binds
+    abstract fun bindEveningSummarySender(impl: EveningSummarySenderImpl): EveningSummarySender
 
     @Binds
     abstract fun bindFeatureEncoder(impl: FeatureEncoderImpl): FeatureEncoder

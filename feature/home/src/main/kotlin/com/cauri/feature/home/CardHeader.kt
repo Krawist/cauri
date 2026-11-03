@@ -179,14 +179,14 @@ private fun Details(operation: PendingOperation, kind: String?) {
 
 // Gold for cash, as everywhere; lagoon for mobile money and its cards, ink for a bank.
 @Composable
-private fun accountColor(kind: AccountKind) = when (kind) {
+internal fun accountColor(kind: AccountKind) = when (kind) {
     AccountKind.CASH -> CauriTheme.palette.gold
     AccountKind.MOBILE_MONEY, AccountKind.PREPAID_CARD -> CauriTheme.palette.accent
     AccountKind.BANK -> CauriTheme.palette.ink
 }
 
 // What the operation is, in words: a transfer from or to Cash is a withdrawal or a deposit.
-private fun kindLabel(operation: PendingOperation) = when {
+internal fun kindLabel(operation: PendingOperation) = when {
     operation.type == PendingType.EXPENSE -> R.string.home_card_kind_payment
     operation.type == PendingType.INCOME -> R.string.home_card_kind_income
     operation.toAccountKind == AccountKind.CASH -> R.string.home_card_kind_withdrawal
@@ -197,7 +197,7 @@ private fun kindLabel(operation: PendingOperation) = when {
 // « 5 000 F », fees included, or the amount in its own currency for a payment abroad, until the user types what it
 // cost; « Montant ? » for a shop visited with no usual amount yet.
 @Composable
-private fun amount(card: ConfirmationCard): String {
+internal fun amount(card: ConfirmationCard): String {
     val foreign = card.operation.foreignAmount
     val currency = card.operation.foreignCurrency
     if (card.amount > 0 || foreign == null || currency == null) {

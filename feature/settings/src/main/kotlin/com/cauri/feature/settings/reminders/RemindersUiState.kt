@@ -1,6 +1,8 @@
 package com.cauri.feature.settings.reminders
 
 import com.cauri.core.data.model.ReminderSettings
+import com.cauri.core.engine.SummaryTime
+import java.time.LocalTime
 
 /**
  * What the smart reminders screen shows.
@@ -8,6 +10,8 @@ import com.cauri.core.data.model.ReminderSettings
  * @property settings The user's limits on the reminders.
  * @property quietPlaces Names of the places that never bring a reminder: home, work and the shops without one.
  * @property choosingQuietHours Whether the sheet of the quiet hours is open.
+ * @property summaryTime When the evening summary comes: the time chosen, or the one that follows the user's answers.
+ * @property choosingSummary Whether the sheet of the time of the evening summary is open.
  */
 internal data class RemindersUiState(
     val settings: ReminderSettings = ReminderSettings(
@@ -18,6 +22,8 @@ internal data class RemindersUiState(
     ),
     val quietPlaces: List<String> = emptyList(),
     val choosingQuietHours: Boolean = false,
+    val summaryTime: LocalTime = SummaryTime.DEFAULT,
+    val choosingSummary: Boolean = false,
 )
 
 // Until the stored choice is read; the same defaults as the preferences.

@@ -18,6 +18,12 @@
     <string name="reminders_quiet_places_none">Aucun</string>
     <string name="reminders_quiet_until">Fin</string>
     <string name="reminders_settings">Réglages</string>
+    <string name="reminders_summary">Récapitulatif du soir</string>
+    <string name="reminders_summary_auto">Auto · %1$02d:%2$02d</string>
+    <string name="reminders_summary_automatic">Automatique, quand tu confirmes d\'habitude</string>
+    <string name="reminders_summary_text">Ce qui reste à confirmer</string>
+    <string name="reminders_summary_why">Une notification le soir, seulement s\'il reste quelque chose à confirmer.</string>
+    <string name="reminders_time">%1$02d:%2$02d</string>
     <string name="reminders_title">Rappels intelligents</string>
     <string name="settings_allowed">Autorisé</string>
     <string name="settings_back">Retour</string>

@@ -48,5 +48,14 @@
                 <action android:name="com.cauri.debug.SHOW_REMINDER" />
             </intent-filter>
         </receiver>
+        <!-- Debug builds only: shows the evening summary of the cards waiting at any hour.
+             adb shell am broadcast -a com.cauri.debug.SHOW_EVENING_SUMMARY -p com.cauri.debug -->
+        <receiver
+            android:name=".reminder.DebugEveningSummaryReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.SHOW_EVENING_SUMMARY" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

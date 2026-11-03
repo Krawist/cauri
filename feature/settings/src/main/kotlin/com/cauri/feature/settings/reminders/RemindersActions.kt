@@ -1,10 +1,18 @@
 package com.cauri.feature.settings.reminders
 
+import java.time.LocalTime
+
 /** What the user can do on the smart reminders screen. */
 internal interface RemindersActions {
     fun onBack()
 
     fun onVisitReminders(on: Boolean)
+
+    /** Opens or closes the sheet of the time of the evening summary. */
+    fun onSummary(open: Boolean)
+
+    /** Has the evening summary come at [time], or follow the user's answers with `null`. */
+    fun onSummaryTime(time: LocalTime?)
 
     /** Opens or closes the sheet of the quiet hours. */
     fun onQuietHours(open: Boolean)

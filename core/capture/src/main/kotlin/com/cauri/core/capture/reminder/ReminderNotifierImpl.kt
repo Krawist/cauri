@@ -31,20 +31,7 @@ internal class ReminderNotifierImpl @Inject constructor(
     private val categories: CategoryRepository,
 ) : ReminderNotifier {
     override suspend fun show(operation: PendingOperation): Boolean {
-        val manager = NotificationManagerCompat.from(context)
-        val allowed = manager.areNotificationsEnabled() &&
-            (
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-                    ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
-                    PackageManager.PERMISSION_GRANTED
-                )
-        if (!allowed) return false
-        manager.createNotificationChannel(
-            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
-                .setName(context.getString(R.string.reminder_channel))
-                .setDescription(context.getString(R.string.reminder_channel_description))
-                .build(),
-        )
+        val manager = channel() ?: return false
         val name = operation.counterparty?.let(::readableName)
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(DesignR.drawable.logo_coin_silhouette)
@@ -55,6 +42,23 @@ internal class ReminderNotifierImpl @Inject constructor(
         // The permission is checked just before.
         @Suppress("MissingPermission")
         manager.notify(notificationId(operation.transactionId), builder.build())
+        return true
+    }
+
+    override suspend fun showSummary(count: Int): Boolean {
+        val manager = channel() ?: return false
+        val open = openSummary()
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(DesignR.drawable.logo_coin_silhouette)
+            .setColor(ContextCompat.getColor(context, DesignR.color.notification_accent))
+            .setContentTitle(context.resources.getQuantityString(R.plurals.reminder_summary_title, count, count))
+            .setContentText(context.getString(R.string.reminder_summary_text))
+            .setContentIntent(open)
+            .addAction(0, context.getString(R.string.reminder_open), open)
+            .setAutoCancel(true)
+        // The permission is checked just before.
+        @Suppress("MissingPermission")
+        manager.notify(SUMMARY_NOTIFICATION, builder.build())
         return true
     }
 
@@ -143,6 +147,38 @@ internal class ReminderNotifierImpl @Inject constructor(
         )
     }
 
+    // The manager once the channel exists; `null` when Cauri may not show notifications.
+    private fun channel(): NotificationManagerCompat? {
+        val manager = NotificationManagerCompat.from(context)
+        val allowed = manager.areNotificationsEnabled() &&
+            (
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED
+                )
+        if (!allowed) return null
+        manager.createNotificationChannel(
+            NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_HIGH)
+                .setName(context.getString(R.string.reminder_channel))
+                .setDescription(context.getString(R.string.reminder_channel_description))
+                .build(),
+        )
+        return manager
+    }
+
+    // Opens the app on « Ce soir ».
+    private fun openSummary(): PendingIntent {
+        val intent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName)) {
+            "Cauri has a launcher activity"
+        }.setAction(EveningSummary.ACTION_OPEN_SUMMARY)
+        return PendingIntent.getActivity(
+            context,
+            SUMMARY_NOTIFICATION,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
+    }
+
     // Opens the app on Accueil, where the card waits.
     private fun openHome(): PendingIntent {
         val intent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName)) {
@@ -162,6 +198,7 @@ internal class ReminderNotifierImpl @Inject constructor(
         const val CHANNEL_ID = "reminders"
         const val CATEGORIES = 3
         const val REPLIES = 4
+        const val SUMMARY_NOTIFICATION = 9_999
         const val NOTIFICATION_BASE = 10_000L
         const val NOTIFICATION_SPAN = 100_000L
     }

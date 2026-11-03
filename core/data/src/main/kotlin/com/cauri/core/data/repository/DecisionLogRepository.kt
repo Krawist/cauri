@@ -16,6 +16,9 @@ interface DecisionLogRepository {
     /** The visit whose card is [transactionId] and the history of its place; `null` when the card is no visit's. */
     suspend fun visitHistory(transactionId: Long): VisitHistory?
 
+    /** When the user answered a card (confirmed or « Rien dépensé ») since [since], the oldest first. */
+    suspend fun answerTimes(since: Instant): List<Instant>
+
     /** Logs [decision], its outcome open until the user answers. */
     suspend fun log(decision: NewDecision)
 }

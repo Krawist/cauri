@@ -2,6 +2,7 @@ package com.cauri.core.data.repository
 
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
+import com.cauri.core.data.database.entity.DecisionOutcome
 import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
@@ -52,6 +53,32 @@ internal class DecisionLogRepositoryImplTest {
             // then
             repository.hasDecision(card).shouldBeTrue()
             database.decisionLogDao().getOpen().single().features shouldBe listOf(1.0, 0.5)
+        }
+    }
+
+    @Nested
+    inner class AnswerTimes {
+        @Test
+        fun `should give when the cards were confirmed or found with nothing spent, since the start`() = runTest {
+            // given
+            val confirmed = database.transactionDao().insert(expense(amount = 2_000, at = NOON, placeId = null))
+            val nothing = database.transactionDao().insert(expense(amount = 0, at = NOON, placeId = null))
+            val dismissed = database.transactionDao().insert(expense(amount = 500, at = NOON, placeId = null))
+            val old = database.transactionDao().insert(expense(amount = 700, at = NOON, placeId = null))
+            listOf(confirmed, nothing, dismissed, old).forEach {
+                repository.log(decision(transactionId = it, at = NOON, action = ReminderAction.EVENING_SUMMARY))
+            }
+            val confirmations = database.confirmationDao()
+            confirmations.closeDecisions(confirmed, DecisionOutcome.CONFIRMED, NOON + Duration.ofHours(8))
+            confirmations.closeDecisions(nothing, DecisionOutcome.NOTHING_SPENT, NOON + Duration.ofHours(7))
+            confirmations.closeDecisions(dismissed, DecisionOutcome.DISMISSED, NOON + Duration.ofHours(6))
+            confirmations.closeDecisions(old, DecisionOutcome.CONFIRMED, NOON - Duration.ofDays(40))
+
+            // when
+            val times = repository.answerTimes(since = NOON - Duration.ofDays(30))
+
+            // then
+            times shouldBe listOf(NOON + Duration.ofHours(7), NOON + Duration.ofHours(8))
         }
     }
 

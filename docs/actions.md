@@ -22,6 +22,7 @@ booleans.
 | `com.cauri.debug.PLACE_VISIT`              | `:core:capture`  | Tells a stay at a place, or its departure                  |
 | `com.cauri.debug.PLACE_STOP`               | `:feature:places` | Makes up a stop, then looks for frequent places           |
 | `com.cauri.debug.SHOW_REMINDER`            | `:core:capture`  | Shows the reminder notification of a card, at any hour     |
+| `com.cauri.debug.SHOW_EVENING_SUMMARY`     | `:core:capture`  | Shows the evening summary of the cards waiting, at any hour |
 
 ## Show a cash count reminder
 
@@ -149,8 +150,8 @@ message asks its category. Its buttons answer the card as in the app. Without `t
 |---------------|------|------------|----------------------------------------------------------------|
 | `transaction` | text | the newest | Id of the transaction of the card (the `transactions` table)   |
 
-Needs Cauri's notifications allowed; nothing shows otherwise. The decisions themselves follow the rules: never at
-night (22 h to 7 h).
+Needs Cauri's notifications allowed; nothing shows otherwise. The decisions themselves follow the rules and the
+guardrails: never in the quiet hours (22 h to 7 h by default, CAU-38).
 
 ## Read what the listener sees
 
@@ -161,3 +162,13 @@ adb logcat -s CauriCapture
 ```
 
 `kept · com.samsung.android.messaging · OrangeMoney` for a watched sender, `ignored · …` for the others.
+
+## Show the evening summary
+
+```bash
+adb shell am broadcast -a com.cauri.debug.SHOW_EVENING_SUMMARY -p com.cauri.debug
+```
+
+Shows the evening summary notification at once (CAU-39), « Récapitulatif : n éléments à confirmer » with the cards
+waiting in « À confirmer », whatever its time, the day already sent, or nothing waiting. A tap or « Ouvrir » opens
+« Ce soir ». No extra. Needs Cauri's notifications allowed.

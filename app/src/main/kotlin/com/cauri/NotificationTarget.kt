@@ -1,6 +1,7 @@
 package com.cauri
 
 import com.cauri.core.capture.health.CaptureHealth
+import com.cauri.core.capture.reminder.EveningSummary
 import com.cauri.feature.cash.reminder.CountReminders
 import com.cauri.feature.places.discovery.PlaceDiscovery
 
@@ -14,6 +15,9 @@ internal enum class NotificationTarget {
 
     /** « Oui » to a place often stopped at: the screen of a new place there. */
     SUGGESTED_PLACE,
+
+    /** The evening summary: « Ce soir ». */
+    EVENING_SUMMARY,
     ;
 
     companion object {
@@ -22,6 +26,7 @@ internal enum class NotificationTarget {
             CountReminders.ACTION_COUNT_CASH -> CASH_COUNT
             CaptureHealth.ACTION_OPEN_SETTINGS -> SETTINGS
             PlaceDiscovery.ACTION_ADD_SUGGESTED_PLACE -> SUGGESTED_PLACE
+            EveningSummary.ACTION_OPEN_SUMMARY -> EVENING_SUMMARY
             else -> null
         }
     }

@@ -522,6 +522,23 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   Récapitulatif du soir » and « Ce que Cauri a appris » come with CAU-39 and CAU-41. Checked on the Galaxy S23 in dark
   mode: the screen, the sheet, the cap; a guardrail at work on a real decision not seen on a phone. Next: CAU-39.
 
+- [ ] **CAU-39** — the evening summary: `EveningSummaryWorker` (`:core:capture`, every quarter of an hour, scheduled by
+  `CauriApplication`) has `EveningSummarySender` (JVM tests) send, once a day and before 23 h, « Récapitulatif : 4
+  éléments à confirmer » with « Ouvrir », only when cards wait, by decision every card of « À confirmer » and not only
+  those the engine kept for the summary (`lastEveningSummary` in DataStore). Its time (`SummaryTime`, `:core:engine`,
+  JVM tests) is the one chosen in « Rappels intelligents » (« Récapitulatif du soir », a sheet: « Automatique » or 19:00
+  to 22:00 by half hours), else, by decision (to validate), the median time of the user's answers given in the evening
+  (18 h to 23 h) over 30 days (`DecisionLogRepository.answerTimes`), to the half hour, between 18:00 and 22:00, once 10
+  answers show it; 20:30 before. A tap opens « Ce soir » (`EveningSummaryScreen`, `:feature:home`,
+  `NotificationTarget.EVENING_SUMMARY`, outside the graph of the tab: no bottom bar): « Dépensé aujourd'hui » and « Dont
+  cash », one line per card (« Visite de 25 min · cash », the amount in a pill or « Montant ? » dashed, ✓), a swipe to
+  the left sets it aside, a tap on the amount types it, on the line opens the edit sheet; « Tout valider (n) » confirms
+  every line with an amount (`ConfirmationViewModel.onConfirmAll`, no undo), « Plus tard » closes. The mockup's line «
+  Moto · 2 trajets habituels » is left out: a habit is confirmed when tapped. Debug builds show the summary on demand
+  (`adb shell am broadcast -a com.cauri.debug.SHOW_EVENING_SUMMARY -p com.cauri.debug`). Checked on the Galaxy S23 in
+  dark mode with made-up messages: the notification, its tap opening « Ce soir », a line set aside and undone. The
+  worker firing at its time and « Tout valider » not seen on a phone. Next: CAU-40.
+
 Update this section at the end of each ticket.
 
 ## Way of working

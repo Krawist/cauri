@@ -21,6 +21,11 @@ class FakeDecisionLogRepository : DecisionLogRepository {
 
     override suspend fun visitHistory(transactionId: Long) = histories[transactionId]
 
+    /** What [answerTimes] answers, whatever the start. */
+    var answers = listOf<Instant>()
+
+    override suspend fun answerTimes(since: Instant) = answers
+
     override suspend fun log(decision: NewDecision) {
         decisions += decision
     }

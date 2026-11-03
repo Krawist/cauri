@@ -10,11 +10,17 @@
     <string name="reminder_channel">Dépenses à confirmer</string>
     <string name="reminder_channel_description">Te demande ce que tu as dépensé, au bon moment et jamais la nuit.</string>
     <string name="reminder_nothing">Rien</string>
+    <string name="reminder_open">Ouvrir</string>
     <string name="reminder_other_amount">Autre montant</string>
     <string name="reminder_other_amount_hint">Autre montant en F</string>
     <string name="reminder_payment_text">%1$s · c\'est quoi ?</string>
     <string name="reminder_payment_title">%1$s F payés à %2$s</string>
     <string name="reminder_payment_title_alone">%1$s F payés</string>
+    <string name="reminder_summary_text">Confirme-les en une fois, avant de dormir.</string>
+    <plurals name="reminder_summary_title">
+        <item quantity="one">Récapitulatif : %1$d élément à confirmer</item>
+        <item quantity="other">Récapitulatif : %1$d éléments à confirmer</item>
+    </plurals>
     <string name="reminder_visit_stay">Visite de %1$d min</string>
     <string name="reminder_visit_title">%1$s : combien as-tu dépensé ?</string>
 </resources>

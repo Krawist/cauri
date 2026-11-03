@@ -30,6 +30,8 @@ internal class DecisionLogRepositoryImpl @Inject constructor(private val decisio
         )
     }
 
+    override suspend fun answerTimes(since: Instant): List<Instant> = decisionLogDao.getAnswerTimes(since)
+
     override suspend fun log(decision: NewDecision) {
         decisionLogDao.insert(
             DecisionLogEntity(

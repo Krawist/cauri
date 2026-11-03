@@ -28,6 +28,13 @@ internal interface DecisionLogDao {
     @Query("SELECT * FROM decision_log WHERE outcome IS NULL ORDER BY decidedAt")
     suspend fun getOpen(): List<DecisionLogEntity>
 
+    /** When a card was confirmed or set aside as « Rien dépensé » since [since], the oldest first. */
+    @Query(
+        "SELECT outcomeAt FROM decision_log WHERE outcome IN ('CONFIRMED', 'NOTHING_SPENT') " +
+            "AND outcomeAt >= :since ORDER BY outcomeAt",
+    )
+    suspend fun getAnswerTimes(since: Instant): List<Instant>
+
     /** Whether a decision was taken about the transaction [transactionId]: the engine decides once per card. */
     @Query("SELECT EXISTS(SELECT 1 FROM decision_log WHERE transactionId = :transactionId)")
     suspend fun hasDecision(transactionId: Long): Boolean

@@ -82,5 +82,19 @@
     <string name="home_settings">Réglages</string>
     <string name="home_sign_in" translatable="false">+ %1$s</string>
     <string name="home_sign_out" translatable="false">− %1$s</string>
+    <string name="home_summary_all_done">Tout est confirmé pour aujourd\'hui.</string>
+    <string name="home_summary_back">Retour</string>
+    <string name="home_summary_cash">Dont cash</string>
+    <string name="home_summary_close">Fermer</string>
+    <string name="home_summary_confirm_all">Tout valider (%1$d)</string>
+    <string name="home_summary_hint">Glisse à gauche une ligne si tu n\'as rien dépensé. Celles sans montant restent pour demain.</string>
+    <string name="home_summary_later">Plus tard</string>
+    <string name="home_summary_spent">Dépensé aujourd\'hui</string>
+    <plurals name="home_summary_subtitle">
+        <item quantity="one">%1$s · %2$d élément</item>
+        <item quantity="other">%1$s · %2$d éléments</item>
+    </plurals>
+    <string name="home_summary_title">Ce soir</string>
+    <string name="home_summary_visit">Visite de %1$d min · cash</string>
     <string name="home_title">Bonjour</string>
 </resources>

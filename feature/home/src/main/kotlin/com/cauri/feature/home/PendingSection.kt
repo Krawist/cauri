@@ -263,9 +263,10 @@ private fun CategoryChips(card: ConfirmationCard, onSelect: (Long) -> Unit) {
     }
 }
 
-// What a swipe does, shown under the card: « Valider » to the right, « Rien dépensé » or « Ignorer » to the left.
+// What a swipe does, shown under the card or the line: « Valider » to the right, « Rien dépensé » or « Ignorer » to the
+// left.
 @Composable
-private fun SwipeBackground(direction: SwipeToDismissBoxValue, type: PendingType, progress: () -> Float) {
+internal fun SwipeBackground(direction: SwipeToDismissBoxValue, type: PendingType, progress: () -> Float) {
     val palette = CauriTheme.palette
     val confirm = direction == SwipeToDismissBoxValue.StartToEnd
     if (direction == SwipeToDismissBoxValue.Settled) return
@@ -292,7 +293,7 @@ private fun SwipeBackground(direction: SwipeToDismissBoxValue, type: PendingType
 }
 
 @Composable
-private fun AmountDialog(amount: Long, onAmount: (Long) -> Unit, onDismiss: () -> Unit) {
+internal fun AmountDialog(amount: Long, onAmount: (Long) -> Unit, onDismiss: () -> Unit) {
     val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     var digits by remember { mutableStateOf(amount.takeIf { it > 0 }?.toString().orEmpty()) }

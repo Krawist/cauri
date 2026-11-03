@@ -84,6 +84,26 @@ internal class ConfirmationViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Confirms every card with an amount as Cauri proposed it, the evening summary's « Tout valider »; those still
+     * without amount wait. No undo: the edit sheet changes a card confirmed.
+     */
+    fun onConfirmAll() {
+        val ready = state.value.cards.filter { it.amount > 0 }
+        val ids = ready.map { it.operation.transactionId }.toSet()
+        state.update { current -> current.copy(cards = current.cards.filterNot { it.operation.transactionId in ids }) }
+        viewModelScope.launch {
+            ready.forEach { card ->
+                confirmations.confirm(
+                    operation = card.operation,
+                    categoryId = card.categoryId,
+                    proposedCategoryId = card.suggested.firstOrNull()?.id,
+                    amount = card.amount,
+                )
+            }
+        }
+    }
+
     /** Sets the card [transactionId] aside: « Rien dépensé ». */
     fun onDismiss(transactionId: Long) {
         val card = card(transactionId) ?: return

@@ -11,6 +11,12 @@ internal interface ReminderNotifier {
      */
     suspend fun show(operation: PendingOperation): Boolean
 
+    /**
+     * Shows the evening summary of the [count] cards waiting, whose tap opens « Ce soir ». `false` when Cauri may not
+     * show notifications.
+     */
+    suspend fun showSummary(count: Int): Boolean
+
     /** Takes the notification of the card [transactionId] off, once answered. */
     fun dismiss(transactionId: Long)
 }

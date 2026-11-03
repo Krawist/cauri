@@ -42,6 +42,7 @@ import com.cauri.feature.cash.navigateToBalanceGap
 import com.cauri.feature.cash.navigateToCashCount
 import com.cauri.feature.home.HomeGraph
 import com.cauri.feature.home.homeGraph
+import com.cauri.feature.home.navigateToEveningSummary
 import com.cauri.feature.onboarding.OnboardingGraph
 import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.places.navigateToPlaces
@@ -91,6 +92,14 @@ internal fun CauriApp(
 // Above the floating bottom bar.
 private val MergeBarBottom = 100.dp
 
+// The screen a notification asked for.
+private fun NavHostController.open(target: NotificationTarget) = when (target) {
+    NotificationTarget.CASH_COUNT -> navigateToCashCount()
+    NotificationTarget.SETTINGS -> navigateToSettings()
+    NotificationTarget.SUGGESTED_PLACE -> navigateToSuggestedPlace()
+    NotificationTarget.EVENING_SUMMARY -> navigateToEveningSummary()
+}
+
 // The tabs of the bottom bar, in order, by the route of their graph.
 private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsRoute, InsightsRoute)
 
@@ -108,15 +117,10 @@ private fun CauriNavHost(
     var editedTransaction by rememberSaveable { mutableStateOf<Long?>(null) }
     // A notification opens its screen, once the onboarding is done.
     LaunchedEffect(notificationTarget) {
-        if (onboardingCompleted) {
-            when (notificationTarget) {
-                NotificationTarget.CASH_COUNT -> navController.navigateToCashCount()
-                NotificationTarget.SETTINGS -> navController.navigateToSettings()
-                NotificationTarget.SUGGESTED_PLACE -> navController.navigateToSuggestedPlace()
-                null -> Unit
-            }
+        if (notificationTarget != null) {
+            if (onboardingCompleted) navController.open(notificationTarget)
+            onNotificationTargetShown()
         }
-        if (notificationTarget != null) onNotificationTargetShown()
     }
     val motion = CauriTheme.motion
     GlassScreen(
@@ -185,6 +189,7 @@ private fun NavGraphBuilder.cauriGraphs(
         },
     )
     homeGraph(
+        navController = navController,
         onCountCash = { navController.navigateToCashCount() },
         onOpenSettings = { navController.navigateToSettings() },
         onEditTransaction = onEditTransaction,

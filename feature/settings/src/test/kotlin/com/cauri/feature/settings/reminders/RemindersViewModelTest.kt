@@ -4,11 +4,17 @@ import com.cauri.core.data.model.Place
 import com.cauri.core.data.model.PlaceKind
 import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
+import com.cauri.core.data.repository.FakeDecisionLogRepository
 import com.cauri.core.data.repository.FakePlaceRepository
+import com.cauri.core.engine.SummaryTimeImpl
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneOffset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -25,12 +31,19 @@ import org.junit.jupiter.params.provider.CsvSource
 internal class RemindersViewModelTest {
     private val preferences = FakeUserPreferencesRepository()
     private val places = FakePlaceRepository()
+    private val log = FakeDecisionLogRepository()
     private lateinit var viewModel: RemindersViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = RemindersViewModel(preferences = preferences, places = places)
+        viewModel = RemindersViewModel(
+            preferences = preferences,
+            places = places,
+            log = log,
+            summaryTime = SummaryTimeImpl(),
+            clock = Clock.fixed(Instant.parse("2026-11-03T12:00:00Z"), ZoneOffset.UTC),
+        )
     }
 
     @AfterEach
@@ -63,6 +76,28 @@ internal class RemindersViewModelTest {
 
             // then
             viewModel.uiState.value.quietPlaces shouldContainExactly listOf("Maison", "Boulangerie Saker")
+        }
+    }
+
+    @Nested
+    inner class OnSummaryTime {
+        @Test
+        fun `should show the time of the summary the user chose`() {
+            // when
+            viewModel.onSummaryTime(LocalTime.of(21, 30))
+
+            // then
+            preferences.reminders.value.summaryTime shouldBe LocalTime.of(21, 30)
+            viewModel.uiState.value.summaryTime shouldBe LocalTime.of(21, 30)
+        }
+
+        @Test
+        fun `should show 20 30 while the summary follows answers not known yet`() {
+            // when
+            viewModel.onSummaryTime(null)
+
+            // then
+            viewModel.uiState.value.summaryTime shouldBe LocalTime.of(20, 30)
         }
     }
 
