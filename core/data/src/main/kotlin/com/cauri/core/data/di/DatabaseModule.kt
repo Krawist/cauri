@@ -42,4 +42,7 @@ internal object DatabaseModule {
 
     @Provides
     fun provideDecisionLogDao(database: CauriDatabase) = database.decisionLogDao()
+
+    @Provides
+    fun provideHabitDao(database: CauriDatabase) = database.habitDao()
 }

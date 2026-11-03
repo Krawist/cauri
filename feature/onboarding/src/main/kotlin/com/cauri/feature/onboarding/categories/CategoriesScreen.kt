@@ -39,13 +39,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.NewCategory
+import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.onboarding.ChoiceSurface
+import com.cauri.feature.onboarding.FirstHabit
 import com.cauri.feature.onboarding.MissingAnswer
-import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.R
 import com.cauri.feature.onboarding.dashedBorder
@@ -54,12 +55,12 @@ private const val CATEGORIES_STEP = 3
 private val ChipHeight = 44.dp
 
 /**
- * Category selection step of the onboarding: [onCategoriesChosen] receives the categories to create, named in the
- * user's language.
+ * Category selection step of the onboarding: [onCategoriesChosen] receives the categories to create and the first
+ * habits of the kept ones, named in the user's language.
  */
 @Composable
 internal fun CategoriesScreen(
-    onCategoriesChosen: (List<NewCategory>) -> Unit,
+    onCategoriesChosen: (categories: List<NewCategory>, habits: List<FirstHabit>) -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -69,6 +70,13 @@ internal fun CategoriesScreen(
             onCategoriesChosen(
                 answers.pack.map { NewCategory(name = context.getString(it.label), nature = it.nature) } +
                     answers.added.map { NewCategory(name = it, nature = CategoryNature.EXPENSE) },
+                answers.habits.map {
+                    FirstHabit(
+                        name = context.getString(it.label),
+                        amount = it.amount,
+                        categoryName = context.getString(it.category.label),
+                    )
+                },
             )
             viewModel.onAnswersHandedOn()
         }
@@ -176,7 +184,7 @@ private fun NewCategoryField(name: String, onNameChange: (String) -> Unit, onCon
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(Modifier.weight(1f)) {
-            OnboardingField(
+            CauriTextField(
                 value = name,
                 onValueChange = onNameChange,
                 missing = false,

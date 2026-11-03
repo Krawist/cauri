@@ -7,6 +7,7 @@ import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.model.Withdrawal
+import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,4 +38,24 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
         val fee = withdrawal.fee?.let { side.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
         transactionDao.insertAll(listOfNotNull(out, into, fee))
     }
+
+    override suspend fun recordCashExpense(amount: Long, categoryId: Long?, note: String, occurredAt: Instant): Long =
+        transactionDao.insert(
+            TransactionEntity(
+                accountId = CASH_ACCOUNT_ID,
+                type = TransactionType.EXPENSE,
+                status = TransactionStatus.CONFIRMED,
+                origin = TransactionOrigin.MANUAL,
+                amount = amount,
+                occurredAt = occurredAt,
+                categoryId = categoryId,
+                placeId = null,
+                rawSignalId = null,
+                transferGroup = null,
+                counterparty = null,
+                note = note,
+            ),
+        )
+
+    override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }

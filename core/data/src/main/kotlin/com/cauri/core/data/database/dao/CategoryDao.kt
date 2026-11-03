@@ -13,9 +13,9 @@ internal interface CategoryDao {
     @Insert
     suspend fun insert(category: CategoryEntity): Long
 
-    /** Inserts [categories] in one statement: all or none. */
+    /** Inserts [categories] in one statement, all or none, and returns their generated ids in the same order. */
     @Insert
-    suspend fun insertAll(categories: List<CategoryEntity>)
+    suspend fun insertAll(categories: List<CategoryEntity>): List<Long>
 
     @Update
     suspend fun update(category: CategoryEntity)

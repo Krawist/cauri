@@ -41,7 +41,19 @@ internal class CategoriesViewModel @Inject constructor() :
         state.update { current ->
             val pack = PackCategory.entries.filter { it in current.keptPack }
             val noneKept = noneKept(current)
-            current.copy(noneKept = noneKept, answered = if (noneKept) null else CategoriesAnswers(pack, current.added))
+            val habits = PackHabit.entries.filter { it.category in pack }
+            current.copy(
+                noneKept = noneKept,
+                answered = if (noneKept) {
+                    null
+                } else {
+                    CategoriesAnswers(
+                        pack = pack,
+                        added = current.added,
+                        habits = habits,
+                    )
+                },
+            )
         }
     }
 

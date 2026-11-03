@@ -177,6 +177,59 @@ internal class TransactionRepositoryImplTest {
         }
     }
 
+    @Nested
+    inner class RecordCashExpense {
+        @Test
+        fun `should record a confirmed expense on the Cash account`() = runTest {
+            // when
+            val id = repository.recordCashExpense(
+                amount = 500,
+                categoryId = null,
+                note = "Moto",
+                occurredAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // then
+            recorded() shouldContainExactlyInAnyOrder listOf(
+                TransactionEntity(
+                    id = id,
+                    accountId = CASH_ACCOUNT_ID,
+                    type = TransactionType.EXPENSE,
+                    status = TransactionStatus.CONFIRMED,
+                    origin = TransactionOrigin.MANUAL,
+                    amount = 500,
+                    occurredAt = Instant.ofEpochSecond(1_000),
+                    categoryId = null,
+                    placeId = null,
+                    rawSignalId = null,
+                    transferGroup = null,
+                    counterparty = null,
+                    note = "Moto",
+                ),
+            )
+        }
+    }
+
+    @Nested
+    inner class DeleteTransaction {
+        @Test
+        fun `should remove the transaction`() = runTest {
+            // given
+            val id = repository.recordCashExpense(
+                amount = 500,
+                categoryId = null,
+                note = "Moto",
+                occurredAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // when
+            repository.deleteTransaction(id)
+
+            // then
+            recorded() shouldHaveSize 0
+        }
+    }
+
     private suspend fun recorded(): List<TransactionEntity> =
         TransactionStatus.entries.flatMap { database.transactionDao().observeByStatus(it).first() }
 

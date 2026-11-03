@@ -33,13 +33,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.PaymentHabit
+import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.format.FcfaVisualTransformation
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.onboarding.ChoiceSurface
 import com.cauri.feature.onboarding.MissingAnswer
-import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.QuestionLabel
 import com.cauri.feature.onboarding.R
@@ -93,7 +93,7 @@ private fun HabitsContent(
         if (HabitsField.PAYMENT_HABIT in state.missingFields) MissingAnswer(R.string.onboarding_choice_missing)
 
         QuestionLabel(R.string.habits_cash_amount, modifier = Modifier.padding(top = CauriSpacing.xxl))
-        OnboardingField(
+        CauriTextField(
             value = state.cashDigits,
             onValueChange = onCashAmountChange,
             missing = HabitsField.CASH_AMOUNT in state.missingFields,

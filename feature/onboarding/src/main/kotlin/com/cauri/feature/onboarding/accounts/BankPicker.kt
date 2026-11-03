@@ -30,11 +30,11 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.Bank
 import com.cauri.core.design.component.BackdropShape
+import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
-import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.R
 
 private val ButtonHeight = 56.dp
@@ -117,7 +117,7 @@ private fun BankPickerHeader(state: AccountsUiState, actions: AccountsActions) {
         verticalArrangement = Arrangement.spacedBy(CauriSpacing.m),
     ) {
         Text(text = stringResource(R.string.accounts_pick_bank), style = MaterialTheme.typography.headlineSmall)
-        OnboardingField(
+        CauriTextField(
             value = state.bankQuery,
             onValueChange = actions::onBankQueryChange,
             missing = false,

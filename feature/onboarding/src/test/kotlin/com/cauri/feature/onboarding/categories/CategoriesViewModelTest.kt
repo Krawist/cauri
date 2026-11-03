@@ -168,7 +168,21 @@ internal class CategoriesViewModelTest {
                     PackCategory.HEALTH,
                 ),
                 added = listOf("Moto"),
+                habits = listOf(PackHabit.MOTO, PackHabit.FRITTERS, PackHabit.TAXI, PackHabit.AIRTIME),
             )
+        }
+
+        @Test
+        fun `should suggest only the habits of the kept categories`() {
+            // given
+            viewModel.onPackCategoryToggle(PackCategory.TRANSPORT)
+            viewModel.onPackCategoryToggle(PackCategory.AIRTIME_AND_DATA)
+
+            // when
+            viewModel.onContinue()
+
+            // then
+            viewModel.uiState.value.answered?.habits shouldBe listOf(PackHabit.FRITTERS)
         }
 
         @Test

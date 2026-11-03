@@ -25,6 +25,9 @@ internal interface TransactionDao {
     @Update
     suspend fun update(transaction: TransactionEntity)
 
+    @Query("DELETE FROM transactions WHERE id = :id")
+    suspend fun delete(id: Long)
+
     /** The two sides of a transfer. */
     @Query("SELECT * FROM transactions WHERE transferGroup = :transferGroup")
     suspend fun getByTransferGroup(transferGroup: String): List<TransactionEntity>

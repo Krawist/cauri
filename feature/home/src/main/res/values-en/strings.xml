@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_add_expense">Add an expense</string>
     <string name="home_cash_label">Cash in your pocket</string>
     <string name="home_count_cash">Count my cash</string>
     <string name="home_counted_date">Counted on %1$s</string>
@@ -11,8 +10,27 @@
         <item quantity="one">%d expense since</item>
         <item quantity="other">%d expenses since</item>
     </plurals>
+    <string name="home_habit_add">Add a habit</string>
+    <string name="home_habit_add_hint">A cash expense in one tap</string>
+    <string name="home_habit_amount">Amount</string>
+    <string name="home_habit_amount_hint">500</string>
+    <string name="home_habit_category">Category</string>
+    <string name="home_habit_delete">Delete</string>
+    <string name="home_habit_edit">Edit the habit</string>
+    <string name="home_habit_name">Name</string>
+    <string name="home_habit_name_hint">Moto, fritters…</string>
+    <string name="home_habit_new">New habit</string>
+    <string name="home_habit_recorded">%1$s · %2$s F recorded</string>
+    <string name="home_habit_save">Save</string>
+    <string name="home_habits_done">Done</string>
+    <string name="home_habits_drag">Move</string>
+    <string name="home_habits_hint">Drag a habit by its handle to change the order of the row.</string>
+    <string name="home_habits_reorder">Reorder</string>
+    <string name="home_habits_title">My habits</string>
+    <string name="home_other_cash_expense">Other cash expense</string>
     <string name="home_settings">Settings</string>
     <string name="home_time_pattern">h:mm a</string>
     <string name="home_time_pattern_hour">h a</string>
     <string name="home_title">Hello</string>
+    <string name="home_undo">Undo</string>
 </resources>

@@ -8,6 +8,8 @@ import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CashCountRepositoryImpl
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.CategoryRepositoryImpl
+import com.cauri.core.data.repository.HabitRepository
+import com.cauri.core.data.repository.HabitRepositoryImpl
 import com.cauri.core.data.repository.TransactionRepository
 import com.cauri.core.data.repository.TransactionRepositoryImpl
 import dagger.Binds
@@ -29,6 +31,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindCategoryRepository(impl: CategoryRepositoryImpl): CategoryRepository
+
+    @Binds
+    abstract fun bindHabitRepository(impl: HabitRepositoryImpl): HabitRepository
 
     @Binds
     abstract fun bindTransactionRepository(impl: TransactionRepositoryImpl): TransactionRepository

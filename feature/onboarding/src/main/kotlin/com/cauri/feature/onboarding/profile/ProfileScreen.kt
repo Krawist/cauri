@@ -19,11 +19,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
+import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.onboarding.LocalOnlyNote
 import com.cauri.feature.onboarding.MissingAnswer
-import com.cauri.feature.onboarding.OnboardingField
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.QuestionLabel
 import com.cauri.feature.onboarding.R
@@ -65,7 +65,7 @@ private fun ProfileContent(
         note = { LocalOnlyNote() },
     ) {
         QuestionLabel(R.string.profile_first_name)
-        OnboardingField(
+        CauriTextField(
             value = state.firstName,
             onValueChange = onFirstNameChange,
             missing = ProfileField.FIRST_NAME in state.missingFields,

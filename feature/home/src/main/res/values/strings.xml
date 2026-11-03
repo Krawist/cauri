@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_add_expense">Ajouter une dépense</string>
+    <string name="home_amount" translatable="false">%1$s F</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>
     <string name="home_counted_and_expenses" translatable="false">%1$s · %2$s</string>
@@ -14,8 +14,27 @@
         <item quantity="many">%d dépenses depuis</item>
         <item quantity="other">%d dépenses depuis</item>
     </plurals>
+    <string name="home_habit_add">Ajouter une habitude</string>
+    <string name="home_habit_add_hint">Une dépense cash en un tap</string>
+    <string name="home_habit_amount">Montant</string>
+    <string name="home_habit_amount_hint">500</string>
+    <string name="home_habit_category">Catégorie</string>
+    <string name="home_habit_delete">Supprimer</string>
+    <string name="home_habit_edit">Modifier l\'habitude</string>
+    <string name="home_habit_name">Nom</string>
+    <string name="home_habit_name_hint">Moto, beignets…</string>
+    <string name="home_habit_new">Nouvelle habitude</string>
+    <string name="home_habit_recorded">%1$s · %2$s F enregistré</string>
+    <string name="home_habit_save">Enregistrer</string>
+    <string name="home_habits_done">Terminé</string>
+    <string name="home_habits_drag">Déplacer</string>
+    <string name="home_habits_hint">Fais glisser une habitude par sa poignée pour changer l\'ordre de la ligne.</string>
+    <string name="home_habits_reorder">Réorganiser</string>
+    <string name="home_habits_title">Mes habitudes</string>
+    <string name="home_other_cash_expense">Autre dépense cash</string>
     <string name="home_settings">Réglages</string>
     <string name="home_time_pattern">H \'h\' mm</string>
     <string name="home_time_pattern_hour">H \'h\'</string>
     <string name="home_title">Bonjour</string>
+    <string name="home_undo">Annuler</string>
 </resources>

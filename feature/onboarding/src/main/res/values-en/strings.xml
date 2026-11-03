@@ -47,6 +47,10 @@
     <string name="category_leisure">Leisure</string>
     <string name="category_tontine">Tontine</string>
     <string name="category_transport">Transport</string>
+    <string name="habit_airtime">Airtime</string>
+    <string name="habit_fritters">Fritters</string>
+    <string name="habit_moto">Moto</string>
+    <string name="habit_taxi">Taxi</string>
     <string name="habits_both">A bit of both</string>
     <string name="habits_both_hint">Cash and mobile money</string>
     <string name="habits_cash">Mostly cash</string>

@@ -72,8 +72,8 @@ fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: (
         composable<CategoriesRoute> { entry ->
             val onboarding = onboardingViewModel(navController, entry)
             CategoriesScreen(
-                onCategoriesChosen = { categories ->
-                    onboarding.onCategoriesChosen(categories)
+                onCategoriesChosen = { categories, habits ->
+                    onboarding.onCategoriesChosen(categories = categories, habits = habits)
                     navController.navigate(AccountsRoute)
                 },
             )

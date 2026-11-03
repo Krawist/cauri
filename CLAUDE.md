@@ -181,7 +181,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   account (two transactions, one transfer group) and the fee, when given, as an expense on the account; all or
   nothing. Parsed from a signal it is « à confirmer » and keeps the signal on the account's side; entered by the user it
   is confirmed. The cash balance goes up by the amount withdrawn (tested). Nothing creates withdrawals yet: parsing
-  comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30). Next: CAU-14.
+  comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30).
+- [ ] **CAU-14** — habits (`HabitEntity`, `HabitRepository`, database v2 by auto-migration): row of glass tiles on
+  Accueil, a tap records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a
+  long-press opens the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by
+  dragging the handles. The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « + »
+  opens the quick entry; Cash preselected comes with CAU-26, and so do the suggestions from frequent manual entries.
+  `CauriTextField` moved to `:core:design`. Not checked on a phone yet (the phone was not reachable). Next: CAU-15.
 
 Update this section at the end of each ticket.
 
