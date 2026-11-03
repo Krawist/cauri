@@ -2,6 +2,7 @@ package com.cauri.core.capture.signal
 
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -42,6 +43,15 @@ internal class SignalFilterServiceImplTest {
         }
 
         @Test
+        fun `should keep the message of a watched sender wrapped in direction marks`() {
+            // when
+            val kept = service.keeps(watched = watched, packageName = "test.sms", title = "\u2068MobileMoney\u2069")
+
+            // then
+            kept.shouldBeTrue()
+        }
+
+        @Test
         fun `should never keep the user's own messages`() {
             // when
             val kept = service.keeps(watched = watched, packageName = "test.sms", title = "Maman")
@@ -66,6 +76,18 @@ internal class SignalFilterServiceImplTest {
 
             // then
             kept.shouldBeFalse()
+        }
+    }
+
+    @Nested
+    inner class Plain {
+        @Test
+        fun `should remove the direction marks and keep every other character`() {
+            // when
+            val plain = service.plain("\u2068OrangeMoney\u2069 \u200Ereçu 5\u202F000 FCFA")
+
+            // then
+            plain shouldBe "OrangeMoney reçu 5\u202F000 FCFA"
         }
     }
 }

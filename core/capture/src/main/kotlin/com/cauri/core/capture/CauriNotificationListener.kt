@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 /**
  * Keeps, as raw signals, the notifications of the watched senders (`watched_senders.json`): the apps of the operators
  * and the banks, and in the SMS and mail apps only their messages. Nothing else is kept. Each kept signal is then read
- * by the [SignalProcessor]. Android binds it again after
+ * by the [SignalProcessor]; the notifications still shown when it connects are read too. Android binds it again after
  * a reboot while the access is given; it asks to be bound again when it gets disconnected.
  */
 @AndroidEntryPoint
@@ -48,12 +48,13 @@ class CauriNotificationListener : NotificationListenerService() {
         val extras = notification.notification.extras
         val summary = notification.notification.flags and Notification.FLAG_GROUP_SUMMARY != 0
         if (sender == packageName || summary) return
-        val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
+        val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()?.let(filter::plain)
         val text = (
             extras.getCharSequence(Notification.EXTRA_BIG_TEXT)
                 ?: extras.getCharSequence(Notification.EXTRA_TEXT)
             )
             ?.toString()
+            ?.let(filter::plain)
             .orEmpty()
         val kept = text.isNotBlank() && filter.keeps(watched = senders.watched, packageName = sender, title = title)
         journal.seen(packageName = sender, title = title, kept = kept)
@@ -68,6 +69,12 @@ class CauriNotificationListener : NotificationListenerService() {
                 if (recorded) processor.process()
             }
         }
+    }
+
+    // The notifications still shown were posted while the listener was not bound, or before a fix: each is kept once,
+    // a notification read again having the same time as when it was posted.
+    override fun onListenerConnected() {
+        activeNotifications?.forEach(::onNotificationPosted)
     }
 
     override fun onListenerDisconnected() {
