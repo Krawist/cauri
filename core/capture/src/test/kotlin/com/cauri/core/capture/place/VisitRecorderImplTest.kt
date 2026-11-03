@@ -1,8 +1,10 @@
 package com.cauri.core.capture.place
 
+import com.cauri.core.capture.reminder.CountingDecider
 import com.cauri.core.data.repository.FakeVisitRepository
 import com.cauri.core.data.repository.FakeVisitRepository.Move
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.shouldBe
 import java.time.Instant
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Nested
@@ -10,7 +12,8 @@ import org.junit.jupiter.api.Test
 
 internal class VisitRecorderImplTest {
     private val visits = FakeVisitRepository()
-    private val recorder = VisitRecorderImpl(visits)
+    private val reminders = CountingDecider()
+    private val recorder = VisitRecorderImpl(visits, reminders)
 
     @Nested
     inner class Record {
@@ -30,6 +33,24 @@ internal class VisitRecorderImplTest {
 
             // then
             visits.moves shouldContainExactly listOf(Move(placeId = 3, at = NOON, entered = false))
+        }
+
+        @Test
+        fun `should decide about the card of a shop once left`() = runTest {
+            // when
+            recorder.record(transition = PlaceTransition.LEFT, placeIds = listOf(3), at = NOON)
+
+            // then
+            reminders.runs shouldBe 1
+        }
+
+        @Test
+        fun `should decide nothing when the user only stays`() = runTest {
+            // when
+            recorder.record(transition = PlaceTransition.STAYED, placeIds = listOf(3), at = NOON)
+
+            // then
+            reminders.runs shouldBe 0
         }
 
         @Test

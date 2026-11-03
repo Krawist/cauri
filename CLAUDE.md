@@ -491,6 +491,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (CAU-37+, by decision). Checked on the Galaxy S23 in dark mode with a made-up shop and simulated visits: the card at
   its usual amount, the sheet, « Rien dépensé ». The split of a visit in a count, a message come during a real visit not
   tried on a phone. Next: CAU-37.
+- [ ] **CAU-37** — the reminder rules and the decision log: `:core:engine` (pure Kotlin, JVM tests) holds
+  `ReminderRules` (« rules-1 », by decision: never a notification from 22 h to 7 h nor within 30 minutes of the last
+  one, the evening summary instead; a visit notifies after a stay of 10 minutes at a place leading to an expense half
+  the time or more, or with fewer than 5 visits before, is skipped below a fifth, goes to the summary otherwise; an
+  expense read in a message notifies; a withdrawal, an income or a transfer goes to the summary) and `FeatureEncoder`
+  (version 1, 12 numbers: the trigger, the hour as a sine and a cosine, the day, the stay by bands, the place's expense
+  rate, the time since the last transaction and the last notification, the notifications of the day, the cash, the
+  rules' score). `ReminderDecider` (`:core:capture`) decides once about each card of the last two hours, after each
+  message read and each visit ended, and logs it (`DecisionLogRepository`: features, action, probability 1, model
+  version; `ReminderAction` moved to `model`). By decision, « maintenant » sends the notification of the mockup
+  (`ReminderNotifier`, channel « Dépenses à confirmer »): a visit « Marché Mokolo : combien as-tu dépensé ? », « Visite
+  de 25 min · Alimentation · cash », its usual amount, « Rien » and « Autre montant » typed in the notification; an
+  expense « 5 000 F payés à Boulangerie Saker », « Orange Money · c'est quoi ? » and its three likely categories. Its
+  buttons answer the card without opening the app (`ReminderReplyReceiver`), which closes the decisions as before. The
+  evening summary is CAU-39. Debug builds show a card's notification at any hour (`adb shell am broadcast -a
+  com.cauri.debug.SHOW_REMINDER -p com.cauri.debug -e transaction 12`). Checked on the Galaxy S23 at night with made-up
+  messages and a made-up shop: decisions logged « EVENING_SUMMARY » by the rules, the two notifications, a category and
+  an amount typed confirming their card. A notification decided by day not seen yet. Next: CAU-38.
 
 Update this section at the end of each ticket.
 

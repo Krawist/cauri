@@ -21,6 +21,7 @@ booleans.
 | `com.cauri.debug.SIMULATE_CAPTURE_SILENCE` | `:core:capture`  | Simulates a month without message, for the Accueil card    |
 | `com.cauri.debug.PLACE_VISIT`              | `:core:capture`  | Tells a stay at a place, or its departure                  |
 | `com.cauri.debug.PLACE_STOP`               | `:feature:places` | Makes up a stop, then looks for frequent places           |
+| `com.cauri.debug.SHOW_REMINDER`            | `:core:capture`  | Shows the reminder notification of a card, at any hour     |
 
 ## Show a cash count reminder
 
@@ -133,6 +134,23 @@ for days in 5 3 1; do adb shell am broadcast -a com.cauri.debug.PLACE_STOP -p co
 
 A place near a declared one, or asked about before, is never asked again. Needs Cauri's notifications allowed for
 the notification; the card shows anyway.
+
+## Show the reminder of a card
+
+```bash
+adb shell am broadcast -a com.cauri.debug.SHOW_REMINDER -p com.cauri.debug -e transaction 12
+```
+
+Shows the reminder notification of the card to confirm `12` (CAU-37), whatever the rules would decide: a visit asks
+what was spent, with its usual amount, « Rien » and « Autre montant » typed in the notification; an expense read in a
+message asks its category. Its buttons answer the card as in the app. Without `transaction`, the newest card.
+
+| Extra         | Type | Default    | Values                                                         |
+|---------------|------|------------|----------------------------------------------------------------|
+| `transaction` | text | the newest | Id of the transaction of the card (the `transactions` table)   |
+
+Needs Cauri's notifications allowed; nothing shows otherwise. The decisions themselves follow the rules: never at
+night (22 h to 7 h).
 
 ## Read what the listener sees
 

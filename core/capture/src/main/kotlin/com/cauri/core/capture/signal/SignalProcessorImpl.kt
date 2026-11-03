@@ -1,5 +1,6 @@
 package com.cauri.core.capture.signal
 
+import com.cauri.core.capture.reminder.ReminderDecider
 import com.cauri.core.data.model.NewAccount
 import com.cauri.core.data.model.RawSignal
 import com.cauri.core.data.preferences.UserPreferencesRepository
@@ -32,6 +33,7 @@ internal class SignalProcessorImpl @Inject constructor(
     private val transferRepository: TransferRepository,
     private val preferencesRepository: UserPreferencesRepository,
     private val visitRepository: VisitRepository,
+    private val reminders: ReminderDecider,
     private val clock: Clock,
 ) : SignalProcessor {
     // The listener and the screens may ask at the same time: a signal must be read only once.
@@ -63,6 +65,8 @@ internal class SignalProcessorImpl @Inject constructor(
             transferRepository.linkTransfers()
             // A payment read during a visit to a shop is what was spent there.
             visitRepository.attachTransactions(clock.instant())
+            // Each new card: notify now, in the evening, or not at all.
+            reminders.decidePending()
         }
     }
 

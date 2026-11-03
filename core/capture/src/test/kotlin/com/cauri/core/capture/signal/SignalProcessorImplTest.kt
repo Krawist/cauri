@@ -1,5 +1,6 @@
 package com.cauri.core.capture.signal
 
+import com.cauri.core.capture.reminder.CountingDecider
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.NewAccount
@@ -59,6 +60,7 @@ internal class SignalProcessorImplTest {
         transferRepository = transfers,
         preferencesRepository = preferences,
         visitRepository = visits,
+        reminders = CountingDecider(),
         clock = Clock.systemUTC(),
     )
 

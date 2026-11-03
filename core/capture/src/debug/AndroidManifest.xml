@@ -39,5 +39,14 @@
                 <action android:name="com.cauri.debug.PLACE_VISIT" />
             </intent-filter>
         </receiver>
+        <!-- Debug builds only: shows the reminder notification of a card at any hour, the newest without extra.
+             adb shell am broadcast -a com.cauri.debug.SHOW_REMINDER -p com.cauri.debug -e transaction 12 -->
+        <receiver
+            android:name=".reminder.DebugReminderReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.SHOW_REMINDER" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

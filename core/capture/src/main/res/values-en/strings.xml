@@ -5,4 +5,16 @@
     <string name="capture_health_text">No message from your banks or Mobile Money for a month. Check that Cauri can read your notifications and run in the background.</string>
     <string name="capture_health_title">Cauri no longer receives your messages</string>
     <string name="notification_listener_label">Cauri · expense detection</string>
+    <string name="reminder_amount">%1$s F</string>
+    <string name="reminder_cash">cash</string>
+    <string name="reminder_channel">Expenses to confirm</string>
+    <string name="reminder_channel_description">Asks what you spent, at the right time and never at night.</string>
+    <string name="reminder_nothing">Nothing</string>
+    <string name="reminder_other_amount">Other amount</string>
+    <string name="reminder_other_amount_hint">Other amount in F</string>
+    <string name="reminder_payment_text">%1$s · what was it?</string>
+    <string name="reminder_payment_title">%1$s F paid to %2$s</string>
+    <string name="reminder_payment_title_alone">%1$s F paid</string>
+    <string name="reminder_visit_stay">Visit of %1$d min</string>
+    <string name="reminder_visit_title">%1$s: how much did you spend?</string>
 </resources>

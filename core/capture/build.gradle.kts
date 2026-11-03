@@ -14,6 +14,7 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.core.design)
+    implementation(projects.core.engine)
     implementation(projects.core.parsing)
     implementation(libs.androidx.core.ktx)
     implementation(libs.kotlinx.coroutines.core)
