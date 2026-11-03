@@ -6,6 +6,8 @@ import com.cauri.core.data.service.CountReminderService
 import com.cauri.core.data.service.CountReminderServiceImpl
 import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.TransferLinkService
+import com.cauri.core.data.service.TransferLinkServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,4 +24,7 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindCountReminderService(impl: CountReminderServiceImpl): CountReminderService
+
+    @Binds
+    abstract fun bindTransferLinkService(impl: TransferLinkServiceImpl): TransferLinkService
 }

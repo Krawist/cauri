@@ -6,6 +6,7 @@ import com.cauri.core.data.preferences.UserPreferencesRepository
 import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.RawSignalRepository
 import com.cauri.core.data.repository.TransactionRepository
+import com.cauri.core.data.repository.TransferRepository
 import com.cauri.core.parsing.MessageParser
 import com.cauri.core.parsing.model.ReceivedMessage
 import java.time.ZoneId
@@ -26,6 +27,7 @@ internal class SignalProcessorImpl @Inject constructor(
     private val detectionService: DetectionService,
     private val accountRepository: AccountRepository,
     private val transactionRepository: TransactionRepository,
+    private val transferRepository: TransferRepository,
     private val preferencesRepository: UserPreferencesRepository,
 ) : SignalProcessor {
     // The listener and the screens may ask at the same time: a signal must be read only once.
@@ -43,16 +45,18 @@ internal class SignalProcessorImpl @Inject constructor(
                     catalog = templateCatalogRepository.catalog,
                     zone = ZoneId.systemDefault(),
                 )?.let { parsed ->
-                        val account = accountRepository.accountOf(parsed.provider)
-                        if (account != null) {
-                            transactionRepository.recordDetected(
-                                detectionService.detect(signal = signal, parsed = parsed, account = account),
-                            )
-                        } else if (knownAccount(parsed.provider) != null) {
-                            preferencesRepository.proposeAccount(parsed.provider)
-                        }
+                    val account = accountRepository.accountOf(parsed.provider)
+                    if (account != null) {
+                        transactionRepository.recordDetected(
+                            detectionService.detect(signal = signal, parsed = parsed, account = account),
+                        )
+                    } else if (knownAccount(parsed.provider) != null) {
+                        preferencesRepository.proposeAccount(parsed.provider)
                     }
+                }
             }
+            // A transfer between two accounts comes as two messages: once both are read, they become one transfer.
+            transferRepository.linkTransfers()
         }
     }
 

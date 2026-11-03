@@ -13,6 +13,7 @@ import com.cauri.core.data.database.dao.PlaceDao
 import com.cauri.core.data.database.dao.RawSignalDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
+import com.cauri.core.data.database.dao.TransferLinkDao
 import com.cauri.core.data.database.dao.VisitDao
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.CashCountEntity
@@ -23,9 +24,12 @@ import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionMergeEntity
+import com.cauri.core.data.database.entity.TransferLinkEntity
 import com.cauri.core.data.database.entity.VisitEntity
 
 /** Local database of Cauri. Build it with [buildCauriDatabase], which creates the Cash account. */
+// One accessor per DAO, as Room needs: the count grows with the tables.
+@Suppress("TooManyFunctions")
 @Database(
     entities = [
         AccountEntity::class,
@@ -38,13 +42,15 @@ import com.cauri.core.data.database.entity.VisitEntity
         DecisionLogEntity::class,
         HabitEntity::class,
         TransactionMergeEntity::class,
+        TransferLinkEntity::class,
     ],
-    version = 6,
+    version = 7,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 5, to = 6),
+        AutoMigration(from = 6, to = 7),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -62,6 +68,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
 
     abstract fun transactionMergeDao(): TransactionMergeDao
+
+    abstract fun transferLinkDao(): TransferLinkDao
 
     abstract fun cashCountDao(): CashCountDao
 

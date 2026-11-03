@@ -43,6 +43,9 @@ internal object DatabaseModule {
     fun provideTransactionMergeDao(database: CauriDatabase) = database.transactionMergeDao()
 
     @Provides
+    fun provideTransferLinkDao(database: CauriDatabase) = database.transferLinkDao()
+
+    @Provides
     fun provideCashCountDao(database: CauriDatabase) = database.cashCountDao()
 
     @Provides

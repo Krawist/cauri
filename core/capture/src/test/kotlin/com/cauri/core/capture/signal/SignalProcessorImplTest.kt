@@ -7,6 +7,7 @@ import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeRawSignalRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
+import com.cauri.core.data.repository.FakeTransferRepository
 import com.cauri.core.parsing.MessageParserImpl
 import com.cauri.core.parsing.model.Direction
 import com.cauri.core.parsing.model.MessageKind
@@ -25,6 +26,7 @@ internal class SignalProcessorImplTest {
     private val rawSignals = FakeRawSignalRepository()
     private val accounts = FakeAccountRepository()
     private val transactions = FakeTransactionRepository()
+    private val transfers = FakeTransferRepository()
     private val preferences = FakeUserPreferencesRepository()
 
     // A made-up template: the processing, not the operators' formats, is tested here.
@@ -51,6 +53,7 @@ internal class SignalProcessorImplTest {
         detectionService = DetectionServiceImpl(),
         accountRepository = accounts,
         transactionRepository = transactions,
+        transferRepository = transfers,
         preferencesRepository = preferences,
     )
 
@@ -94,6 +97,19 @@ internal class SignalProcessorImplTest {
 
             // then
             processor.proposedAccounts.first().shouldBeEmpty()
+        }
+
+        @Test
+        fun `should link the transfers once the signals are read`() = runTest {
+            // given
+            accounts.createAccount(orangeMoney())
+            payment(text = "Paiement de 2500 FCFA")
+
+            // when
+            processor.process()
+
+            // then
+            transfers.linkRuns shouldBe 1
         }
 
         @Test

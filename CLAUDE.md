@@ -265,7 +265,19 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (`RecordedEntry`). Each merge is logged in `transaction_merges` (database v6) with the values the kept transaction
   had, and `undoMerge` puts both back; the writes are all or none in `TransactionMergeDao`. No screen uses it yet: the
   quick entry on any account (« Fusionné · Annuler ») comes with CAU-26, the merges in « Activité » with CAU-30.
-  Checked on the Galaxy S23: upgrade to v6, a detected payment still recorded. Next: CAU-23.
+  Checked on the Galaxy S23: upgrade to v6, a detected payment still recorded.
+- [ ] **CAU-23** — `TransferLinkService` (JVM tests): a detected debit and a detected credit are one transfer between
+  the user's accounts when on two accounts, within 30 minutes, the credit equal to the debit or smaller by at most 3 %
+  (an operator keeping its fee); the same amount, then the closest in time win, each operation in one transfer at most.
+  Both become the two sides of the transfer (one transfer group), and when less arrived than left, the debit is the
+  amount that arrived and the gap a fee on the debited account, so that each balance stays right. Orange Money writes
+  the bank's amount and its fee apart (« transfert de 100000 FCFA … Frais : 1000 FCFA »): both sides are then equal and
+  the fee is already an expense. `TransferRepository.linkTransfers` sweeps the detected expenses and incomes never
+  linked, after each `SignalProcessor.process`; each link is logged in `transfer_links` (database v7) and
+  `unlinkTransfer` puts both back, never linked again. Withdrawals to Cash were transfers already (CAU-13, CAU-21).
+  One line per transfer in « Activité » and the undo come with CAU-30. Checked on the Galaxy S23 with made-up messages:
+  the UBA debit « B2W … ORANGEMONEYCM » of 10 000 F and the Orange Money credit « depuis votre compte UBA » linked into
+  one transfer, its 100 F fee kept as an expense. Next: CAU-24.
 
 Update this section at the end of each ticket.
 

@@ -15,7 +15,10 @@ interface SignalProcessor {
     /** The accounts the user chose not to follow. */
     val ignoredAccounts: Flow<List<NewAccount>>
 
-    /** Reads every signal no template read yet, oldest first; safe to call at any time, runs once at a time. */
+    /**
+     * Reads every signal no template read yet, oldest first, then links the debits and credits that are transfers
+     * between the user's accounts; safe to call at any time, runs once at a time.
+     */
     suspend fun process()
 
     /** Creates the account of [provider] and reads its messages received so far. */
