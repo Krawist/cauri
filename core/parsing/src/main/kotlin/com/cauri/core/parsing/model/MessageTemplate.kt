@@ -9,6 +9,8 @@ import kotlinx.serialization.Serializable
  *
  * @property id Stable identifier, `<sender>.<message>` (« orange-money.payment »).
  * @property version Version of this template, raised at each change of its pattern or values.
+ * @property provider Code of the operator, bank or card whose account the message is about (« ORANGE_MONEY »), as
+ *   stored on the user's accounts.
  * @property senders Who sends it: SMS or mail sender names (« OrangeMoney »), case and spaces ignored, or package
  *   names of apps.
  * @property kind What the message reports.
@@ -26,6 +28,7 @@ import kotlinx.serialization.Serializable
 data class MessageTemplate(
     val id: String,
     val version: Int,
+    val provider: String,
     val senders: List<String>,
     val kind: MessageKind,
     val direction: Direction,

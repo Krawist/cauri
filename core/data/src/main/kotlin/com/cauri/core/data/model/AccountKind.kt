@@ -9,4 +9,7 @@ enum class AccountKind {
     MOBILE_MONEY,
 
     BANK,
+
+    /** A prepaid card with its own balance, such as the Orange Money virtual card. */
+    PREPAID_CARD,
 }

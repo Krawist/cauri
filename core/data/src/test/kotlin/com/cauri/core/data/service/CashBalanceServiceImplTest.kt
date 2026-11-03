@@ -134,5 +134,7 @@ internal class CashBalanceServiceImplTest {
         transferGroup = null,
         counterparty = null,
         note = null,
+        foreignAmount = null,
+        foreignCurrency = null,
     )
 }

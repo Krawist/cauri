@@ -25,6 +25,7 @@ import com.cauri.core.capture.permission.LocationAccess
 import com.cauri.core.capture.permission.PermissionStatus
 import com.cauri.core.data.model.CountReminderFrequency
 import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.model.NewAccount
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
@@ -55,6 +56,8 @@ internal fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = h
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
             override fun onCountReminderChange(settings: CountReminderSettings) = viewModel.onReminderChange(settings)
+
+            override fun onFollowAccount(provider: String) = viewModel.onFollowAccount(provider)
         }
     }
     SettingsContent(state = state, actions = actions)
@@ -87,7 +90,7 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
         RowGroup {
             SettingRow(
                 icon = DesignR.drawable.ic_battery,
-                title = R.string.settings_battery,
+                title = stringResource(R.string.settings_battery),
                 text = stringResource(R.string.settings_battery_text),
                 status = if (state.batteryUnrestricted) {
                     granted(R.string.settings_battery_unrestricted)
@@ -105,6 +108,30 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
         )
         SectionLabel(stringResource(R.string.settings_reminders), modifier = Modifier.padding(top = CauriSpacing.xxl))
         RemindersGroup(settings = state.countReminder, actions = actions)
+        if (state.ignoredAccounts.isNotEmpty()) {
+            SectionLabel(
+                stringResource(R.string.settings_ignored_accounts),
+                modifier = Modifier.padding(top = CauriSpacing.xxl),
+            )
+            IgnoredAccountsGroup(accounts = state.ignoredAccounts, actions = actions)
+        }
+    }
+}
+
+// A tap follows the account: Cauri reads its messages again, from the first one it kept.
+@Composable
+private fun IgnoredAccountsGroup(accounts: List<NewAccount>, actions: SettingsActions) {
+    RowGroup {
+        accounts.forEachIndexed { index, account ->
+            if (index > 0) Separator()
+            SettingRow(
+                icon = DesignR.drawable.ic_message,
+                title = account.name,
+                text = stringResource(R.string.settings_ignored_account_text),
+                status = off(R.string.settings_ignored),
+                onClick = { actions.onFollowAccount(account.provider) },
+            )
+        }
     }
 }
 
@@ -113,7 +140,7 @@ private fun RemindersGroup(settings: CountReminderSettings, actions: SettingsAct
     RowGroup {
         SettingRow(
             icon = DesignR.drawable.ic_clock,
-            title = R.string.settings_count_reminder,
+            title = stringResource(R.string.settings_count_reminder),
             text = if (settings.frequency == CountReminderFrequency.NEVER) {
                 stringResource(R.string.settings_count_reminder_none)
             } else {
@@ -134,7 +161,7 @@ private fun PermissionsGroup(status: PermissionStatus, actions: SettingsActions)
     RowGroup {
         SettingRow(
             icon = DesignR.drawable.ic_message,
-            title = R.string.settings_notification_access,
+            title = stringResource(R.string.settings_notification_access),
             text = stringResource(R.string.settings_notification_access_text),
             status = if (status.notificationAccess) granted(R.string.settings_allowed) else refused(),
             onClick = actions::onNotificationAccess,
@@ -142,7 +169,7 @@ private fun PermissionsGroup(status: PermissionStatus, actions: SettingsActions)
         Separator()
         SettingRow(
             icon = DesignR.drawable.ic_bell,
-            title = R.string.settings_notifications,
+            title = stringResource(R.string.settings_notifications),
             text = stringResource(R.string.settings_notifications_text),
             status = if (status.notificationsAllowed) granted(R.string.settings_allowed) else refused(),
             onClick = actions::onNotifications,
@@ -150,7 +177,7 @@ private fun PermissionsGroup(status: PermissionStatus, actions: SettingsActions)
         Separator()
         SettingRow(
             icon = DesignR.drawable.ic_place,
-            title = R.string.settings_location,
+            title = stringResource(R.string.settings_location),
             text = stringResource(R.string.settings_location_text),
             status = when (status.location) {
                 LocationAccess.ALWAYS -> granted(R.string.settings_location_always)
@@ -198,4 +225,6 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onCountReminder(open: Boolean) = Unit
 
     override fun onCountReminderChange(settings: CountReminderSettings) = Unit
+
+    override fun onFollowAccount(provider: String) = Unit
 }

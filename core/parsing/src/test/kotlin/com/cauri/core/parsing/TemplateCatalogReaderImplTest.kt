@@ -20,7 +20,7 @@ internal class TemplateCatalogReaderImplTest {
         fun `should read a catalogue`() {
             // given
             val json = catalog(
-                """{"id": "test.payment", "version": 2, "senders": ["TestMoney"], "kind": "PAYMENT",
+                """{"id": "test.payment", "version": 2, "provider": "TEST_MONEY", "senders": ["TestMoney"], "kind": "PAYMENT",
                 "direction": "DEBIT", "currency": "XAF", "pattern": "Paiement de (?<amount>\\d+) F le (?<date>.+)",
                 "dateFormat": "dd/MM/yyyy HH:mm"}""",
             )
@@ -35,6 +35,7 @@ internal class TemplateCatalogReaderImplTest {
                     MessageTemplate(
                         id = "test.payment",
                         version = 2,
+                        provider = "TEST_MONEY",
                         senders = listOf("TestMoney"),
                         kind = MessageKind.PAYMENT,
                         direction = Direction.DEBIT,
@@ -69,6 +70,16 @@ internal class TemplateCatalogReaderImplTest {
         }
 
         @Test
+        fun `should refuse a template without provider`() {
+            // given
+            val json = catalog(template(provider = "", pattern = "(?<amount>\\\\d+)"))
+
+            // when & then
+            shouldThrow<IllegalArgumentException> { reader.read(json) } shouldHaveMessage
+                "Template test.payment has no provider"
+        }
+
+        @Test
         fun `should refuse a template without sender`() {
             // given
             val json = catalog(template(senders = "", pattern = "(?<amount>\\\\d+)"))
@@ -98,9 +109,9 @@ internal class TemplateCatalogReaderImplTest {
         }
     }
 
-    private fun template(senders: String = "\"TestMoney\"", pattern: String) =
-        """{"id": "test.payment", "version": 1, "senders": [$senders], "kind": "PAYMENT", "direction": "DEBIT",
-        "currency": "XAF", "pattern": "$pattern"}"""
+    private fun template(provider: String = "TEST_MONEY", senders: String = "\"TestMoney\"", pattern: String) =
+        """{"id": "test.payment", "version": 1, "provider": "$provider", "senders": [$senders], "kind": "PAYMENT",
+        "direction": "DEBIT", "currency": "XAF", "pattern": "$pattern"}"""
 
     private fun catalog(vararg templates: String) =
         """{"version": "test", "templates": [${templates.joinToString()}]}"""

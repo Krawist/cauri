@@ -46,6 +46,7 @@ internal class MessageTemplatesTest {
                 ParsedMessage(
                     templateId = it.templateId,
                     templateVersion = 1,
+                    provider = catalog.templates.single { template -> template.id == it.templateId }.provider,
                     kind = it.kind,
                     direction = it.direction,
                     amount = it.amount,

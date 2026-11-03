@@ -6,6 +6,8 @@ import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
+import com.cauri.core.data.model.DetectedOperation
+import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
@@ -32,12 +34,58 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
             transferGroup = UUID.randomUUID().toString(),
             counterparty = null,
             note = null,
+            foreignAmount = null,
+            foreignCurrency = null,
         )
         // The signal is kept on the side it comes from: a signal creates at most one transaction.
         val out = side.copy(rawSignalId = withdrawal.rawSignalId)
         val into = side.copy(accountId = CASH_ACCOUNT_ID, type = TransactionType.TRANSFER_IN)
         val fee = withdrawal.fee?.let { side.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
         transactionDao.insertAll(listOfNotNull(out, into, fee))
+    }
+
+    override suspend fun recordDetected(operation: DetectedOperation) {
+        val type = when (operation.type) {
+            DetectedType.EXPENSE -> TransactionType.EXPENSE
+            DetectedType.INCOME -> TransactionType.INCOME
+            DetectedType.WITHDRAWAL -> TransactionType.TRANSFER_OUT
+            DetectedType.DEPOSIT -> TransactionType.TRANSFER_IN
+        }
+        val transfer = type == TransactionType.TRANSFER_OUT || type == TransactionType.TRANSFER_IN
+        val detected = TransactionEntity(
+            accountId = operation.accountId,
+            type = type,
+            status = TransactionStatus.DETECTED,
+            origin = TransactionOrigin.SIGNAL,
+            amount = operation.amount,
+            occurredAt = operation.occurredAt,
+            categoryId = null,
+            placeId = null,
+            rawSignalId = operation.rawSignalId,
+            transferGroup = if (transfer) UUID.randomUUID().toString() else null,
+            counterparty = operation.counterparty,
+            note = null,
+            foreignAmount = operation.foreignAmount,
+            foreignCurrency = operation.foreignCurrency,
+        )
+        // Only the detected side keeps the signal: a signal creates at most one transaction.
+        val plain = detected.copy(rawSignalId = null, counterparty = null, foreignAmount = null, foreignCurrency = null)
+        val cash = detected.transferGroup?.let {
+            val cashType = if (type ==
+                TransactionType.TRANSFER_OUT
+            ) {
+                TransactionType.TRANSFER_IN
+            } else {
+                TransactionType.TRANSFER_OUT
+            }
+            plain.copy(accountId = CASH_ACCOUNT_ID, type = cashType)
+        }
+        val fee = operation.fee?.let { plain.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
+        transactionDao.insertParsed(
+            transactions = listOfNotNull(detected, cash, fee),
+            rawSignalId = operation.rawSignalId,
+            templateVersion = operation.templateVersion,
+        )
     }
 
     override suspend fun recordCashExpense(amount: Long, categoryId: Long?, note: String, occurredAt: Instant): Long =
@@ -55,6 +103,8 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
                 transferGroup = null,
                 counterparty = null,
                 note = note,
+                foreignAmount = null,
+                foreignCurrency = null,
             ),
         )
 
@@ -74,6 +124,8 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
                     transferGroup = null,
                     counterparty = null,
                     note = it.note,
+                    foreignAmount = null,
+                    foreignCurrency = null,
                 )
             },
         )

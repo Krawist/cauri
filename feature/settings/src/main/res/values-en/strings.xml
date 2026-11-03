@@ -23,6 +23,9 @@
     <string name="settings_count_reminder_why">A reminder in the evening, one a day at most, to keep your cash up to date.</string>
     <string name="settings_done">Done</string>
     <string name="settings_hint">Tap a row to change it in Android\'s settings.</string>
+    <string name="settings_ignored">Ignored</string>
+    <string name="settings_ignored_account_text">Cauri does not read its messages. Tap to follow it.</string>
+    <string name="settings_ignored_accounts">Ignored accounts</string>
     <string name="settings_location">Location</string>
     <string name="settings_location_always">Always</string>
     <string name="settings_location_text">To remind you of an expense when you leave a market or a shop. Optional.</string>

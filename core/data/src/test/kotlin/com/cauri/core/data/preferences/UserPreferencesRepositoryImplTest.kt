@@ -120,4 +120,62 @@ internal class UserPreferencesRepositoryImplTest {
             repository.lastCountReminder.first() shouldBe LocalDate.of(2026, 11, 3)
         }
     }
+
+    @Nested
+    inner class ProposeAccount {
+        @Test
+        fun `should offer to follow the provider`() = scope.runTest {
+            // when
+            repository.proposeAccount("ORANGE_MONEY")
+
+            // then
+            repository.proposedAccounts.first() shouldBe setOf("ORANGE_MONEY")
+        }
+
+        @Test
+        fun `should not offer again a provider the user ignored`() = scope.runTest {
+            // given
+            repository.ignoreAccount("ORANGE_MONEY")
+
+            // when
+            repository.proposeAccount("ORANGE_MONEY")
+
+            // then
+            repository.proposedAccounts.first() shouldBe emptySet()
+        }
+    }
+
+    @Nested
+    inner class IgnoreAccount {
+        @Test
+        fun `should move the offer to the ignored providers`() = scope.runTest {
+            // given
+            repository.proposeAccount("ORANGE_MONEY")
+
+            // when
+            repository.ignoreAccount("ORANGE_MONEY")
+
+            // then
+            repository.proposedAccounts.first() shouldBe emptySet()
+            repository.ignoredAccounts.first() shouldBe setOf("ORANGE_MONEY")
+        }
+    }
+
+    @Nested
+    inner class ClearAccountChoice {
+        @Test
+        fun `should forget the offer and the refusal`() = scope.runTest {
+            // given
+            repository.proposeAccount("UBA")
+            repository.ignoreAccount("ORANGE_MONEY")
+
+            // when
+            repository.clearAccountChoice("UBA")
+            repository.clearAccountChoice("ORANGE_MONEY")
+
+            // then
+            repository.proposedAccounts.first() shouldBe emptySet()
+            repository.ignoredAccounts.first() shouldBe emptySet()
+        }
+    }
 }

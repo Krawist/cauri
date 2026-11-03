@@ -4,9 +4,13 @@ import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountStatus
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.Account
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.CASH_PROVIDER
 import com.cauri.core.data.model.NewAccount
 import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -51,7 +55,7 @@ internal class AccountRepositoryImplTest {
                 AccountEntity(
                     name = "Cash",
                     kind = AccountKind.CASH,
-                    provider = null,
+                    provider = CASH_PROVIDER,
                     currency = "XAF",
                     status = AccountStatus.ACTIVE,
                 ),
@@ -70,6 +74,32 @@ internal class AccountRepositoryImplTest {
                     status = AccountStatus.ACTIVE,
                 ),
             )
+        }
+    }
+
+    @Nested
+    inner class AccountOf {
+        @Test
+        fun `should find the account of a provider`() = runTest {
+            // given
+            val id = repository.createAccount(
+                NewAccount(name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF"),
+            )
+
+            // when
+            val account = repository.accountOf("UBA")
+
+            // then
+            account shouldBe Account(id = id, name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF")
+        }
+
+        @Test
+        fun `should find nothing for a provider without account`() = runTest {
+            // when
+            val account = repository.accountOf("UBA")
+
+            // then
+            account.shouldBeNull()
         }
     }
 }

@@ -6,6 +6,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.cauri.core.capture.signal.NotificationJournal
 import com.cauri.core.capture.signal.SignalFilterService
+import com.cauri.core.capture.signal.SignalProcessor
 import com.cauri.core.capture.signal.WatchedSenderRepository
 import com.cauri.core.data.repository.RawSignalRepository
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Keeps, as raw signals, the notifications of the watched senders (`watched_senders.json`): the apps of the operators
- * and the banks, and in the SMS and mail apps only their messages. Nothing else is kept. Android binds it again after
+ * and the banks, and in the SMS and mail apps only their messages. Nothing else is kept. Each kept signal is then read
+ * by the [SignalProcessor]. Android binds it again after
  * a reboot while the access is given; it asks to be bound again when it gets disconnected.
  */
 @AndroidEntryPoint
@@ -35,6 +37,9 @@ class CauriNotificationListener : NotificationListenerService() {
 
     @Inject
     internal lateinit var journal: NotificationJournal
+
+    @Inject
+    internal lateinit var processor: SignalProcessor
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -54,12 +59,13 @@ class CauriNotificationListener : NotificationListenerService() {
         journal.seen(packageName = sender, title = title, kept = kept)
         if (kept) {
             scope.launch {
-                rawSignals.record(
+                val recorded = rawSignals.record(
                     sender = sender,
                     title = title,
                     text = text,
                     receivedAt = Instant.ofEpochMilli(notification.postTime),
                 )
+                if (recorded) processor.process()
             }
         }
     }

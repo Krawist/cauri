@@ -1,0 +1,23 @@
+package com.cauri.core.data.repository
+
+import com.cauri.core.data.model.RawSignal
+import java.time.Instant
+
+/** In-memory [RawSignalRepository] for tests: recorded signals get the ids 1, 2, 3… and stay unparsed. */
+class FakeRawSignalRepository : RawSignalRepository {
+    /** The signals [unparsed] gives, in order. */
+    val signals = mutableListOf<RawSignal>()
+
+    override suspend fun record(sender: String, title: String?, text: String, receivedAt: Instant): Boolean {
+        signals += RawSignal(
+            id = signals.size + 1L,
+            sender = sender,
+            title = title,
+            text = text,
+            receivedAt = receivedAt,
+        )
+        return true
+    }
+
+    override suspend fun unparsed(): List<RawSignal> = signals.toList()
+}

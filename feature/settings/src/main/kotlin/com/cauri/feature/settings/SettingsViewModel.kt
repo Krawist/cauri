@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cauri.core.capture.battery.BatteryService
 import com.cauri.core.capture.permission.PermissionService
+import com.cauri.core.capture.signal.SignalProcessor
 import com.cauri.core.data.model.CountReminderSettings
 import com.cauri.core.data.preferences.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,14 +17,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * Settings screen: the status of each permission and of the battery, changed in the system settings, and the cash
- * count reminders. The screen calls [refresh] when the user comes back from the system settings.
+ * Settings screen: the status of each permission and of the battery, changed in the system settings, the cash count
+ * reminders and the accounts the user chose not to follow. The screen calls [refresh] when the user comes back from
+ * the system settings.
  */
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     private val permissions: PermissionService,
     private val battery: BatteryService,
     private val preferences: UserPreferencesRepository,
+    private val processor: SignalProcessor,
 ) : ViewModel() {
     private val state = MutableStateFlow(
         SettingsUiState(permissions = permissions.status(), batteryUnrestricted = battery.unrestricted()),
@@ -34,6 +37,9 @@ internal class SettingsViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             preferences.countReminder.collect { settings -> state.update { it.copy(countReminder = settings) } }
+        }
+        viewModelScope.launch {
+            processor.ignoredAccounts.collect { accounts -> state.update { it.copy(ignoredAccounts = accounts) } }
         }
     }
 
@@ -46,6 +52,11 @@ internal class SettingsViewModel @Inject constructor(
 
     fun onReminderChange(settings: CountReminderSettings) {
         viewModelScope.launch { preferences.saveCountReminder(settings) }
+    }
+
+    /** Follows the account of [provider] and reads the messages it received so far. */
+    fun onFollowAccount(provider: String) {
+        viewModelScope.launch { processor.follow(provider) }
     }
 
     /** System screen where the user gives or takes back the access to the notifications. */

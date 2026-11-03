@@ -7,6 +7,7 @@ import java.time.Instant
  *
  * @property templateId Identifier of the template that read the message.
  * @property templateVersion Version of that template.
+ * @property provider Code of the operator, bank or card whose account the message is about.
  * @property kind What the message reports.
  * @property direction Whether the money leaves the account or comes into it.
  * @property amount Amount of the operation, fees excluded.
@@ -21,6 +22,7 @@ import java.time.Instant
 data class ParsedMessage(
     val templateId: String,
     val templateVersion: Int,
+    val provider: String,
     val kind: MessageKind,
     val direction: Direction,
     val amount: Long,

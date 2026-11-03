@@ -25,6 +25,10 @@ internal interface AccountDao {
     @Delete
     suspend fun delete(account: AccountEntity)
 
+    /** The account of [provider], hidden or not; `null` when the user has none. */
+    @Query("SELECT * FROM accounts WHERE provider = :provider ORDER BY id LIMIT 1")
+    suspend fun getByProvider(provider: String): AccountEntity?
+
     @Query("SELECT * FROM accounts WHERE id = :id")
     suspend fun getById(id: Long): AccountEntity?
 

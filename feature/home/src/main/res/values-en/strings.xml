@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="home_account_follow">Follow this account</string>
+    <string name="home_account_ignore">No thanks</string>
+    <string name="home_account_label">Account spotted</string>
+    <string name="home_account_text">Cauri recognised %1$s messages. It can turn them into your payments, which you always confirm. You can change your mind in Settings.</string>
+    <string name="home_account_title">Follow your %1$s account?</string>
     <string name="home_cash_label">Cash in your pocket</string>
     <string name="home_count_cash">Count my cash</string>
     <string name="home_counted">Counted %1$s</string>

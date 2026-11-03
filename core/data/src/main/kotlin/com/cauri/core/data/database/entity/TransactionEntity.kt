@@ -15,7 +15,8 @@ import java.time.Instant
  * @property type Direction of the money.
  * @property status Detected, confirmed or dismissed.
  * @property origin How the transaction was created.
- * @property amount Amount in minor units of the account's currency, always positive (XAF has no decimals).
+ * @property amount Amount in minor units of the account's currency, always positive (XAF has no decimals); 0 for an
+ *   operation made in another currency, until the user types what it cost.
  * @property occurredAt When the money moved.
  * @property categoryId Category; `null` until one is chosen (and for transfers).
  * @property placeId Place where it happened; `null` when unknown.
@@ -23,6 +24,9 @@ import java.time.Instant
  * @property transferGroup Identifier shared by the two sides of a transfer; `null` for other transactions.
  * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
  * @property note Free note of the user; `null` when there is none.
+ * @property foreignAmount Amount in minor units of [foreignCurrency] for an operation made in another currency than the
+ *   account's, such as a card payment in USD; `null` otherwise.
+ * @property foreignCurrency ISO 4217 code of [foreignAmount]; `null` when the operation was in the account's currency.
  */
 @Entity(
     tableName = "transactions",
@@ -55,4 +59,6 @@ internal data class TransactionEntity(
     val transferGroup: String?,
     val counterparty: String?,
     val note: String?,
+    val foreignAmount: Long?,
+    val foreignCurrency: String?,
 )

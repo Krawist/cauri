@@ -238,7 +238,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   SIM), UBA credits and other UBA debits (only two operation SMS seen), bank mails, and the creation of the virtual
   card (one SMS, whose amount may be a fee or a first top-up). For CAU-21: the ENEO payment and
   the airtime top-up each come with a second SMS left unrecognised on purpose; the virtual card has its own balance,
-  and its top-up has no Orange Money debit SMS. Next: CAU-21.
+  and its top-up has no Orange Money debit SMS.
+- [ ] **CAU-21** — `SignalProcessor` (`:core:capture`) reads the unread raw signals with the bundled catalogue (each
+  template now names its `provider`), when the listener keeps one and when Accueil opens, once at a time.
+  `DetectionService` (JVM tests): withdrawal → transfer to Cash, deposit → transfer from Cash (agents and services
+  alike, by decision), other debits → expense, other credits → income, a fee above 0 → separate expense, an operation in
+  another currency → amount 0 with `foreignAmount`/`foreignCurrency` kept (database v4) until the user types it.
+  `TransactionRepository.recordDetected` writes them « à confirmer » and marks the signal read in one transaction; a
+  notification posted twice creates one transaction. A message about an account the user does not have creates nothing:
+  Accueil offers to follow it (« Suivre ton compte … ? », `AccountProposalViewModel`), a refusal is kept
+  (`ignoredAccounts` in DataStore) and Réglages lists the ignored accounts, a tap following them and reading their
+  messages received so far. The Orange Money virtual card is an account of its own (`PREPAID_CARD`, « Orange Money
+  Virtuo »). Every account has a provider, `CASH_PROVIDER` (« CASH ») for the Cash account (database v5, a manual
+  migration that recreates the accounts table and its trigger). Debug builds keep a made-up message on demand: `adb
+  shell am broadcast -a com.cauri.debug.RECORD_SIGNAL -e title OrangeMoney -e text "…" -p com.cauri.debug`. Checked on
+  the Galaxy S23 with made-up Orange Money messages: database upgrades to v4 then v5 (Cash provider set, trigger kept),
+  the offer, « Non merci », following from Réglages, the payment, the withdrawal raising the cash by 10 000 F with its
+  fee, a repeated message kept once. « À confirmer » (CAU-27) and « Activité » (CAU-30) do not exist yet, so the
+  detected transactions show only through the balances. Next: CAU-22.
 
 Update this section at the end of each ticket.
 

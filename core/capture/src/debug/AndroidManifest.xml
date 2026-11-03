@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Debug builds only: keeps and reads a made-up operator message, to check the templates on a phone.
+             adb shell am broadcast -a com.cauri.debug.RECORD_SIGNAL -e title OrangeMoney -e text "…" -p com.cauri.debug -->
+        <receiver
+            android:name=".signal.DebugSignalReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.RECORD_SIGNAL" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

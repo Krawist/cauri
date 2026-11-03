@@ -14,6 +14,8 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
         CountReminderSettings(frequency = CountReminderFrequency.WHEN_USEFUL, hour = 20),
     )
     override val lastCountReminder = MutableStateFlow<LocalDate?>(null)
+    override val proposedAccounts = MutableStateFlow<Set<String>>(emptySet())
+    override val ignoredAccounts = MutableStateFlow<Set<String>>(emptySet())
 
     override suspend fun setOnboardingCompleted() {
         onboardingCompleted.value = true
@@ -29,5 +31,19 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     override suspend fun setLastCountReminder(day: LocalDate) {
         lastCountReminder.value = day
+    }
+
+    override suspend fun proposeAccount(provider: String) {
+        if (provider !in ignoredAccounts.value) proposedAccounts.value += provider
+    }
+
+    override suspend fun ignoreAccount(provider: String) {
+        proposedAccounts.value -= provider
+        ignoredAccounts.value += provider
+    }
+
+    override suspend fun clearAccountChoice(provider: String) {
+        proposedAccounts.value -= provider
+        ignoredAccounts.value -= provider
     }
 }

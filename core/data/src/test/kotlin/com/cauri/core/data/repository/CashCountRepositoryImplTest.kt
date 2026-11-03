@@ -77,6 +77,8 @@ internal class CashCountRepositoryImplTest {
                     transferGroup = null,
                     counterparty = null,
                     note = null,
+                    foreignAmount = null,
+                    foreignCurrency = null,
                 ),
             )
 

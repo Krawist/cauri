@@ -3,6 +3,7 @@ package com.cauri.core.data.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionStatus
@@ -25,6 +26,20 @@ internal interface TransactionDao {
 
     @Update
     suspend fun update(transaction: TransactionEntity)
+
+    /** Remembers that [templateVersion] read the raw signal [rawSignalId]: it is no longer replayed. */
+    @Query("UPDATE raw_signals SET templateVersion = :templateVersion WHERE id = :rawSignalId")
+    suspend fun markParsed(rawSignalId: Long, templateVersion: String)
+
+    /**
+     * Inserts [transactions], read in the raw signal [rawSignalId] by [templateVersion], and marks the signal read: all
+     * or none.
+     */
+    @Transaction
+    suspend fun insertParsed(transactions: List<TransactionEntity>, rawSignalId: Long, templateVersion: String) {
+        insertAll(transactions)
+        markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
+    }
 
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun delete(id: Long)

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.cauri.core.data.model.CountReminderFrequency
 import com.cauri.core.data.model.CountReminderSettings
 import com.cauri.core.data.model.IncomeType
@@ -39,6 +40,10 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         it[LastReminderDay]?.let(LocalDate::ofEpochDay)
     }
 
+    override val proposedAccounts: Flow<Set<String>> = dataStore.data.map { it[ProposedAccounts].orEmpty() }
+
+    override val ignoredAccounts: Flow<Set<String>> = dataStore.data.map { it[IgnoredAccounts].orEmpty() }
+
     override suspend fun setOnboardingCompleted() {
         dataStore.edit { it[OnboardingCompleted] = true }
     }
@@ -61,6 +66,30 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
 
     override suspend fun setLastCountReminder(day: LocalDate) {
         dataStore.edit { it[LastReminderDay] = day.toEpochDay() }
+    }
+
+    override suspend fun proposeAccount(provider: String) {
+        dataStore.edit {
+            if (provider !in
+                it[IgnoredAccounts].orEmpty()
+            ) {
+                it[ProposedAccounts] = it[ProposedAccounts].orEmpty() + provider
+            }
+        }
+    }
+
+    override suspend fun ignoreAccount(provider: String) {
+        dataStore.edit {
+            it[ProposedAccounts] = it[ProposedAccounts].orEmpty() - provider
+            it[IgnoredAccounts] = it[IgnoredAccounts].orEmpty() + provider
+        }
+    }
+
+    override suspend fun clearAccountChoice(provider: String) {
+        dataStore.edit {
+            it[ProposedAccounts] = it[ProposedAccounts].orEmpty() - provider
+            it[IgnoredAccounts] = it[IgnoredAccounts].orEmpty() - provider
+        }
     }
 
     // The profile is saved as a whole: it is either complete or absent.
@@ -89,6 +118,8 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val ReminderFrequency = stringPreferencesKey("count_reminder_frequency")
         val ReminderHour = intPreferencesKey("count_reminder_hour")
         val LastReminderDay = longPreferencesKey("count_reminder_last_day")
+        val ProposedAccounts = stringSetPreferencesKey("accounts_proposed")
+        val IgnoredAccounts = stringSetPreferencesKey("accounts_ignored")
         const val DEFAULT_REMINDER_HOUR = 20
     }
 }

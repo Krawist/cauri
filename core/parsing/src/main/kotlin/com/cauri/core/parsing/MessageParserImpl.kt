@@ -61,6 +61,7 @@ class MessageParserImpl @Inject constructor() : MessageParser {
             ParsedMessage(
                 templateId = template.id,
                 templateVersion = template.version,
+                provider = template.provider,
                 kind = template.kind,
                 direction = template.direction,
                 amount = it,

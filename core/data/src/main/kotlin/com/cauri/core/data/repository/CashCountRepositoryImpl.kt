@@ -58,6 +58,8 @@ internal class CashCountRepositoryImpl @Inject constructor(
                     transferGroup = null,
                     counterparty = null,
                     note = null,
+                    foreignAmount = null,
+                    foreignCurrency = null,
                 ),
             )
         }

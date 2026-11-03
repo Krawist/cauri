@@ -209,6 +209,8 @@ internal class TransactionDaoTest {
         transferGroup = null,
         counterparty = null,
         note = null,
+        foreignAmount = null,
+        foreignCurrency = null,
     )
 
     private fun transfer(accountId: Long, type: TransactionType, group: String) = TransactionEntity(
@@ -224,5 +226,7 @@ internal class TransactionDaoTest {
         transferGroup = group,
         counterparty = null,
         note = null,
+        foreignAmount = null,
+        foreignCurrency = null,
     )
 }

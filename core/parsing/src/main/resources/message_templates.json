@@ -4,6 +4,7 @@
     {
       "id": "orange-money.transfer-sent",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -16,6 +17,7 @@
     {
       "id": "orange-money.transfer-received",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -28,6 +30,7 @@
     {
       "id": "orange-money.money-received",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -40,6 +43,7 @@
     {
       "id": "orange-money.international-received",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -52,6 +56,7 @@
     {
       "id": "orange-money.international-received-from",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -64,6 +69,7 @@
     {
       "id": "orange-money.international-sent",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -76,6 +82,7 @@
     {
       "id": "orange-money.from-bank",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -88,6 +95,7 @@
     {
       "id": "orange-money.to-bank",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -100,6 +108,7 @@
     {
       "id": "orange-money.deposit",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -112,6 +121,7 @@
     {
       "id": "orange-money.withdrawal",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -124,6 +134,7 @@
     {
       "id": "orange-money.merchant-payment",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -136,6 +147,7 @@
     {
       "id": "orange-money.bundle-payment",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -148,6 +160,7 @@
     {
       "id": "orange-money.bundle-purchase",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -160,6 +173,7 @@
     {
       "id": "orange-money.airtime",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -172,6 +186,7 @@
     {
       "id": "orange-money.eneo-payment",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -184,6 +199,7 @@
     {
       "id": "orange-money.eneo-payment-en",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -196,6 +212,7 @@
     {
       "id": "orange-money.payment",
       "version": 1,
+      "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
       ],
@@ -208,6 +225,7 @@
     {
       "id": "orange-money.card-payment",
       "version": 1,
+      "provider": "ORANGE_MONEY_CARD",
       "senders": [
         "OrangeMoney"
       ],
@@ -220,6 +238,7 @@
     {
       "id": "orange-money.card-top-up",
       "version": 1,
+      "provider": "ORANGE_MONEY_CARD",
       "senders": [
         "OrangeMoney"
       ],
@@ -232,6 +251,7 @@
     {
       "id": "uba.card-payment",
       "version": 1,
+      "provider": "UBA",
       "senders": [
         "UBA"
       ],
@@ -245,6 +265,7 @@
     {
       "id": "uba.transfer-to-orange-money",
       "version": 1,
+      "provider": "UBA",
       "senders": [
         "UBA"
       ],

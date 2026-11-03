@@ -21,6 +21,7 @@ class TemplateCatalogReaderImpl @Inject constructor() : TemplateCatalogReader {
     private fun check(template: MessageTemplate) {
         Regex(template.pattern)
         Currency.getInstance(template.currency)
+        require(template.provider.isNotBlank()) { "Template ${template.id} has no provider" }
         require(template.senders.isNotEmpty()) { "Template ${template.id} has no sender" }
         require("(?<amount>" in template.pattern) { "Template ${template.id} has no amount group" }
         require(("(?<date>" in template.pattern) == (template.dateFormat != null)) {

@@ -12,12 +12,15 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.DetectedOperation
+import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -104,6 +107,8 @@ internal class TransactionRepositoryImplTest {
                     transferGroup = null,
                     counterparty = null,
                     note = null,
+                    foreignAmount = null,
+                    foreignCurrency = null,
                 ),
             )
         }
@@ -181,6 +186,125 @@ internal class TransactionRepositoryImplTest {
     }
 
     @Nested
+    inner class RecordDetected {
+        @Test
+        fun `should record an expense waiting for confirmation and mark its signal read`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+
+            // then
+            recorded().map { it.copy(id = 0) } shouldContainExactlyInAnyOrder listOf(
+                TransactionEntity(
+                    accountId = momoId,
+                    type = TransactionType.EXPENSE,
+                    status = TransactionStatus.DETECTED,
+                    origin = TransactionOrigin.SIGNAL,
+                    amount = 2_500,
+                    occurredAt = Instant.ofEpochSecond(1_000),
+                    categoryId = null,
+                    placeId = null,
+                    rawSignalId = signalId,
+                    transferGroup = null,
+                    counterparty = "Boulangerie",
+                    note = null,
+                    foreignAmount = null,
+                    foreignCurrency = null,
+                ),
+            )
+            database.rawSignalDao().getUnparsed().shouldBeEmpty()
+        }
+
+        @Test
+        fun `should record the fee as a separate expense on the account`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.INCOME, fee = 50),
+            )
+
+            // then
+            recorded().map { Triple(it.type, it.amount, it.rawSignalId) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionType.INCOME, 2_500L, signalId),
+                Triple(TransactionType.EXPENSE, 50L, null),
+            )
+        }
+
+        @Test
+        fun `should record a withdrawal as a transfer to the Cash account`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.WITHDRAWAL, fee = null),
+            )
+
+            // then
+            recorded().map { Triple(it.accountId, it.type, it.transferGroup != null) } shouldContainExactlyInAnyOrder
+                listOf(
+                    Triple(momoId, TransactionType.TRANSFER_OUT, true),
+                    Triple(CASH_ACCOUNT_ID, TransactionType.TRANSFER_IN, true),
+                )
+        }
+
+        @Test
+        fun `should record a deposit as a transfer from the Cash account`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.DEPOSIT, fee = null),
+            )
+
+            // then
+            recorded().map { Triple(it.accountId, it.type, it.transferGroup != null) } shouldContainExactlyInAnyOrder
+                listOf(
+                    Triple(momoId, TransactionType.TRANSFER_IN, true),
+                    Triple(CASH_ACCOUNT_ID, TransactionType.TRANSFER_OUT, true),
+                )
+        }
+
+        @Test
+        fun `should record nothing and leave the signal unread when it already created a transaction`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordWithdrawal(
+                Withdrawal(
+                    accountId = momoId,
+                    amount = 20_000,
+                    fee = null,
+                    occurredAt = Instant.ofEpochSecond(1_000),
+                    rawSignalId = signalId,
+                ),
+            )
+
+            // when
+            shouldThrow<SQLException> {
+                repository.recordDetected(
+                    operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = 50),
+                )
+            }
+
+            // then
+            recorded() shouldHaveSize 2
+            database.rawSignalDao().getUnparsed() shouldHaveSize 1
+        }
+    }
+
+    @Nested
     inner class RecordCashExpense {
         @Test
         fun `should record a confirmed expense on the Cash account`() = runTest {
@@ -208,6 +332,8 @@ internal class TransactionRepositoryImplTest {
                     transferGroup = null,
                     counterparty = null,
                     note = "Moto",
+                    foreignAmount = null,
+                    foreignCurrency = null,
                 ),
             )
         }
@@ -319,6 +445,28 @@ internal class TransactionRepositoryImplTest {
         status = AccountStatus.ACTIVE,
     )
 
+    private fun unparsedSignal() = RawSignalEntity(
+        sender = "com.samsung.android.messaging",
+        title = "OrangeMoney",
+        text = "Paiement de 2500 FCFA",
+        receivedAt = Instant.EPOCH,
+        templateVersion = null,
+    )
+
+    // An operation of 2 500 with Boulangerie, read at second 1 000.
+    private fun operation(rawSignalId: Long, accountId: Long, type: DetectedType, fee: Long?) = DetectedOperation(
+        rawSignalId = rawSignalId,
+        templateVersion = "orange-money.payment@1",
+        accountId = accountId,
+        type = type,
+        amount = 2_500,
+        fee = fee,
+        foreignAmount = null,
+        foreignCurrency = null,
+        counterparty = "Boulangerie",
+        occurredAt = Instant.ofEpochSecond(1_000),
+    )
+
     private fun withdrawalSignal() = RawSignalEntity(
         sender = "com.mtn.momo",
         title = null,
@@ -341,5 +489,7 @@ internal class TransactionRepositoryImplTest {
         transferGroup = group,
         counterparty = null,
         note = null,
+        foreignAmount = null,
+        foreignCurrency = null,
     )
 }

@@ -3,6 +3,7 @@ package com.cauri.core.data.repository
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.RawSignal
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactly
@@ -94,6 +95,62 @@ internal class RawSignalRepositoryImplTest {
 
             // then
             kept.shouldBeTrue()
+        }
+    }
+
+    @Nested
+    inner class Unparsed {
+        @Test
+        fun `should give the signals no template read yet, oldest first`() = runTest {
+            // given
+            val later = database.rawSignalDao().insert(
+                RawSignalEntity(
+                    sender = "com.samsung.android.messaging",
+                    title = "OrangeMoney",
+                    text = "Paiement de 2500 FCFA",
+                    receivedAt = Instant.ofEpochSecond(2_000),
+                    templateVersion = null,
+                ),
+            )
+            database.rawSignalDao().insert(
+                RawSignalEntity(
+                    sender = "com.samsung.android.messaging",
+                    title = "OrangeMoney",
+                    text = "Retrait de 10000 FCFA",
+                    receivedAt = Instant.ofEpochSecond(500),
+                    templateVersion = "orange-money.withdrawal@1",
+                ),
+            )
+            val earlier = database.rawSignalDao().insert(
+                RawSignalEntity(
+                    sender = "com.samsung.android.messaging",
+                    title = "UBA",
+                    text = "DEBIT",
+                    receivedAt = Instant.ofEpochSecond(1_000),
+                    templateVersion = null,
+                ),
+            )
+
+            // when
+            val signals = repository.unparsed()
+
+            // then
+            signals shouldContainExactly listOf(
+                RawSignal(
+                    id = earlier,
+                    sender = "com.samsung.android.messaging",
+                    title = "UBA",
+                    text = "DEBIT",
+                    receivedAt = Instant.ofEpochSecond(1_000),
+                ),
+                RawSignal(
+                    id = later,
+                    sender = "com.samsung.android.messaging",
+                    title = "OrangeMoney",
+                    text = "Paiement de 2500 FCFA",
+                    receivedAt = Instant.ofEpochSecond(2_000),
+                ),
+            )
         }
     }
 }

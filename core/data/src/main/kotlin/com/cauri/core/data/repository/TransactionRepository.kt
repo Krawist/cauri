@@ -1,5 +1,6 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
@@ -13,6 +14,13 @@ interface TransactionRepository {
      * entered by the user, it is confirmed.
      */
     suspend fun recordWithdrawal(withdrawal: Withdrawal)
+
+    /**
+     * Records [operation], read in a raw signal, as transactions waiting for the user's confirmation, and marks the
+     * signal read. A withdrawal is a transfer to the Cash account and a deposit a transfer from it; a fee is a separate
+     * expense on the account. All or nothing.
+     */
+    suspend fun recordDetected(operation: DetectedOperation)
 
     /**
      * Records a confirmed cash expense of [amount] (minor units) in [categoryId], named [note], made at [occurredAt],

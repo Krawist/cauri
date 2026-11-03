@@ -36,8 +36,12 @@ import com.cauri.core.data.database.entity.VisitEntity
         DecisionLogEntity::class,
         HabitEntity::class,
     ],
-    version = 3,
-    autoMigrations = [AutoMigration(from = 1, to = 2), AutoMigration(from = 2, to = 3)],
+    version = 5,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4),
+    ],
 )
 @TypeConverters(DatabaseConverters::class)
 internal abstract class CauriDatabase : RoomDatabase() {

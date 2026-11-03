@@ -1,5 +1,6 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.model.RawSignal
 import java.time.Instant
 
 /** The notifications of the watched senders, kept as received: the source of truth of the capture. */
@@ -10,4 +11,7 @@ interface RawSignalRepository {
      * notifications again when they update them.
      */
     suspend fun record(sender: String, title: String?, text: String, receivedAt: Instant): Boolean
+
+    /** The signals no template read yet, oldest first: to read when they arrive, and again when templates change. */
+    suspend fun unparsed(): List<RawSignal>
 }

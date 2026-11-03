@@ -18,4 +18,7 @@ internal interface SettingsActions {
     fun onCountReminder(open: Boolean)
 
     fun onCountReminderChange(settings: CountReminderSettings)
+
+    /** Follows the account of [provider] the user had chosen not to follow. */
+    fun onFollowAccount(provider: String)
 }

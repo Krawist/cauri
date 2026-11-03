@@ -19,6 +19,12 @@ interface UserPreferencesRepository {
     /** Day of the last cash count reminder; `null` when none was sent. */
     val lastCountReminder: Flow<LocalDate?>
 
+    /** Providers whose messages Cauri recognised without an account to record them on: it offers to follow them. */
+    val proposedAccounts: Flow<Set<String>>
+
+    /** Providers the user chose not to follow: their messages stay raw until the user changes their mind. */
+    val ignoredAccounts: Flow<Set<String>>
+
     suspend fun setOnboardingCompleted()
 
     /** Saves the whole [profile], replacing the stored one. */
@@ -28,4 +34,13 @@ interface UserPreferencesRepository {
 
     /** Remembers that a cash count reminder was sent on [day]. */
     suspend fun setLastCountReminder(day: LocalDate)
+
+    /** Offers to follow [provider], unless the user already chose not to. */
+    suspend fun proposeAccount(provider: String)
+
+    /** Remembers that the user does not want to follow [provider]. */
+    suspend fun ignoreAccount(provider: String)
+
+    /** Forgets the offer or the refusal of [provider], once its account exists. */
+    suspend fun clearAccountChoice(provider: String)
 }

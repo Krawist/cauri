@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="home_account_follow">Suivre ce compte</string>
+    <string name="home_account_ignore">Non merci</string>
+    <string name="home_account_label">Compte repéré</string>
+    <string name="home_account_text">Cauri a reconnu des messages %1$s. Il peut en tirer tes paiements, que tu confirmeras toujours. Tu pourras changer d\'avis dans Réglages.</string>
+    <string name="home_account_title">Suivre ton compte %1$s ?</string>
     <string name="home_amount" translatable="false">%1$s F</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>

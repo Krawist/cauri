@@ -39,6 +39,7 @@ internal class MessageParserImplTest {
             parsed shouldBe ParsedMessage(
                 templateId = "test.payment",
                 templateVersion = 1,
+                provider = "TEST_MONEY",
                 kind = MessageKind.PAYMENT,
                 direction = Direction.DEBIT,
                 amount = 2_500,
@@ -64,6 +65,7 @@ internal class MessageParserImplTest {
             parsed shouldBe ParsedMessage(
                 templateId = "test.payment",
                 templateVersion = 1,
+                provider = "TEST_MONEY",
                 kind = MessageKind.PAYMENT,
                 direction = Direction.DEBIT,
                 amount = 2_500,
@@ -227,6 +229,7 @@ internal class MessageParserImplTest {
     ) = MessageTemplate(
         id = id,
         version = 1,
+        provider = "TEST_MONEY",
         senders = senders,
         kind = kind,
         direction = Direction.DEBIT,

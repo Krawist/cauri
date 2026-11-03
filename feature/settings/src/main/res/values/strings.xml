@@ -23,6 +23,9 @@
     <string name="settings_count_reminder_why">Un rappel le soir, un seul par jour, pour garder ton cash à jour.</string>
     <string name="settings_done">Terminé</string>
     <string name="settings_hint">Touche une ligne pour la changer dans les réglages d\'Android.</string>
+    <string name="settings_ignored">Ignoré</string>
+    <string name="settings_ignored_account_text">Cauri ne lit pas ses messages. Touche pour le suivre.</string>
+    <string name="settings_ignored_accounts">Comptes ignorés</string>
     <string name="settings_location">Localisation</string>
     <string name="settings_location_always">Toujours</string>
     <string name="settings_location_text">Pour te rappeler une dépense quand tu quittes un marché ou une boutique. Facultatif.</string>

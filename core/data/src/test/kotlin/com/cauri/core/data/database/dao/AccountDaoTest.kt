@@ -7,6 +7,7 @@ import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_
 import com.cauri.core.data.database.entity.AccountStatus
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.CASH_PROVIDER
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
@@ -46,7 +47,7 @@ internal class AccountDaoTest {
                 id = CASH_ACCOUNT_ID,
                 name = "Cash",
                 kind = AccountKind.CASH,
-                provider = null,
+                provider = CASH_PROVIDER,
                 currency = "XAF",
                 status = AccountStatus.ACTIVE,
             )

@@ -75,13 +75,7 @@ internal fun RowGroup(content: @Composable () -> Unit) {
 
 /** A setting with its lagoon icon and its status pill; a tap opens the system screen where it is changed. */
 @Composable
-internal fun SettingRow(
-    @DrawableRes icon: Int,
-    @StringRes title: Int,
-    text: String,
-    status: StatusPill,
-    onClick: () -> Unit,
-) {
+internal fun SettingRow(@DrawableRes icon: Int, title: String, text: String, status: StatusPill, onClick: () -> Unit) {
     val palette = CauriTheme.palette
     Row(
         modifier = Modifier
@@ -99,7 +93,7 @@ internal fun SettingRow(
         }
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                text = stringResource(title),
+                text = title,
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
                 color = palette.ink,
             )
