@@ -12,6 +12,8 @@ import com.cauri.core.capture.place.LocationService
 import com.cauri.core.capture.place.LocationServiceImpl
 import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.capture.place.PlaceWatcherImpl
+import com.cauri.core.capture.place.VisitRecorder
+import com.cauri.core.capture.place.VisitRecorderImpl
 import com.cauri.core.capture.signal.DetectionService
 import com.cauri.core.capture.signal.DetectionServiceImpl
 import com.cauri.core.capture.signal.SignalFilterService
@@ -71,6 +73,9 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindTemplateCatalogRepository(impl: TemplateCatalogRepositoryImpl): TemplateCatalogRepository
+
+    @Binds
+    abstract fun bindVisitRecorder(impl: VisitRecorderImpl): VisitRecorder
 
     @Binds
     abstract fun bindWatchedSenderRepository(impl: WatchedSenderRepositoryImpl): WatchedSenderRepository

@@ -19,6 +19,7 @@ booleans.
 | `com.cauri.debug.RECORD_SIGNAL`            | `:core:capture`  | Keeps and reads a made-up operator message                 |
 | `com.cauri.debug.SHOW_CAPTURE_WARNING`     | `:core:capture`  | Shows the warning that the capture stopped                 |
 | `com.cauri.debug.SIMULATE_CAPTURE_SILENCE` | `:core:capture`  | Simulates a month without message, for the Accueil card    |
+| `com.cauri.debug.PLACE_VISIT`              | `:core:capture`  | Tells a stay at a place, or its departure                  |
 
 ## Show a cash count reminder
 
@@ -87,6 +88,26 @@ adb shell am broadcast -a com.cauri.debug.SIMULATE_CAPTURE_SILENCE -p com.cauri.
 ```
 
 The choice is kept until it is changed or Cauri's data is cleared.
+
+## Tell a stay at a place
+
+```bash
+adb shell am broadcast -a com.cauri.debug.PLACE_VISIT -p com.cauri.debug -e place 3
+```
+
+Tells that the user has stayed at the place `3` for five minutes, as its geofence would (CAU-34): a visit opens from
+five minutes ago, unless one is open there already. « Mes lieux » counts it at once.
+
+| Extra   | Type    | Default | Values                                                         |
+|---------|---------|---------|----------------------------------------------------------------|
+| `place` | text    | —       | Id of the place (the `id` of the `places` table); required     |
+| `left`  | boolean | `false` | `true` tells that the user left it: the open visit closes      |
+
+```bash
+adb shell am broadcast -a com.cauri.debug.PLACE_VISIT -p com.cauri.debug -e place 3 --ez left true
+```
+
+As everywhere, the boolean extra is written `--ez`, after the package.
 
 ## Read what the listener sees
 

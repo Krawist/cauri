@@ -24,6 +24,8 @@ import com.cauri.core.data.repository.TransactionRepository
 import com.cauri.core.data.repository.TransactionRepositoryImpl
 import com.cauri.core.data.repository.TransferRepository
 import com.cauri.core.data.repository.TransferRepositoryImpl
+import com.cauri.core.data.repository.VisitRepository
+import com.cauri.core.data.repository.VisitRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -69,4 +71,7 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindConfirmationRepository(impl: ConfirmationRepositoryImpl): ConfirmationRepository
+
+    @Binds
+    abstract fun bindVisitRepository(impl: VisitRepositoryImpl): VisitRepository
 }

@@ -48,7 +48,9 @@ internal class GeofenceServiceImpl @Inject constructor(
         return allowed && places.isNotEmpty() && client.addGeofences(request(places), transitions).done()
     }
 
+    // A place the user stands in when it is registered, as after a restart, counts once they have stayed there.
     private fun request(places: List<Place>) = GeofencingRequest.Builder()
+        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
         .addGeofences(places.map { it.toGeofence() })
         .build()
 
@@ -56,7 +58,9 @@ internal class GeofenceServiceImpl @Inject constructor(
         .setRequestId(id.toString())
         .setCircularRegion(latitude, longitude, radiusMeters.toFloat())
         .setExpirationDuration(Geofence.NEVER_EXPIRE)
-        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+        // A visit once the user has stayed, never when passing by; then when they leave.
+        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL or Geofence.GEOFENCE_TRANSITION_EXIT)
+        .setLoiteringDelay(VisitRecorder.STAY.toMillis().toInt())
         .build()
 
     // Whether the task succeeded, once it ends.

@@ -443,10 +443,22 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   21.3.0, by decision; `GeofenceService`), with the location « always » only: `PlaceService` keeps 100 at most, the most
   visited then the newest; `PlaceWatcher`, started by `CauriApplication`, registers them again after each change, after
   a restart (`PlaceBootReceiver`) and once the location is allowed; « Mes lieux » says when it is missing.
-  `PlaceTransitionReceiver` records nothing yet: the visits are CAU-34. Checked on the Galaxy S23 in light mode: a shop
+  The visits are CAU-34. Checked on the Galaxy S23 in light mode: a shop
   saved at ± 20 m, its geofence of 150 m registered, changed and deleted, the geofence gone; addresses found above the
   field, the address of the phone's position in the field. Dark mode and a phone without Google Play services not tried.
   Next: CAU-34.
+- [ ] **CAU-34** — visits (`VisitRepository`, `VisitDao.enter`/`leave`): by decision, a visit counts once the user
+  has stayed 5 minutes in a place (`VisitRecorder.STAY`), Android's « dwell » with that loitering delay, so that passing
+  by on a moto or in a taxi never does; its departure closes it (geofences now `DWELL` and `EXIT`).
+  `PlaceTransitionReceiver` (Hilt) has `VisitRecorder` record each transition: a stay opens a visit from 5 minutes
+  before, unless one is open there already; a departure closes the open one. By decision, no Activity Recognition, which
+  would need the « Activité physique » permission: the stay is enough for now. Visits are rows of the database, so they
+  survive a restart; the geofences registered again then tell a stay with `INITIAL_TRIGGER_DWELL`, which goes on with
+  the visit already open. « Mes lieux » counts them. Debug builds tell a stay or a departure on demand (`adb shell am
+  broadcast -a com.cauri.debug.PLACE_VISIT -p com.cauri.debug -e place 3`, `--ez left true` to leave). Checked on the
+  Galaxy S23 with a made-up place: two stays told twice kept as one visit each, a departure closing it, « 2 visites »,
+  the geofences with a dwell of 5 minutes. A real visit, a restart and the battery over a day not checked: the phone
+  does not move. Next: CAU-35.
 
 Update this section at the end of each ticket.
 

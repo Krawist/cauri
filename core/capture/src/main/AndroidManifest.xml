@@ -22,7 +22,7 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <!-- Receives the transitions of the places' geofences, sent by Google Play services only. -->
+        <!-- Receives the stays at the places and their departures (geofences), sent by Google Play services only. -->
         <receiver
             android:name=".place.PlaceTransitionReceiver"
             android:exported="false" />
