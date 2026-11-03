@@ -1,0 +1,311 @@
+package com.cauri.feature.transactions.activity
+
+import android.content.res.Configuration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.ActivityLine
+import com.cauri.core.data.model.ActivityStatus
+import com.cauri.core.data.model.MonthSpending
+import com.cauri.core.data.model.PendingType
+import com.cauri.core.design.format.formatFcfa
+import com.cauri.core.design.glass.GlassSurface
+import com.cauri.core.design.theme.CauriRadius
+import com.cauri.core.design.theme.CauriSpacing
+import com.cauri.core.design.theme.CauriTheme
+import com.cauri.feature.transactions.R
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
+private val FilterHeight = 36.dp
+private val FilterRadius = 22.dp
+private val GroupRadius = 22.dp
+
+// Above the floating bottom bar of the app.
+private val BottomSpace = 120.dp
+
+/**
+ * « Activité »: the filters « Tout », « Cash », « Mobile » and « Banque », what was spent this month in cash and
+ * digital, then the history grouped by day, the cash counts with their gap. A line opens the edit sheet through
+ * [onEditTransaction].
+ */
+@Composable
+internal fun ActivityScreen(onEditTransaction: (Long) -> Unit, viewModel: ActivityViewModel = hiltViewModel()) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    ActivityContent(state = state, onFilter = viewModel::onFilter, onEditTransaction = onEditTransaction)
+}
+
+@Composable
+private fun ActivityContent(
+    state: ActivityUiState,
+    onFilter: (ActivityFilter) -> Unit,
+    onEditTransaction: (Long) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize().safeDrawingPadding(),
+        contentPadding = PaddingValues(
+            start = CauriSpacing.xl,
+            top = CauriSpacing.xxl,
+            end = CauriSpacing.xl,
+            bottom = BottomSpace,
+        ),
+        verticalArrangement = Arrangement.spacedBy(CauriSpacing.l),
+    ) {
+        item { Header() }
+        item { Filters(selected = state.filter, onFilter = onFilter) }
+        item { Spending(spending = state.spending) }
+        if (state.days.isEmpty()) {
+            item {
+                Text(
+                    text = stringResource(R.string.transactions_activity_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = CauriTheme.palette.muted,
+                    modifier = Modifier.padding(top = CauriSpacing.s),
+                )
+            }
+        }
+        items(items = state.days, key = { it.date.toEpochDay() }) { day ->
+            Day(day = day, today = state.today, onEditTransaction = onEditTransaction)
+        }
+    }
+}
+
+// « Activité » and the search of the mockup, which does nothing yet: searching and sorting come with CAU-55.
+@Composable
+private fun Header() {
+    val palette = CauriTheme.palette
+    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.transactions_activity_title),
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+            color = palette.ink,
+            modifier = Modifier.weight(1f),
+        )
+        GlassSurface(
+            shape = CircleShape,
+            modifier = Modifier.size(CauriSpacing.touchTarget),
+            interaction = Modifier.clickable(role = Role.Button, onClick = {}),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_search),
+                contentDescription = stringResource(R.string.transactions_activity_search),
+                tint = palette.ink,
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
+    }
+}
+
+// The four filters on a glass track, the chosen one raised.
+@Composable
+private fun Filters(selected: ActivityFilter, onFilter: (ActivityFilter) -> Unit) {
+    val palette = CauriTheme.palette
+    GlassSurface(shape = RoundedCornerShape(FilterRadius), modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(CauriSpacing.xs)) {
+            ActivityFilter.entries.forEach { filter ->
+                val chosen = filter == selected
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(FilterHeight)
+                        .clip(CircleShape)
+                        .then(if (chosen) Modifier.background(palette.segment, CircleShape) else Modifier)
+                        .selectable(selected = chosen, role = Role.Tab, onClick = { onFilter(filter) }),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(
+                            when (filter) {
+                                ActivityFilter.ALL -> R.string.transactions_activity_all
+                                ActivityFilter.CASH -> R.string.transactions_activity_cash
+                                ActivityFilter.MOBILE -> R.string.transactions_activity_mobile
+                                ActivityFilter.BANK -> R.string.transactions_activity_bank
+                            },
+                        ),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = if (chosen) FontWeight.SemiBold else FontWeight.Medium,
+                        ),
+                        color = if (chosen) palette.ink else palette.muted,
+                    )
+                }
+            }
+        }
+    }
+}
+
+// « Cash dépensé » in gold and « Numérique dépensé », side by side.
+@Composable
+private fun Spending(spending: MonthSpending) {
+    val palette = CauriTheme.palette
+    Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
+        listOf(
+            Triple(R.string.transactions_activity_cash_spent, spending.cash, palette.goldText),
+            Triple(R.string.transactions_activity_digital_spent, spending.digital, palette.muted),
+        ).forEach { (label, amount, color) ->
+            GlassSurface(shape = RoundedCornerShape(CauriRadius.tile), modifier = Modifier.weight(1f)) {
+                Column(
+                    modifier = Modifier.padding(horizontal = CauriSpacing.l, vertical = CauriSpacing.m + 2.dp),
+                    verticalArrangement = Arrangement.spacedBy(CauriSpacing.xs),
+                ) {
+                    Text(
+                        text = stringResource(label),
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
+                        color = color,
+                    )
+                    Text(
+                        text = stringResource(R.string.transactions_amount, formatFcfa(amount)),
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = palette.ink,
+                    )
+                }
+            }
+        }
+    }
+}
+
+// « Aujourd'hui », « Hier » or « Lundi 2 novembre », over the day's lines on one glass card.
+@Composable
+private fun Day(day: ActivityDay, today: LocalDate?, onEditTransaction: (Long) -> Unit) {
+    val palette = CauriTheme.palette
+    val locale = LocalConfiguration.current.locales[0]
+    Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s + 2.dp)) {
+        Text(
+            text = when (day.date) {
+                today -> stringResource(R.string.transactions_activity_today)
+                today?.minusDays(1) -> stringResource(R.string.transactions_activity_yesterday)
+                else -> DateTimeFormatter.ofPattern("EEEE d MMMM", locale).format(day.date)
+                    .replaceFirstChar { it.titlecase(locale) }
+            },
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+            color = palette.muted,
+            modifier = Modifier.padding(top = CauriSpacing.xs),
+        )
+        GlassSurface(shape = RoundedCornerShape(GroupRadius), modifier = Modifier.fillMaxWidth()) {
+            Column {
+                day.lines.forEachIndexed { index, line ->
+                    if (index > 0) {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = CauriSpacing.l)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(palette.chip),
+                        )
+                    }
+                    when (line) {
+                        is ActivityLine.Operation -> OperationRow(line = line, onClick = {
+                            onEditTransaction(line.transactionId)
+                        })
+                        is ActivityLine.CashCount -> CashCountRow(line = line)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun ActivityContentPreview() {
+    val today = LocalDate.now()
+    val noon = today.atTime(LocalTime.NOON).atZone(ZoneId.systemDefault()).toInstant()
+    CauriTheme {
+        Box(Modifier.background(CauriTheme.palette.background)) {
+            ActivityContent(
+                state = ActivityUiState(
+                    days = listOf(
+                        ActivityDay(
+                            date = today,
+                            lines = listOf(
+                                ActivityLine.CashCount(
+                                    at = noon,
+                                    countId = 1,
+                                    amount = 3_000,
+                                    expectedAmount = 7_500,
+                                    expenses = 3,
+                                ),
+                                previewOperation(at = noon, note = "Moto-taxi", category = "Transport"),
+                                previewOperation(at = noon, note = null, category = null)
+                                    .copy(status = ActivityStatus.PENDING, counterparty = "BOULANGERIE SAKER"),
+                            ),
+                        ),
+                        ActivityDay(
+                            date = today.minusDays(1),
+                            lines = listOf(
+                                previewOperation(at = noon.minus(Duration.ofDays(1)), note = null, category = null)
+                                    .copy(
+                                        type = PendingType.TRANSFER,
+                                        accountName = "MTN MoMo",
+                                        accountKind = AccountKind.MOBILE_MONEY,
+                                        toAccountName = "Cash",
+                                        toAccountKind = AccountKind.CASH,
+                                        amount = 20_000,
+                                    ),
+                            ),
+                        ),
+                    ),
+                    spending = MonthSpending(cash = 86_400, digital = 55_900),
+                    today = today,
+                ),
+                onFilter = {},
+                onEditTransaction = {},
+            )
+        }
+    }
+}
+
+private fun previewOperation(at: Instant, note: String?, category: String?) = ActivityLine.Operation(
+    at = at,
+    transactionId = 1,
+    type = PendingType.EXPENSE,
+    status = ActivityStatus.CONFIRMED,
+    amount = 500,
+    accountName = "Cash",
+    accountKind = AccountKind.CASH,
+    toAccountName = null,
+    toAccountKind = null,
+    categoryName = category,
+    parts = 1,
+    counterparty = null,
+    note = note,
+    fee = false,
+    reconciled = false,
+)

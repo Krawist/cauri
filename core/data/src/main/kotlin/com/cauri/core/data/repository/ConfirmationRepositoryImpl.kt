@@ -45,10 +45,12 @@ internal class ConfirmationRepositoryImpl @Inject constructor(
             categoryId = edit.categoryId.takeUnless { transfer },
             note = edit.note?.trim()?.takeIf { it.isNotEmpty() },
             proposedCategoryId = edit.proposedCategoryId,
-            splitGroup = if (parts.isEmpty()) transaction.splitGroup else UUID.randomUUID().toString(),
+            // Split again, it keeps its group; the parts typed replace those it had.
+            splitGroup = if (parts.isEmpty()) null else transaction.splitGroup ?: UUID.randomUUID().toString(),
         )
         confirmationDao.confirmEdited(
             transaction = edited,
+            formerSplitGroup = transaction.splitGroup,
             // Each part rides with the operation, without its signal nor Cauri's proposal, kept on the edited one.
             parts = parts.map {
                 edited.copy(

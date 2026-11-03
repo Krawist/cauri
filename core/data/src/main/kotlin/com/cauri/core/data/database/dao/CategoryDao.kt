@@ -34,6 +34,10 @@ internal interface CategoryDao {
     )
     suspend fun getUses(accountId: Long, type: TransactionType, since: Instant): List<CategoryUse>
 
+    /** Every category, hidden ones too. */
+    @Query("SELECT * FROM categories")
+    fun observeAll(): Flow<List<CategoryEntity>>
+
     @Query("SELECT * FROM categories WHERE status = 'ACTIVE' ORDER BY name")
     fun observeActive(): Flow<List<CategoryEntity>>
 }

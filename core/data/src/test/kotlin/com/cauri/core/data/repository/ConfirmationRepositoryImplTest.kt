@@ -107,6 +107,24 @@ internal class ConfirmationRepositoryImplTest {
         }
 
         @Test
+        fun `should replace the parts of an operation split again`() = runTest {
+            // given
+            val omId = database.accountDao().insert(orangeMoney())
+            val (food, family) = database.categoryDao().insertAll(listOf(category("Alimentation"), category("Famille")))
+            detect(accountId = omId, type = DetectedType.EXPENSE)
+            val pending = transactions.pending.first().single()
+            val edit = edit(transactionId = pending.transactionId, accountId = omId, categoryId = food)
+            repository.confirm(edit.copy(parts = listOf(SplitPart(categoryId = family, amount = 1_000))))
+
+            // when
+            repository.confirm(edit.copy(parts = listOf(SplitPart(categoryId = family, amount = 500))))
+
+            // then
+            recorded().sortedBy { it.id }.map { it.categoryId to it.amount } shouldContainExactly
+                listOf(food to 2_000L, family to 500L)
+        }
+
+        @Test
         fun `should keep the account, the time and the note typed`() = runTest {
             // given
             val omId = database.accountDao().insert(orangeMoney())

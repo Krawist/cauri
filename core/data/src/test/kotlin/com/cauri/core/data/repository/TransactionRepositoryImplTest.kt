@@ -6,6 +6,8 @@ import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.AccountStatus
+import com.cauri.core.data.database.entity.CategoryEntity
+import com.cauri.core.data.database.entity.CategoryStatus
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionOrigin
@@ -13,6 +15,7 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.EntryType
@@ -20,6 +23,7 @@ import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReconciledExpense
+import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
 import com.cauri.core.data.service.DuplicateServiceImpl
@@ -363,6 +367,44 @@ internal class TransactionRepositoryImplTest {
             editable.shouldNotBeNull()
             listOf(editable.type, editable.accountId, editable.toAccountId, editable.read, editable.pending) shouldBe
                 listOf(PendingType.TRANSFER, momoId, CASH_ACCOUNT_ID, true, true)
+        }
+
+        @Test
+        fun `should give a split operation with its whole amount and its parts`() = runTest {
+            // given
+            val categoryId = database.categoryDao().insert(
+                CategoryEntity(
+                    name = "Famille",
+                    parentId = null,
+                    nature = CategoryNature.EXPENSE,
+                    status = CategoryStatus.ACTIVE,
+                ),
+            )
+            val first = repository.recordCashExpense(
+                amount = 1_500,
+                categoryId = null,
+                note = "Marché",
+                occurredAt = Instant.EPOCH,
+            )
+            val part = repository.recordCashExpense(
+                amount = 1_000,
+                categoryId = categoryId,
+                note = "Marché",
+                occurredAt = Instant.EPOCH,
+            )
+            listOf(first, part).forEach { id ->
+                database.transactionDao().update(
+                    database.transactionDao().getById(id).shouldNotBeNull().copy(splitGroup = "split"),
+                )
+            }
+
+            // when
+            val editable = repository.getEditable(first)
+
+            // then
+            editable.shouldNotBeNull()
+            editable.amount shouldBe 2_500L
+            editable.parts shouldContainExactly listOf(SplitPart(categoryId = categoryId, amount = 1_000))
         }
 
         @Test

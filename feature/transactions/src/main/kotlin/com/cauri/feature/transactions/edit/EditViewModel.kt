@@ -81,6 +81,9 @@ internal class EditViewModel @Inject constructor(
                     categoryId = transaction.categoryId ?: suggested.firstOrNull()?.id,
                     occurredAt = transaction.occurredAt,
                     note = transaction.note.orEmpty(),
+                    parts = transaction.parts.map { part ->
+                        PartDraft(categoryId = part.categoryId, amount = part.amount.toString())
+                    },
                 )
             }
         }

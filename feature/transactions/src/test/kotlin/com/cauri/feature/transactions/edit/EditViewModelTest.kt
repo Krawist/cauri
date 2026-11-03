@@ -198,6 +198,7 @@ internal class EditViewModelTest {
         accountId = 2,
         toAccountId = null,
         categoryId = null,
+        parts = emptyList(),
         counterparty = "BOULANGERIE",
         note = null,
         occurredAt = Instant.ofEpochSecond(1_000),

@@ -30,6 +30,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cauri.core.data.model.CashBalance
+import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.format.formatMoment
 import com.cauri.core.design.glass.GlassSurface
@@ -131,7 +132,7 @@ private fun CountButton(onClick: () -> Unit) {
         colors = ButtonDefaults.buttonColors(containerColor = palette.goldSoft, contentColor = palette.goldText),
         contentPadding = PaddingValues(horizontal = CauriSpacing.l),
     ) {
-        Icon(painter = painterResource(R.drawable.ic_count), contentDescription = null)
+        Icon(painter = painterResource(DesignR.drawable.ic_count), contentDescription = null)
         Text(
             text = stringResource(R.string.home_count_cash),
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),

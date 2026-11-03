@@ -21,7 +21,7 @@ The documents kept in Claude are the reference; they are written in French.
 | Document                                  | Local copy        | Reference                                         |
 |-------------------------------------------|-------------------|---------------------------------------------------|
 | Product requirements (what and why)       | —                 | https://claude.ai/artifact/6ZMKPajYcTATWmgfoHCqin |
-| MVP tickets (CAU-01 to CAU-53, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
+| MVP tickets (CAU-01 to CAU-55, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
 | Mockups, light and dark (canvas)          | —                 | https://claude.ai/artifact/7cuvPsaveMQEG1VCZh2qbP |
 
 `docs/tickets.md` is the detailed English working copy: acceptance criteria, dependencies and the mockup of each
@@ -354,6 +354,22 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   unplugged) with made-up Orange Money payments, in light mode: the sheet, a part of 1 000 F out of 2 500 F, « Valider
   », the date moved to yesterday, « Rien dépensé ». Dark mode, an income, a transfer and a payment abroad not tried on a
   phone. Next: CAU-30.
+- [ ] **CAU-30** — « Activité » (`ActivityScreen`, `ActivityViewModel` in `:feature:transactions`;
+  `ActivityRepository` and `ActivityService`, JVM tests, in `:core:data`): « Tout », « Cash », « Mobile » (prepaid cards
+  included) and « Banque », a transfer showing with either of its accounts and a count with the cash; « Cash dépensé »
+  and « Numérique dépensé » since the first of the month (set aside left out, waiting operations and fees counted); the
+  history by day (« Aujourd'hui », « Hier », « Lundi 2 novembre »), one glass card per day. One line per operation: a
+  transfer once and grey (« Retrait au guichet », « Dépôt », « Transfert », « MoMo → Cash »), never spending; by
+  decision a split operation once with its total (« Réparti en 2 »), and the operations set aside shown struck through
+  (« Mis de côté »); merged entries left out; a fee on a line of its own (« Frais »); « À confirmer » for a waiting one.
+  A cash count shows what was counted and its gap (« Écart de 4 500 F réparti en 3 dépenses », « … de plus que prévu »,
+  « Aucun écart »). A line opens the edit sheet (`activityGraph(onEditTransaction)`): a split operation opens with its
+  parts, and saving replaces them; an entry shows its type icon and its note. The icons of expense, income, transfer and
+  count moved to `:core:design`. The search button of the mockup is shown and does nothing yet: search, periods and
+  sorting are CAU-55. Undoing a merge or a linked transfer from the sheet is CAU-54 (by decision). Checked on the Galaxy
+  S23 in dark mode: upgrade to v10, the lines of the mockup (set aside, waiting, habits, deposits, a count with a
+  surplus, fees), « Mobile », a line opening the sheet. A split line, light mode and a long history on an entry-level
+  phone not checked. Next: CAU-31.
 
 Update this section at the end of each ticket.
 

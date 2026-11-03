@@ -50,9 +50,9 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
     val palette = CauriTheme.palette
     val operation = card.operation
     val (icon, tint, background) = when (operation.type) {
-        PendingType.EXPENSE -> Triple(R.drawable.ic_expense, palette.coralText, palette.coralSoft)
-        PendingType.INCOME -> Triple(R.drawable.ic_income, palette.greenText, palette.greenSoft)
-        PendingType.TRANSFER -> Triple(R.drawable.ic_transfer, palette.ink, palette.chip)
+        PendingType.EXPENSE -> Triple(DesignR.drawable.ic_expense, palette.coralText, palette.coralSoft)
+        PendingType.INCOME -> Triple(DesignR.drawable.ic_income, palette.greenText, palette.greenSoft)
+        PendingType.TRANSFER -> Triple(DesignR.drawable.ic_transfer, palette.ink, palette.chip)
     }
     val kind = stringResource(kindLabel(operation))
     val title = operation.toAccountName?.let {

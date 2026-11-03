@@ -141,7 +141,7 @@ private fun CauriNavHost(
                 onOpenSettings = { navController.navigateToSettings() },
                 onEditTransaction = { editedTransaction = it },
             )
-            activityGraph()
+            activityGraph(onEditTransaction = { editedTransaction = it })
             placeholderTabs()
             cashGraph(navController = navController, onBack = { navController.popBackStack() })
             settingsGraph(onBack = { navController.popBackStack() })

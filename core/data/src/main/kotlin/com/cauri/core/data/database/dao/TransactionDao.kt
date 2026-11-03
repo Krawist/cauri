@@ -74,6 +74,14 @@ internal interface TransactionDao {
         excluded: List<TransactionStatus>,
     ): Boolean
 
+    /** Every transaction but the merged entries, newest first: the history of « Activité ». */
+    @Query("SELECT * FROM transactions WHERE status != 'MERGED' ORDER BY occurredAt DESC, id")
+    fun observeHistory(): Flow<List<TransactionEntity>>
+
+    /** The parts of an operation split across several categories. */
+    @Query("SELECT * FROM transactions WHERE splitGroup = :splitGroup ORDER BY id")
+    suspend fun getBySplitGroup(splitGroup: String): List<TransactionEntity>
+
     /** The transactions with [status], newest first. */
     @Query("SELECT * FROM transactions WHERE status = :status ORDER BY occurredAt DESC")
     fun observeByStatus(status: TransactionStatus): Flow<List<TransactionEntity>>

@@ -23,16 +23,16 @@ import com.cauri.core.data.model.EditableTransaction
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.format.readableName
-import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.transactions.R
 
 private val IconBoxSize = 48.dp
+private val IconBoxRadius = 16.dp
 
 /**
  * Where the transaction comes from and what it is, as in the mockup: « Lu dans un message » over the merchant, the
- * two accounts of a transfer, or else its type.
+ * two accounts of a transfer, the note or the habit, or else its type.
  */
 @Composable
 internal fun EditHeader(transaction: EditableTransaction, accounts: List<Account>) {
@@ -43,6 +43,8 @@ internal fun EditHeader(transaction: EditableTransaction, accounts: List<Account
     val title = when {
         from != null && to != null -> stringResource(R.string.transactions_transfer, from, to)
         transaction.counterparty != null -> readableName(transaction.counterparty.orEmpty())
+        // What the user typed, or the name of a habit.
+        transaction.note != null -> transaction.note.orEmpty()
         else -> stringResource(
             when (transaction.type) {
                 PendingType.EXPENSE -> R.string.transactions_type_expense
@@ -51,21 +53,21 @@ internal fun EditHeader(transaction: EditableTransaction, accounts: List<Account
             },
         )
     }
+    // The message it was read in, else its type.
+    val (icon, tint, background) = when {
+        transaction.read -> Triple(DesignR.drawable.ic_message, palette.goldText, palette.goldSoft)
+        transaction.type == PendingType.EXPENSE ->
+            Triple(DesignR.drawable.ic_expense, palette.coralText, palette.coralSoft)
+        transaction.type == PendingType.INCOME ->
+            Triple(DesignR.drawable.ic_income, palette.greenText, palette.greenSoft)
+        else -> Triple(DesignR.drawable.ic_transfer, palette.ink, palette.chip)
+    }
     Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.m), verticalAlignment = Alignment.CenterVertically) {
         Box(
-            modifier = Modifier.size(IconBoxSize).background(
-                palette.goldSoft,
-                RoundedCornerShape(
-                    CauriRadius.icon + 2.dp,
-                ),
-            ),
+            modifier = Modifier.size(IconBoxSize).background(background, RoundedCornerShape(IconBoxRadius)),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                painter = painterResource(DesignR.drawable.ic_message),
-                contentDescription = null,
-                tint = palette.goldText,
-            )
+            Icon(painter = painterResource(icon), contentDescription = null, tint = tint)
         }
         Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             if (transaction.read) {

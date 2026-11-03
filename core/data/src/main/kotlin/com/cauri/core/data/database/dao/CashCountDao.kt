@@ -19,4 +19,8 @@ internal interface CashCountDao {
     /** The most recent count, again after each new one; `null` before the first one. */
     @Query("SELECT * FROM cash_counts ORDER BY countedAt DESC LIMIT 1")
     fun observeLatest(): Flow<CashCountEntity?>
+
+    /** Every count, newest first. */
+    @Query("SELECT * FROM cash_counts ORDER BY countedAt DESC")
+    fun observeAll(): Flow<List<CashCountEntity>>
 }

@@ -20,6 +20,7 @@ import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.RecordedEntry
+import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.DuplicateService
 import java.time.Clock
@@ -65,16 +66,21 @@ internal class TransactionRepositoryImpl @Inject constructor(
     override suspend fun getEditable(transactionId: Long): EditableTransaction? {
         val transaction = transactionDao.getById(transactionId) ?: return null
         val sides = transaction.transferGroup?.let { transactionDao.getByTransferGroup(it) } ?: listOf(transaction)
+        val parts = transaction.splitGroup?.let { transactionDao.getBySplitGroup(it) }.orEmpty()
+            .filter { it.id != transaction.id }
         return EditableTransaction(
             transactionId = transaction.id,
             type = transaction.type.toPendingType(),
-            amount = transaction.amount,
+            amount = transaction.amount + parts.sumOf { it.amount },
             foreignAmount = transaction.foreignAmount,
             foreignCurrency = transaction.foreignCurrency,
             accountId = transaction.accountId,
             toAccountId = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN && it.id != transaction.id }
                 ?.accountId,
             categoryId = transaction.categoryId,
+            parts = parts.mapNotNull { part ->
+                part.categoryId?.let { SplitPart(categoryId = it, amount = part.amount) }
+            },
             counterparty = sides.firstNotNullOfOrNull { it.counterparty },
             note = transaction.note,
             occurredAt = transaction.occurredAt,

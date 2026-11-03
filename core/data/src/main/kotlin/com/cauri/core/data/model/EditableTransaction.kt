@@ -7,14 +7,16 @@ import java.time.Instant
  *
  * @property transactionId Transaction edited; for a transfer, its outgoing side.
  * @property type Expense, income or transfer.
- * @property amount Amount in minor units of the account's currency; 0 for an operation in another currency, until the
- *   user types what it cost.
+ * @property amount Whole amount in minor units of the account's currency, [parts] included; 0 for an operation in
+ *   another currency, until the user types what it cost.
  * @property foreignAmount Amount in minor units of [foreignCurrency] for an operation in another currency; `null`
  *   otherwise.
  * @property foreignCurrency ISO 4217 code of [foreignAmount]; `null` when the operation was in the account's currency.
  * @property accountId Account the money left, or arrived on for an income.
  * @property toAccountId Account the money arrived on for a transfer; `null` otherwise.
- * @property categoryId Category chosen; `null` when none yet (and for a transfer).
+ * @property categoryId Category chosen, of the rest of the amount when split; `null` when none yet (and for a
+ *   transfer).
+ * @property parts Parts split to other categories before; empty when not split.
  * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
  * @property note Free note of the user; `null` when there is none.
  * @property occurredAt When the money moved.
@@ -30,6 +32,7 @@ data class EditableTransaction(
     val accountId: Long,
     val toAccountId: Long?,
     val categoryId: Long?,
+    val parts: List<SplitPart>,
     val counterparty: String?,
     val note: String?,
     val occurredAt: Instant,

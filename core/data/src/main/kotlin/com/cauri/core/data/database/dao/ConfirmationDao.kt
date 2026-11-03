@@ -35,16 +35,19 @@ internal interface ConfirmationDao {
     }
 
     /**
-     * Confirms [transaction] as edited in the sheet, with the [parts] split from it and, for a transfer, the amount and
-     * time on its other side; closes its open decisions as [outcome] at [at].
+     * Confirms [transaction] as edited in the sheet, with the [parts] split from it in place of those of
+     * [formerSplitGroup] and, for a transfer, the amount and time on its other side; closes its open decisions as
+     * [outcome] at [at].
      */
     @Transaction
     suspend fun confirmEdited(
         transaction: TransactionEntity,
+        formerSplitGroup: String?,
         parts: List<TransactionEntity>,
         outcome: DecisionOutcome,
         at: Instant,
     ) {
+        formerSplitGroup?.let { deleteParts(splitGroup = it, keptId = transaction.id) }
         update(transaction)
         insertAll(parts)
         transaction.transferGroup?.let {
@@ -73,6 +76,9 @@ internal interface ConfirmationDao {
         setTransferStatus(id = id, status = TransactionStatus.DETECTED)
         openDecisions(id)
     }
+
+    @Query("DELETE FROM transactions WHERE splitGroup = :splitGroup AND id != :keptId")
+    suspend fun deleteParts(splitGroup: String, keptId: Long)
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransaction(id: Long): TransactionEntity?

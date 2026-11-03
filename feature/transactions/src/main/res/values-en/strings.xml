@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="transactions_activity_all">All</string>
+    <string name="transactions_activity_bank">Bank</string>
+    <string name="transactions_activity_cash">Cash</string>
+    <string name="transactions_activity_cash_misc">Misc. cash</string>
+    <string name="transactions_activity_cash_spent">Cash spent</string>
+    <string name="transactions_activity_count">Cash count</string>
+    <string name="transactions_activity_count_even">No gap</string>
+    <string name="transactions_activity_count_first">First count</string>
+    <plurals name="transactions_activity_count_gap">
+        <item quantity="one">Gap of %1$s F split into %2$d expense</item>
+        <item quantity="other">Gap of %1$s F split into %2$d expenses</item>
+    </plurals>
+    <string name="transactions_activity_count_surplus">%1$s F more than expected</string>
+    <string name="transactions_activity_deposit">Deposit</string>
+    <string name="transactions_activity_digital_spent">Digital spent</string>
+    <string name="transactions_activity_empty">No operation yet</string>
+    <string name="transactions_activity_fee">Fee</string>
+    <string name="transactions_activity_mobile">Mobile</string>
+    <string name="transactions_activity_pending">To confirm</string>
+    <string name="transactions_activity_search">Search</string>
+    <string name="transactions_activity_set_aside">Set aside</string>
+    <string name="transactions_activity_split">Split in %1$d</string>
     <string name="transactions_activity_title">Activity</string>
+    <string name="transactions_activity_today">Today</string>
+    <string name="transactions_activity_withdrawal">Counter withdrawal</string>
+    <string name="transactions_activity_yesterday">Yesterday</string>
     <string name="transactions_amount_too_high">The amount cannot exceed %1$s F</string>
     <string name="transactions_close">Close</string>
-    <string name="transactions_coming_soon">Screen coming soon</string>
     <string name="transactions_delete">Delete</string>
     <string name="transactions_edit_account">Account</string>
     <string name="transactions_edit_all_categories">All…</string>

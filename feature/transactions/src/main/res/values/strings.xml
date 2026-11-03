@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="transactions_activity_all">Tout</string>
+    <string name="transactions_activity_bank">Banque</string>
+    <string name="transactions_activity_cash">Cash</string>
+    <string name="transactions_activity_cash_misc">Divers cash</string>
+    <string name="transactions_activity_cash_spent">Cash dépensé</string>
+    <string name="transactions_activity_count">Comptage du cash</string>
+    <string name="transactions_activity_count_even">Aucun écart</string>
+    <string name="transactions_activity_count_first">Premier comptage</string>
+    <plurals name="transactions_activity_count_gap">
+        <item quantity="one">Écart de %1$s F réparti en %2$d dépense</item>
+        <item quantity="many">Écart de %1$s F réparti en %2$d dépenses</item>
+        <item quantity="other">Écart de %1$s F réparti en %2$d dépenses</item>
+    </plurals>
+    <string name="transactions_activity_count_surplus">%1$s F de plus que prévu</string>
+    <string name="transactions_activity_deposit">Dépôt</string>
+    <string name="transactions_activity_digital_spent">Numérique dépensé</string>
+    <string name="transactions_activity_empty">Aucune opération pour l\'instant</string>
+    <string name="transactions_activity_fee">Frais</string>
+    <string name="transactions_activity_mobile">Mobile</string>
+    <string name="transactions_activity_pending">À confirmer</string>
+    <string name="transactions_activity_search">Rechercher</string>
+    <string name="transactions_activity_set_aside">Mis de côté</string>
+    <string name="transactions_activity_split">Réparti en %1$d</string>
     <string name="transactions_activity_title">Activité</string>
+    <string name="transactions_activity_today">Aujourd\'hui</string>
+    <string name="transactions_activity_withdrawal">Retrait au guichet</string>
+    <string name="transactions_activity_yesterday">Hier</string>
+    <string name="transactions_amount" translatable="false">%1$s F</string>
     <string name="transactions_amount_too_high">Le montant ne peut pas dépasser %1$s F</string>
     <string name="transactions_close">Fermer</string>
-    <string name="transactions_coming_soon">Écran à venir</string>
     <string name="transactions_currency" translatable="false">F</string>
     <string name="transactions_delete">Effacer</string>
     <string name="transactions_edit_account">Compte</string>
@@ -34,6 +60,9 @@
     <string name="transactions_other_category">Autre…</string>
     <string name="transactions_quick_entry_title">Nouvelle opération</string>
     <string name="transactions_save">Enregistrer</string>
+    <string name="transactions_separator" translatable="false">" · "</string>
+    <string name="transactions_sign_in" translatable="false">+%1$s</string>
+    <string name="transactions_sign_out" translatable="false">−%1$s</string>
     <string name="transactions_to">Vers</string>
     <string name="transactions_transfer" translatable="false">%1$s → %2$s</string>
     <string name="transactions_type_expense">Dépense</string>
