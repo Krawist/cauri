@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="insights_budget_accept">Accepter</string>
+    <string name="insights_budget_adjust">Ajuster</string>
+    <string name="insights_budget_cancel">Annuler</string>
+    <string name="insights_budget_ignore">Ignorer</string>
+    <string name="insights_budget_of">Budget %1$s</string>
+    <string name="insights_budget_save">Enregistrer</string>
+    <string name="insights_budget_suggested_amount">%1$s F par mois, d\'après tes dépenses des dernières semaines</string>
+    <string name="insights_budgets_later">Après quatre semaines de dépenses, Cauri te propose un budget par catégorie.</string>
+    <string name="insights_budgets_suggested">Budgets proposés</string>
+    <string name="insights_per_month">F / mois</string>
+    <string name="insights_title">Analyses</string>
+</resources>

@@ -67,6 +67,7 @@ dependencies {
     implementation(projects.feature.places)
     implementation(projects.feature.transactions)
     implementation(projects.feature.settings)
+    implementation(projects.feature.insights)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)

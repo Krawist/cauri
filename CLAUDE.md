@@ -90,13 +90,14 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
 | `:feature:settings`     | Settings: permission and battery statuses, reminders      | 10, 11, 38     |
 | `:feature:places`       | « Mes lieux », the screen of a place                      | 33             |
+| `:feature:insights`     | « Analyses »: budgets suggested, insights                 | 45, 47         |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
 | `:core:capture`         | Permissions, notifications, signals, health, geofences    | 10–24, 33      |
 | `:core:parsing`         | Message templates and parsing (pure Kotlin)               | 19, 20         |
 | `:core:engine`          | Reminder rules, guardrails, bandit (pure Kotlin)          | 37–42          |
 
-Budgets and goals (phase 3) will get their own modules when their tickets start.
+Goals (phase 3) will get their own module when their ticket starts.
 
 ### Design tokens
 
@@ -590,6 +591,17 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   JVM tests; `seenHelp` in DataStore). By decision, three bubbles for now: the swipes and the tap of the cards « À
   confirmer », the tap and the long press of the habits, the tap on a line of « Activité ». Checked on the Galaxy S23 in
   dark mode: the bubble of the cards, closed, gone after a restart; the two others not seen on a phone. Next: CAU-45.
+
+- [ ] **CAU-45** — budgets suggested from real spending, in « Analyses », now `:feature:insights` (`InsightsScreen`,
+  `InsightsViewModel`, the placeholder of the tab gone). `BudgetService` (JVM tests): nothing before four weeks of
+  history; then, for each expense category spent on twice at least, what it cost over the last six weeks at most (the
+  history when shorter), the waiting operations counted and what was set aside left out, brought to 30 days and rounded
+  up to 500 F. `BudgetRepository` (`budgets`, database v20: amount a month, status, the amount suggested next to the one
+  kept): one card per category without budget and never ignored, « Accepter », « Ajuster » (a field, the suggestion to
+  start from) or « Ignorer » (by decision, never suggested again). Before four weeks, « Après quatre semaines de
+  dépenses, Cauri te propose un budget par catégorie. ». The budgets are read by the insights (CAU-47) and the daily
+  available amount (CAU-46). Checked on the Galaxy S23 in dark mode: the upgrade to v20, the tab before four weeks; a
+  suggestion not seen on a phone (too little history). Next: CAU-47.
 
 Update this section at the end of each ticket.
 

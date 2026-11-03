@@ -46,6 +46,8 @@ import com.cauri.feature.cash.navigateToCashCount
 import com.cauri.feature.home.HomeGraph
 import com.cauri.feature.home.homeGraph
 import com.cauri.feature.home.navigateToEveningSummary
+import com.cauri.feature.insights.InsightsGraph
+import com.cauri.feature.insights.insightsGraph
 import com.cauri.feature.onboarding.OnboardingGraph
 import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.places.navigateToPlaces
@@ -107,7 +109,7 @@ private fun NavHostController.open(target: NotificationTarget) = when (target) {
 }
 
 // The tabs of the bottom bar, in order, by the route of their graph.
-private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsRoute, InsightsRoute)
+private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsRoute, InsightsGraph)
 
 @Composable
 private fun CauriNavHost(
@@ -202,6 +204,7 @@ private fun NavGraphBuilder.cauriGraphs(
         onSplitBalanceGap = navController::navigateToBalanceGap,
     )
     activityGraph(onEditTransaction = onEditTransaction)
+    insightsGraph()
     placeholderTabs()
     cashGraph(navController = navController, onBack = { navController.popBackStack() })
     settingsGraph(
