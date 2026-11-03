@@ -32,6 +32,10 @@ internal interface AccountDao {
     @Query("SELECT * FROM accounts WHERE id = :id")
     suspend fun getById(id: Long): AccountEntity?
 
+    /** Every account, hidden or not. */
+    @Query("SELECT * FROM accounts ORDER BY id")
+    fun observeAll(): Flow<List<AccountEntity>>
+
     /** The active accounts, Cash first. */
     @Query("SELECT * FROM accounts WHERE status = 'ACTIVE' ORDER BY id")
     fun observeActive(): Flow<List<AccountEntity>>

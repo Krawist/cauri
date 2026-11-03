@@ -2,13 +2,18 @@ package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.ManualEntry
+import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.RecordedEntry
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
+import kotlinx.coroutines.flow.Flow
 
 /** The money moving on the user's accounts. */
 interface TransactionRepository {
+    /** The operations read in messages and waiting for the user's confirmation, newest first. */
+    val pending: Flow<List<PendingOperation>>
+
     /**
      * Records [withdrawal] as a transfer from its account to the Cash account, two transactions sharing a transfer
      * group, and its fee, when there is one, as a separate expense on its account. All or nothing: it fails when the

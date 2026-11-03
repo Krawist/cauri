@@ -30,6 +30,7 @@ internal class DetectionServiceImpl @Inject constructor() : DetectionService {
             fee = parsed.fees?.takeIf { !foreign && it > 0 },
             foreignAmount = parsed.amount.takeIf { foreign },
             foreignCurrency = parsed.currency.takeIf { foreign },
+            balance = parsed.balance.takeIf { !foreign },
             counterparty = parsed.counterparty,
             occurredAt = parsed.occurredAt,
         )

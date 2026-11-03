@@ -39,6 +39,7 @@ internal class DetectionServiceImplTest {
                 fee = 50,
                 foreignAmount = null,
                 foreignCurrency = null,
+                balance = 12_500,
                 counterparty = "BOULANGERIE",
                 occurredAt = Instant.ofEpochSecond(1_000),
             )
@@ -88,6 +89,18 @@ internal class DetectionServiceImplTest {
             Triple(operation.amount, operation.fee, operation.foreignAmount to operation.foreignCurrency) shouldBe
                 Triple(0L, null, 2_500L to "USD")
         }
+
+        @Test
+        fun `should leave out the balance of an operation in another currency`() {
+            // given
+            val parsed = parsed(kind = MessageKind.PAYMENT, direction = Direction.DEBIT, currency = "USD", fees = null)
+
+            // when
+            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+
+            // then
+            operation.balance.shouldBeNull()
+        }
     }
 
     private fun signal() = RawSignal(
@@ -115,7 +128,7 @@ internal class DetectionServiceImplTest {
         amount = 2_500,
         currency = currency,
         fees = fees,
-        balance = null,
+        balance = 12_500,
         counterparty = "BOULANGERIE",
         reference = null,
         occurredAt = Instant.ofEpochSecond(1_000),

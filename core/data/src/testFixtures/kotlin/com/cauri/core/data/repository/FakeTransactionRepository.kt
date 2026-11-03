@@ -2,10 +2,12 @@ package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.ManualEntry
+import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.RecordedEntry
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /** In-memory [TransactionRepository] for tests: recorded cash expenses get the ids 1, 2, 3… in order. */
 class FakeTransactionRepository : TransactionRepository {
@@ -25,6 +27,8 @@ class FakeTransactionRepository : TransactionRepository {
         val note: String,
         val occurredAt: Instant,
     )
+
+    override val pending = MutableStateFlow(emptyList<PendingOperation>())
 
     val withdrawals = mutableListOf<Withdrawal>()
     val detected = mutableListOf<DetectedOperation>()

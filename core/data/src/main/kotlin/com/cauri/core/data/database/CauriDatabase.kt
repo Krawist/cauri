@@ -4,6 +4,7 @@ import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.cauri.core.data.database.dao.AccountBalanceDao
 import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.CategoryDao
@@ -15,6 +16,7 @@ import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
 import com.cauri.core.data.database.dao.TransferLinkDao
 import com.cauri.core.data.database.dao.VisitDao
+import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.CashCountEntity
 import com.cauri.core.data.database.entity.CategoryEntity
@@ -43,19 +45,23 @@ import com.cauri.core.data.database.entity.VisitEntity
         HabitEntity::class,
         TransactionMergeEntity::class,
         TransferLinkEntity::class,
+        AccountBalanceEntity::class,
     ],
-    version = 7,
+    version = 8,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
         AutoMigration(from = 5, to = 6),
         AutoMigration(from = 6, to = 7),
+        AutoMigration(from = 7, to = 8),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
 internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun accountDao(): AccountDao
+
+    abstract fun accountBalanceDao(): AccountBalanceDao
 
     abstract fun categoryDao(): CategoryDao
 

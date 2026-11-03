@@ -12,13 +12,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -28,13 +31,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cauri.core.data.model.Account
+import com.cauri.core.data.model.AccountBalance
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Habit
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private val ProfileButtonSize = 52.dp
 private val ProfileButtonElevation = 16.dp
@@ -44,7 +54,10 @@ private val ProfileRingWidth = 1.5.dp
 // Above the floating bottom bar of the app.
 private val UndoBarBottom = 100.dp
 
-/** Temporary home screen; the real one, cash first, comes with CAU-25. */
+/**
+ * Home screen, cash first: the greeting, « Cash dans ta poche » with « Compter mon cash », the notices, the one-tap
+ * cash expenses, the balances of the digital accounts and the operations to confirm.
+ */
 @Composable
 internal fun HomeScreen(
     onCountCash: () -> Unit,
@@ -86,20 +99,25 @@ private fun HomeContent(
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.safeDrawingPadding().padding(horizontal = 20.dp, vertical = 28.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .safeDrawingPadding()
+                .padding(start = 20.dp, top = 28.dp, end = 20.dp, bottom = UndoBarBottom),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = stringResource(R.string.home_title), style = MaterialTheme.typography.headlineMedium)
+                Greeting(today = state.today, name = state.name)
                 ProfileButton(initial = state.initial, onClick = onOpenSettings)
             }
             CashCard(cash = state.cash, onCountCash = onCountCash)
             notices()
             HabitsRow(habits = state.habits, actions = actions, onAddExpense = onAddExpense)
+            BalancesCard(balances = state.balances)
+            PendingSection(pending = state.pending)
         }
         state.recorded?.let { recorded ->
             UndoBar(
@@ -112,6 +130,34 @@ private fun HomeContent(
                     .padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = UndoBarBottom),
             )
         }
+    }
+}
+
+// « Lundi 2 novembre » over « Bonjour, Krawist ».
+@Composable
+private fun Greeting(today: LocalDate?, name: String) {
+    val palette = CauriTheme.palette
+    val locale = LocalConfiguration.current.locales[0]
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        today?.let {
+            Text(
+                text = DateTimeFormatter.ofPattern("EEEE d MMMM", locale).format(it)
+                    .replaceFirstChar { first -> first.titlecase(locale) },
+                style = MaterialTheme.typography.labelLarge,
+                color = palette.muted,
+            )
+        }
+        Text(
+            text = if (name.isBlank()) {
+                stringResource(
+                    R.string.home_title,
+                )
+            } else {
+                stringResource(R.string.home_greeting, name)
+            },
+            style = MaterialTheme.typography.headlineMedium,
+            color = palette.ink,
+        )
     }
 }
 
@@ -152,6 +198,8 @@ private fun HomeContentPreview() {
     CauriTheme {
         HomeContent(
             state = HomeUiState(
+                today = LocalDate.now(),
+                name = "Krawist",
                 initial = "K",
                 cash = CashBalance(
                     amount = 7_500,
@@ -162,6 +210,32 @@ private fun HomeContentPreview() {
                     Habit(id = 1, name = "Moto", amount = 500, categoryId = null),
                     Habit(id = 2, name = "Beignets", amount = 300, categoryId = null),
                     Habit(id = 3, name = "Taxi", amount = 350, categoryId = null),
+                ),
+                balances = listOf(
+                    AccountBalance(
+                        account = Account(
+                            id = 2,
+                            name = "Orange Money",
+                            kind = AccountKind.MOBILE_MONEY,
+                            provider = "ORANGE_MONEY",
+                            currency = "XAF",
+                        ),
+                        amount = 12_000,
+                        at = Instant.now(),
+                    ),
+                ),
+                pending = listOf(
+                    PendingOperation(
+                        transactionId = 1,
+                        type = PendingType.EXPENSE,
+                        amount = 5_000,
+                        foreignAmount = null,
+                        foreignCurrency = null,
+                        accountName = "Orange Money",
+                        toAccountName = null,
+                        counterparty = "Boulangerie Saker",
+                        occurredAt = Instant.now(),
+                    ),
                 ),
             ),
             actions = PreviewHabitActions,

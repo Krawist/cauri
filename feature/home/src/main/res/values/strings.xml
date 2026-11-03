@@ -6,6 +6,7 @@
     <string name="home_account_text">Cauri a reconnu des messages %1$s. Il peut en tirer tes paiements, que tu confirmeras toujours. Tu pourras changer d\'avis dans Réglages.</string>
     <string name="home_account_title">Suivre ton compte %1$s ?</string>
     <string name="home_amount" translatable="false">%1$s F</string>
+    <string name="home_balances_label">Tes comptes</string>
     <string name="home_capture_check">Vérifier</string>
     <string name="home_capture_label">Détection en pause</string>
     <string name="home_capture_text">Aucun message de tes banques ni de Mobile Money depuis plus d\'un mois. Ton téléphone a peut-être arrêté Cauri, ou retiré la lecture des notifications.</string>
@@ -20,6 +21,8 @@
         <item quantity="many">%d dépenses depuis</item>
         <item quantity="other">%d dépenses depuis</item>
     </plurals>
+    <string name="home_foreign_amount" translatable="false">%1$s %2$s</string>
+    <string name="home_greeting">Bonjour, %1$s</string>
     <string name="home_habit_add">Ajouter une habitude</string>
     <string name="home_habit_add_hint">Une dépense cash en un tap</string>
     <string name="home_habit_amount">Montant</string>
@@ -38,6 +41,9 @@
     <string name="home_habits_reorder">Réorganiser</string>
     <string name="home_habits_title">Mes habitudes</string>
     <string name="home_other_cash_expense">Autre dépense cash</string>
+    <string name="home_pending_title">À confirmer</string>
+    <string name="home_pending_transfer" translatable="false">%1$s → %2$s</string>
+    <string name="home_separator" translatable="false">" · "</string>
     <string name="home_settings">Réglages</string>
     <string name="home_title">Bonjour</string>
     <string name="home_undo">Annuler</string>

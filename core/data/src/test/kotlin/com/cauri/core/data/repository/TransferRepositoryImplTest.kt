@@ -11,8 +11,10 @@ import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
+import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.service.DuplicateServiceImpl
 import com.cauri.core.data.service.TransferLinkServiceImpl
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import java.time.Clock
@@ -36,6 +38,7 @@ internal class TransferRepositoryImplTest {
         transactions = TransactionRepositoryImpl(
             database.transactionDao(),
             database.transactionMergeDao(),
+            database.accountDao(),
             DuplicateServiceImpl(),
             CLOCK,
         )
@@ -110,7 +113,27 @@ internal class TransferRepositoryImplTest {
         }
     }
 
-    private suspend fun detect(accountId: Long, type: DetectedType, amount: Long) {
+    @Nested
+    inner class Pending {
+        @Test
+        fun `should show a linked transfer as one operation between the two accounts`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(account(name = "UBA", provider = "UBA"))
+            val orangeId = database.accountDao().insert(account(name = "Orange Money", provider = "ORANGE_MONEY"))
+            detect(accountId = ubaId, type = DetectedType.EXPENSE, amount = 10_000, counterparty = "ORANGEMONEYCM")
+            detect(accountId = orangeId, type = DetectedType.INCOME, amount = 10_000, counterparty = "UBA")
+            repository.linkTransfers()
+
+            // when
+            val pending = transactions.pending.first()
+
+            // then
+            pending.map { listOf(it.type, it.accountName, it.toAccountName, it.counterparty) } shouldContainExactly
+                listOf(listOf(PendingType.TRANSFER, "UBA", "Orange Money", null))
+        }
+    }
+
+    private suspend fun detect(accountId: Long, type: DetectedType, amount: Long, counterparty: String? = null) {
         val signalId = database.rawSignalDao().insert(
             RawSignalEntity(
                 sender = "com.samsung.android.messaging",
@@ -130,7 +153,8 @@ internal class TransferRepositoryImplTest {
                 fee = null,
                 foreignAmount = null,
                 foreignCurrency = null,
-                counterparty = null,
+                balance = null,
+                counterparty = counterparty,
                 occurredAt = Instant.ofEpochSecond(1_000),
             ),
         )

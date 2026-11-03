@@ -1,7 +1,9 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
+import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionMergeEntity
@@ -12,6 +14,8 @@ import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.ManualEntry
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.RecordedEntry
 import com.cauri.core.data.model.Withdrawal
@@ -21,15 +25,39 @@ import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 
 /** Default implementation for [TransactionRepository]. */
 @Singleton
 internal class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
     private val mergeDao: TransactionMergeDao,
+    accountDao: AccountDao,
     private val duplicates: DuplicateService,
     private val clock: Clock,
 ) : TransactionRepository {
+    override val pending: Flow<List<PendingOperation>> = combine(
+        transactionDao.observeByStatus(TransactionStatus.DETECTED),
+        accountDao.observeAll(),
+    ) { detected, accounts ->
+        val names = accounts.associate { it.id to it.name }
+        // A fee or the Cash side of a withdrawal has no signal of its own: it rides with the operation read.
+        val (transfers, others) = detected.partition { it.transferGroup != null }
+        val single = others.filter { it.rawSignalId != null }.map { it.toPending(names, to = null) }
+        val paired = transfers.groupBy { it.transferGroup }.values.mapNotNull { sides ->
+            val out = sides.firstOrNull { it.type == TransactionType.TRANSFER_OUT }
+            val into = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN }
+            val read = sides.filter { it.rawSignalId != null }
+            out?.takeIf { read.isNotEmpty() }?.let { side ->
+                // One message names the agent of a withdrawal or a deposit; two messages, a transfer between the user's
+                // accounts, name only the other account, already shown.
+                side.copy(counterparty = read.singleOrNull()?.counterparty).toPending(names, to = into?.accountId)
+            }
+        }
+        (single + paired).sortedByDescending { it.occurredAt }
+    }
+
     override suspend fun recordWithdrawal(withdrawal: Withdrawal) {
         val parsed = withdrawal.rawSignalId != null
         val side = TransactionEntity(
@@ -98,6 +126,14 @@ internal class TransactionRepositoryImpl @Inject constructor(
         )
         mergeDao.insertParsed(
             transactions = listOfNotNull(manual?.let { duplicates.merged(detected, it) } ?: detected, cash, fee),
+            balance = operation.balance?.let {
+                AccountBalanceEntity(
+                    accountId = operation.accountId,
+                    amount = it,
+                    at = operation.occurredAt,
+                    rawSignalId = operation.rawSignalId,
+                )
+            },
             rawSignalId = operation.rawSignalId,
             templateVersion = operation.templateVersion,
             entry = manual,
@@ -219,3 +255,20 @@ internal class TransactionRepositoryImpl @Inject constructor(
 
     override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }
+
+// The card of [this], an operation read in a message, with the names of its accounts.
+private fun TransactionEntity.toPending(names: Map<Long, String>, to: Long?) = PendingOperation(
+    transactionId = id,
+    type = when (type) {
+        TransactionType.EXPENSE -> PendingType.EXPENSE
+        TransactionType.INCOME -> PendingType.INCOME
+        TransactionType.TRANSFER_OUT, TransactionType.TRANSFER_IN -> PendingType.TRANSFER
+    },
+    amount = amount,
+    foreignAmount = foreignAmount,
+    foreignCurrency = foreignCurrency,
+    accountName = names.getValue(accountId),
+    toAccountName = to?.let(names::getValue),
+    counterparty = counterparty,
+    occurredAt = occurredAt,
+)

@@ -1,5 +1,8 @@
 package com.cauri.feature.home
 
+import com.cauri.core.data.model.Account
+import com.cauri.core.data.model.AccountBalance
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.CategoryNature
@@ -7,8 +10,11 @@ import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.UserProfile
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
+import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeHabitRepository
@@ -19,6 +25,7 @@ import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneOffset
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,13 +44,14 @@ internal class HomeViewModelTest {
     private val categories = FakeCategoryRepository()
     private val habits = FakeHabitRepository()
     private val transactions = FakeTransactionRepository()
+    private val accounts = FakeAccountRepository()
     private val clock = Clock.fixed(Instant.parse("2026-11-03T08:30:00Z"), ZoneOffset.UTC)
     private lateinit var viewModel: HomeViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = HomeViewModel(preferences, cashCounts, categories, habits, transactions, clock)
+        viewModel = HomeViewModel(preferences, cashCounts, categories, accounts, habits, transactions, clock)
     }
 
     @AfterEach
@@ -65,6 +73,64 @@ internal class HomeViewModelTest {
 
             // then
             viewModel.uiState.value.initial shouldBe "K"
+        }
+
+        @Test
+        fun `should greet the user by name on today's date`() {
+            // when
+            preferences.profile.value = UserProfile(
+                displayName = "Krawist",
+                occupation = Occupation.EMPLOYEE,
+                incomeType = IncomeType.FIXED_DATE,
+                paymentHabit = PaymentHabit.BOTH,
+            )
+
+            // then
+            viewModel.uiState.value.let { it.today to it.name } shouldBe (LocalDate.of(2026, 11, 3) to "Krawist")
+        }
+
+        @Test
+        fun `should follow the balances of the digital accounts`() {
+            // given
+            val balance = AccountBalance(
+                account = Account(
+                    id = 2,
+                    name = "Orange Money",
+                    kind = AccountKind.MOBILE_MONEY,
+                    provider = "ORANGE_MONEY",
+                    currency = "XAF",
+                ),
+                amount = 4_500,
+                at = Instant.ofEpochSecond(1_000),
+            )
+
+            // when
+            accounts.balances.value = listOf(balance)
+
+            // then
+            viewModel.uiState.value.balances shouldContainExactly listOf(balance)
+        }
+
+        @Test
+        fun `should follow the operations to confirm`() {
+            // given
+            val operation = PendingOperation(
+                transactionId = 7,
+                type = PendingType.EXPENSE,
+                amount = 5_000,
+                foreignAmount = null,
+                foreignCurrency = null,
+                accountName = "Orange Money",
+                toAccountName = null,
+                counterparty = "Boulangerie",
+                occurredAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // when
+            transactions.pending.value = listOf(operation)
+
+            // then
+            viewModel.uiState.value.pending shouldContainExactly listOf(operation)
         }
 
         @Test

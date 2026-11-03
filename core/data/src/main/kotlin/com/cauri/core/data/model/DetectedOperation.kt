@@ -15,6 +15,8 @@ import java.time.Instant
  * @property foreignAmount Amount in minor units of [foreignCurrency] when the operation was in another currency;
  *   `null` otherwise.
  * @property foreignCurrency ISO 4217 code of [foreignAmount]; `null` when the operation was in the account's currency.
+ * @property balance Balance of the account after the operation, in minor units of its currency; `null` when the
+ *   message gives none, or gives it in another currency.
  * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
  * @property occurredAt When the money moved.
  */
@@ -27,6 +29,7 @@ data class DetectedOperation(
     val fee: Long?,
     val foreignAmount: Long?,
     val foreignCurrency: String?,
+    val balance: Long?,
     val counterparty: String?,
     val occurredAt: Instant,
 )

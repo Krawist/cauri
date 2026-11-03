@@ -5,27 +5,34 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionMergeEntity
 import com.cauri.core.data.database.entity.TransactionStatus
 import java.time.Instant
 
 /** The writes that record a parsed signal or merge two sides of the same operation, each all or none. */
+// One function per statement of these writes: the count grows with what a parsed signal records.
+@Suppress("TooManyFunctions")
 @Dao
 internal interface TransactionMergeDao {
     /**
-     * Inserts [transactions], read in the raw signal [rawSignalId] by [templateVersion], and marks the signal read.
-     * With [merge], the first transaction is kept for the manual entry [entry], set aside, and the merge is logged.
+     * Inserts [transactions] and the account's [balance], read in the raw signal [rawSignalId] by [templateVersion],
+     * and marks the signal read. With [merge], the first transaction is kept for the manual entry [entry], set aside,
+     * and the merge is logged.
      */
     @Transaction
+    @Suppress("LongParameterList") // Everything one signal writes, in one transaction.
     suspend fun insertParsed(
         transactions: List<TransactionEntity>,
+        balance: AccountBalanceEntity?,
         rawSignalId: Long,
         templateVersion: String,
         entry: TransactionEntity?,
         merge: TransactionMergeEntity?,
     ) {
         val ids = insertTransactions(transactions)
+        balance?.let { insertBalance(it) }
         markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
         if (entry != null && merge != null) {
             updateTransaction(entry.copy(status = TransactionStatus.MERGED))
@@ -70,6 +77,9 @@ internal interface TransactionMergeDao {
 
     @Update
     suspend fun updateTransaction(transaction: TransactionEntity)
+
+    @Insert
+    suspend fun insertBalance(balance: AccountBalanceEntity)
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransaction(id: Long): TransactionEntity?

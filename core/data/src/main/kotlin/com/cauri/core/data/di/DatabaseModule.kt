@@ -25,6 +25,9 @@ internal object DatabaseModule {
     fun provideAccountDao(database: CauriDatabase) = database.accountDao()
 
     @Provides
+    fun provideAccountBalanceDao(database: CauriDatabase) = database.accountBalanceDao()
+
+    @Provides
     fun provideCategoryDao(database: CauriDatabase) = database.categoryDao()
 
     @Provides

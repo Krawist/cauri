@@ -6,12 +6,14 @@ import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.NewHabit
 import com.cauri.core.data.preferences.UserPreferencesRepository
+import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
+import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +22,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-/** Home screen: the profile button, the estimated cash in pocket and the one-tap cash expenses. */
+/**
+ * Home screen, cash first: the greeting, the estimated cash in pocket, the one-tap cash expenses, the balances of the
+ * digital accounts and the operations to confirm.
+ */
 // Injected repositories: one per kind of data the screen shows or changes.
 @Suppress("LongParameterList")
 @HiltViewModel
@@ -28,12 +33,13 @@ internal class HomeViewModel @Inject constructor(
     preferences: UserPreferencesRepository,
     cashCounts: CashCountRepository,
     categories: CategoryRepository,
+    accounts: AccountRepository,
     private val habits: HabitRepository,
     private val transactions: TransactionRepository,
     private val clock: Clock,
 ) : ViewModel(),
     HabitActions {
-    private val state = MutableStateFlow(HomeUiState())
+    private val state = MutableStateFlow(HomeUiState(today = LocalDate.now(clock)))
 
     val uiState: StateFlow<HomeUiState> = state.asStateFlow()
 
@@ -47,12 +53,18 @@ internal class HomeViewModel @Inject constructor(
             ) { profile, cash, habits, categories ->
                 state.update { current ->
                     current.copy(
+                        name = profile?.displayName.orEmpty(),
                         initial = profile?.displayName?.take(1)?.uppercase().orEmpty(),
                         cash = cash,
                         habits = habits,
                         categories = categories.filter { it.nature == CategoryNature.EXPENSE },
                     )
                 }
+            }.collect {}
+        }
+        viewModelScope.launch {
+            combine(accounts.balances, transactions.pending) { balances, pending ->
+                state.update { it.copy(balances = balances, pending = pending) }
             }.collect {}
         }
     }

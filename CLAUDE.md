@@ -21,7 +21,7 @@ The documents kept in Claude are the reference; they are written in French.
 | Document                                  | Local copy        | Reference                                         |
 |-------------------------------------------|-------------------|---------------------------------------------------|
 | Product requirements (what and why)       | —                 | https://claude.ai/artifact/6ZMKPajYcTATWmgfoHCqin |
-| MVP tickets (CAU-01 to CAU-51, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
+| MVP tickets (CAU-01 to CAU-52, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
 | Mockups, light and dark (canvas)          | —                 | https://claude.ai/artifact/7cuvPsaveMQEG1VCZh2qbP |
 
 `docs/tickets.md` is the detailed English working copy: acceptance criteria, dependencies and the mockup of each
@@ -290,7 +290,17 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   demand (`adb shell am broadcast -a com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of silence for the card (`-a
   com.cauri.debug.SIMULATE_CAPTURE_SILENCE`, `-ez on false` to end it; `DebugCaptureHealthService` bound in debug only).
   Checked on the Galaxy S23: the notification, its tap opening Réglages; the card with a simulated silence, « Vérifier »
-  opening Réglages; the daily check not seen firing. Next: CAU-25.
+  opening Réglages; the daily check not seen firing.
+- [ ] **CAU-25** — Accueil, cash first: the day and « Bonjour, <prénom> », « Cash dans ta poche », the notices, the
+  habits, « Tes comptes » and « À confirmer ». « Tes comptes » lists the balance of each digital account as its last
+  message gave it (`account_balances`, database v8, written with the signal's transactions; `AccountRepository.balances`,
+  mobile money first); by decision the latest balance wins, read or typed; the balance typed by the user, with the split
+  of its gap as for the cash, is CAU-52. « Disponible aujourd'hui » waits for the budgets (CAU-46). « À confirmer »
+  (`TransactionRepository.pending`) shows one card per operation read in a message, newest first: its fee rides with
+  it, a withdrawal or a linked transfer is one card « UBA → Orange Money ». ✓, the swipes and the proposed category
+  come with CAU-27, the visits (shown first) with the places. Balances of the messages read before v8 are not
+  recovered. Checked on the Galaxy S23 in light mode: upgrade to v8, the greeting, the Orange Money balance from a
+  made-up payment, five cards (payments, a withdrawal, a linked transfer). Dark mode not checked. Next: CAU-26.
 
 Update this section at the end of each ticket.
 

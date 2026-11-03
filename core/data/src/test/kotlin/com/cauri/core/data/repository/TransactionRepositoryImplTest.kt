@@ -2,6 +2,7 @@ package com.cauri.core.data.repository
 
 import android.database.SQLException
 import com.cauri.core.data.database.CauriDatabase
+import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.AccountStatus
@@ -16,6 +17,8 @@ import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.ManualEntry
+import com.cauri.core.data.model.PendingOperation
+import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
@@ -24,6 +27,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
@@ -49,6 +53,7 @@ internal class TransactionRepositoryImplTest {
         repository = TransactionRepositoryImpl(
             database.transactionDao(),
             database.transactionMergeDao(),
+            database.accountDao(),
             DuplicateServiceImpl(),
             CLOCK,
         )
@@ -288,6 +293,29 @@ internal class TransactionRepositoryImplTest {
         }
 
         @Test
+        fun `should keep the balance the message gave`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null)
+                    .copy(balance = 12_500),
+            )
+
+            // then
+            database.accountBalanceDao().observeLatest().first().map { it.copy(id = 0) } shouldContainExactly listOf(
+                AccountBalanceEntity(
+                    accountId = momoId,
+                    amount = 12_500,
+                    at = Instant.ofEpochSecond(1_000),
+                    rawSignalId = signalId,
+                ),
+            )
+        }
+
+        @Test
         fun `should record nothing and leave the signal unread when it already created a transaction`() = runTest {
             // given
             val momoId = database.accountDao().insert(momo())
@@ -312,6 +340,93 @@ internal class TransactionRepositoryImplTest {
             // then
             recorded() shouldHaveSize 2
             database.rawSignalDao().getUnparsed() shouldHaveSize 1
+        }
+    }
+
+    @Nested
+    inner class Pending {
+        @Test
+        fun `should list an operation read in a message, its fee riding with it`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = 50),
+            )
+
+            // when
+            val pending = repository.pending.first()
+
+            // then
+            pending.map { it.copy(transactionId = 0) } shouldContainExactly listOf(
+                PendingOperation(
+                    transactionId = 0,
+                    type = PendingType.EXPENSE,
+                    amount = 2_500,
+                    foreignAmount = null,
+                    foreignCurrency = null,
+                    accountName = "MTN MoMo",
+                    toAccountName = null,
+                    counterparty = "Boulangerie",
+                    occurredAt = Instant.ofEpochSecond(1_000),
+                ),
+            )
+        }
+
+        @Test
+        fun `should list a withdrawal once, from the account to Cash`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.WITHDRAWAL, fee = null),
+            )
+
+            // when
+            val pending = repository.pending.first()
+
+            // then
+            pending.map { Triple(it.type, it.accountName, it.toAccountName) } shouldContainExactly listOf(
+                Triple(PendingType.TRANSFER, "MTN MoMo", "Cash"),
+            )
+        }
+
+        @Test
+        fun `should list the newest operation first`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val first = database.rawSignalDao().insert(unparsedSignal())
+            val second = database.rawSignalDao().insert(unparsedSignal().copy(text = "Paiement de 300 FCFA"))
+            repository.recordDetected(
+                operation(rawSignalId = first, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            repository.recordDetected(
+                operation(rawSignalId = second, accountId = momoId, type = DetectedType.INCOME, fee = null)
+                    .copy(occurredAt = Instant.ofEpochSecond(2_000)),
+            )
+
+            // when
+            val pending = repository.pending.first()
+
+            // then
+            pending.map { it.type } shouldContainExactly listOf(PendingType.INCOME, PendingType.EXPENSE)
+        }
+
+        @Test
+        fun `should leave out what the user entered`() = runTest {
+            // given
+            repository.recordCashExpense(
+                amount = 500,
+                categoryId = null,
+                note = "Moto",
+                occurredAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // when
+            val pending = repository.pending.first()
+
+            // then
+            pending.shouldBeEmpty()
         }
     }
 
@@ -580,6 +695,7 @@ internal class TransactionRepositoryImplTest {
         fee = fee,
         foreignAmount = null,
         foreignCurrency = null,
+        balance = null,
         counterparty = "Boulangerie",
         occurredAt = Instant.ofEpochSecond(1_000),
     )
