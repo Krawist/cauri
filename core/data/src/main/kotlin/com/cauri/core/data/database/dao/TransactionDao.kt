@@ -7,6 +7,7 @@ import androidx.room.Update
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
+import com.cauri.core.data.service.ProposalOutcome
 import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 
@@ -71,4 +72,12 @@ internal interface TransactionDao {
     /** The transactions with [status], newest first. */
     @Query("SELECT * FROM transactions WHERE status = :status ORDER BY occurredAt DESC")
     fun observeByStatus(status: TransactionStatus): Flow<List<TransactionEntity>>
+
+    /** The confirmed transactions that came with a proposal of Cauri, next to what the user kept. */
+    @Query(
+        "SELECT t.placeId, t.counterparty, r.templateVersion, t.proposedCategoryId, t.categoryId, " +
+            "t.proposedAmount, t.amount FROM transactions AS t LEFT JOIN raw_signals AS r ON r.id = t.rawSignalId " +
+            "WHERE t.status = 'CONFIRMED' AND (t.proposedCategoryId IS NOT NULL OR t.proposedAmount IS NOT NULL)",
+    )
+    suspend fun getProposalOutcomes(): List<ProposalOutcome>
 }

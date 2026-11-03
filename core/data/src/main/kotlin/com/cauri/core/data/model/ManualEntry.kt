@@ -11,6 +11,8 @@ import java.time.Instant
  * @property categoryId Category; `null` when none was chosen.
  * @property note Free note; `null` when there is none.
  * @property occurredAt When the money moved.
+ * @property proposedCategoryId Category Cauri proposed for the entry, whatever the user chose; `null` when it proposed
+ *   none.
  */
 data class ManualEntry(
     val accountId: Long,
@@ -19,4 +21,5 @@ data class ManualEntry(
     val categoryId: Long?,
     val note: String?,
     val occurredAt: Instant,
+    val proposedCategoryId: Long? = null,
 )

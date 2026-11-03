@@ -106,18 +106,27 @@ internal class TransactionRepositoryImpl @Inject constructor(
             note = null,
             foreignAmount = operation.foreignAmount,
             foreignCurrency = operation.foreignCurrency,
+            // The amount read is Cauri's proposal: the user may correct it when confirming.
+            proposedAmount = operation.amount.takeIf { operation.foreignCurrency == null },
         )
         // Only the detected side keeps the signal: a signal creates at most one transaction.
-        val plain = detected.copy(rawSignalId = null, counterparty = null, foreignAmount = null, foreignCurrency = null)
+        val plain = detected.copy(
+            rawSignalId = null,
+            counterparty = null,
+            foreignAmount = null,
+            foreignCurrency = null,
+            proposedAmount = null,
+        )
+        // The Cash side goes the other way: a withdrawal arrives on Cash, a deposit leaves it.
         val cash = detected.transferGroup?.let {
-            val cashType = if (type ==
-                TransactionType.TRANSFER_OUT
-            ) {
-                TransactionType.TRANSFER_IN
-            } else {
-                TransactionType.TRANSFER_OUT
-            }
-            plain.copy(accountId = CASH_ACCOUNT_ID, type = cashType)
+            plain.copy(
+                accountId = CASH_ACCOUNT_ID,
+                type = if (type == TransactionType.TRANSFER_OUT) {
+                    TransactionType.TRANSFER_IN
+                } else {
+                    TransactionType.TRANSFER_OUT
+                },
+            )
         }
         val fee = operation.fee?.let { plain.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
         val manual = duplicates.sameOperation(
@@ -126,14 +135,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
         )
         mergeDao.insertParsed(
             transactions = listOfNotNull(manual?.let { duplicates.merged(detected, it) } ?: detected, cash, fee),
-            balance = operation.balance?.let {
-                AccountBalanceEntity(
-                    accountId = operation.accountId,
-                    amount = it,
-                    at = operation.occurredAt,
-                    rawSignalId = operation.rawSignalId,
-                )
-            },
+            balance = operation.balanceRead(),
             rawSignalId = operation.rawSignalId,
             templateVersion = operation.templateVersion,
             entry = manual,
@@ -158,6 +160,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             note = entry.note,
             foreignAmount = null,
             foreignCurrency = null,
+            proposedCategoryId = entry.proposedCategoryId,
         )
         val detected = duplicates.sameOperation(
             transaction = manual,
@@ -272,3 +275,8 @@ private fun TransactionEntity.toPending(names: Map<Long, String>, to: Long?) = P
     counterparty = counterparty,
     occurredAt = occurredAt,
 )
+
+// The balance the message gave after the operation; `null` when it gave none.
+private fun DetectedOperation.balanceRead() = balance?.let {
+    AccountBalanceEntity(accountId = accountId, amount = it, at = occurredAt, rawSignalId = rawSignalId)
+}

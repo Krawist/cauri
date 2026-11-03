@@ -31,6 +31,7 @@ internal class DuplicateServiceImpl @Inject constructor() : DuplicateService {
         categoryId = manual.categoryId ?: detected.categoryId,
         note = manual.note ?: detected.note,
         placeId = manual.placeId ?: detected.placeId,
+        proposedCategoryId = detected.proposedCategoryId ?: manual.proposedCategoryId,
     )
 
     // A fee has no signal of its own: only the operation read in a message can be merged.

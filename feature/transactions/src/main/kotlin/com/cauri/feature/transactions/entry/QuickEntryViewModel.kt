@@ -133,6 +133,8 @@ internal class QuickEntryViewModel @Inject constructor(
                         categoryId = entry.categoryId,
                         note = null,
                         occurredAt = clock.instant(),
+                        // The first category suggested is Cauri's proposal, kept whatever the user chose.
+                        proposedCategoryId = entry.suggested.firstOrNull()?.id,
                     ),
                 )
                 recorded.mergeId?.let { mergeId -> change { it.copy(mergeId = mergeId) } }

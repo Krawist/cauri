@@ -10,6 +10,8 @@ import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.CategoryRepositoryImpl
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.HabitRepositoryImpl
+import com.cauri.core.data.repository.ProposalRepository
+import com.cauri.core.data.repository.ProposalRepositoryImpl
 import com.cauri.core.data.repository.RawSignalRepository
 import com.cauri.core.data.repository.RawSignalRepositoryImpl
 import com.cauri.core.data.repository.TransactionRepository
@@ -47,4 +49,7 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindTransferRepository(impl: TransferRepositoryImpl): TransferRepository
+
+    @Binds
+    abstract fun bindProposalRepository(impl: ProposalRepositoryImpl): ProposalRepository
 }

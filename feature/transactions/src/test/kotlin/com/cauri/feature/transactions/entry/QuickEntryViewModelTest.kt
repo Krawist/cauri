@@ -130,6 +130,7 @@ internal class QuickEntryViewModelTest {
                     categoryId = 10,
                     note = null,
                     occurredAt = clock.instant(),
+                    proposedCategoryId = 10,
                 ),
             )
         }

@@ -27,6 +27,10 @@ import java.time.Instant
  * @property foreignAmount Amount in minor units of [foreignCurrency] for an operation made in another currency than the
  *   account's, such as a card payment in USD; `null` otherwise.
  * @property foreignCurrency ISO 4217 code of [foreignAmount]; `null` when the operation was in the account's currency.
+ * @property proposedCategoryId Category Cauri proposed, kept next to [categoryId] once the user confirmed; `null` when
+ *   it proposed none.
+ * @property proposedAmount Amount Cauri proposed (the one read in the message), kept next to [amount]; `null` when it
+ *   proposed none, such as for an amount the user typed.
  */
 @Entity(
     tableName = "transactions",
@@ -61,4 +65,6 @@ internal data class TransactionEntity(
     val note: String?,
     val foreignAmount: Long?,
     val foreignCurrency: String?,
+    val proposedCategoryId: Long? = null,
+    val proposedAmount: Long? = null,
 )

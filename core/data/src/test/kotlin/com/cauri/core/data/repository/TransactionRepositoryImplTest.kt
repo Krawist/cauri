@@ -231,6 +231,7 @@ internal class TransactionRepositoryImplTest {
                     note = null,
                     foreignAmount = null,
                     foreignCurrency = null,
+                    proposedAmount = 2_500,
                 ),
             )
             database.rawSignalDao().getUnparsed().shouldBeEmpty()
@@ -444,6 +445,18 @@ internal class TransactionRepositoryImplTest {
             recorded.mergeId.shouldBeNull()
             recorded().map { Triple(it.id, it.status, it.origin) } shouldContainExactlyInAnyOrder
                 listOf(Triple(recorded.transactionId, TransactionStatus.CONFIRMED, TransactionOrigin.MANUAL))
+        }
+
+        @Test
+        fun `should keep the category Cauri proposed next to the one chosen`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+
+            // when
+            repository.recordEntry(entry(accountId = momoId).copy(proposedCategoryId = 7))
+
+            // then
+            recorded().single().proposedCategoryId shouldBe 7L
         }
 
         @Test

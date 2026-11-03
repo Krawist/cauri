@@ -315,7 +315,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   categories take three lines at most and scroll inside them. Checked on the Galaxy S23 in dark mode: a cash expense of
   5 000 F in four taps (cash 14 500 → 9 500), a payment typed on Orange Money merged into the detected one, a merge
   undone. In light mode: the glass sheet and its keys, a transfer Cash → Orange Money. Income not tried on the phone;
-  the cap seen on it, the categories scrolling in three lines not (five categories only). Next: CAU-27.
+  the cap seen on it, the categories scrolling in three lines not (five categories only). Next: CAU-29.
+- [ ] **CAU-29** — each transaction keeps Cauri's proposal next to the confirmed values (`proposedCategoryId`,
+  `proposedAmount`, database v9): the amount read in a message for a detected operation, the first suggested category
+  for a quick entry (whatever the user chose); a habit, typed by the user, has none, and a merge keeps the proposal of
+  either side. `ProposalService` (JVM tests): the share of proposals confirmed unchanged, category and amount kept, per
+  place, merchant or template (`ProposalRepository.acceptance`, `ProposalSource`), for the predictions of CAU-42. No
+  screen confirms a detected operation yet (CAU-27): its proposal is measured once confirmed. Checked on the Galaxy
+  S23: the upgrade to v9. Next: CAU-27.
 
 Update this section at the end of each ticket.
 
