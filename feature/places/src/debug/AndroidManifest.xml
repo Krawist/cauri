@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Debug builds only: makes up a stop of half an hour, days ago, then looks for places to suggest.
+             adb shell am broadcast -a com.cauri.debug.PLACE_STOP -p com.cauri.debug -e lat 3.88 -e lon 11.5 -e days 2 -->
+        <receiver
+            android:name=".discovery.DebugPlaceDiscoveryReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.PLACE_STOP" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

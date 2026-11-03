@@ -62,7 +62,8 @@ private const val LARGEST_CIRCLE = 0.42f
 
 /**
  * Screen of a place, new or saved before: where the map goes, with the radius around the pin, « Ma position », and the
- * form of the mockup « Ajouter un lieu ». A new place is located as it opens, the location asked first when needed.
+ * form of the mockup « Ajouter un lieu ». A new place is located as it opens, the location asked first when needed;
+ * one Cauri suggested opens at its own position.
  */
 @Composable
 internal fun PlaceScreen(onClose: () -> Unit, viewModel: PlaceViewModel = hiltViewModel()) {
@@ -82,7 +83,8 @@ internal fun PlaceScreen(onClose: () -> Unit, viewModel: PlaceViewModel = hiltVi
             )
         }
     }
-    LaunchedEffect(Unit) { if (!state.editing) locate() }
+    // A place saved before, or suggested, has its position already.
+    LaunchedEffect(Unit) { if (!state.editing && !state.suggested) locate() }
     LaunchedEffect(state.closed) { if (state.closed) onClose() }
     PlaceContent(state = state, actions = viewModel, onLocate = locate)
     if (state.confirmingDelete) DeleteDialog(state = state, actions = viewModel)

@@ -24,10 +24,10 @@ internal class LocationServiceImpl @Inject constructor(
 ) : LocationService {
     // The permission is checked just before.
     @SuppressLint("MissingPermission")
-    override suspend fun currentPosition(): Position? {
+    override suspend fun currentPosition(precise: Boolean): Position? {
         if (permissions.status().location == LocationAccess.DENIED) return null
         val request = CurrentLocationRequest.Builder()
-            .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
+            .setPriority(if (precise) Priority.PRIORITY_HIGH_ACCURACY else Priority.PRIORITY_BALANCED_POWER_ACCURACY)
             .setMaxUpdateAgeMillis(MAX_AGE_MILLIS)
             .build()
         return withTimeoutOrNull(TIMEOUT_MILLIS) {

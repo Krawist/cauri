@@ -9,6 +9,8 @@ import com.cauri.core.data.repository.PlaceRepository
  * State of the screen of a place.
  *
  * @property editing Whether it changes a place saved before, rather than adding one.
+ * @property suggested Whether the new place is one Cauri suggested, at its own position: the phone is not located.
+ * @property suggestionId Suggestion of Cauri the new place answers « Oui » to; `null` for none, or until it is read.
  * @property loaded Whether the place changed was read; always `true` for a new one.
  * @property name Name typed.
  * @property kind Shop, home or work.
@@ -35,6 +37,8 @@ import com.cauri.core.data.repository.PlaceRepository
  */
 internal data class PlaceUiState(
     val editing: Boolean = false,
+    val suggested: Boolean = false,
+    val suggestionId: Long? = null,
     val loaded: Boolean = true,
     val name: String = "",
     val kind: PlaceKind = PlaceKind.SHOP,

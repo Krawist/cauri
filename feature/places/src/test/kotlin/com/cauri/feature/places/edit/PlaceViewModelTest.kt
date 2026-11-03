@@ -7,7 +7,9 @@ import com.cauri.core.capture.place.FoundAddress
 import com.cauri.core.capture.place.Position
 import com.cauri.core.data.model.NewPlace
 import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.model.PlaceSuggestion
 import com.cauri.core.data.repository.FakeCategoryRepository
+import com.cauri.core.data.repository.FakeDiscoveryRepository
 import com.cauri.core.data.repository.FakePlaceRepository
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -31,6 +33,7 @@ internal class PlaceViewModelTest {
     private val places = FakePlaceRepository()
     private val location = FakeLocationService()
     private val addresses = FakeAddressService()
+    private val discovery = FakeDiscoveryRepository()
     private val dispatcher = UnconfinedTestDispatcher()
 
     @BeforeEach
@@ -235,7 +238,14 @@ internal class PlaceViewModelTest {
             // given
             val id = places.addPlace(place(name = "Marché Mokolo"))
             val viewModel =
-                PlaceViewModel(SavedStateHandle(mapOf("placeId" to id)), categories, places, location, addresses)
+                PlaceViewModel(
+                    SavedStateHandle(mapOf("placeId" to id)),
+                    categories,
+                    places,
+                    location,
+                    addresses,
+                    discovery,
+                )
             viewModel.onName("Marché Central")
 
             // when
@@ -244,6 +254,51 @@ internal class PlaceViewModelTest {
             // then
             places.places.value.map { it.name to it.latitude } shouldContainExactly listOf("Marché Central" to 3.88)
         }
+    }
+
+    @Nested
+    inner class Suggested {
+        @Test
+        fun `should open at the place chosen in Mes lieux`() {
+            // given
+            discovery.pending.value = listOf(suggestion(), suggestion().copy(id = 6, latitude = 4.0))
+
+            // when
+            val viewModel = suggestedPlace(mapOf("suggestionId" to 5L))
+
+            // then
+            viewModel.uiState.value.let { listOf(it.latitude, it.area, it.suggestionId) } shouldBe
+                listOf(3.89, "Bastos", 5L)
+        }
+
+        @Test
+        fun `should open at the place the notification asked about`() {
+            // given
+            discovery.pending.value = listOf(suggestion().copy(id = 4, notified = false), suggestion())
+
+            // when
+            val viewModel = suggestedPlace(mapOf("notified" to true))
+
+            // then
+            viewModel.uiState.value.suggestionId shouldBe 5L
+        }
+
+        @Test
+        fun `should answer yes once the place is saved`() = runTest {
+            // given
+            discovery.pending.value = listOf(suggestion())
+            val viewModel = suggestedPlace(mapOf("suggestionId" to 5L))
+            viewModel.onName("Boutique de Bastos")
+
+            // when
+            viewModel.onSave()
+
+            // then
+            discovery.answers shouldBe mapOf(5L to true)
+        }
+
+        private fun suggestedPlace(route: Map<String, Any>) =
+            PlaceViewModel(SavedStateHandle(route), categories, places, location, addresses, discovery)
     }
 
     @Nested
@@ -268,7 +323,14 @@ internal class PlaceViewModelTest {
             // given
             val id = places.addPlace(place(name = "Marché Mokolo"))
             val viewModel =
-                PlaceViewModel(SavedStateHandle(mapOf("placeId" to id)), categories, places, location, addresses)
+                PlaceViewModel(
+                    SavedStateHandle(mapOf("placeId" to id)),
+                    categories,
+                    places,
+                    location,
+                    addresses,
+                    discovery,
+                )
 
             // when
             viewModel.onDelete()
@@ -279,7 +341,10 @@ internal class PlaceViewModelTest {
         }
     }
 
-    private fun newPlace() = PlaceViewModel(SavedStateHandle(), categories, places, location, addresses)
+    private fun newPlace() = PlaceViewModel(SavedStateHandle(), categories, places, location, addresses, discovery)
+
+    private fun suggestion() =
+        PlaceSuggestion(id = 5, latitude = 3.89, longitude = 11.51, area = "Bastos", stops = 6, notified = true)
 
     private fun bastos() = FoundAddress(
         label = "Carrefour Bastos, Bastos, Yaoundé",

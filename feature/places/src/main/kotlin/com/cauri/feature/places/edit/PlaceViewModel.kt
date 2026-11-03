@@ -10,6 +10,7 @@ import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.NewPlace
 import com.cauri.core.data.model.PlaceKind
 import com.cauri.core.data.repository.CategoryRepository
+import com.cauri.core.data.repository.DiscoveryRepository
 import com.cauri.core.data.repository.PlaceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,8 +23,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * Screen of a place, new or saved before: its name, kind, default category, radius and reminder, at the position
- * where the user stands or at an address found by the search. A new place is located as soon as the screen asks.
+ * Screen of a place, new, suggested by Cauri, or saved before: its name, kind, default category, radius and reminder,
+ * at the position where the user stands or at an address found by the search. A new place is located as soon as the
+ * screen asks.
  */
 // One function per gesture of the screen.
 @Suppress("TooManyFunctions")
@@ -34,18 +36,26 @@ internal class PlaceViewModel @Inject constructor(
     private val places: PlaceRepository,
     private val location: LocationService,
     private val addresses: AddressService,
+    private val discovery: DiscoveryRepository,
 ) : ViewModel(),
     PlaceActions {
     // The place changed; `null` for a new one.
     private val placeId: Long? = savedState["placeId"]
 
-    private val state = MutableStateFlow(PlaceUiState(editing = placeId != null, loaded = placeId == null))
+    // The place Cauri asks about, chosen in « Mes lieux », or the one its notification asked about last.
+    private val chosenSuggestion: Long? = savedState["suggestionId"]
+    private val notified: Boolean = savedState["notified"] ?: false
+    private val suggested = chosenSuggestion != null || notified
+
+    private val state =
+        MutableStateFlow(PlaceUiState(editing = placeId != null, suggested = suggested, loaded = placeId == null))
 
     val uiState: StateFlow<PlaceUiState> = state.asStateFlow()
 
     private var search: Job? = null
 
     init {
+        if (suggested) viewModelScope.launch { openSuggestion() }
         viewModelScope.launch {
             categories.categories.collect { all ->
                 change { it.copy(categories = all.filter { category -> category.nature == CategoryNature.EXPENSE }) }
@@ -71,6 +81,21 @@ internal class PlaceViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    // At the place suggested, its address looked for as for the phone's position.
+    private suspend fun openSuggestion() {
+        val suggestion = chosenSuggestion?.let { discovery.getSuggestion(it) } ?: discovery.getLastNotified() ?: return
+        change {
+            it.copy(
+                suggestionId = suggestion.id,
+                latitude = suggestion.latitude,
+                longitude = suggestion.longitude,
+                area = suggestion.area,
+            )
+        }
+        val found = addresses.addressAt(latitude = suggestion.latitude, longitude = suggestion.longitude)
+        if (found != null) change { it.at(found) }
     }
 
     override fun onClose() = change { it.copy(closed = true) }
@@ -167,6 +192,7 @@ internal class PlaceViewModel @Inject constructor(
         change { it.copy(closed = true) }
         viewModelScope.launch {
             if (placeId == null) places.addPlace(place) else places.updatePlace(id = placeId, place = place)
+            edit.suggestionId?.let { discovery.answer(id = it, accepted = true) }
         }
     }
 

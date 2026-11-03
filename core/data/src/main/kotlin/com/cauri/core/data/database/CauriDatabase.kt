@@ -10,6 +10,7 @@ import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.CategoryDao
 import com.cauri.core.data.database.dao.ConfirmationDao
 import com.cauri.core.data.database.dao.DecisionLogDao
+import com.cauri.core.data.database.dao.DiscoveryDao
 import com.cauri.core.data.database.dao.HabitDao
 import com.cauri.core.data.database.dao.PlaceDao
 import com.cauri.core.data.database.dao.RawSignalDao
@@ -24,7 +25,9 @@ import com.cauri.core.data.database.entity.CategoryEntity
 import com.cauri.core.data.database.entity.DecisionLogEntity
 import com.cauri.core.data.database.entity.HabitEntity
 import com.cauri.core.data.database.entity.PlaceEntity
+import com.cauri.core.data.database.entity.PlaceSuggestionEntity
 import com.cauri.core.data.database.entity.RawSignalEntity
+import com.cauri.core.data.database.entity.StopEntity
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionMergeEntity
 import com.cauri.core.data.database.entity.TransferLinkEntity
@@ -47,8 +50,10 @@ import com.cauri.core.data.database.entity.VisitEntity
         TransactionMergeEntity::class,
         TransferLinkEntity::class,
         AccountBalanceEntity::class,
+        StopEntity::class,
+        PlaceSuggestionEntity::class,
     ],
-    version = 14,
+    version = 15,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -62,6 +67,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 11, to = 12),
         AutoMigration(from = 12, to = 13),
         AutoMigration(from = 13, to = 14),
+        AutoMigration(from = 14, to = 15),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -91,4 +97,6 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun decisionLogDao(): DecisionLogDao
 
     abstract fun habitDao(): HabitDao
+
+    abstract fun discoveryDao(): DiscoveryDao
 }

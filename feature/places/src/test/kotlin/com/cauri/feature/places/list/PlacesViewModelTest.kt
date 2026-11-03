@@ -5,7 +5,9 @@ import com.cauri.core.capture.permission.LocationAccess
 import com.cauri.core.capture.place.FakePlaceWatcher
 import com.cauri.core.data.model.NewPlace
 import com.cauri.core.data.model.PlaceKind
+import com.cauri.core.data.model.PlaceSuggestion
 import com.cauri.core.data.repository.FakeCategoryRepository
+import com.cauri.core.data.repository.FakeDiscoveryRepository
 import com.cauri.core.data.repository.FakePlaceRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -26,6 +28,7 @@ internal class PlacesViewModelTest {
     private val categories = FakeCategoryRepository()
     private val permissions = FakePermissionService()
     private val watcher = FakePlaceWatcher()
+    private val discovery = FakeDiscoveryRepository()
 
     @BeforeEach
     fun setUp() {
@@ -46,7 +49,7 @@ internal class PlacesViewModelTest {
             places.addPlace(place(name = "Maison", kind = PlaceKind.HOME))
 
             // when
-            val viewModel = PlacesViewModel(places, categories, permissions, watcher)
+            val viewModel = PlacesViewModel(places, categories, permissions, watcher, discovery)
 
             // then
             viewModel.uiState.value.let { state -> state.shops.map { it.name } to state.quiet.map { it.name } } shouldBe
@@ -55,11 +58,31 @@ internal class PlacesViewModelTest {
     }
 
     @Nested
+    inner class OnIgnoreSuggestion {
+        @Test
+        fun `should ignore for good the place refused, the others staying`() {
+            // given
+            discovery.pending.value = listOf(
+                PlaceSuggestion(id = 5, latitude = 3.89, longitude = 11.51, area = null, stops = 3, notified = true),
+                PlaceSuggestion(id = 6, latitude = 3.9, longitude = 11.52, area = null, stops = 4, notified = false),
+            )
+            val viewModel = PlacesViewModel(places, categories, permissions, watcher, discovery)
+
+            // when
+            viewModel.onIgnoreSuggestion(5)
+
+            // then
+            discovery.answers shouldBe mapOf(5L to false)
+            viewModel.uiState.value.suggestions.map { it.id } shouldContainExactly listOf(6L)
+        }
+    }
+
+    @Nested
     inner class Refresh {
         @Test
         fun `should register the geofences again once the location is allowed`() {
             // given
-            val viewModel = PlacesViewModel(places, categories, permissions, watcher)
+            val viewModel = PlacesViewModel(places, categories, permissions, watcher, discovery)
             permissions.status = permissions.status.copy(location = LocationAccess.ALWAYS)
 
             // when
@@ -73,7 +96,7 @@ internal class PlacesViewModelTest {
         @Test
         fun `should not register them again when nothing changed`() {
             // given
-            val viewModel = PlacesViewModel(places, categories, permissions, watcher)
+            val viewModel = PlacesViewModel(places, categories, permissions, watcher, discovery)
 
             // when
             viewModel.refresh()

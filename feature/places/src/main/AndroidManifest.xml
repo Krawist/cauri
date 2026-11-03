@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- « Non » of the notification asking whether a place often stopped at is a shop. -->
+        <receiver
+            android:name=".discovery.PlaceSuggestionReceiver"
+            android:exported="false" />
+    </application>
+</manifest>

@@ -7,6 +7,7 @@ import com.cauri.core.capture.health.CaptureHealth
 import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
+import com.cauri.feature.places.discovery.PlaceDiscovery
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -32,5 +33,6 @@ internal class CauriApplication :
         CountReminders.schedule(this)
         CaptureHealth.schedule(this)
         placeWatcher.start()
+        PlaceDiscovery.schedule(this)
     }
 }

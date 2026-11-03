@@ -7,6 +7,7 @@ import com.cauri.core.capture.permission.PermissionService
 import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.data.model.PlaceKind
 import com.cauri.core.data.repository.CategoryRepository
+import com.cauri.core.data.repository.DiscoveryRepository
 import com.cauri.core.data.repository.PlaceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,8 +19,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * « Mes lieux »: the shops, then home and work. The screen calls [refresh] each time it comes back, as after the user
- * allowed the location in the system settings.
+ * « Mes lieux »: the place Cauri asks about, the shops, then home and work. The screen calls [refresh] each time it
+ * comes back, as after the user allowed the location in the system settings.
  */
 @HiltViewModel
 internal class PlacesViewModel @Inject constructor(
@@ -27,6 +28,7 @@ internal class PlacesViewModel @Inject constructor(
     categories: CategoryRepository,
     private val permissions: PermissionService,
     private val watcher: PlaceWatcher,
+    private val discovery: DiscoveryRepository,
 ) : ViewModel() {
     private val state = MutableStateFlow(PlacesUiState(location = permissions.status().location))
 
@@ -46,6 +48,14 @@ internal class PlacesViewModel @Inject constructor(
                 }
             }.collect {}
         }
+        viewModelScope.launch {
+            discovery.pending.collect { suggestions -> state.update { it.copy(suggestions = suggestions) } }
+        }
+    }
+
+    /** « Non, ignorer » of the suggestion [id]: the place is ignored for good. */
+    fun onIgnoreSuggestion(id: Long) {
+        viewModelScope.launch { discovery.answer(id = id, accepted = false) }
     }
 
     /** Reads the location access again, and has the geofences registered again if it changed. */

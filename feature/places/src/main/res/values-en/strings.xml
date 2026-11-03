@@ -10,6 +10,8 @@
     <string name="places_delete_confirm">Delete</string>
     <string name="places_delete_text">Its visits will be erased. The expenses made there stay, without a place.</string>
     <string name="places_delete_title">Delete “%1$s”?</string>
+    <string name="places_discovery_channel">Frequent places</string>
+    <string name="places_discovery_channel_description">When you often stop at the same spot, Cauri asks whether it is a shop.</string>
     <string name="places_edit_title">Edit the place</string>
     <string name="places_empty">Add the shops where you often spend, while you are there: Cauri will remind you to note what you paid. Add your home and work too, where it will never remind you of anything.</string>
     <string name="places_kind_home">Home</string>
@@ -42,6 +44,16 @@
         <item quantity="one">%1$d shop followed</item>
         <item quantity="other">%1$d shops followed</item>
     </plurals>
+    <string name="places_suggestion_add">Yes, add it</string>
+    <string name="places_suggestion_ignore">No, ignore</string>
+    <string name="places_suggestion_near">Near %1$s · %2$s</string>
+    <string name="places_suggestion_no">No</string>
+    <plurals name="places_suggestion_stops">
+        <item quantity="one">%1$d stop this month</item>
+        <item quantity="other">%1$d stops this month</item>
+    </plurals>
+    <string name="places_suggestion_title">You often come here. Is it a shop?</string>
+    <string name="places_suggestion_yes">Yes</string>
     <string name="places_title">My places</string>
     <plurals name="places_visits">
         <item quantity="one">%1$d visit</item>

@@ -45,6 +45,7 @@ import com.cauri.feature.home.homeGraph
 import com.cauri.feature.onboarding.OnboardingGraph
 import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.places.navigateToPlaces
+import com.cauri.feature.places.navigateToSuggestedPlace
 import com.cauri.feature.places.placesGraph
 import com.cauri.feature.settings.navigateToSettings
 import com.cauri.feature.settings.settingsGraph
@@ -111,6 +112,7 @@ private fun CauriNavHost(
             when (notificationTarget) {
                 NotificationTarget.CASH_COUNT -> navController.navigateToCashCount()
                 NotificationTarget.SETTINGS -> navController.navigateToSettings()
+                NotificationTarget.SUGGESTED_PLACE -> navController.navigateToSuggestedPlace()
                 null -> Unit
             }
         }

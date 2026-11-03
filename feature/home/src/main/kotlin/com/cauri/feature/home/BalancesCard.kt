@@ -23,18 +23,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.RollingNumber
+import com.cauri.core.design.component.bleed
 import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -195,13 +194,6 @@ private fun MarkText(text: String, color: Color) {
         style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
         color = color,
     )
-}
-
-// Widens the content by [margin] on both sides, out of the screen's margins: the cards scroll from edge to edge.
-private fun Modifier.bleed(margin: Dp) = layout { measurable, constraints ->
-    val extra = margin.roundToPx() * 2
-    val placeable = measurable.measure(constraints.copy(minWidth = 0, maxWidth = constraints.maxWidth + extra))
-    layout(constraints.maxWidth, placeable.height) { placeable.place(-extra / 2, 0) }
 }
 
 // Providers of the accounts, as the onboarding and the messages name them.

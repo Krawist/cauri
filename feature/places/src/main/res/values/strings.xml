@@ -10,6 +10,8 @@
     <string name="places_delete_confirm">Supprimer</string>
     <string name="places_delete_text">Ses visites seront effacées. Les dépenses faites là-bas restent, sans lieu.</string>
     <string name="places_delete_title">Supprimer « %1$s » ?</string>
+    <string name="places_discovery_channel">Lieux fréquents</string>
+    <string name="places_discovery_channel_description">Quand tu t\'arrêtes souvent au même endroit, Cauri demande si c\'est un commerce.</string>
     <string name="places_edit_title">Modifier le lieu</string>
     <string name="places_empty">Ajoute les commerces où tu dépenses souvent, quand tu y es : Cauri te rappellera de noter ce que tu y as payé. Ajoute aussi ta maison et ton travail, où il ne te rappellera jamais rien.</string>
     <string name="places_kind_home">Maison</string>
@@ -43,6 +45,17 @@
         <item quantity="many">%1$d commerces suivis</item>
         <item quantity="other">%1$d commerces suivis</item>
     </plurals>
+    <string name="places_suggestion_add">Oui, l\'ajouter</string>
+    <string name="places_suggestion_ignore">Non, ignorer</string>
+    <string name="places_suggestion_near">Près de %1$s · %2$s</string>
+    <string name="places_suggestion_no">Non</string>
+    <plurals name="places_suggestion_stops">
+        <item quantity="one">%1$d arrêt ce mois</item>
+        <item quantity="many">%1$d arrêts ce mois</item>
+        <item quantity="other">%1$d arrêts ce mois</item>
+    </plurals>
+    <string name="places_suggestion_title">Tu viens souvent ici. C\'est un commerce ?</string>
+    <string name="places_suggestion_yes">Oui</string>
     <string name="places_title">Mes lieux</string>
     <plurals name="places_visits">
         <item quantity="one">%1$d visite</item>

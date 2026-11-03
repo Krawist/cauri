@@ -459,6 +459,23 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   Galaxy S23 with a made-up place: two stays told twice kept as one visit each, a departure closing it, « 2 visites »,
   the geofences with a dwell of 5 minutes. A real visit, a restart and the battery over a day not checked: the phone
   does not move. Next: CAU-35.
+- [ ] **CAU-35** — frequent places (`DiscoveryRepository`, `DiscoveryService` with JVM tests, database v15 with
+  `stops` and `place_suggestions`): by decision, `PlaceDiscoveryWorker` (`:feature:places`, every 15 minutes, scheduled
+  by `CauriApplication`) reads a coarse position (Wi-Fi and cell towers, `currentPosition(precise = false)`) with the
+  location « always » only; two positions within 150 m and 40 minutes make a stop, a position joining the stop it fits
+  among the last 40 minutes (positions may come late), and a position alone is forgotten 40 minutes after; and stops are
+  kept 30 days on the phone, by decision. A place is frequent, by decision, with stops within 150 m on 3 different days
+  of the last 30, none at night (22 h to 5 h: home, not a shop), far from the places declared and from the places asked
+  about before. `PlaceDiscoverer` asks with a notification once per place, one at a time (« Tu viens souvent ici. C'est
+  un commerce ? », « Près de Bastos · 6 arrêts ce mois », « Oui » and « Non »), and « Mes lieux » shows, by decision,
+  every place not answered yet, one card each swiped sideways, edge to edge, the next one at the edge (« Oui, l'ajouter
+  », « Non, ignorer »): « Oui » opens the screen of a new place at its position (`PlaceRoute(suggestionId)`, or the one
+  the notification asked about last with `NotificationTarget.SUGGESTED_PLACE`), answered once the place is saved; « Non
+  » ignores it for good (`PlaceSuggestionReceiver` from the notification). Debug builds make up a stop on demand (`adb
+  shell am broadcast -a com.cauri.debug.PLACE_STOP -p com.cauri.debug -e lat 4.05 -e lon 9.77 -e days 5`). Checked on
+  the Galaxy S23 with made-up stops in Douala on 3 days: the notification and its buttons, « Oui » opening the screen
+  there, two cards swiped, « Non, ignorer ». `Modifier.bleed` moved to `:core:design`, for « Mes comptes » and these
+  cards. The worker over a real day and its battery not checked. Next: CAU-36.
 
 Update this section at the end of each ticket.
 

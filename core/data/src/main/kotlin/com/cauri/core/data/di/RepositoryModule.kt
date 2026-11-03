@@ -12,6 +12,8 @@ import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.CategoryRepositoryImpl
 import com.cauri.core.data.repository.ConfirmationRepository
 import com.cauri.core.data.repository.ConfirmationRepositoryImpl
+import com.cauri.core.data.repository.DiscoveryRepository
+import com.cauri.core.data.repository.DiscoveryRepositoryImpl
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.HabitRepositoryImpl
 import com.cauri.core.data.repository.PlaceRepository
@@ -50,6 +52,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindCategoryRepository(impl: CategoryRepositoryImpl): CategoryRepository
+
+    @Binds
+    abstract fun bindDiscoveryRepository(impl: DiscoveryRepositoryImpl): DiscoveryRepository
 
     @Binds
     abstract fun bindHabitRepository(impl: HabitRepositoryImpl): HabitRepository

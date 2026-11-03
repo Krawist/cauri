@@ -10,6 +10,8 @@ import com.cauri.core.data.service.CategorySuggestionService
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import com.cauri.core.data.service.CountReminderService
 import com.cauri.core.data.service.CountReminderServiceImpl
+import com.cauri.core.data.service.DiscoveryService
+import com.cauri.core.data.service.DiscoveryServiceImpl
 import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
 import com.cauri.core.data.service.PlaceService
@@ -37,6 +39,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindCategorySuggestionService(impl: CategorySuggestionServiceImpl): CategorySuggestionService
+
+    @Binds
+    abstract fun bindDiscoveryService(impl: DiscoveryServiceImpl): DiscoveryService
 
     @Binds
     abstract fun bindDuplicateService(impl: DuplicateServiceImpl): DuplicateService

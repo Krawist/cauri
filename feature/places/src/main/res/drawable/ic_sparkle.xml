@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sparkles of the card « Tu viens souvent ici », from the mockup « Mes lieux ». -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M12,3 L13.8,7.7 L18.5,9.5 L13.8,11.3 L12,16 L10.2,11.3 L5.5,9.5 L10.2,7.7 Z M19,15 L19.8,17.2 L22,18 L19.8,18.8 L19,21 L18.2,18.8 L16,18 L18.2,17.2 Z"
+        android:strokeWidth="2"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

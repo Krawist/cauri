@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -65,12 +66,14 @@ private const val MAP_MIDDLE = 0.5f
 
 /**
  * « Mes lieux »: where the map goes, the shops with their default category and visits, then home and work, which
- * never bring a reminder. A tap opens a place; « + » adds one through [onOpenPlace] with `null`.
+ * never bring a reminder. A tap opens a place; « + » adds one through [onOpenPlace] with `null`; « Oui, l'ajouter »
+ * of a place Cauri asks about, [onAddSuggestion] with its id.
  */
 @Composable
 internal fun PlacesScreen(
     onBack: () -> Unit,
     onOpenPlace: (Long?) -> Unit,
+    onAddSuggestion: (Long) -> Unit,
     viewModel: PlacesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -79,33 +82,41 @@ internal fun PlacesScreen(
         viewModel.refresh()
         onPauseOrDispose {}
     }
-    PlacesContent(
-        state = state,
-        onBack = onBack,
-        onOpenPlace = onOpenPlace,
-        onAllowLocation = { context.startActivity(viewModel.locationSettings()) },
-    )
+    // Named apart from the actions they back, which share their names.
+    val back = onBack
+    val open = onOpenPlace
+    val addSuggestion = onAddSuggestion
+    val actions = remember(viewModel, context, back, open, addSuggestion) {
+        object : PlacesActions {
+            override fun onBack() = back()
+
+            override fun onOpenPlace(id: Long?) = open(id)
+
+            override fun onAllowLocation() = context.startActivity(viewModel.locationSettings())
+
+            override fun onAddSuggestion(id: Long) = addSuggestion(id)
+
+            override fun onIgnoreSuggestion(id: Long) = viewModel.onIgnoreSuggestion(id)
+        }
+    }
+    PlacesContent(state = state, actions = actions)
 }
 
 @Composable
-private fun PlacesContent(
-    state: PlacesUiState,
-    onBack: () -> Unit,
-    onOpenPlace: (Long?) -> Unit,
-    onAllowLocation: () -> Unit,
-) {
+private fun PlacesContent(state: PlacesUiState, actions: PlacesActions) {
     // The header stays while the places scroll under it.
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
         Box(modifier = Modifier.padding(horizontal = CauriSpacing.xl, vertical = CauriSpacing.l)) {
-            Header(shops = state.shops.size, onBack = onBack, onAdd = { onOpenPlace(null) })
+            Header(shops = state.shops.size, onBack = actions::onBack, onAdd = { actions.onOpenPlace(null) })
         }
-        Places(state = state, onOpenPlace = onOpenPlace, onAllowLocation = onAllowLocation)
+        Places(state = state, actions = actions)
     }
 }
 
-// Where the map goes, the notice of the location, then the shops and the places without reminder.
+// Where the map goes, the place Cauri asks about, the notice of the location, then the shops and the places without
+// reminder.
 @Composable
-private fun Places(state: PlacesUiState, onOpenPlace: (Long?) -> Unit, onAllowLocation: () -> Unit) {
+private fun Places(state: PlacesUiState, actions: PlacesActions) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,7 +132,8 @@ private fun Places(state: PlacesUiState, onOpenPlace: (Long?) -> Unit, onAllowLo
                 .border(1.dp, CauriTheme.palette.glassBorder, RoundedCornerShape(CauriRadius.card)),
             pins = pinsOf(state.shops + state.quiet),
         )
-        if (state.location != LocationAccess.ALWAYS) LocationNotice(onAllow = onAllowLocation)
+        if (state.suggestions.isNotEmpty()) SuggestionCards(suggestions = state.suggestions, actions = actions)
+        if (state.location != LocationAccess.ALWAYS) LocationNotice(onAllow = actions::onAllowLocation)
         if (state.loaded && state.shops.isEmpty() && state.quiet.isEmpty()) {
             Text(
                 text = stringResource(R.string.places_empty),
@@ -135,7 +147,7 @@ private fun Places(state: PlacesUiState, onOpenPlace: (Long?) -> Unit, onAllowLo
                 title = stringResource(R.string.places_shops),
                 places = state.shops,
                 state = state,
-                onOpen = onOpenPlace,
+                onOpen = actions::onOpenPlace,
             )
         }
         if (state.quiet.isNotEmpty()) {
@@ -143,7 +155,7 @@ private fun Places(state: PlacesUiState, onOpenPlace: (Long?) -> Unit, onAllowLo
                 title = stringResource(R.string.places_quiet),
                 places = state.quiet,
                 state = state,
-                onOpen = onOpenPlace,
+                onOpen = actions::onOpenPlace,
             )
         }
     }
@@ -392,10 +404,21 @@ private fun PlacesContentPreview() {
                     location = LocationAccess.WHILE_IN_USE,
                     loaded = true,
                 ),
-                onBack = {},
-                onOpenPlace = {},
-                onAllowLocation = {},
+                actions = PreviewPlacesActions,
             )
         }
     }
+}
+
+/** Actions that do nothing, for previews. */
+private object PreviewPlacesActions : PlacesActions {
+    override fun onBack() = Unit
+
+    override fun onOpenPlace(id: Long?) = Unit
+
+    override fun onAllowLocation() = Unit
+
+    override fun onAddSuggestion(id: Long) = Unit
+
+    override fun onIgnoreSuggestion(id: Long) = Unit
 }

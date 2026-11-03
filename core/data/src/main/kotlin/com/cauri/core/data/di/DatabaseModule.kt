@@ -43,6 +43,9 @@ internal object DatabaseModule {
     fun provideVisitDao(database: CauriDatabase) = database.visitDao()
 
     @Provides
+    fun provideDiscoveryDao(database: CauriDatabase) = database.discoveryDao()
+
+    @Provides
     fun provideTransactionDao(database: CauriDatabase) = database.transactionDao()
 
     @Provides

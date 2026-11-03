@@ -20,6 +20,7 @@ booleans.
 | `com.cauri.debug.SHOW_CAPTURE_WARNING`     | `:core:capture`  | Shows the warning that the capture stopped                 |
 | `com.cauri.debug.SIMULATE_CAPTURE_SILENCE` | `:core:capture`  | Simulates a month without message, for the Accueil card    |
 | `com.cauri.debug.PLACE_VISIT`              | `:core:capture`  | Tells a stay at a place, or its departure                  |
+| `com.cauri.debug.PLACE_STOP`               | `:feature:places` | Makes up a stop, then looks for frequent places           |
 
 ## Show a cash count reminder
 
@@ -108,6 +109,30 @@ adb shell am broadcast -a com.cauri.debug.PLACE_VISIT -p com.cauri.debug -e plac
 ```
 
 As everywhere, the boolean extra is written `--ez`, after the package.
+
+## Make up a stop
+
+```bash
+adb shell am broadcast -a com.cauri.debug.PLACE_STOP -p com.cauri.debug -e lat 4.0511 -e lon 9.7679 -e days 5
+```
+
+Makes up a stop of half an hour (three positions a quarter of an hour apart) at the position given, `days` days ago,
+then looks for the places to suggest as the quarter-hourly worker does (CAU-35), and asks about the first one with a
+notification and the card of « Mes lieux ». Three stops on different days, the oldest first, make a place frequent:
+
+```bash
+for days in 5 3 1; do adb shell am broadcast -a com.cauri.debug.PLACE_STOP -p com.cauri.debug -e lat 4.0511 -e lon 9.7679 -e days $days; done
+```
+
+| Extra  | Type | Default | Values                                                                      |
+|--------|------|---------|-----------------------------------------------------------------------------|
+| `lat`  | text | —       | Latitude in degrees; required                                               |
+| `lon`  | text | —       | Longitude in degrees; required                                              |
+| `days` | text | `0`     | How many days ago the stop was                                              |
+| `hour` | text | `10`    | Hour it started; from 22 to 4 it is a night, and the place is never asked   |
+
+A place near a declared one, or asked about before, is never asked again. Needs Cauri's notifications allowed for
+the notification; the card shows anyway.
 
 ## Read what the listener sees
 

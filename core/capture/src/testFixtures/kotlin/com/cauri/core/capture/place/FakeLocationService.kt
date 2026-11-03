@@ -5,5 +5,5 @@ class FakeLocationService : LocationService {
     /** Where the phone is; `null` when it cannot be located. */
     var position: Position? = null
 
-    override suspend fun currentPosition() = position
+    override suspend fun currentPosition(precise: Boolean) = position
 }
