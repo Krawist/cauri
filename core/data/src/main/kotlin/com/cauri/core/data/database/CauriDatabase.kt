@@ -12,6 +12,7 @@ import com.cauri.core.data.database.dao.HabitDao
 import com.cauri.core.data.database.dao.PlaceDao
 import com.cauri.core.data.database.dao.RawSignalDao
 import com.cauri.core.data.database.dao.TransactionDao
+import com.cauri.core.data.database.dao.TransactionMergeDao
 import com.cauri.core.data.database.dao.VisitDao
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.CashCountEntity
@@ -21,6 +22,7 @@ import com.cauri.core.data.database.entity.HabitEntity
 import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
+import com.cauri.core.data.database.entity.TransactionMergeEntity
 import com.cauri.core.data.database.entity.VisitEntity
 
 /** Local database of Cauri. Build it with [buildCauriDatabase], which creates the Cash account. */
@@ -35,12 +37,14 @@ import com.cauri.core.data.database.entity.VisitEntity
         CashCountEntity::class,
         DecisionLogEntity::class,
         HabitEntity::class,
+        TransactionMergeEntity::class,
     ],
-    version = 5,
+    version = 6,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
         AutoMigration(from = 3, to = 4),
+        AutoMigration(from = 5, to = 6),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -56,6 +60,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun visitDao(): VisitDao
 
     abstract fun transactionDao(): TransactionDao
+
+    abstract fun transactionMergeDao(): TransactionMergeDao
 
     abstract fun cashCountDao(): CashCountDao
 

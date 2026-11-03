@@ -13,7 +13,7 @@ import javax.inject.Singleton
 internal class CashBalanceServiceImpl @Inject constructor() : CashBalanceService {
     override fun estimate(count: CashCountEntity, transactions: List<TransactionEntity>): CashBalance {
         val counted = transactions.filter {
-            it.status != TransactionStatus.DISMISSED && it.occurredAt > count.countedAt
+            it.status !in TransactionStatus.NOT_COUNTED && it.occurredAt > count.countedAt
         }
         val amount = counted.fold(count.amount) { balance, transaction ->
             when (transaction.type) {

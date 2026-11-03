@@ -38,8 +38,11 @@ internal class SignalProcessorImpl @Inject constructor(
     override suspend fun process() {
         mutex.withLock {
             rawSignalRepository.unparsed().forEach { signal ->
-                messageParser.parse(message = signal.toMessage(), catalog = templateCatalogRepository.catalog, zone = ZoneId.systemDefault())
-                    ?.let { parsed ->
+                messageParser.parse(
+                    message = signal.toMessage(),
+                    catalog = templateCatalogRepository.catalog,
+                    zone = ZoneId.systemDefault(),
+                )?.let { parsed ->
                         val account = accountRepository.accountOf(parsed.provider)
                         if (account != null) {
                             transactionRepository.recordDetected(

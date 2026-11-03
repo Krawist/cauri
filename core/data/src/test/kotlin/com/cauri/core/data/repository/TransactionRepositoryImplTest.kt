@@ -14,18 +14,24 @@ import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
+import com.cauri.core.data.model.EntryType
+import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
+import com.cauri.core.data.service.DuplicateServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -40,7 +46,12 @@ internal class TransactionRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         database = inMemoryDatabase()
-        repository = TransactionRepositoryImpl(database.transactionDao())
+        repository = TransactionRepositoryImpl(
+            database.transactionDao(),
+            database.transactionMergeDao(),
+            DuplicateServiceImpl(),
+            CLOCK,
+        )
     }
 
     @AfterEach
@@ -305,6 +316,112 @@ internal class TransactionRepositoryImplTest {
     }
 
     @Nested
+    inner class RecordEntry {
+        @Test
+        fun `should record a confirmed entry when Cauri detected nothing alike`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+
+            // when
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+
+            // then
+            recorded.mergeId.shouldBeNull()
+            recorded().map { Triple(it.id, it.status, it.origin) } shouldContainExactlyInAnyOrder
+                listOf(Triple(recorded.transactionId, TransactionStatus.CONFIRMED, TransactionOrigin.MANUAL))
+        }
+
+        @Test
+        fun `should merge the entry into the operation Cauri detected`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            val detectedId = recorded().single().id
+
+            // when
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+
+            // then
+            recorded.transactionId shouldBe detectedId
+            recorded().map { Triple(it.status, it.origin, it.note) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionStatus.CONFIRMED, TransactionOrigin.SIGNAL, "Pain"),
+                Triple(TransactionStatus.MERGED, TransactionOrigin.MANUAL, "Pain"),
+            )
+        }
+    }
+
+    @Nested
+    inner class RecordDetectedAfterEntry {
+        @Test
+        fun `should merge the operation into the entry the user typed before`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordEntry(entry(accountId = momoId))
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+
+            // then
+            recorded().map { Triple(it.status, it.rawSignalId, it.note) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionStatus.CONFIRMED, signalId, "Pain"),
+                Triple(TransactionStatus.MERGED, null, "Pain"),
+            )
+        }
+
+        @Test
+        fun `should keep the cash balance counting the operation once`() = runTest {
+            // given
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            val cashCounts = CashCountRepositoryImpl(
+                cashCountDao = database.cashCountDao(),
+                transactionDao = database.transactionDao(),
+                cashBalanceService = CashBalanceServiceImpl(),
+            )
+            cashCounts.addCount(amount = 10_000, countedAt = Instant.EPOCH, expectedAmount = null)
+            repository.recordEntry(entry(accountId = CASH_ACCOUNT_ID))
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = CASH_ACCOUNT_ID, type = DetectedType.EXPENSE, fee = null),
+            )
+
+            // then
+            cashCounts.balance.first().shouldNotBeNull().amount shouldBe 7_500
+        }
+    }
+
+    @Nested
+    inner class UndoMerge {
+        @Test
+        fun `should count the two transactions apart again`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null),
+            )
+            val recorded = repository.recordEntry(entry(accountId = momoId))
+
+            // when
+            repository.undoMerge(recorded.mergeId.shouldNotBeNull())
+
+            // then
+            recorded().map { Triple(it.status, it.origin, it.note) } shouldContainExactlyInAnyOrder listOf(
+                Triple(TransactionStatus.DETECTED, TransactionOrigin.SIGNAL, null),
+                Triple(TransactionStatus.CONFIRMED, TransactionOrigin.MANUAL, "Pain"),
+            )
+            database.transactionMergeDao().getMerge(recorded.mergeId.shouldNotBeNull())?.undoneAt shouldBe
+                CLOCK.instant()
+        }
+    }
+
+    @Nested
     inner class RecordCashExpense {
         @Test
         fun `should record a confirmed expense on the Cash account`() = runTest {
@@ -467,6 +584,16 @@ internal class TransactionRepositoryImplTest {
         occurredAt = Instant.ofEpochSecond(1_000),
     )
 
+    // The payment of 2 500 with Boulangerie, typed by the user ten minutes after it was made.
+    private fun entry(accountId: Long) = ManualEntry(
+        accountId = accountId,
+        type = EntryType.EXPENSE,
+        amount = 2_500,
+        categoryId = null,
+        note = "Pain",
+        occurredAt = Instant.ofEpochSecond(1_600),
+    )
+
     private fun withdrawalSignal() = RawSignalEntity(
         sender = "com.mtn.momo",
         title = null,
@@ -492,4 +619,8 @@ internal class TransactionRepositoryImplTest {
         foreignAmount = null,
         foreignCurrency = null,
     )
+
+    private companion object {
+        val CLOCK: Clock = Clock.fixed(Instant.parse("2026-11-03T12:00:00Z"), ZoneOffset.UTC)
+    }
 }

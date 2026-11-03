@@ -11,6 +11,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// One provider per DAO, as Hilt needs: the count grows with the tables.
+@Suppress("TooManyFunctions")
 @Module
 @InstallIn(SingletonComponent::class)
 internal object DatabaseModule {
@@ -36,6 +38,9 @@ internal object DatabaseModule {
 
     @Provides
     fun provideTransactionDao(database: CauriDatabase) = database.transactionDao()
+
+    @Provides
+    fun provideTransactionMergeDao(database: CauriDatabase) = database.transactionMergeDao()
 
     @Provides
     fun provideCashCountDao(database: CauriDatabase) = database.cashCountDao()

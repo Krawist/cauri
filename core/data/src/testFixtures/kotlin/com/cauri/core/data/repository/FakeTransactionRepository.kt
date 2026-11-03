@@ -1,7 +1,9 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.DetectedOperation
+import com.cauri.core.data.model.ManualEntry
 import com.cauri.core.data.model.ReconciledExpense
+import com.cauri.core.data.model.RecordedEntry
 import com.cauri.core.data.model.Withdrawal
 import java.time.Instant
 
@@ -38,6 +40,18 @@ class FakeTransactionRepository : TransactionRepository {
 
     override suspend fun recordDetected(operation: DetectedOperation) {
         detected += operation
+    }
+
+    val entries = mutableListOf<ManualEntry>()
+    val undoneMerges = mutableListOf<Long>()
+
+    override suspend fun recordEntry(entry: ManualEntry): RecordedEntry {
+        entries += entry
+        return RecordedEntry(transactionId = nextId++, mergeId = null)
+    }
+
+    override suspend fun undoMerge(mergeId: Long) {
+        undoneMerges += mergeId
     }
 
     override suspend fun recordCashExpense(amount: Long, categoryId: Long?, note: String, occurredAt: Instant): Long {

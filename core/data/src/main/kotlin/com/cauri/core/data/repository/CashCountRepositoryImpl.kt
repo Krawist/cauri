@@ -35,7 +35,7 @@ internal class CashCountRepositoryImpl @Inject constructor(
                 .observeOnAccountAfter(
                     accountId = CASH_ACCOUNT_ID,
                     after = count.countedAt,
-                    excluded = TransactionStatus.DISMISSED,
+                    excluded = TransactionStatus.NOT_COUNTED,
                 )
                 .map { transactions -> cashBalanceService.estimate(count = count, transactions = transactions) }
         }

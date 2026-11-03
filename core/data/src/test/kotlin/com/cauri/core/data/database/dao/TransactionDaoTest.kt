@@ -139,7 +139,7 @@ internal class TransactionDaoTest {
             val after = transactionDao.observeOnAccountAfter(
                 accountId = CASH_ACCOUNT_ID,
                 after = Instant.ofEpochMilli(1_000),
-                excluded = TransactionStatus.DISMISSED,
+                excluded = TransactionStatus.NOT_COUNTED,
             ).first()
 
             // then
@@ -157,7 +157,7 @@ internal class TransactionDaoTest {
             val after = transactionDao.observeOnAccountAfter(
                 accountId = CASH_ACCOUNT_ID,
                 after = Instant.EPOCH,
-                excluded = TransactionStatus.DISMISSED,
+                excluded = TransactionStatus.NOT_COUNTED,
             ).first()
 
             // then
@@ -182,7 +182,7 @@ internal class TransactionDaoTest {
             val after = transactionDao.observeOnAccountAfter(
                 accountId = CASH_ACCOUNT_ID,
                 after = Instant.EPOCH,
-                excluded = TransactionStatus.DISMISSED,
+                excluded = TransactionStatus.NOT_COUNTED,
             ).first()
 
             // then

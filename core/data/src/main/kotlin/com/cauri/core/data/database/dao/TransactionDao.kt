@@ -3,7 +3,6 @@ package com.cauri.core.data.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionStatus
@@ -27,20 +26,6 @@ internal interface TransactionDao {
     @Update
     suspend fun update(transaction: TransactionEntity)
 
-    /** Remembers that [templateVersion] read the raw signal [rawSignalId]: it is no longer replayed. */
-    @Query("UPDATE raw_signals SET templateVersion = :templateVersion WHERE id = :rawSignalId")
-    suspend fun markParsed(rawSignalId: Long, templateVersion: String)
-
-    /**
-     * Inserts [transactions], read in the raw signal [rawSignalId] by [templateVersion], and marks the signal read: all
-     * or none.
-     */
-    @Transaction
-    suspend fun insertParsed(transactions: List<TransactionEntity>, rawSignalId: Long, templateVersion: String) {
-        insertAll(transactions)
-        markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
-    }
-
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun delete(id: Long)
 
@@ -48,27 +33,39 @@ internal interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE transferGroup = :transferGroup")
     suspend fun getByTransferGroup(transferGroup: String): List<TransactionEntity>
 
-    /** The transactions of [accountId] that moved money after [after], not [excluded], oldest first. */
+    /** The transactions of [accountId] with [status] that happened between [from] and [to]. */
     @Query(
-        "SELECT * FROM transactions WHERE accountId = :accountId AND occurredAt > :after AND status != :excluded " +
-            "ORDER BY occurredAt",
+        "SELECT * FROM transactions WHERE accountId = :accountId AND status = :status " +
+            "AND occurredAt BETWEEN :from AND :to",
+    )
+    suspend fun getAround(
+        accountId: Long,
+        status: TransactionStatus,
+        from: Instant,
+        to: Instant,
+    ): List<TransactionEntity>
+
+    /** The transactions of [accountId] that moved money after [after], none with an [excluded] status, oldest first. */
+    @Query(
+        "SELECT * FROM transactions WHERE accountId = :accountId AND occurredAt > :after " +
+            "AND status NOT IN (:excluded) ORDER BY occurredAt",
     )
     fun observeOnAccountAfter(
         accountId: Long,
         after: Instant,
-        excluded: TransactionStatus,
+        excluded: List<TransactionStatus>,
     ): Flow<List<TransactionEntity>>
 
-    /** Whether [accountId] has a transaction of [type] after [after], not [excluded]. */
+    /** Whether [accountId] has a transaction of [type] after [after], none with an [excluded] status. */
     @Query(
         "SELECT EXISTS(SELECT 1 FROM transactions WHERE accountId = :accountId AND type = :type " +
-            "AND occurredAt > :after AND status != :excluded)",
+            "AND occurredAt > :after AND status NOT IN (:excluded))",
     )
     suspend fun existsOnAccountAfter(
         accountId: Long,
         type: TransactionType,
         after: Instant,
-        excluded: TransactionStatus,
+        excluded: List<TransactionStatus>,
     ): Boolean
 
     /** The transactions with [status], newest first. */

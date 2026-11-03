@@ -255,7 +255,17 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   the Galaxy S23 with made-up Orange Money messages: database upgrades to v4 then v5 (Cash provider set, trigger kept),
   the offer, « Non merci », following from Réglages, the payment, the withdrawal raising the cash by 10 000 F with its
   fee, a repeated message kept once. « À confirmer » (CAU-27) and « Activité » (CAU-30) do not exist yet, so the
-  detected transactions show only through the balances. Next: CAU-22.
+  detected transactions show only through the balances.
+- [ ] **CAU-22** — `DuplicateService` (JVM tests): a manual entry and a detected transaction are the same operation
+  when on the same account, of the same type (expense or income, transfers left to CAU-23) and amount, within two hours,
+  the detected one read in a signal and not confirmed yet (never a fee); the closest in time wins. The detected one is
+  kept, confirmed, with the user's category, note and place; the entry becomes `MERGED`, left out of every balance like
+  `DISMISSED` (`TransactionStatus.NOT_COUNTED`). Both ways: `TransactionRepository.recordDetected` merges into an entry
+  typed before, `recordEntry(ManualEntry)` into an operation detected before and returns the merge to offer to undo
+  (`RecordedEntry`). Each merge is logged in `transaction_merges` (database v6) with the values the kept transaction
+  had, and `undoMerge` puts both back; the writes are all or none in `TransactionMergeDao`. No screen uses it yet: the
+  quick entry on any account (« Fusionné · Annuler ») comes with CAU-26, the merges in « Activité » with CAU-30.
+  Checked on the Galaxy S23: upgrade to v6, a detected payment still recorded. Next: CAU-23.
 
 Update this section at the end of each ticket.
 
