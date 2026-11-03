@@ -67,7 +67,27 @@ internal class ActivityServiceImplTest {
         }
 
         @Test
-        fun `should count a fee read with its operation, never waiting for a confirmation`() {
+        fun `should show a withdrawal with its fee in its amount`() {
+            // given
+            val out = transaction(id = 1, accountId = 2, type = TransactionType.TRANSFER_OUT).copy(transferGroup = "t")
+            val into = transaction(id = 2, accountId = 1, type = TransactionType.TRANSFER_IN)
+                .copy(transferGroup = "t", rawSignalId = null)
+            val fee = transaction(
+                id = 3,
+                accountId = 2,
+                type = TransactionType.EXPENSE,
+            ).copy(amount = 150, rawSignalId = null)
+
+            // when
+            val lines = service.lines(listOf(out, into, fee), emptyList(), accounts(), emptyMap())
+
+            // then
+            lines.operations().map { Triple(it.type, it.amount, it.fees) } shouldContainExactly
+                listOf(Triple(PendingType.TRANSFER, 2_650L, 150L))
+        }
+
+        @Test
+        fun `should keep a fee whose operation was not found on a line of its own, counted`() {
             // given
             val fee = transaction(id = 1, accountId = 2, type = TransactionType.EXPENSE)
                 .copy(status = TransactionStatus.DETECTED, rawSignalId = null)
@@ -118,6 +138,26 @@ internal class ActivityServiceImplTest {
 
             // then
             spending shouldBe MonthSpending(cash = 2_500, digital = 2_500)
+        }
+
+        @Test
+        fun `should count the fee of a transfer, never the transfer`() {
+            // given
+            val out = transaction(id = 1, accountId = 2, type = TransactionType.TRANSFER_OUT).copy(transferGroup = "t")
+            val into = transaction(id = 2, accountId = 1, type = TransactionType.TRANSFER_IN)
+                .copy(transferGroup = "t", rawSignalId = null)
+            val fee = transaction(
+                id = 3,
+                accountId = 2,
+                type = TransactionType.EXPENSE,
+            ).copy(amount = 150, rawSignalId = null)
+            val lines = service.lines(listOf(out, into, fee), emptyList(), accounts(), emptyMap())
+
+            // when
+            val spending = service.spending(lines = lines, from = Instant.EPOCH)
+
+            // then
+            spending shouldBe MonthSpending(cash = 0, digital = 150)
         }
     }
 

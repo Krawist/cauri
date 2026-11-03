@@ -18,6 +18,7 @@
     <string name="transactions_activity_digital_spent">Numérique dépensé</string>
     <string name="transactions_activity_empty">Aucune opération pour l\'instant</string>
     <string name="transactions_activity_fee">Frais</string>
+    <string name="transactions_activity_fees">dont %1$s F de frais</string>
     <string name="transactions_activity_mobile">Mobile</string>
     <string name="transactions_activity_pending">À confirmer</string>
     <string name="transactions_activity_search">Rechercher</string>

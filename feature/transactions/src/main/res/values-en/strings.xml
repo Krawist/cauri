@@ -17,6 +17,7 @@
     <string name="transactions_activity_digital_spent">Digital spent</string>
     <string name="transactions_activity_empty">No operation yet</string>
     <string name="transactions_activity_fee">Fee</string>
+    <string name="transactions_activity_fees">incl. %1$s F of fees</string>
     <string name="transactions_activity_mobile">Mobile</string>
     <string name="transactions_activity_pending">To confirm</string>
     <string name="transactions_activity_search">Search</string>

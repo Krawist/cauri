@@ -10,9 +10,9 @@ import java.time.Instant
 /** Builds « Activité » out of the transactions and the cash counts. */
 internal interface ActivityService {
     /**
-     * The lines of « Activité », newest first: one per operation, a transfer and a split operation each being one, and
-     * one per cash count, above the expenses its gap was split into. Merged entries are left out; [accounts] and
-     * [categories] (names) by id.
+     * The lines of « Activité », newest first: one per operation, a transfer and a split operation each being one, its
+     * fees in its amount, and one per cash count, above the expenses its gap was split into. Merged entries are left
+     * out; [accounts] and [categories] (names) by id.
      */
     fun lines(
         transactions: List<TransactionEntity>,
@@ -21,6 +21,9 @@ internal interface ActivityService {
         categories: Map<Long, String>,
     ): List<ActivityLine>
 
-    /** What the expenses of [lines] spent from [from] on, cash apart from digital, the money set aside left out. */
+    /**
+     * What [lines] spent from [from] on, cash apart from digital: the expenses and the fees of the transfers, the money
+     * set aside left out.
+     */
     fun spending(lines: List<ActivityLine>, from: Instant): MonthSpending
 }

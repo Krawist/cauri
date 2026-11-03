@@ -14,8 +14,8 @@ sealed interface ActivityLine {
      *   split operation.
      * @property type Expense, income or transfer.
      * @property status Waiting, counted or set aside.
-     * @property amount Amount in minor units of the account's currency, the parts of a split operation included; 0 for
-     *   an operation in another currency, until the user types what it cost.
+     * @property amount Amount in minor units of the account's currency, its [fees] and the parts of a split operation
+     *   included; 0 for an operation in another currency, until the user types what it cost.
      * @property accountName Account the money left, or arrived on for an income.
      * @property accountKind Kind of the account named [accountName].
      * @property toAccountName Account the money arrived on for a transfer; `null` otherwise.
@@ -24,7 +24,9 @@ sealed interface ActivityLine {
      * @property parts Number of categories a split operation is spread across; 1 when not split.
      * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
      * @property note Free note of the user, or the name of a habit; `null` when there is none.
-     * @property fee Whether it is the fee of an operation read in a message.
+     * @property fees Fees the message of the operation gave, or kept by an operator on a transfer, in [amount]; 0 for
+     *   none.
+     * @property fee Whether it is a fee whose operation was not found, shown on a line of its own.
      * @property reconciled Whether it comes from the gap of a cash count.
      */
     data class Operation(
@@ -41,6 +43,7 @@ sealed interface ActivityLine {
         val parts: Int,
         val counterparty: String?,
         val note: String?,
+        val fees: Long,
         val fee: Boolean,
         val reconciled: Boolean,
     ) : ActivityLine

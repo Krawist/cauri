@@ -95,6 +95,7 @@ internal class ActivityViewModelTest {
         parts = 1,
         counterparty = null,
         note = null,
+        fees = 0,
         fee = false,
         reconciled = false,
     )

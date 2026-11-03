@@ -84,10 +84,11 @@ internal fun OperationRow(line: ActivityLine.Operation, onClick: () -> Unit) {
                 fontWeight = if (line.type == PendingType.TRANSFER) FontWeight.Medium else FontWeight.SemiBold,
                 textDecoration = if (setAside) TextDecoration.LineThrough else null,
             ),
+            // Coral for what left, green for what arrived; a transfer stays grey, never spending.
             color = when {
                 setAside || line.type == PendingType.TRANSFER -> palette.muted
                 line.type == PendingType.INCOME -> palette.greenText
-                else -> palette.ink
+                else -> palette.coralText
             },
         )
     }
@@ -219,18 +220,19 @@ private fun title(line: ActivityLine.Operation): String = when {
     else -> stringResource(R.string.transactions_type_expense)
 }
 
-// « Transport · Cash », « Réparti en 2 · Orange Money », « MoMo → Cash » for a transfer.
+// « Transport · Cash », « Réparti en 2 · Orange Money », « MoMo → Cash » for a transfer, then « dont 150 F de frais ».
 @Composable
 private fun subtitle(line: ActivityLine.Operation, title: String): String {
     val toAccount = line.toAccountName
-    if (toAccount != null) return stringResource(R.string.transactions_transfer, line.accountName, toAccount)
-    val category = if (line.parts > 1) {
-        stringResource(R.string.transactions_activity_split, line.parts)
-    } else {
-        line.categoryName?.takeIf { it != title }
+    // The amount shown includes them: the edit sheet shows the operation alone.
+    val fees = line.fees.takeIf { it > 0 }?.let { stringResource(R.string.transactions_activity_fees, formatFcfa(it)) }
+    val category = when {
+        toAccount != null -> null
+        line.parts > 1 -> stringResource(R.string.transactions_activity_split, line.parts)
+        else -> line.categoryName?.takeIf { it != title }
     }
-    return listOfNotNull(
-        category,
-        line.accountName,
-    ).joinToString(separator = stringResource(R.string.transactions_separator))
+    val accounts = toAccount?.let { stringResource(R.string.transactions_transfer, line.accountName, it) }
+        ?: line.accountName
+    return listOfNotNull(category, accounts, fees)
+        .joinToString(separator = stringResource(R.string.transactions_separator))
 }

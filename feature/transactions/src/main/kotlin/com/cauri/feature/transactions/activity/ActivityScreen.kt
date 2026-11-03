@@ -306,6 +306,7 @@ private fun previewOperation(at: Instant, note: String?, category: String?) = Ac
     parts = 1,
     counterparty = null,
     note = note,
+    fees = 0,
     fee = false,
     reconciled = false,
 )

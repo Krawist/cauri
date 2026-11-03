@@ -25,19 +25,34 @@ internal class ActivityServiceImpl @Inject constructor() : ActivityService {
         categories: Map<Long, String>,
     ): List<ActivityLine> {
         val shown = transactions.filter { it.status != TransactionStatus.MERGED }
-        val (transfers, others) = shown.partition { it.transferGroup != null }
+        // A fee rides with its operation, on its account and at its time: the line shows the whole amount debited.
+        val (fees, moves) = shown.partition { it.isFee() }
+        val feesOf = fees.groupByTo(mutableMapOf()) { it.accountId to it.occurredAt }
+        fun feesFor(vararg sides: TransactionEntity?) = sides.filterNotNull()
+            .filter { it.origin == TransactionOrigin.SIGNAL }
+            .flatMap { feesOf.remove(it.accountId to it.occurredAt).orEmpty() }
+        val (transfers, others) = moves.partition { it.transferGroup != null }
         val (split, single) = others.partition { it.splitGroup != null }
         val transferLines = transfers.groupBy { it.transferGroup }.values.mapNotNull { sides ->
             val out = sides.firstOrNull { it.type == TransactionType.TRANSFER_OUT }
             val into = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN }
-            out?.toLine(accounts = accounts, categories = categories, to = into?.accountId)
+            out?.toLine(accounts = accounts, categories = categories, to = into?.accountId, fees = feesFor(out, into))
         }
         // The first part keeps the signal and the proposal: the sheet opens it, with the others.
         val splitLines = split.groupBy { it.splitGroup }.values.map { parts ->
-            parts.minBy { it.id }.toLine(accounts = accounts, categories = categories, parts = parts)
+            val first = parts.minBy { it.id }
+            first.toLine(accounts = accounts, categories = categories, parts = parts, fees = feesFor(first))
         }
-        val operations =
-            transferLines + splitLines + single.map { it.toLine(accounts = accounts, categories = categories) }
+        val singleLines = single.map {
+            it.toLine(
+                accounts = accounts,
+                categories = categories,
+                fees = if (it.type == TransactionType.EXPENSE) feesFor(it) else emptyList(),
+            )
+        }
+        // A fee whose operation was not found keeps a line of its own.
+        val feeLines = feesOf.values.flatten().map { it.toLine(accounts = accounts, categories = categories) }
+        val operations = transferLines + splitLines + singleLines + feeLines
         val countLines = counts.map { count ->
             ActivityLine.CashCount(
                 at = count.countedAt,
@@ -57,25 +72,37 @@ internal class ActivityServiceImpl @Inject constructor() : ActivityService {
 
     override fun spending(lines: List<ActivityLine>, from: Instant): MonthSpending {
         val spent = lines.filterIsInstance<ActivityLine.Operation>().filter {
-            it.type == PendingType.EXPENSE && it.status != ActivityStatus.SET_ASIDE && !it.at.isBefore(from)
+            it.status != ActivityStatus.SET_ASIDE && !it.at.isBefore(from)
+        }
+
+        // A transfer is never spending, its fees are.
+        fun ActivityLine.Operation.spending() = when (type) {
+            PendingType.EXPENSE -> amount
+            PendingType.TRANSFER -> fees
+            PendingType.INCOME -> 0
         }
         val (cash, digital) = spent.partition { it.accountKind == AccountKind.CASH }
-        return MonthSpending(cash = cash.sumOf { it.amount }, digital = digital.sumOf { it.amount })
+        return MonthSpending(cash = cash.sumOf { it.spending() }, digital = digital.sumOf { it.spending() })
     }
 }
 
-// The line of [this], with the account the money arrived on for a transfer, and the [parts] of a split operation.
+// The fee of an operation read in a message, or kept by an operator on a transfer: never a signal of its own.
+private fun TransactionEntity.isFee() = type == TransactionType.EXPENSE &&
+    origin == TransactionOrigin.SIGNAL &&
+    rawSignalId == null &&
+    splitGroup == null
+
+// The line of [this], with the account the money arrived on for a transfer, the [parts] of a split operation and the
+// [fees] of its message.
 private fun TransactionEntity.toLine(
     accounts: Map<Long, AccountEntity>,
     categories: Map<Long, String>,
     to: Long? = null,
     parts: List<TransactionEntity> = listOf(this),
+    fees: List<TransactionEntity> = emptyList(),
 ): ActivityLine.Operation {
-    // A fee rides with the operation read in its message: it never waits for a confirmation of its own.
-    val fee = type == TransactionType.EXPENSE &&
-        origin == TransactionOrigin.SIGNAL &&
-        rawSignalId == null &&
-        splitGroup == null
+    // A fee never waits for a confirmation of its own.
+    val fee = isFee()
     return ActivityLine.Operation(
         at = occurredAt,
         transactionId = id,
@@ -89,7 +116,7 @@ private fun TransactionEntity.toLine(
             TransactionStatus.CONFIRMED -> ActivityStatus.CONFIRMED
             TransactionStatus.DISMISSED, TransactionStatus.MERGED -> ActivityStatus.SET_ASIDE
         },
-        amount = parts.sumOf { it.amount },
+        amount = parts.sumOf { it.amount } + fees.sumOf { it.amount },
         accountName = accounts.getValue(accountId).name,
         accountKind = accounts.getValue(accountId).kind,
         toAccountName = to?.let { accounts.getValue(it).name },
@@ -98,6 +125,7 @@ private fun TransactionEntity.toLine(
         parts = parts.size,
         counterparty = counterparty,
         note = note,
+        fees = fees.sumOf { it.amount },
         fee = fee,
         reconciled = origin == TransactionOrigin.RECONCILIATION,
     )
