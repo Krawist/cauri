@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Key erasing the last digit of the keypad, from the mockup. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="26dp"
+    android:height="26dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M9,5 H20 A1,1 0,0 1,21 6 V18 A1,1 0,0 1,20 19 H9 L3,12 Z M12,9.5 L17,14.5 M17,9.5 L12,14.5"
+        android:strokeWidth="1.8"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

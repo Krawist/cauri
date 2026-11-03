@@ -1,6 +1,7 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.model.Category
+import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.NewCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -15,4 +16,10 @@ class FakeCategoryRepository : CategoryRepository {
         created += categories
         return categories.indices.map { first + it }
     }
+
+    /** What [suggested] answers, by type of entry, whatever the account. */
+    val suggestions = mutableMapOf<EntryType, List<Category>>()
+
+    override suspend fun suggested(accountId: Long, type: EntryType, limit: Int): List<Category> =
+        suggestions[type].orEmpty().take(limit)
 }

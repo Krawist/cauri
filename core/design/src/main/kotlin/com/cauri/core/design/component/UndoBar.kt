@@ -1,4 +1,4 @@
-package com.cauri.feature.home
+package com.cauri.core.design.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,8 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cauri.core.design.R as DesignR
-import com.cauri.core.design.format.formatFcfa
+import com.cauri.core.design.R
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
@@ -32,16 +31,14 @@ private val BarElevation = 12.dp
 // Long enough to read and tap « Annuler », short enough not to linger.
 private const val UNDO_MILLIS = 4_000L
 
-/** « Moto · 500 F enregistré » with « Annuler », for a few seconds after a tap on a habit. */
+/**
+ * [message], such as « Moto · 500 F enregistré », with « Annuler », for a few seconds after an action the user can
+ * undo; a new [message] starts the time again.
+ */
 @Composable
-internal fun UndoBar(
-    recorded: RecordedHabit,
-    onUndo: () -> Unit,
-    onDismissed: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun UndoBar(message: String, onUndo: () -> Unit, onDismissed: () -> Unit, modifier: Modifier = Modifier) {
     val palette = CauriTheme.palette
-    LaunchedEffect(recorded) {
+    LaunchedEffect(message) {
         delay(UNDO_MILLIS)
         onDismissed()
     }
@@ -60,19 +57,19 @@ internal fun UndoBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                painter = painterResource(DesignR.drawable.ic_check),
+                painter = painterResource(R.drawable.ic_check),
                 contentDescription = null,
                 tint = palette.greenText,
             )
             Text(
-                text = stringResource(R.string.home_habit_recorded, recorded.name, formatFcfa(recorded.amount)),
+                text = message,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                 color = palette.ink,
                 modifier = Modifier.weight(1f),
             )
             TextButton(onClick = onUndo, colors = ButtonDefaults.textButtonColors(contentColor = palette.accentText)) {
                 Text(
-                    text = stringResource(R.string.home_undo),
+                    text = stringResource(R.string.undo),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
                 )
             }

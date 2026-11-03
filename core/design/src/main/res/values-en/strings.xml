@@ -6,4 +6,5 @@
     <string name="moment_today">today at %1$s</string>
     <string name="moment_weekday">on %1$s at %2$s</string>
     <string name="moment_yesterday">yesterday at %1$s</string>
+    <string name="undo">Undo</string>
 </resources>

@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
 
 /** The user's accounts; the Cash account always exists. */
 interface AccountRepository {
+    /** The active accounts, Cash first, again after each change. */
+    val accounts: Flow<List<Account>>
+
     /**
      * The balances of the active accounts other than Cash, as their last message gave them: mobile money first, then
      * the banks and the cards. An account whose messages never gave a balance is left out.

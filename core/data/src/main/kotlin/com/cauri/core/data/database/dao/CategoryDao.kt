@@ -5,6 +5,9 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.cauri.core.data.database.entity.CategoryEntity
+import com.cauri.core.data.database.entity.TransactionType
+import com.cauri.core.data.service.CategoryUse
+import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,6 +24,16 @@ internal interface CategoryDao {
     suspend fun update(category: CategoryEntity)
 
     /** The active categories, by name. */
+    /**
+     * The categories chosen for the confirmed transactions of [type] on [accountId] since [since]: what the suggestions
+     * learn from.
+     */
+    @Query(
+        "SELECT categoryId, occurredAt FROM transactions WHERE accountId = :accountId AND type = :type " +
+            "AND status = 'CONFIRMED' AND categoryId IS NOT NULL AND occurredAt >= :since",
+    )
+    suspend fun getUses(accountId: Long, type: TransactionType, since: Instant): List<CategoryUse>
+
     @Query("SELECT * FROM categories WHERE status = 'ACTIVE' ORDER BY name")
     fun observeActive(): Flow<List<CategoryEntity>>
 }

@@ -21,23 +21,28 @@ private const val CONTENT_LAYER = 1f
  * - [background]: the blurred shapes behind everything;
  * - [content]: the screen content, often a scrolling list; its glass cards blur the [background] only;
  * - [overlay]: what floats above the content (bottom bar, sheets); its glass blurs the [background] and the [content].
+ *
+ * It fills the room it is given; with [fillMaxSize] `false`, it is as large as its [content], such as a sheet as tall
+ * as what it holds, and the [background] covers that size.
  */
 @Composable
 fun GlassScreen(
     modifier: Modifier = Modifier,
+    fillMaxSize: Boolean = true,
     background: @Composable BoxScope.() -> Unit = {},
     overlay: @Composable BoxScope.() -> Unit = {},
     content: @Composable BoxScope.() -> Unit,
 ) {
     val hazeState = remember { HazeState() }
     CompositionLocalProvider(LocalGlassHazeState provides hazeState) {
-        Box(modifier = modifier.fillMaxSize().background(CauriTheme.palette.background)) {
+        val fill = if (fillMaxSize) Modifier.fillMaxSize() else Modifier
+        Box(modifier = modifier.then(fill).background(CauriTheme.palette.background)) {
             Box(
-                modifier = Modifier.fillMaxSize().hazeSource(state = hazeState, zIndex = BACKGROUND_LAYER),
+                modifier = Modifier.matchParentSize().hazeSource(state = hazeState, zIndex = BACKGROUND_LAYER),
                 content = background,
             )
             Box(
-                modifier = Modifier.fillMaxSize().hazeSource(state = hazeState, zIndex = CONTENT_LAYER),
+                modifier = fill.hazeSource(state = hazeState, zIndex = CONTENT_LAYER),
                 content = content,
             )
             overlay()

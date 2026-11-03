@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="transactions_activity_title">Activity</string>
+    <string name="transactions_amount_too_high">The amount cannot exceed %1$s F</string>
+    <string name="transactions_close">Close</string>
     <string name="transactions_coming_soon">Screen coming soon</string>
-    <string name="transactions_quick_entry_title">New expense</string>
+    <string name="transactions_delete">Delete</string>
+    <string name="transactions_from">From</string>
+    <string name="transactions_merged">Merged with an operation from a message</string>
+    <string name="transactions_other_category">Other…</string>
+    <string name="transactions_quick_entry_title">New operation</string>
+    <string name="transactions_save">Save</string>
+    <string name="transactions_to">To</string>
+    <string name="transactions_type_expense">Expense</string>
+    <string name="transactions_type_income">Income</string>
+    <string name="transactions_type_transfer">Transfer</string>
 </resources>

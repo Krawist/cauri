@@ -10,7 +10,9 @@ class FakeAccountRepository : AccountRepository {
     val created = mutableListOf<NewAccount>()
 
     /** The accounts [accountOf] finds, by provider. */
-    val accounts = mutableMapOf<String, Account>()
+    val byProvider = mutableMapOf<String, Account>()
+
+    override val accounts = MutableStateFlow(emptyList<Account>())
 
     override val balances = MutableStateFlow(emptyList<AccountBalance>())
 
@@ -21,7 +23,7 @@ class FakeAccountRepository : AccountRepository {
     override suspend fun createAccount(account: NewAccount): Long {
         created += account
         val id = created.size + 1L
-        accounts[account.provider] = Account(
+        byProvider[account.provider] = Account(
             id = id,
             name = account.name,
             kind = account.kind,
@@ -31,5 +33,5 @@ class FakeAccountRepository : AccountRepository {
         return id
     }
 
-    override suspend fun accountOf(provider: String): Account? = accounts[provider]
+    override suspend fun accountOf(provider: String): Account? = byProvider[provider]
 }

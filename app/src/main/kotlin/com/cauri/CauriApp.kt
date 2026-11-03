@@ -2,6 +2,8 @@ package com.cauri
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
@@ -26,6 +29,7 @@ import com.cauri.core.design.component.CauriBottomBar
 import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
+import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.feature.cash.cashGraph
 import com.cauri.feature.cash.navigateToCashCount
 import com.cauri.feature.home.HomeGraph
@@ -35,6 +39,7 @@ import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.settings.navigateToSettings
 import com.cauri.feature.settings.settingsGraph
 import com.cauri.feature.transactions.ActivityGraph
+import com.cauri.feature.transactions.QuickEntryMergeBar
 import com.cauri.feature.transactions.QuickEntrySheet
 import com.cauri.feature.transactions.activityGraph
 import kotlinx.coroutines.delay
@@ -70,6 +75,9 @@ internal fun CauriApp(
         LaunchScreen()
     }
 }
+
+// Above the floating bottom bar.
+private val MergeBarBottom = 100.dp
 
 // The tabs of the bottom bar, in order, by the route of their graph.
 private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsRoute, InsightsRoute)
@@ -113,6 +121,7 @@ private fun CauriNavHost(
                     modifier = Modifier.align(Alignment.BottomCenter),
                 )
             }
+            QuickEntryMergeBar(modifier = Modifier.align(Alignment.BottomCenter).aboveBottomBar())
         },
     ) {
         NavHost(navController = navController, startDestination = startDestination) {
@@ -139,6 +148,10 @@ private fun CauriNavHost(
         QuickEntrySheet(onDismiss = { quickEntryOpen = false })
     }
 }
+
+// Where a bar floats over the screens: above the bottom bar, inside the screen's margins.
+private fun Modifier.aboveBottomBar() =
+    safeDrawingPadding().padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = MergeBarBottom)
 
 @Composable
 private fun TabBar(selectedTab: Int, onTabSelected: (Int) -> Unit, onAdd: () -> Unit, modifier: Modifier = Modifier) {

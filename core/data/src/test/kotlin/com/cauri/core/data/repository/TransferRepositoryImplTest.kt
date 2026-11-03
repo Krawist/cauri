@@ -2,6 +2,7 @@ package com.cauri.core.data.repository
 
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.AccountEntity
+import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.AccountStatus
 import com.cauri.core.data.database.entity.RawSignalEntity
 import com.cauri.core.data.database.entity.TransactionEntity
@@ -16,6 +17,7 @@ import com.cauri.core.data.service.DuplicateServiceImpl
 import com.cauri.core.data.service.TransferLinkServiceImpl
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import java.time.Clock
 import java.time.Instant
@@ -42,12 +44,42 @@ internal class TransferRepositoryImplTest {
             DuplicateServiceImpl(),
             CLOCK,
         )
-        repository = TransferRepositoryImpl(database.transferLinkDao(), TransferLinkServiceImpl(), CLOCK)
+        repository = TransferRepositoryImpl(
+            database.transactionDao(),
+            database.transferLinkDao(),
+            TransferLinkServiceImpl(),
+            CLOCK,
+        )
     }
 
     @AfterEach
     fun tearDown() {
         database.close()
+    }
+
+    @Nested
+    inner class RecordTransfer {
+        @Test
+        fun `should record a confirmed transfer, one side on each account`() = runTest {
+            // given
+            val orangeId = database.accountDao().insert(account(name = "Orange Money", provider = "ORANGE_MONEY"))
+
+            // when
+            repository.recordTransfer(
+                fromAccountId = CASH_ACCOUNT_ID,
+                toAccountId = orangeId,
+                amount = 5_000,
+                occurredAt = Instant.ofEpochSecond(1_000),
+            )
+
+            // then
+            val recorded = recorded()
+            recorded.map { listOf(it.accountId, it.type, it.status, it.amount) } shouldContainExactlyInAnyOrder listOf(
+                listOf(CASH_ACCOUNT_ID, TransactionType.TRANSFER_OUT, TransactionStatus.CONFIRMED, 5_000L),
+                listOf(orangeId, TransactionType.TRANSFER_IN, TransactionStatus.CONFIRMED, 5_000L),
+            )
+            recorded.map { it.transferGroup }.distinct().single().shouldNotBeNull()
+        }
     }
 
     @Nested

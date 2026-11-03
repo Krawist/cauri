@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cross of the button closing the quick entry, from the mockup. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="18dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M6,6 L18,18 M18,6 L6,18"
+        android:strokeWidth="2.2"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round" />
+</vector>

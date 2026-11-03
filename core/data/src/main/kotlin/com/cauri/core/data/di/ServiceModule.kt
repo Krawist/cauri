@@ -2,6 +2,8 @@ package com.cauri.core.data.di
 
 import com.cauri.core.data.service.CashBalanceService
 import com.cauri.core.data.service.CashBalanceServiceImpl
+import com.cauri.core.data.service.CategorySuggestionService
+import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import com.cauri.core.data.service.CountReminderService
 import com.cauri.core.data.service.CountReminderServiceImpl
 import com.cauri.core.data.service.DuplicateService
@@ -18,6 +20,9 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class ServiceModule {
     @Binds
     abstract fun bindCashBalanceService(impl: CashBalanceServiceImpl): CashBalanceService
+
+    @Binds
+    abstract fun bindCategorySuggestionService(impl: CategorySuggestionServiceImpl): CategorySuggestionService
 
     @Binds
     abstract fun bindDuplicateService(impl: DuplicateServiceImpl): DuplicateService

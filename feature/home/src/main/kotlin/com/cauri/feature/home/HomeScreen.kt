@@ -38,6 +38,8 @@ import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
+import com.cauri.core.design.component.UndoBar
+import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
@@ -118,7 +120,7 @@ private fun HomeContent(
         }
         state.recorded?.let { recorded ->
             UndoBar(
-                recorded = recorded,
+                message = stringResource(R.string.home_habit_recorded, recorded.name, formatFcfa(recorded.amount)),
                 onUndo = actions::onUndo,
                 onDismissed = actions::onUndoDismissed,
                 modifier = Modifier

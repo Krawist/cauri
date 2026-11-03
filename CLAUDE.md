@@ -21,7 +21,7 @@ The documents kept in Claude are the reference; they are written in French.
 | Document                                  | Local copy        | Reference                                         |
 |-------------------------------------------|-------------------|---------------------------------------------------|
 | Product requirements (what and why)       | —                 | https://claude.ai/artifact/6ZMKPajYcTATWmgfoHCqin |
-| MVP tickets (CAU-01 to CAU-52, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
+| MVP tickets (CAU-01 to CAU-53, 3 phases)  | `docs/tickets.md` | https://claude.ai/artifact/XE2X5itqGYCmyDifwjKm4e |
 | Mockups, light and dark (canvas)          | —                 | https://claude.ai/artifact/7cuvPsaveMQEG1VCZh2qbP |
 
 `docs/tickets.md` is the detailed English working copy: acceptance criteria, dependencies and the mockup of each
@@ -183,13 +183,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   is confirmed. The cash balance goes up by the amount withdrawn (tested). Nothing creates withdrawals yet: parsing
   comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30).
 - [ ] **CAU-14** — habits (`HabitEntity`, `HabitRepository`, database v2 by auto-migration): glass tiles on Accueil,
-  three a line on two lines at most, more scrolling inside them, and « + Ajouter une habitude », dashed, under them; a tap
-  records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a long-press opens
-  the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by dragging the handles.
-  The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « Ajouter une habitude » opens the
-  sheet of a new habit (the quick entry is the « + » of the bottom bar). `CauriTextField` moved to `:core:design`. On a
-  phone: the upgrade to v2 and the empty row, the habit sheet and « Mes habitudes », two drags in a row (each line
-  keyed, the dragged one opaque); taps and undo not checked yet.
+  three a line on two lines at most, more scrolling inside them, and « + Ajouter une habitude », dashed, under them; a
+  tap records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a long-press
+  opens the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by dragging the
+  handles. The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « Ajouter une habitude »
+  opens the sheet of a new habit (the quick entry is the « + » of the bottom bar). `CauriTextField` moved to
+  `:core:design`. On a phone: the upgrade to v2 and the empty row, the habit sheet and « Mes habitudes », two drags in a
+  row (each line keyed, the dragged one opaque); taps and undo not checked yet.
 - [ ] **CAU-15** — `CashCountScreen` (`:feature:cash`): banknotes and coins with « − » and « + » (gold once counted),
   « Tout effacer », « Saisir le total directement », « Total compté », « Attendu ≈ » and the gap, updated on every
   tap. No gap or a surplus: « Valider le comptage » saves the count, `CashCountRepository.addCount` recording a surplus
@@ -288,20 +288,34 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   a silence is the user's own rhythm), once a week at most (`lastCaptureWarning` in DataStore), which opens Réglages
   (`CaptureHealth.ACTION_OPEN_SETTINGS`, `NotificationTarget` in `:app`); Accueil shows the card « Détection en pause »
   with « Vérifier » on the same condition, read again each time Accueil comes back. Debug builds show the warning on
-  demand (`adb shell am broadcast -a com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of silence for the card (`-a
-  com.cauri.debug.SIMULATE_CAPTURE_SILENCE`, `-ez on false` to end it; `DebugCaptureHealthService` bound in debug only).
-  Checked on the Galaxy S23: the notification, its tap opening Réglages; the card with a simulated silence, « Vérifier »
-  opening Réglages; the daily check not seen firing.
+  demand (`adb shell am broadcast -a com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of
+  silence for the card (`-a com.cauri.debug.SIMULATE_CAPTURE_SILENCE`, `-ez on false` to end it;
+  `DebugCaptureHealthService` bound in debug only). Checked on the Galaxy S23: the notification, its tap opening
+  Réglages; the card with a simulated silence, « Vérifier » opening Réglages; the daily check not seen firing.
 - [ ] **CAU-25** — Accueil, cash first: the day and « Bonjour, <prénom> », « Cash dans ta poche », the notices, the
   habits, « Tes comptes » and « À confirmer ». « Tes comptes » lists the balance of each digital account as its last
-  message gave it (`account_balances`, database v8, written with the signal's transactions; `AccountRepository.balances`,
-  mobile money first); by decision the latest balance wins, read or typed; the balance typed by the user, with the split
-  of its gap as for the cash, is CAU-52. « Disponible aujourd'hui » waits for the budgets (CAU-46). « À confirmer »
-  (`TransactionRepository.pending`) shows one card per operation read in a message, newest first: its fee rides with
-  it, a withdrawal or a linked transfer is one card « UBA → Orange Money ». ✓, the swipes and the proposed category
-  come with CAU-27, the visits (shown first) with the places. Balances of the messages read before v8 are not
-  recovered. Checked on the Galaxy S23 in light mode: upgrade to v8, the greeting, the Orange Money balance from a
-  made-up payment, five cards (payments, a withdrawal, a linked transfer). Dark mode not checked. Next: CAU-26.
+  message gave it (`account_balances`, database v8, written with the signal's transactions;
+  `AccountRepository.balances`, mobile money first); by decision the latest balance wins, read or typed; the balance
+  typed by the user, with the split of its gap as for the cash, is CAU-52. « Disponible aujourd'hui » waits for the
+  budgets (CAU-46). « À confirmer » (`TransactionRepository.pending`) shows one card per operation read in a message,
+  newest first: its fee rides with it, a withdrawal or a linked transfer is one card « UBA → Orange Money ». ✓, the
+  swipes and the proposed category come with CAU-27, the visits (shown first) with the places. Balances of the messages
+  read before v8 are not recovered. Checked on the Galaxy S23 in light mode: upgrade to v8, the greeting, the Orange
+  Money balance from a made-up payment, five cards (payments, a withdrawal, a linked transfer), light and dark.
+- [ ] **CAU-26** — `QuickEntrySheet` (`:feature:transactions`): « Dépense », « Revenu » or « Transfert », the amount on
+  a keypad (« 000 », erase), the account (Cash first, in gold), up to three suggested categories, the first chosen, and
+  « Autre… » for every category of the type; a transfer chooses « De » and « Vers » and has no category
+  (`TransferRepository.recordTransfer`, two confirmed sides). `CategorySuggestionService` (JVM tests): the categories
+  used most on the account within two hours of the time of day over 90 days, then at any hour, then by name
+  (`CategoryRepository.suggested`). An entry merged into an operation detected before shows « Fusionné avec une
+  opération reçue par message · Annuler » for 4 s above the bottom bar (`QuickEntryMergeBar`); `UndoBar` moved to
+  `:core:design`. The sheet is a glass screen of its own over the screens' shapes, as tall as what it holds
+  (`GlassScreen(fillMaxSize = false)`), the keys in strong glass; it scrolls on a small screen. An amount stops at 10
+  000 000 F (`MAX_AMOUNT`), a digit over it refused with « Le montant ne peut pas dépasser 10 000 000 F ». The
+  categories take three lines at most and scroll inside them. Checked on the Galaxy S23 in dark mode: a cash expense of
+  5 000 F in four taps (cash 14 500 → 9 500), a payment typed on Orange Money merged into the detected one, a merge
+  undone. In light mode: the glass sheet and its keys, a transfer Cash → Orange Money. Income not tried on the phone;
+  the cap seen on it, the categories scrolling in three lines not (five categories only). Next: CAU-27.
 
 Update this section at the end of each ticket.
 

@@ -82,6 +82,23 @@ internal class AccountRepositoryImplTest {
     }
 
     @Nested
+    inner class Accounts {
+        @Test
+        fun `should list the active accounts, Cash first`() = runTest {
+            // given
+            repository.createAccount(
+                NewAccount(name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF"),
+            )
+
+            // when
+            val accounts = repository.accounts.first()
+
+            // then
+            accounts.map { it.name } shouldContainExactly listOf("Cash", "UBA")
+        }
+    }
+
+    @Nested
     inner class Balances {
         @Test
         fun `should give the latest balance of each account, mobile money before the banks`() = runTest {

@@ -49,9 +49,12 @@ class FakeTransactionRepository : TransactionRepository {
     val entries = mutableListOf<ManualEntry>()
     val undoneMerges = mutableListOf<Long>()
 
+    /** Merge [recordEntry] answers, as if Cauri had detected the same operation; `null` for none. */
+    var mergeId: Long? = null
+
     override suspend fun recordEntry(entry: ManualEntry): RecordedEntry {
         entries += entry
-        return RecordedEntry(transactionId = nextId++, mergeId = null)
+        return RecordedEntry(transactionId = nextId++, mergeId = mergeId)
     }
 
     override suspend fun undoMerge(mergeId: Long) {

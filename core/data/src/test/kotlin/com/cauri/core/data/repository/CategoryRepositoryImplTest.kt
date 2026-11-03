@@ -1,13 +1,23 @@
 package com.cauri.core.data.repository
 
 import com.cauri.core.data.database.CauriDatabase
+import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.CategoryStatus
+import com.cauri.core.data.database.entity.TransactionEntity
+import com.cauri.core.data.database.entity.TransactionOrigin
+import com.cauri.core.data.database.entity.TransactionStatus
+import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.CategoryNature
+import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.NewCategory
+import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -22,7 +32,7 @@ internal class CategoryRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         database = inMemoryDatabase()
-        repository = CategoryRepositoryImpl(database.categoryDao())
+        repository = CategoryRepositoryImpl(database.categoryDao(), CategorySuggestionServiceImpl(), CLOCK)
     }
 
     @AfterEach
@@ -96,5 +106,65 @@ internal class CategoryRepositoryImplTest {
             // then
             categories.map { it.name } shouldContainExactly listOf("Alimentation", "Transport")
         }
+    }
+
+    @Nested
+    inner class Suggested {
+        @Test
+        fun `should put first the category used on the account around this time`() = runTest {
+            // given
+            val (_, transportId) = repository.createCategories(
+                listOf(
+                    NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Transport", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Santé", nature = CategoryNature.EXPENSE),
+                ),
+            )
+            database.transactionDao().insert(cashExpense(categoryId = transportId, at = "2026-11-02T08:00:00Z"))
+
+            // when
+            val suggested = repository.suggested(accountId = CASH_ACCOUNT_ID, type = EntryType.EXPENSE, limit = 2)
+
+            // then
+            suggested.map { it.name } shouldContainExactly listOf("Transport", "Alimentation")
+        }
+
+        @Test
+        fun `should suggest only income categories for an income`() = runTest {
+            // given
+            repository.createCategories(
+                listOf(
+                    NewCategory(name = "Transport", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Salaire", nature = CategoryNature.INCOME),
+                ),
+            )
+
+            // when
+            val suggested = repository.suggested(accountId = CASH_ACCOUNT_ID, type = EntryType.INCOME, limit = 3)
+
+            // then
+            suggested.map { it.name } shouldContainExactly listOf("Salaire")
+        }
+    }
+
+    private fun cashExpense(categoryId: Long, at: String) = TransactionEntity(
+        accountId = CASH_ACCOUNT_ID,
+        type = TransactionType.EXPENSE,
+        status = TransactionStatus.CONFIRMED,
+        origin = TransactionOrigin.MANUAL,
+        amount = 500,
+        occurredAt = Instant.parse(at),
+        categoryId = categoryId,
+        placeId = null,
+        rawSignalId = null,
+        transferGroup = null,
+        counterparty = null,
+        note = null,
+        foreignAmount = null,
+        foreignCurrency = null,
+    )
+
+    private companion object {
+        val CLOCK: Clock = Clock.fixed(Instant.parse("2026-11-03T08:30:00Z"), ZoneOffset.UTC)
     }
 }

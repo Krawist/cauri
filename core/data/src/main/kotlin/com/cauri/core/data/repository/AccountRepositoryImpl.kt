@@ -12,6 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 /** Default implementation for [AccountRepository]. */
 @Singleton
@@ -19,6 +20,10 @@ internal class AccountRepositoryImpl @Inject constructor(
     private val accountDao: AccountDao,
     private val balanceDao: AccountBalanceDao,
 ) : AccountRepository {
+    override val accounts: Flow<List<Account>> = accountDao.observeActive().map { accounts ->
+        accounts.map { it.toModel() }
+    }
+
     override val balances: Flow<List<AccountBalance>> =
         combine(accountDao.observeActive(), balanceDao.observeLatest()) { accounts, balances ->
             val latest = balances.associateBy { it.accountId }
