@@ -89,13 +89,14 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:cash`         | Cash count, split of the gap                              | 15, 16         |
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
 | `:feature:settings`     | Settings: permission and battery statuses                 | 10, 11         |
+| `:feature:places`       | « Mes lieux », the screen of a place                      | 33             |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
-| `:core:capture`         | Permissions, notification listening, raw signals, health  | 10, 18, 21, 24 |
+| `:core:capture`         | Permissions, notifications, signals, health, geofences    | 10–24, 33      |
 | `:core:parsing`         | Message templates and parsing (pure Kotlin)               | 19, 20         |
 | `:core:engine`          | Reminder rules, guardrails, bandit (pure Kotlin)          | 37–42          |
 
-Places (CAU-33 to 36), budgets and goals (phase 3) will get their own modules when their tickets start.
+Budgets and goals (phase 3) will get their own modules when their tickets start.
 
 ### Design tokens
 
@@ -423,7 +424,29 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   link puts the debit and the credit back « à confirmer » with the amounts of their messages, never linked again.
   Checked on the Galaxy S23 in light mode with made-up messages: a UBA → Orange Money transfer separated from « À
   confirmer », a payment merged with a quick entry separated from « Activité », each showing again on its own line. Dark
-  mode not tried. Next: CAU-31 (blocked by CAU-36) or CAU-32 (deferred).
+  mode not tried. Next: CAU-33.
+- [ ] **CAU-33** — places (`Place`, `NewPlace`, `PlaceKind` now public, `PlaceRepository`, database v12 with
+  `places.remindAfterVisit`, v13 with `places.area`, v14 with `places.address`): « Mes lieux » (`:feature:places`),
+  opened from a row of Réglages (by decision), its header fixed, lists the shops (default category, visits) then home
+  and work (their neighbourhood, « Sans rappel »), under where the map goes; a tap opens the screen of the place,
+  filled, « + » a new one. By decision there is no real map, whose tiles would come from the network: `MapArea` draws
+  the mockups' streets, the places as pins by their positions against each other, and the radius around the pin; a real
+  map can take its place later. The screen is transparent over the screens' shapes, its form a glass sheet. A place is
+  where the user stands (`LocationService`, asked as the screen opens, again with « Ma position ») or, by decision, at
+  an address searched in « Adresse », above the name (`AddressService` on Android's `Geocoder`, Cameroon first, as the
+  user stops typing; the addresses open above the field, the name the map knows then the address): the one other use of
+  the network, what is typed and the positions going to the phone's geocoding service. The field always shows the
+  address of the position, found at the phone's position too, kept with the place and its neighbourhood; the name the
+  map knows, never a street, fills an empty name. The geocoder knows few names of shops. The radius goes from 50 to 300
+  m (80 by default), the reminder and the category for a shop only; home and work never remind. « Enregistrer le lieu »
+  and « Supprimer ce lieu » stay at the bottom of the screen. Each place is a geofence (Google Play services location
+  21.3.0, by decision; `GeofenceService`), with the location « always » only: `PlaceService` keeps 100 at most, the most
+  visited then the newest; `PlaceWatcher`, started by `CauriApplication`, registers them again after each change, after
+  a restart (`PlaceBootReceiver`) and once the location is allowed; « Mes lieux » says when it is missing.
+  `PlaceTransitionReceiver` records nothing yet: the visits are CAU-34. Checked on the Galaxy S23 in light mode: a shop
+  saved at ± 20 m, its geofence of 150 m registered, changed and deleted, the geofence gone; addresses found above the
+  field, the address of the phone's position in the field. Dark mode and a phone without Google Play services not tried.
+  Next: CAU-34.
 
 Update this section at the end of each ticket.
 

@@ -14,6 +14,8 @@ import com.cauri.core.data.repository.ConfirmationRepository
 import com.cauri.core.data.repository.ConfirmationRepositoryImpl
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.HabitRepositoryImpl
+import com.cauri.core.data.repository.PlaceRepository
+import com.cauri.core.data.repository.PlaceRepositoryImpl
 import com.cauri.core.data.repository.ProposalRepository
 import com.cauri.core.data.repository.ProposalRepositoryImpl
 import com.cauri.core.data.repository.RawSignalRepository
@@ -49,6 +51,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindHabitRepository(impl: HabitRepositoryImpl): HabitRepository
+
+    @Binds
+    abstract fun bindPlaceRepository(impl: PlaceRepositoryImpl): PlaceRepository
 
     @Binds
     abstract fun bindRawSignalRepository(impl: RawSignalRepositoryImpl): RawSignalRepository

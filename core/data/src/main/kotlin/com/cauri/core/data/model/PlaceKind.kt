@@ -1,7 +1,7 @@
-package com.cauri.core.data.database.entity
+package com.cauri.core.data.model
 
 /** Role of a place for the reminders. */
-internal enum class PlaceKind {
+enum class PlaceKind {
     /** A shop or market, where a visit may mean an expense. */
     SHOP,
 

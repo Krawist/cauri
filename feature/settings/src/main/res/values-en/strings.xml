@@ -36,6 +36,9 @@
     <string name="settings_notifications_text">To ask you to confirm an expense, at the right time and never at night.</string>
     <string name="settings_off">Off</string>
     <string name="settings_permissions">Permissions</string>
+    <string name="settings_places">My places</string>
+    <string name="settings_places_section">Places</string>
+    <string name="settings_places_text">The shops where to remind you of an expense, your home and your work.</string>
     <string name="settings_refused">Refused</string>
     <string name="settings_reminders">Reminders</string>
     <string name="settings_title">Settings</string>

@@ -32,7 +32,11 @@ import com.cauri.core.design.theme.CauriTheme
 
 /** Settings: each permission and the battery with their status; a tap opens the system screen where it is changed. */
 @Composable
-internal fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
+internal fun SettingsScreen(
+    onBack: () -> Unit,
+    onOpenPlaces: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LifecycleResumeEffect(Unit) {
@@ -41,7 +45,7 @@ internal fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = h
     }
     // Named apart from the action it backs, which shares its name.
     val back = onBack
-    val actions = remember(viewModel, context, back) {
+    val actions = remember(viewModel, context, back, onOpenPlaces) {
         object : SettingsActions {
             override fun onBack() = back()
 
@@ -52,6 +56,8 @@ internal fun SettingsScreen(onBack: () -> Unit, viewModel: SettingsViewModel = h
             override fun onLocation() = context.startActivity(viewModel.locationSettings())
 
             override fun onBattery() = context.startActivity(viewModel.batterySettings())
+
+            override fun onPlaces() = onOpenPlaces()
 
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
@@ -83,6 +89,7 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
         )
         SectionLabel(stringResource(R.string.settings_permissions))
         PermissionsGroup(status = state.permissions, actions = actions)
+        PlacesGroup(actions = actions)
         SectionLabel(
             stringResource(R.string.settings_battery_section),
             modifier = Modifier.padding(top = CauriSpacing.xxl),
@@ -115,6 +122,21 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
             )
             IgnoredAccountsGroup(accounts = state.ignoredAccounts, actions = actions)
         }
+    }
+}
+
+// « Mes lieux », under the location it relies on.
+@Composable
+private fun PlacesGroup(actions: SettingsActions) {
+    SectionLabel(stringResource(R.string.settings_places_section), modifier = Modifier.padding(top = CauriSpacing.xxl))
+    RowGroup {
+        SettingRow(
+            icon = DesignR.drawable.ic_place,
+            title = stringResource(R.string.settings_places),
+            text = stringResource(R.string.settings_places_text),
+            status = null,
+            onClick = actions::onPlaces,
+        )
     }
 }
 
@@ -221,6 +243,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onLocation() = Unit
 
     override fun onBattery() = Unit
+
+    override fun onPlaces() = Unit
 
     override fun onCountReminder(open: Boolean) = Unit
 

@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.work.runtime)
+    implementation(libs.play.services.location)
     ksp(libs.androidx.hilt.compiler)
 
     testFixturesImplementation(projects.core.data)

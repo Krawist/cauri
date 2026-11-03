@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="places_add">Ajouter un lieu</string>
+    <string name="places_address">Adresse</string>
+    <string name="places_back">Retour</string>
+    <string name="places_category">Catégorie par défaut</string>
+    <string name="places_close">Fermer</string>
+    <string name="places_delete">Supprimer ce lieu</string>
+    <string name="places_delete_cancel">Annuler</string>
+    <string name="places_delete_confirm">Supprimer</string>
+    <string name="places_delete_text">Ses visites seront effacées. Les dépenses faites là-bas restent, sans lieu.</string>
+    <string name="places_delete_title">Supprimer « %1$s » ?</string>
+    <string name="places_edit_title">Modifier le lieu</string>
+    <string name="places_empty">Ajoute les commerces où tu dépenses souvent, quand tu y es : Cauri te rappellera de noter ce que tu y as payé. Ajoute aussi ta maison et ton travail, où il ne te rappellera jamais rien.</string>
+    <string name="places_kind_home">Maison</string>
+    <string name="places_kind_shop">Commerce</string>
+    <string name="places_kind_work">Travail</string>
+    <string name="places_location_allow">Autoriser</string>
+    <string name="places_location_needed">Pour remarquer tes visites quand l\'app est fermée, Cauri a besoin de ta position « Toujours ».</string>
+    <string name="places_meters">%1$d m</string>
+    <string name="places_my_position">Ma position</string>
+    <string name="places_name">Nom</string>
+    <string name="places_name_hint">Boutique du quartier</string>
+    <string name="places_new_title">Nouveau lieu</string>
+    <string name="places_no_reminder">Sans rappel</string>
+    <string name="places_position_found">Position relevée à ± %1$d m</string>
+    <string name="places_position_found_in">%1$s · relevée à ± %2$d m</string>
+    <string name="places_position_locating">Recherche de ta position…</string>
+    <string name="places_position_none">Touche « Ma position » ou cherche une adresse</string>
+    <string name="places_position_not_found">Position introuvable, réessaie</string>
+    <string name="places_position_saved">Position enregistrée</string>
+    <string name="places_quiet">Sans rappel</string>
+    <string name="places_radius">Rayon de %1$d m</string>
+    <string name="places_radius_label">Rayon</string>
+    <string name="places_remind">Me rappeler après une visite</string>
+    <string name="places_save">Enregistrer le lieu</string>
+    <string name="places_search_hint">Chercher une adresse</string>
+    <string name="places_search_none">Aucune adresse trouvée</string>
+    <string name="places_search_searching">Recherche…</string>
+    <string name="places_shops">Commerces</string>
+    <plurals name="places_shops_count">
+        <item quantity="one">%1$d commerce suivi</item>
+        <item quantity="many">%1$d commerces suivis</item>
+        <item quantity="other">%1$d commerces suivis</item>
+    </plurals>
+    <string name="places_title">Mes lieux</string>
+    <plurals name="places_visits">
+        <item quantity="one">%1$d visite</item>
+        <item quantity="many">%1$d visites</item>
+        <item quantity="other">%1$d visites</item>
+    </plurals>
+</resources>

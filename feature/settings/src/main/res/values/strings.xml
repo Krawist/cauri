@@ -36,6 +36,9 @@
     <string name="settings_notifications_text">Pour te demander de confirmer une dépense, au bon moment et jamais la nuit.</string>
     <string name="settings_off">Désactivé</string>
     <string name="settings_permissions">Autorisations</string>
+    <string name="settings_places">Mes lieux</string>
+    <string name="settings_places_section">Lieux</string>
+    <string name="settings_places_text">Les commerces où te rappeler une dépense, ta maison et ton travail.</string>
     <string name="settings_refused">Refusé</string>
     <string name="settings_reminders">Rappels</string>
     <string name="settings_title">Réglages</string>

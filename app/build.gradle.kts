@@ -64,6 +64,7 @@ dependencies {
     implementation(projects.feature.onboarding)
     implementation(projects.feature.home)
     implementation(projects.feature.cash)
+    implementation(projects.feature.places)
     implementation(projects.feature.transactions)
     implementation(projects.feature.settings)
 

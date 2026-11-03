@@ -2,9 +2,9 @@ package com.cauri.core.data.database.dao
 
 import com.cauri.core.data.database.CauriDatabase
 import com.cauri.core.data.database.entity.PlaceEntity
-import com.cauri.core.data.database.entity.PlaceKind
 import com.cauri.core.data.database.entity.VisitEntity
 import com.cauri.core.data.database.inMemoryDatabase
+import com.cauri.core.data.model.PlaceKind
 import io.kotest.matchers.collections.shouldContainExactly
 import java.time.Instant
 import kotlinx.coroutines.test.runTest

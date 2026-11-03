@@ -44,6 +44,8 @@ import com.cauri.feature.home.HomeGraph
 import com.cauri.feature.home.homeGraph
 import com.cauri.feature.onboarding.OnboardingGraph
 import com.cauri.feature.onboarding.onboardingGraph
+import com.cauri.feature.places.navigateToPlaces
+import com.cauri.feature.places.placesGraph
 import com.cauri.feature.settings.navigateToSettings
 import com.cauri.feature.settings.settingsGraph
 import com.cauri.feature.transactions.ActivityGraph
@@ -189,7 +191,8 @@ private fun NavGraphBuilder.cauriGraphs(
     activityGraph(onEditTransaction = onEditTransaction)
     placeholderTabs()
     cashGraph(navController = navController, onBack = { navController.popBackStack() })
-    settingsGraph(onBack = { navController.popBackStack() })
+    settingsGraph(onBack = { navController.popBackStack() }, onOpenPlaces = { navController.navigateToPlaces() })
+    placesGraph(navController = navController, onBack = { navController.popBackStack() })
 }
 
 // Whether the navigation goes from a tab to another: tabs fade, side by side, instead of sliding.

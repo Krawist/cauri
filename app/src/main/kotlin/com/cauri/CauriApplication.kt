@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.cauri.core.capture.health.CaptureHealth
+import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
 import dagger.hilt.android.HiltAndroidApp
@@ -16,6 +17,9 @@ internal class CauriApplication :
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject
+    lateinit var placeWatcher: PlaceWatcher
+
     /** Whether glass surfaces blur, chosen once per process, never per frame or per screen. */
     val glassBlur: Boolean by lazy { supportsGlassBlur() }
 
@@ -27,5 +31,6 @@ internal class CauriApplication :
         super.onCreate()
         CountReminders.schedule(this)
         CaptureHealth.schedule(this)
+        placeWatcher.start()
     }
 }

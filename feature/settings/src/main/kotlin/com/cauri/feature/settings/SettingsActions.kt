@@ -14,6 +14,9 @@ internal interface SettingsActions {
 
     fun onBattery()
 
+    /** Opens « Mes lieux ». */
+    fun onPlaces()
+
     /** Opens or closes the sheet of the cash count reminders. */
     fun onCountReminder(open: Boolean)
 

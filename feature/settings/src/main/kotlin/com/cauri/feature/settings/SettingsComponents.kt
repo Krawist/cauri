@@ -73,9 +73,12 @@ internal fun RowGroup(content: @Composable () -> Unit) {
     }
 }
 
-/** A setting with its lagoon icon and its status pill; a tap opens the system screen where it is changed. */
+/**
+ * A setting with its lagoon icon and its status pill, when it has a [status]; a tap opens the screen where it is
+ * changed.
+ */
 @Composable
-internal fun SettingRow(@DrawableRes icon: Int, title: String, text: String, status: StatusPill, onClick: () -> Unit) {
+internal fun SettingRow(@DrawableRes icon: Int, title: String, text: String, status: StatusPill?, onClick: () -> Unit) {
     val palette = CauriTheme.palette
     Row(
         modifier = Modifier
@@ -99,14 +102,16 @@ internal fun SettingRow(@DrawableRes icon: Int, title: String, text: String, sta
             )
             Text(text = text, style = MaterialTheme.typography.bodySmall, color = palette.muted)
         }
-        Text(
-            text = stringResource(status.label),
-            style = MaterialTheme.typography.labelMedium,
-            color = status.color,
-            modifier = Modifier
-                .background(status.fill, CircleShape)
-                .padding(horizontal = CauriSpacing.s + 2.dp, vertical = CauriSpacing.xs),
-        )
+        if (status != null) {
+            Text(
+                text = stringResource(status.label),
+                style = MaterialTheme.typography.labelMedium,
+                color = status.color,
+                modifier = Modifier
+                    .background(status.fill, CircleShape)
+                    .padding(horizontal = CauriSpacing.s + 2.dp, vertical = CauriSpacing.xs),
+            )
+        }
         if (onClick != null) {
             Icon(
                 painter = painterResource(DesignR.drawable.ic_chevron),

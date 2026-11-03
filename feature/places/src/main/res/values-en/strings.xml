@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="places_add">Add a place</string>
+    <string name="places_address">Address</string>
+    <string name="places_back">Back</string>
+    <string name="places_category">Default category</string>
+    <string name="places_close">Close</string>
+    <string name="places_delete">Delete this place</string>
+    <string name="places_delete_cancel">Cancel</string>
+    <string name="places_delete_confirm">Delete</string>
+    <string name="places_delete_text">Its visits will be erased. The expenses made there stay, without a place.</string>
+    <string name="places_delete_title">Delete “%1$s”?</string>
+    <string name="places_edit_title">Edit the place</string>
+    <string name="places_empty">Add the shops where you often spend, while you are there: Cauri will remind you to note what you paid. Add your home and work too, where it will never remind you of anything.</string>
+    <string name="places_kind_home">Home</string>
+    <string name="places_kind_shop">Shop</string>
+    <string name="places_kind_work">Work</string>
+    <string name="places_location_allow">Allow</string>
+    <string name="places_location_needed">To notice your visits while the app is closed, Cauri needs your location “All the time”.</string>
+    <string name="places_meters">%1$d m</string>
+    <string name="places_my_position">My position</string>
+    <string name="places_name">Name</string>
+    <string name="places_name_hint">Corner shop</string>
+    <string name="places_new_title">New place</string>
+    <string name="places_no_reminder">No reminder</string>
+    <string name="places_position_found">Position found within %1$d m</string>
+    <string name="places_position_found_in">%1$s · found within %2$d m</string>
+    <string name="places_position_locating">Looking for your position…</string>
+    <string name="places_position_none">Tap “My position” or search an address</string>
+    <string name="places_position_not_found">Position not found, try again</string>
+    <string name="places_position_saved">Position saved</string>
+    <string name="places_quiet">No reminder</string>
+    <string name="places_radius">Radius of %1$d m</string>
+    <string name="places_radius_label">Radius</string>
+    <string name="places_remind">Remind me after a visit</string>
+    <string name="places_save">Save the place</string>
+    <string name="places_search_hint">Search an address</string>
+    <string name="places_search_none">No address found</string>
+    <string name="places_search_searching">Searching…</string>
+    <string name="places_shops">Shops</string>
+    <plurals name="places_shops_count">
+        <item quantity="one">%1$d shop followed</item>
+        <item quantity="other">%1$d shops followed</item>
+    </plurals>
+    <string name="places_title">My places</string>
+    <plurals name="places_visits">
+        <item quantity="one">%1$d visit</item>
+        <item quantity="other">%1$d visits</item>
+    </plurals>
+</resources>

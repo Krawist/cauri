@@ -12,6 +12,8 @@ import com.cauri.core.data.service.CountReminderService
 import com.cauri.core.data.service.CountReminderServiceImpl
 import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.PlaceService
+import com.cauri.core.data.service.PlaceServiceImpl
 import com.cauri.core.data.service.ProposalService
 import com.cauri.core.data.service.ProposalServiceImpl
 import com.cauri.core.data.service.TransferLinkService
@@ -44,6 +46,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindTransferLinkService(impl: TransferLinkServiceImpl): TransferLinkService
+
+    @Binds
+    abstract fun bindPlaceService(impl: PlaceServiceImpl): PlaceService
 
     @Binds
     abstract fun bindProposalService(impl: ProposalServiceImpl): ProposalService
