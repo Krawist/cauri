@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.glass.GlassSurface
@@ -33,11 +34,18 @@ import com.cauri.core.design.theme.CauriTheme
 
 private val ButtonHeight = 44.dp
 
-/** Warns, while it lasts, that Cauri received no message for a month; « Vérifier » opens Réglages through [onCheck]. */
+/**
+ * Warns, while it lasts, that Cauri received no message for a month and misses a permission; « Vérifier » opens
+ * Réglages through [onCheck], and the card goes once the permissions are back.
+ */
 @Composable
 internal fun CaptureHealth(onCheck: () -> Unit, viewModel: CaptureHealthViewModel = hiltViewModel()) {
-    val silent by viewModel.silent.collectAsStateWithLifecycle()
-    if (silent) CaptureHealthCard(onCheck = onCheck)
+    val paused by viewModel.paused.collectAsStateWithLifecycle()
+    LifecycleResumeEffect(Unit) {
+        viewModel.refresh()
+        onPauseOrDispose {}
+    }
+    if (paused) CaptureHealthCard(onCheck = onCheck)
 }
 
 @Composable

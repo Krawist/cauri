@@ -286,8 +286,8 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   needs is missing (the access to the notifications taken back, or the battery restricted: with every permission given,
   a silence is the user's own rhythm), once a week at most (`lastCaptureWarning` in DataStore), which opens Réglages
   (`CaptureHealth.ACTION_OPEN_SETTINGS`, `NotificationTarget` in `:app`); Accueil shows the card « Détection en pause »
-  with « Vérifier » while the silence lasts. Debug builds show the warning on demand (`adb shell am broadcast -a
-  com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of silence for the card (`-a
+  with « Vérifier » on the same condition, read again each time Accueil comes back. Debug builds show the warning on
+  demand (`adb shell am broadcast -a com.cauri.debug.SHOW_CAPTURE_WARNING -p com.cauri.debug`) and simulate a month of silence for the card (`-a
   com.cauri.debug.SIMULATE_CAPTURE_SILENCE`, `-ez on false` to end it; `DebugCaptureHealthService` bound in debug only).
   Checked on the Galaxy S23: the notification, its tap opening Réglages; the card with a simulated silence, « Vérifier »
   opening Réglages; the daily check not seen firing. Next: CAU-25.

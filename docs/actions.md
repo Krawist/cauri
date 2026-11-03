@@ -74,8 +74,9 @@ Needs Cauri's notifications allowed; nothing shows otherwise.
 adb shell am broadcast -a com.cauri.debug.SIMULATE_CAPTURE_SILENCE -p com.cauri.debug
 ```
 
-Makes the capture count as silent for a month, so that Accueil shows the card « Détection en pause » (CAU-24). Accueil
-reads it when it opens: close Cauri and open it again. The daily warning keeps its real rule.
+Makes the capture count as silent for a month, so that Accueil shows the card « Détection en pause » (CAU-24). The
+card also needs a missing permission (the access to the notifications, or the battery restricted): take one back in
+Android first. Accueil reads it each time it comes back to the screen. The daily warning keeps its real rule.
 
 | Extra | Type    | Default | Values                                                   |
 |-------|---------|---------|----------------------------------------------------------|
