@@ -46,7 +46,6 @@
     <string name="transactions_amount_too_high">Le montant ne peut pas dépasser %1$s F</string>
     <string name="transactions_close">Fermer</string>
     <string name="transactions_currency" translatable="false">F</string>
-    <string name="transactions_delete">Effacer</string>
     <string name="transactions_edit_account">Compte</string>
     <string name="transactions_edit_all_categories">Toutes…</string>
     <string name="transactions_edit_amount">Montant</string>

@@ -674,11 +674,12 @@ internal class TransactionRepositoryImplTest {
 
             // when
             repository.recordReconciliation(
+                accountId = CASH_ACCOUNT_ID,
                 expenses = listOf(
                     ReconciledExpense(amount = 2_000, categoryId = null, note = "Moto"),
                     ReconciledExpense(amount = 2_500, categoryId = null, note = null),
                 ),
-                countedAt = Instant.ofEpochSecond(2_000),
+                at = Instant.ofEpochSecond(2_000),
             )
 
             // then

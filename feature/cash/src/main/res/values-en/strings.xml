@@ -35,7 +35,9 @@
     <string name="cash_split_pick_category">In which category?</string>
     <string name="cash_split_rest">Not placed</string>
     <string name="cash_split_rest_hint">Recorded as “Miscellaneous cash”. You can file it later.</string>
+    <string name="cash_split_rest_hint_balance">Not recorded: the typed balance becomes the account\'s.</string>
     <string name="cash_split_save">Save</string>
     <string name="cash_split_since">Since your count %1$s</string>
+    <string name="cash_split_since_balance">%1$s · since the balance %2$s</string>
     <string name="cash_split_title_amount">Where did %1$s F go?</string>
 </resources>

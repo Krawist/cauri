@@ -267,16 +267,16 @@ internal class TransactionRepositoryImpl @Inject constructor(
             ),
         )
 
-    override suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant) {
+    override suspend fun recordReconciliation(accountId: Long, expenses: List<ReconciledExpense>, at: Instant) {
         transactionDao.insertAll(
             expenses.map {
                 TransactionEntity(
-                    accountId = CASH_ACCOUNT_ID,
+                    accountId = accountId,
                     type = TransactionType.EXPENSE,
                     status = TransactionStatus.CONFIRMED,
                     origin = TransactionOrigin.RECONCILIATION,
                     amount = it.amount,
-                    occurredAt = countedAt,
+                    occurredAt = at,
                     categoryId = it.categoryId,
                     placeId = null,
                     rawSignalId = null,

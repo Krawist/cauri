@@ -3,9 +3,11 @@ package com.cauri.feature.cash
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.ReconciledExpense
+import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.HabitRepository
@@ -22,12 +24,16 @@ import kotlinx.coroutines.launch
 
 /**
  * Split of the money missing after a count ([GapSplitRoute]): the habits as moments Cauri noticed, the expenses the
- * user adds, and the rest as « Divers cash ». Only typed amounts count.
+ * user adds, and the rest as « Divers cash ». Only typed amounts count. For the balance typed of a digital account
+ * (CAU-52), there are no habits and the rest records nothing.
  */
+// Injected repositories: one per kind of data the split reads or writes.
+@Suppress("LongParameterList")
 @HiltViewModel
 internal class GapSplitViewModel @Inject constructor(
     savedState: SavedStateHandle,
     private val cashCounts: CashCountRepository,
+    private val accounts: AccountRepository,
     habits: HabitRepository,
     categories: CategoryRepository,
     private val transactions: TransactionRepository,
@@ -36,6 +42,9 @@ internal class GapSplitViewModel @Inject constructor(
     GapSplitActions {
     private val counted: Long = checkNotNull(savedState["counted"])
     private val expected: Long = checkNotNull(savedState["expected"])
+
+    // The digital account whose typed balance left the gap; `null` for the cash.
+    private val accountId: Long? = savedState["accountId"]
     private val state = MutableStateFlow(GapSplitUiState(gap = expected - counted, rest = expected - counted))
     private var addedLines = 0
 
@@ -43,18 +52,23 @@ internal class GapSplitViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val since = cashCounts.balance.first()?.countedAt
-            val lines = habits.habits.first().map {
-                GapLine(
-                    key = "habit-${it.id}",
-                    name = it.name,
-                    fromHabit = true,
-                    hint = it.amount,
-                    categoryId = it.categoryId,
-                    note = it.name,
-                )
+            val account = accountId?.let { id -> accounts.balances.first().firstOrNull { it.account.id == id } }
+            if (account != null) {
+                update { it.copy(since = account.at, accountName = account.account.name) }
+            } else {
+                val since = cashCounts.balance.first()?.countedAt
+                val lines = habits.habits.first().map {
+                    GapLine(
+                        key = "habit-${it.id}",
+                        name = it.name,
+                        fromHabit = true,
+                        hint = it.amount,
+                        categoryId = it.categoryId,
+                        note = it.name,
+                    )
+                }
+                update { it.copy(since = since, lines = lines + it.lines) }
             }
-            update { it.copy(since = since, lines = lines + it.lines) }
         }
         viewModelScope.launch {
             categories.categories.collect { all ->
@@ -91,13 +105,24 @@ internal class GapSplitViewModel @Inject constructor(
                 ReconciledExpense(amount = it, categoryId = line.categoryId, note = line.note)
             }
         }
-        val rest = listOfNotNull(
-            current.rest.takeIf { it > 0 }?.let { ReconciledExpense(amount = it, categoryId = null, note = null) },
-        )
         viewModelScope.launch {
             val now = clock.instant()
-            transactions.recordReconciliation(expenses = expenses + rest, countedAt = now)
-            cashCounts.addCount(amount = counted, countedAt = now, expectedAmount = expected)
+            val account = accountId
+            if (account != null) {
+                // The rest of a digital account's gap records nothing: the typed balance holds it.
+                transactions.recordReconciliation(accountId = account, expenses = expenses, at = now)
+                accounts.recordBalance(accountId = account, amount = counted, at = now)
+            } else {
+                val rest = listOfNotNull(
+                    current.rest.takeIf {
+                        it > 0
+                    }?.let { ReconciledExpense(amount = it, categoryId = null, note = null) },
+                )
+                // The Cash account always exists.
+                val cash = accounts.accounts.first().first { it.kind == AccountKind.CASH }.id
+                transactions.recordReconciliation(accountId = cash, expenses = expenses + rest, at = now)
+                cashCounts.addCount(amount = counted, countedAt = now, expectedAmount = expected)
+            }
             state.update { it.copy(saved = true) }
         }
     }

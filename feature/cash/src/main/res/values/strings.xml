@@ -39,7 +39,9 @@
     <string name="cash_split_pick_category">Dans quelle catégorie ?</string>
     <string name="cash_split_rest">Reste non identifié</string>
     <string name="cash_split_rest_hint">Enregistré comme « Divers cash ». Tu pourras le reclasser plus tard.</string>
+    <string name="cash_split_rest_hint_balance">Pas enregistré : le solde tapé devient celui du compte.</string>
     <string name="cash_split_save">Enregistrer</string>
     <string name="cash_split_since">Depuis ton comptage %1$s</string>
+    <string name="cash_split_since_balance">%1$s · depuis le solde %2$s</string>
     <string name="cash_split_title_amount">Où sont partis %1$s F ?</string>
 </resources>

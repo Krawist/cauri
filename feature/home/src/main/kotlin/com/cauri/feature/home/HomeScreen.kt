@@ -19,6 +19,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -55,17 +58,21 @@ private val ProfileRingWidth = 1.5.dp
 private val UndoBarBottom = 100.dp
 
 /**
- * Home screen, cash first: the greeting, « Cash dans ta poche » with « Compter mon cash », the notices, the one-tap
- * cash expenses, the balances of the digital accounts and the operations to confirm.
+ * Home screen, cash first: the greeting, « Cash dans ta poche » with « Compter mon cash », « Mes comptes », the one-tap
+ * cash expenses, the notices and the operations to confirm.
  */
 @Composable
 internal fun HomeScreen(
     onCountCash: () -> Unit,
     onOpenSettings: () -> Unit,
     onEditTransaction: (Long) -> Unit,
+    onSplitBalanceGap: (accountId: Long, typed: Long, shown: Long) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    // The account whose balance is being typed, from « Tes comptes »; `null` while none is.
+    var typingBalance by rememberSaveable { mutableStateOf<Long?>(null) }
+    var addingAccount by rememberSaveable { mutableStateOf(false) }
     HomeContent(
         state = state,
         actions = viewModel,
@@ -76,7 +83,20 @@ internal fun HomeScreen(
             AccountProposal()
         },
         pending = { PendingSection(onEdit = onEditTransaction) },
+        onBalance = { typingBalance = it.account.id },
+        onAddAccount = { addingAccount = true },
     )
+    if (addingAccount) AddAccountSheet(onDismiss = { addingAccount = false })
+    state.balances.firstOrNull { it.account.id == typingBalance }?.let { balance ->
+        BalanceSheet(
+            balance = balance,
+            onSplitGap = { typed, shown ->
+                typingBalance = null
+                onSplitBalanceGap(balance.account.id, typed, shown)
+            },
+            onDismiss = { typingBalance = null },
+        )
+    }
     state.editing?.let { draft ->
         HabitSheet(
             draft = draft,
@@ -96,6 +116,8 @@ private fun HomeContent(
     onOpenSettings: () -> Unit,
     notices: @Composable () -> Unit = {},
     pending: @Composable () -> Unit = {},
+    onBalance: (AccountBalance) -> Unit = {},
+    onAddAccount: () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -114,9 +136,10 @@ private fun HomeContent(
                 ProfileButton(initial = state.initial, onClick = onOpenSettings)
             }
             CashCard(cash = state.cash, onCountCash = onCountCash)
-            notices()
+            // The accounts right under the cash, the habits under them.
+            BalancesCard(balances = state.balances, onBalance = onBalance, onAddAccount = onAddAccount)
             HabitsRow(habits = state.habits, actions = actions)
-            BalancesCard(balances = state.balances)
+            notices()
             pending()
         }
         ConfirmationUndoBar(

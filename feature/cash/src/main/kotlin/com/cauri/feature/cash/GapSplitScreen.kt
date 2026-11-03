@@ -68,7 +68,7 @@ internal fun GapSplitScreen(onBack: () -> Unit, onSaved: () -> Unit, viewModel: 
 private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, onBack: () -> Unit) {
     val palette = CauriTheme.palette
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = CauriSpacing.xl)) {
-        Header(gap = state.gap, since = state.since, onBack = onBack)
+        Header(gap = state.gap, since = state.since, accountName = state.accountName, onBack = onBack)
         Column(
             modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(CauriSpacing.m + 2.dp),
@@ -86,7 +86,7 @@ private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, on
             if (state.lines.isNotEmpty()) Lines(state = state, actions = actions)
             AddExpenseButton(onClick = { actions.onPickCategory(open = true) })
         }
-        Rest(rest = state.rest)
+        Rest(rest = state.rest, digital = state.accountName != null)
         Button(
             onClick = actions::onSave,
             modifier = Modifier.fillMaxWidth().padding(
@@ -102,7 +102,7 @@ private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, on
 }
 
 @Composable
-private fun Header(gap: Long, since: Instant?, onBack: () -> Unit) {
+private fun Header(gap: Long, since: Instant?, accountName: String?, onBack: () -> Unit) {
     val palette = CauriTheme.palette
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = CauriSpacing.l, bottom = CauriSpacing.l),
@@ -118,7 +118,9 @@ private fun Header(gap: Long, since: Instant?, onBack: () -> Unit) {
             )
             if (since != null) {
                 Text(
-                    text = stringResource(R.string.cash_split_since, formatMoment(since)),
+                    text =
+                    accountName?.let { stringResource(R.string.cash_split_since_balance, it, formatMoment(since)) }
+                        ?: stringResource(R.string.cash_split_since, formatMoment(since)),
                     style = MaterialTheme.typography.bodySmall,
                     color = palette.muted,
                 )
@@ -192,9 +194,9 @@ private fun AddExpenseButton(onClick: () -> Unit) {
     }
 }
 
-// « Reste non identifié », recorded as « Divers cash » for the user to file later.
+// « Reste non identifié », recorded as « Divers cash » for the user to file later; nothing for a digital account.
 @Composable
-private fun Rest(rest: Long) {
+private fun Rest(rest: Long, digital: Boolean) {
     val palette = CauriTheme.palette
     Column(
         modifier = Modifier.padding(horizontal = CauriSpacing.xs),
@@ -214,7 +216,9 @@ private fun Rest(rest: Long) {
             )
         }
         Text(
-            text = stringResource(R.string.cash_split_rest_hint),
+            text = stringResource(
+                if (digital) R.string.cash_split_rest_hint_balance else R.string.cash_split_rest_hint,
+            ),
             style = MaterialTheme.typography.bodySmall,
             color = palette.muted,
         )

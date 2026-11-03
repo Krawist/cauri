@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="keypad_delete">Delete</string>
     <string name="moment_date">on %1$s</string>
     <string name="moment_time_pattern">h:mm a</string>
     <string name="moment_time_pattern_hour">h a</string>

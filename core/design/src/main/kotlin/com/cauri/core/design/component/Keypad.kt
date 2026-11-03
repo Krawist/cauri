@@ -1,4 +1,4 @@
-package com.cauri.feature.transactions.entry
+package com.cauri.core.design.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,10 +20,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.cauri.core.design.R
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
-import com.cauri.feature.transactions.R
 
 private val KeyHeight = 56.dp
 private val KeyShape = RoundedCornerShape(16.dp)
@@ -33,7 +33,7 @@ private val Rows = listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("
 
 /** Numeric keypad of the amount: [onDigits] gets a digit or « 000 », [onDelete] erases the last digit. */
 @Composable
-internal fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
+fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
         Rows.forEach { keys ->
             Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
@@ -64,7 +64,7 @@ private fun RowScope.DigitKey(label: String, onClick: () -> Unit) {
 
 @Composable
 private fun RowScope.DeleteKey(onClick: () -> Unit) {
-    val description = stringResource(R.string.transactions_delete)
+    val description = stringResource(R.string.keypad_delete)
     Box(
         modifier = Modifier
             .weight(1f)

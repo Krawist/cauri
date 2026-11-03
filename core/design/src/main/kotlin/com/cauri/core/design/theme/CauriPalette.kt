@@ -38,6 +38,10 @@ import androidx.compose.ui.graphics.Color
  * @property blobLagoon Blurred lagoon shape drawn behind the content of a screen.
  * @property blobGold Blurred gold shape drawn behind the content of a screen.
  * @property blobCoral Blurred coral shape drawn behind the content of a screen.
+ * @property mtn MTN's yellow, behind the MTN MoMo mark of an account; the same in both themes.
+ * @property onMtn Text drawn on [mtn].
+ * @property orange Orange's orange, behind the Orange Money mark of an account; the same in both themes.
+ * @property onOrange Text drawn on [orange].
  */
 @Immutable
 data class CauriPalette(
@@ -71,6 +75,10 @@ data class CauriPalette(
     val blobLagoon: Color,
     val blobGold: Color,
     val blobCoral: Color,
+    val mtn: Color,
+    val onMtn: Color,
+    val orange: Color,
+    val onOrange: Color,
 )
 
 internal val LightPalette = CauriPalette(
@@ -105,6 +113,10 @@ internal val LightPalette = CauriPalette(
     blobLagoon = Color(0x802BB3A8),
     blobGold = Color(0x99E8C27A),
     blobCoral = Color(0x6BF0997B),
+    mtn = Color(0xFFFFCC00),
+    onMtn = Color(0xFF1A1A1A),
+    orange = Color(0xFFFF7900),
+    onOrange = Color(0xFFFFFFFF),
 )
 
 internal val DarkPalette = CauriPalette(
@@ -138,6 +150,10 @@ internal val DarkPalette = CauriPalette(
     blobLagoon = Color(0x8C0F7B76),
     blobGold = Color(0x738A6420),
     blobCoral = Color(0x668E3B2C),
+    mtn = Color(0xFFFFCC00),
+    onMtn = Color(0xFF1A1A1A),
+    orange = Color(0xFFFF7900),
+    onOrange = Color(0xFFFFFFFF),
 )
 
 internal val LocalCauriPalette = staticCompositionLocalOf { LightPalette }

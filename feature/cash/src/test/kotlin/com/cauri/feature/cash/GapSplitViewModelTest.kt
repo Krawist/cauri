@@ -1,11 +1,15 @@
 package com.cauri.feature.cash
 
 import androidx.lifecycle.SavedStateHandle
+import com.cauri.core.data.model.Account
+import com.cauri.core.data.model.AccountBalance
+import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.ReconciledExpense
+import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeHabitRepository
@@ -29,6 +33,7 @@ import org.junit.jupiter.api.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GapSplitViewModelTest {
     private val cashCounts = FakeCashCountRepository()
+    private val accounts = FakeAccountRepository()
     private val habits = FakeHabitRepository()
     private val categories = FakeCategoryRepository()
     private val transactions = FakeTransactionRepository()
@@ -38,6 +43,7 @@ internal class GapSplitViewModelTest {
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
+        accounts.accounts.value = listOf(cash(), orangeMoney())
         cashCounts.balance.value = CashBalance(amount = 7_500, countedAt = Instant.EPOCH, expensesSinceCount = 0)
         habits.habits.value = listOf(Habit(id = 1, name = "Moto", amount = 500, categoryId = 3))
         categories.categories.value = listOf(
@@ -47,6 +53,7 @@ internal class GapSplitViewModelTest {
         viewModel = GapSplitViewModel(
             savedState = SavedStateHandle(mapOf("counted" to 3_000L, "expected" to 7_500L)),
             cashCounts = cashCounts,
+            accounts = accounts,
             habits = habits,
             categories = categories,
             transactions = transactions,
@@ -135,10 +142,14 @@ internal class GapSplitViewModelTest {
 
             // then
             transactions.reconciliations shouldContainExactly listOf(
-                listOf(
-                    ReconciledExpense(amount = 2_000, categoryId = 3, note = "Moto"),
-                    ReconciledExpense(amount = 2_500, categoryId = null, note = null),
-                ) to clock.instant(),
+                FakeTransactionRepository.Reconciliation(
+                    accountId = 1,
+                    expenses = listOf(
+                        ReconciledExpense(amount = 2_000, categoryId = 3, note = "Moto"),
+                        ReconciledExpense(amount = 2_500, categoryId = null, note = null),
+                    ),
+                    at = clock.instant(),
+                ),
             )
         }
 
@@ -154,4 +165,49 @@ internal class GapSplitViewModelTest {
             viewModel.uiState.value.saved.shouldBeTrue()
         }
     }
+
+    @Nested
+    inner class DigitalAccount {
+        @Test
+        fun `should record the typed expenses and the balance, nothing for the rest`() {
+            // given
+            accounts.balances.value = listOf(
+                AccountBalance(account = orangeMoney(), amount = 5_000, at = Instant.EPOCH),
+            )
+            val split = GapSplitViewModel(
+                savedState = SavedStateHandle(mapOf("counted" to 4_000L, "expected" to 5_000L, "accountId" to 2L)),
+                cashCounts = cashCounts,
+                accounts = accounts,
+                habits = habits,
+                categories = categories,
+                transactions = transactions,
+                clock = clock,
+            )
+            split.onAddExpense(Category(id = 3, name = "Transport", nature = CategoryNature.EXPENSE))
+            split.onAmountChange(key = "added-0", amount = "600")
+
+            // when
+            split.onSave()
+
+            // then
+            transactions.reconciliations shouldContainExactly listOf(
+                FakeTransactionRepository.Reconciliation(
+                    accountId = 2,
+                    expenses = listOf(ReconciledExpense(amount = 600, categoryId = 3, note = null)),
+                    at = clock.instant(),
+                ),
+            )
+            accounts.recordedBalances shouldContainExactly listOf(Triple(2L, 4_000L, clock.instant()))
+        }
+    }
+
+    private fun cash() = Account(id = 1, name = "Cash", kind = AccountKind.CASH, provider = "CASH", currency = "XAF")
+
+    private fun orangeMoney() = Account(
+        id = 2,
+        name = "Orange Money",
+        kind = AccountKind.MOBILE_MONEY,
+        provider = "ORANGE_MONEY",
+        currency = "XAF",
+    )
 }

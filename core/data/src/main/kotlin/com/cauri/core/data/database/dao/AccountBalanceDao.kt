@@ -1,6 +1,7 @@
 package com.cauri.core.data.database.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import com.cauri.core.data.database.entity.AccountBalanceEntity
 import kotlinx.coroutines.flow.Flow
@@ -13,4 +14,8 @@ internal interface AccountBalanceDao {
             "WHERE o.accountId = b.accountId AND (o.at > b.at OR (o.at = b.at AND o.id > b.id)))",
     )
     fun observeLatest(): Flow<List<AccountBalanceEntity>>
+
+    /** Inserts [balance], typed by the user. */
+    @Insert
+    suspend fun insert(balance: AccountBalanceEntity)
 }

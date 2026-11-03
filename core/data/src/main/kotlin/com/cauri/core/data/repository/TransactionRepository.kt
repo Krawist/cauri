@@ -51,10 +51,10 @@ interface TransactionRepository {
     suspend fun recordCashExpense(amount: Long, categoryId: Long?, note: String, occurredAt: Instant): Long
 
     /**
-     * Records [expenses], the split of a count's gap, as confirmed cash expenses made at [countedAt], the time of the
-     * count, which already takes them into account. All or nothing.
+     * Records [expenses], the split of a gap, as confirmed expenses on [accountId] made at [at]: the time of the cash
+     * count or of the balance typed, which already takes them into account. All or nothing.
      */
-    suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant)
+    suspend fun recordReconciliation(accountId: Long, expenses: List<ReconciledExpense>, at: Instant)
 
     /** Whether cash was withdrawn after [since], a withdrawal « Rien dépensé » left aside. */
     suspend fun hasCashWithdrawalSince(since: Instant): Boolean

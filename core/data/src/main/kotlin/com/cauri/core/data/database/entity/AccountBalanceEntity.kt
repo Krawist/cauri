@@ -7,14 +7,15 @@ import androidx.room.PrimaryKey
 import java.time.Instant
 
 /**
- * A balance of an account, as the operator's message gave it after an operation. The latest one, by [at], is the
- * balance shown for the account.
+ * A balance of an account, as the operator's message gave it after an operation or as the user typed it. The latest
+ * one, by [at], read or typed, is the balance shown for the account.
  *
  * @property id Generated identifier.
  * @property accountId Account it is the balance of.
  * @property amount Balance in minor units of the account's currency; negative for an overdrawn bank account.
  * @property at When the account had this balance: the time of the operation.
- * @property rawSignalId Signal the balance was read in. A signal gives at most one balance.
+ * @property rawSignalId Signal the balance was read in, `null` for a balance the user typed. A signal gives at most one
+ *   balance.
  */
 @Entity(
     tableName = "account_balances",
@@ -29,5 +30,5 @@ internal data class AccountBalanceEntity(
     val accountId: Long,
     val amount: Long,
     val at: Instant,
-    val rawSignalId: Long,
+    val rawSignalId: Long?,
 )

@@ -79,6 +79,8 @@ private fun CauriPalette.tokens(): List<Pair<String, Color>> = listOf(
     "blobLagoon" to blobLagoon,
     "blobGold" to blobGold,
     "blobCoral" to blobCoral,
+    "mtn" to mtn,
+    "orange" to orange,
 )
 
 @Preview(name = "Light")

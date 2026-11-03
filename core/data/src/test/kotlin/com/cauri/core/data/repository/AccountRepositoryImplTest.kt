@@ -10,7 +10,6 @@ import com.cauri.core.data.model.Account
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CASH_PROVIDER
 import com.cauri.core.data.model.NewAccount
-import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
@@ -130,7 +129,7 @@ internal class AccountRepositoryImplTest {
         }
 
         @Test
-        fun `should leave out an account whose messages gave no balance`() = runTest {
+        fun `should list an account without balance yet, without amount`() = runTest {
             // given
             repository.createAccount(
                 NewAccount(name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF"),
@@ -140,7 +139,34 @@ internal class AccountRepositoryImplTest {
             val balances = repository.balances.first()
 
             // then
-            balances.shouldBeEmpty()
+            balances.map { it.account.name to it.amount } shouldContainExactly listOf("UBA" to null)
+        }
+    }
+
+    @Nested
+    inner class RecordBalance {
+        @Test
+        fun `should make the balance typed the account's, until a newer message`() = runTest {
+            // given
+            val omId = repository.createAccount(
+                NewAccount(
+                    name = "Orange Money",
+                    kind = AccountKind.MOBILE_MONEY,
+                    provider = "ORANGE_MONEY",
+                    currency = "XAF",
+                ),
+            )
+            val merges = database.transactionMergeDao()
+            merges.insertBalance(balance(accountId = omId, amount = 5_000, at = 1_000, rawSignalId = signal()))
+            repository.recordBalance(accountId = omId, amount = 4_000, at = Instant.ofEpochSecond(2_000))
+            val typed = repository.balances.first().single().amount
+
+            // when
+            merges.insertBalance(balance(accountId = omId, amount = 4_500, at = 3_000, rawSignalId = signal()))
+
+            // then
+            typed shouldBe 4_000L
+            repository.balances.first().single().amount shouldBe 4_500L
         }
     }
 

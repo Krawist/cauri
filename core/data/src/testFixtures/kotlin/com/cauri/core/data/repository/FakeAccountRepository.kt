@@ -3,6 +3,7 @@ package com.cauri.core.data.repository
 import com.cauri.core.data.model.Account
 import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.NewAccount
+import java.time.Instant
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /** In-memory [AccountRepository] for tests: created accounts get the ids 2, 3, 4… in order, Cash being 1. */
@@ -15,6 +16,13 @@ class FakeAccountRepository : AccountRepository {
     override val accounts = MutableStateFlow(emptyList<Account>())
 
     override val balances = MutableStateFlow(emptyList<AccountBalance>())
+
+    /** Balances typed through [recordBalance], each with its account and time. */
+    val recordedBalances = mutableListOf<Triple<Long, Long, Instant>>()
+
+    override suspend fun recordBalance(accountId: Long, amount: Long, at: Instant) {
+        recordedBalances += Triple(accountId, amount, at)
+    }
 
     override suspend fun createAccounts(accounts: List<NewAccount>) {
         accounts.forEach { createAccount(it) }

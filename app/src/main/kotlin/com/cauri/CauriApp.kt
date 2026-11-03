@@ -31,6 +31,7 @@ import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.feature.cash.cashGraph
+import com.cauri.feature.cash.navigateToBalanceGap
 import com.cauri.feature.cash.navigateToCashCount
 import com.cauri.feature.home.HomeGraph
 import com.cauri.feature.home.homeGraph
@@ -140,6 +141,7 @@ private fun CauriNavHost(
                 onCountCash = { navController.navigateToCashCount() },
                 onOpenSettings = { navController.navigateToSettings() },
                 onEditTransaction = { editedTransaction = it },
+                onSplitBalanceGap = navController::navigateToBalanceGap,
             )
             activityGraph(onEditTransaction = { editedTransaction = it })
             placeholderTabs()

@@ -40,8 +40,16 @@ class FakeTransactionRepository : TransactionRepository {
     val detected = mutableListOf<DetectedOperation>()
     val cashExpenses = mutableListOf<CashExpense>()
 
-    /** Expenses recorded by [recordReconciliation], with the time of their count. */
-    val reconciliations = mutableListOf<Pair<List<ReconciledExpense>, Instant>>()
+    /**
+     * A split of a gap recorded by [recordReconciliation].
+     *
+     * @property accountId Account of the expenses.
+     * @property expenses Expenses recorded.
+     * @property at Time of the count or of the balance typed.
+     */
+    data class Reconciliation(val accountId: Long, val expenses: List<ReconciledExpense>, val at: Instant)
+
+    val reconciliations = mutableListOf<Reconciliation>()
     private var nextId = 1L
 
     override suspend fun recordWithdrawal(withdrawal: Withdrawal) {
@@ -74,8 +82,8 @@ class FakeTransactionRepository : TransactionRepository {
         return id
     }
 
-    override suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant) {
-        reconciliations += expenses to countedAt
+    override suspend fun recordReconciliation(accountId: Long, expenses: List<ReconciledExpense>, at: Instant) {
+        reconciliations += Reconciliation(accountId = accountId, expenses = expenses, at = at)
     }
 
     /** What [hasCashWithdrawalSince] answers. */

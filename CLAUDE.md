@@ -379,6 +379,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   history stays the default, totalling the current month; a period narrows the lines and the totals, the filters and the
   search narrow the lines only. `MonthSpending` became `Spending`, computed by the view model. Checked on the Galaxy S23
   in light mode: a search, the sheet, the sort by amount. The range of dates not tried on a phone. Next: CAU-52.
+- [ ] **CAU-52** — the balance of a digital account typed by the user: by decision, a tap on an account of « Tes
+  comptes » opens `BalanceSheet` (`BalanceViewModel`, `:feature:home`): « Solde Orange Money », the balance typed, «
+  Affiché : 5 000 F » (by decision the balance expected is the one shown) and the gap. « Enregistrer » keeps it
+  (`AccountRepository.recordBalance`, `account_balances` with no signal, database v11), the gap left unsplit creating
+  nothing; with money missing, « Répartir l'écart » opens, by decision, the split screen of the cash count
+  (`GapSplitRoute(accountId)`, `navigateToBalanceGap`): no habits, « + Autre dépense » recording confirmed expenses on
+  the account (`recordReconciliation(accountId, …)`), the rest recording nothing, then the balance. A balance typed
+  above the one shown records no income (by decision). The latest balance, read or typed, wins (CAU-25). An account
+  without balance yet now shows in « Tes comptes » with « — », its first balance without gap. Checked on the Galaxy S23
+  in light mode: 11 000 F shown, 10 000 F typed, 600 F split to a category, the balance 10 000 F. With the updated
+  mockup, « Tes comptes » became « Mes comptes », right under the cash and above the habits (by decision): one glass
+  card per account scrolling sideways, edge to edge, its mark (MTN yellow, Orange orange, a bank's columns: `mtn` and
+  `orange` in the palette), its name and its balance; the dashed « + » at the end opens « Ajouter un compte »
+  (`AddAccountSheet`, `AddAccountViewModel`), as the bank list of the onboarding: a glass screen of its own, one search
+  over the mobile money services not followed yet then the banks of `knownBanks`, glass rows ticked several at once, «
+  Ajouter 2 comptes »; « Disponible aujourd'hui » waits for the budgets (CAU-46). The balance sheet is a glass screen of
+  its own as the quick entry, the balance typed on Cauri's keypad, never the phone's (`Keypad` moved to `:core:design`).
+  Next: CAU-54.
 
 Update this section at the end of each ticket.
 

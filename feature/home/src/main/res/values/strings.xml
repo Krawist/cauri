@@ -5,8 +5,28 @@
     <string name="home_account_label">Compte repéré</string>
     <string name="home_account_text">Cauri a reconnu des messages %1$s. Il peut en tirer tes paiements, que tu confirmeras toujours. Tu pourras changer d\'avis dans Réglages.</string>
     <string name="home_account_title">Suivre ton compte %1$s ?</string>
+    <string name="home_add_account_bank">Banque</string>
+    <plurals name="home_add_account_done">
+        <item quantity="one">Ajouter %d compte</item>
+        <item quantity="many">Ajouter %d comptes</item>
+        <item quantity="other">Ajouter %d comptes</item>
+    </plurals>
+    <string name="home_add_account_mobile">Mobile Money</string>
+    <string name="home_add_account_none">Aucun compte trouvé</string>
+    <string name="home_add_account_search">Rechercher un compte</string>
+    <string name="home_add_account_title">Ajouter un compte</string>
     <string name="home_amount" translatable="false">%1$s F</string>
-    <string name="home_balances_label">Tes comptes</string>
+    <string name="home_balance_even">Juste</string>
+    <string name="home_balance_hint">Tape le solde que montre l\'app de ton opérateur.</string>
+    <string name="home_balance_missing">il manque %1$s F</string>
+    <string name="home_balance_more">%1$s F de plus</string>
+    <string name="home_balance_none" translatable="false">—</string>
+    <string name="home_balance_save">Enregistrer</string>
+    <string name="home_balance_shown">Affiché : %1$s F</string>
+    <string name="home_balance_split">Répartir l\'écart</string>
+    <string name="home_balance_title">Solde %1$s</string>
+    <string name="home_balance_type">Taper le solde</string>
+    <string name="home_balances_label">Mes comptes</string>
     <string name="home_capture_check">Vérifier</string>
     <string name="home_capture_label">Détection en pause</string>
     <string name="home_capture_text">Aucun message de tes banques ni de Mobile Money depuis plus d\'un mois. Ton téléphone a peut-être arrêté Cauri, ou retiré la lecture des notifications.</string>
@@ -52,6 +72,8 @@
     <string name="home_habits_hint">Fais glisser une habitude par sa poignée pour changer l\'ordre de la ligne.</string>
     <string name="home_habits_reorder">Réorganiser</string>
     <string name="home_habits_title">Mes habitudes</string>
+    <string name="home_mark_mtn" translatable="false">MTN</string>
+    <string name="home_mark_orange" translatable="false">OM</string>
     <string name="home_pending_title">À confirmer</string>
     <string name="home_pending_transfer" translatable="false">%1$s → %2$s</string>
     <string name="home_separator" translatable="false">" · "</string>

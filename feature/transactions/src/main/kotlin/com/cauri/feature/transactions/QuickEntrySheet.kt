@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.Account
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.Category
+import com.cauri.core.design.component.Keypad
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.component.screenBackdropShapes
@@ -53,7 +54,6 @@ import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.transactions.entry.EntryChip
 import com.cauri.feature.transactions.entry.EntryChipHeight
 import com.cauri.feature.transactions.entry.EntryHeader
-import com.cauri.feature.transactions.entry.Keypad
 import com.cauri.feature.transactions.entry.QuickEntryActions
 import com.cauri.feature.transactions.entry.QuickEntryType
 import com.cauri.feature.transactions.entry.QuickEntryUiState

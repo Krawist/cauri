@@ -41,7 +41,6 @@
     <string name="transactions_activity_yesterday">Yesterday</string>
     <string name="transactions_amount_too_high">The amount cannot exceed %1$s F</string>
     <string name="transactions_close">Close</string>
-    <string name="transactions_delete">Delete</string>
     <string name="transactions_edit_account">Account</string>
     <string name="transactions_edit_all_categories">All…</string>
     <string name="transactions_edit_amount">Amount</string>
