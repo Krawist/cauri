@@ -476,6 +476,21 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   the Galaxy S23 with made-up stops in Douala on 3 days: the notification and its buttons, « Oui » opening the screen
   there, two cards swiped, « Non, ignorer ». `Modifier.bleed` moved to `:core:design`, for « Mes comptes » and these
   cards. The worker over a real day and its battery not checked. Next: CAU-36.
+- [ ] **CAU-36** — visits to shops become cards to confirm (`VisitRepository`, `VisitService` with JVM tests,
+  database v16 then v17 with `visits.transactionId`): by decision, leaving a shop that brings a reminder with nothing
+  paid during the visit creates a cash expense « à confirmer » (`TransactionOrigin.VISIT`, at 0 so that nothing counts
+  before the user says what, the place's category, its usual amount as `proposedAmount`: the median of the expenses
+  there, none before the first), which is, by decision, the same card as the operations read in messages (its gold pin,
+  « ● Cash · Visite de 25 min · … », the usual amount or « Montant ? », the categories with the place's first, ✓, the
+  swipes) and opens the same edit sheet, the usual amount filled in. A payment read in a message or typed from the entry
+  to 15 minutes after the exit, by decision, takes the place of the visit (`attachTransactions`, on leaving, after each
+  message read and when Accueil opens): the card goes. By decision, a card waits until the next cash count: « Répartir
+  l'écart » lists the visits since the count first (« Visite de 25 min », `GapLineSource`), the amount typed confirms
+  the card, the others are set aside (`settle`). The cards waiting are left out of « Activité » and of the expenses
+  since the count. The notification « Combien as-tu dépensé ? » and the evening recap come with the reminder engine
+  (CAU-37+, by decision). Checked on the Galaxy S23 in dark mode with a made-up shop and simulated visits: the card at
+  its usual amount, the sheet, « Rien dépensé ». The split of a visit in a count, a message come during a real visit not
+  tried on a phone. Next: CAU-37.
 
 Update this section at the end of each ticket.
 

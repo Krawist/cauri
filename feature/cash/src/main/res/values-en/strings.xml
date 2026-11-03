@@ -30,6 +30,7 @@
     <string name="cash_split_amount_of">Amount for %1$s</string>
     <string name="cash_split_assigned">Split %1$s F</string>
     <string name="cash_split_from_habit">One of your habits</string>
+    <string name="cash_split_from_visit">Visit of %1$d min</string>
     <string name="cash_split_noticed">Cauri noticed these moments</string>
     <string name="cash_split_of">of %1$s F</string>
     <string name="cash_split_pick_category">In which category?</string>

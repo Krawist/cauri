@@ -9,9 +9,11 @@ import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeConfirmationRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
+import com.cauri.core.data.repository.FakeVisitRepository
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import java.time.Clock
 import java.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,13 +30,14 @@ internal class ConfirmationViewModelTest {
     private val transactions = FakeTransactionRepository()
     private val categories = FakeCategoryRepository()
     private val confirmations = FakeConfirmationRepository()
+    private val visits = FakeVisitRepository()
     private lateinit var viewModel: ConfirmationViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         categories.suggestions[EntryType.EXPENSE] = listOf(food(), snacks())
-        viewModel = ConfirmationViewModel(transactions, categories, confirmations)
+        viewModel = ConfirmationViewModel(transactions, categories, confirmations, visits, Clock.systemUTC())
     }
 
     @AfterEach
@@ -171,4 +174,40 @@ internal class ConfirmationViewModelTest {
     private fun food() = Category(id = 10, name = "Alimentation", nature = CategoryNature.EXPENSE)
 
     private fun snacks() = Category(id = 11, name = "Snacks", nature = CategoryNature.EXPENSE)
+
+    @Nested
+    inner class Visits {
+        @Test
+        fun `should have the payments of the visits take their place first`() {
+            // then
+            visits.attachRuns shouldBe 1
+        }
+
+        @Test
+        fun `should propose the usual amount of a shop visited`() {
+            // when
+            transactions.pending.value = listOf(
+                PendingOperation(
+                    transactionId = 9,
+                    accountId = 1,
+                    type = PendingType.EXPENSE,
+                    amount = 0,
+                    fees = 0,
+                    foreignAmount = null,
+                    foreignCurrency = null,
+                    accountName = "Cash",
+                    accountKind = AccountKind.CASH,
+                    toAccountName = null,
+                    toAccountKind = null,
+                    counterparty = "Marché Mokolo",
+                    occurredAt = Instant.ofEpochSecond(1_000),
+                    proposedAmount = 2_000,
+                    stayMinutes = 25,
+                ),
+            )
+
+            // then
+            viewModel.uiState.value.cards.map { it.amount } shouldContainExactly listOf(2_000L)
+        }
+    }
 }

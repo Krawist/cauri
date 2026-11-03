@@ -53,9 +53,11 @@ internal fun GapLineRow(line: GapLine, onAmountChange: (String) -> Unit) {
                 color = palette.ink,
             )
             Text(
-                text = stringResource(
-                    if (line.fromHabit) R.string.cash_split_from_habit else R.string.cash_split_added,
-                ),
+                text = when (line.source) {
+                    GapLineSource.HABIT -> stringResource(R.string.cash_split_from_habit)
+                    GapLineSource.VISIT -> stringResource(R.string.cash_split_from_visit, line.visitMinutes ?: 0)
+                    GapLineSource.ADDED -> stringResource(R.string.cash_split_added)
+                },
                 style = MaterialTheme.typography.bodySmall,
                 color = palette.muted,
             )

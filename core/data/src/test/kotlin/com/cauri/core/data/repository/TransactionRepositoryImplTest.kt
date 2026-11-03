@@ -59,6 +59,7 @@ internal class TransactionRepositoryImplTest {
             database.transactionMergeDao(),
             database.transferLinkDao(),
             database.accountDao(),
+            database.visitDao(),
             DuplicateServiceImpl(),
             CLOCK,
         )

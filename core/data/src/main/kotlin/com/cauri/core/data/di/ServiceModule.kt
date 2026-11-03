@@ -20,11 +20,15 @@ import com.cauri.core.data.service.ProposalService
 import com.cauri.core.data.service.ProposalServiceImpl
 import com.cauri.core.data.service.TransferLinkService
 import com.cauri.core.data.service.TransferLinkServiceImpl
+import com.cauri.core.data.service.VisitService
+import com.cauri.core.data.service.VisitServiceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+// One binding per service of the module.
+@Suppress("TooManyFunctions")
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class ServiceModule {
@@ -54,6 +58,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindPlaceService(impl: PlaceServiceImpl): PlaceService
+
+    @Binds
+    abstract fun bindVisitService(impl: VisitServiceImpl): VisitService
 
     @Binds
     abstract fun bindProposalService(impl: ProposalServiceImpl): ProposalService

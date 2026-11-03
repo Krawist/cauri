@@ -32,6 +32,7 @@
     <string name="home_capture_text">Aucun message de tes banques ni de Mobile Money depuis plus d\'un mois. Ton téléphone a peut-être arrêté Cauri, ou retiré la lecture des notifications.</string>
     <string name="home_capture_title">Cauri ne reçoit plus tes messages</string>
     <string name="home_card_amount_ok">OK</string>
+    <string name="home_card_amount_to_type">Montant ?</string>
     <string name="home_card_confirm">Valider</string>
     <string name="home_card_confirmed">Confirmé</string>
     <string name="home_card_edit">Modifier</string>
@@ -41,6 +42,7 @@
     <string name="home_card_kind_income">Argent reçu</string>
     <string name="home_card_kind_payment">Paiement</string>
     <string name="home_card_kind_transfer">Transfert entre tes comptes</string>
+    <string name="home_card_kind_visit">Visite de %1$d min</string>
     <string name="home_card_kind_withdrawal">Retrait</string>
     <string name="home_card_nothing_spent">Rien dépensé</string>
     <string name="home_card_set_aside">Mis de côté</string>

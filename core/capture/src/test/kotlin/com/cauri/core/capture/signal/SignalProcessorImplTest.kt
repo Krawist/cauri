@@ -8,6 +8,7 @@ import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeRawSignalRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
 import com.cauri.core.data.repository.FakeTransferRepository
+import com.cauri.core.data.repository.FakeVisitRepository
 import com.cauri.core.parsing.MessageParserImpl
 import com.cauri.core.parsing.model.Direction
 import com.cauri.core.parsing.model.MessageKind
@@ -16,6 +17,7 @@ import com.cauri.core.parsing.model.TemplateCatalog
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import java.time.Clock
 import java.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -28,6 +30,7 @@ internal class SignalProcessorImplTest {
     private val transactions = FakeTransactionRepository()
     private val transfers = FakeTransferRepository()
     private val preferences = FakeUserPreferencesRepository()
+    private val visits = FakeVisitRepository()
 
     // A made-up template: the processing, not the operators' formats, is tested here.
     private val processor = SignalProcessorImpl(
@@ -55,6 +58,8 @@ internal class SignalProcessorImplTest {
         transactionRepository = transactions,
         transferRepository = transfers,
         preferencesRepository = preferences,
+        visitRepository = visits,
+        clock = Clock.systemUTC(),
     )
 
     @Nested

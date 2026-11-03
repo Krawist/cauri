@@ -7,8 +7,10 @@ import com.cauri.core.data.repository.AccountRepository
 import com.cauri.core.data.repository.RawSignalRepository
 import com.cauri.core.data.repository.TransactionRepository
 import com.cauri.core.data.repository.TransferRepository
+import com.cauri.core.data.repository.VisitRepository
 import com.cauri.core.parsing.MessageParser
 import com.cauri.core.parsing.model.ReceivedMessage
+import java.time.Clock
 import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,6 +31,8 @@ internal class SignalProcessorImpl @Inject constructor(
     private val transactionRepository: TransactionRepository,
     private val transferRepository: TransferRepository,
     private val preferencesRepository: UserPreferencesRepository,
+    private val visitRepository: VisitRepository,
+    private val clock: Clock,
 ) : SignalProcessor {
     // The listener and the screens may ask at the same time: a signal must be read only once.
     private val mutex = Mutex()
@@ -57,6 +61,8 @@ internal class SignalProcessorImpl @Inject constructor(
             }
             // A transfer between two accounts comes as two messages: once both are read, they become one transfer.
             transferRepository.linkTransfers()
+            // A payment read during a visit to a shop is what was spent there.
+            visitRepository.attachTransactions(clock.instant())
         }
     }
 

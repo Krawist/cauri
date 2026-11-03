@@ -12,8 +12,10 @@ import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.TransactionRepository
+import com.cauri.core.data.repository.VisitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Clock
+import java.time.Duration
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +25,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * Split of the money missing after a count ([GapSplitRoute]): the habits as moments Cauri noticed, the expenses the
+ * Split of the money missing after a count ([GapSplitRoute]): the visits to shops and the habits as moments Cauri
+ * noticed, the expenses the
  * user adds, and the rest as « Divers cash ». Only typed amounts count. For the balance typed of a digital account
  * (CAU-52), there are no habits and the rest records nothing.
  */
@@ -35,6 +38,7 @@ internal class GapSplitViewModel @Inject constructor(
     private val cashCounts: CashCountRepository,
     private val accounts: AccountRepository,
     habits: HabitRepository,
+    private val visits: VisitRepository,
     categories: CategoryRepository,
     private val transactions: TransactionRepository,
     private val clock: Clock,
@@ -61,13 +65,26 @@ internal class GapSplitViewModel @Inject constructor(
                     GapLine(
                         key = "habit-${it.id}",
                         name = it.name,
-                        fromHabit = true,
+                        source = GapLineSource.HABIT,
                         hint = it.amount,
                         categoryId = it.categoryId,
                         note = it.name,
                     )
                 }
-                update { it.copy(since = since, lines = lines + it.lines) }
+                // The visits to shops since the count first, the latest first: where cash most likely went.
+                val visited = visits.waiting.first().map {
+                    GapLine(
+                        key = "visit-${it.transactionId}",
+                        name = it.placeName,
+                        source = GapLineSource.VISIT,
+                        hint = it.proposedAmount,
+                        categoryId = it.categoryId,
+                        note = null,
+                        visitMinutes = Duration.between(it.enteredAt, it.leftAt).toMinutes(),
+                        transactionId = it.transactionId,
+                    )
+                }
+                update { it.copy(since = since, lines = visited + lines + it.lines) }
             }
         }
         viewModelScope.launch {
@@ -90,7 +107,7 @@ internal class GapSplitViewModel @Inject constructor(
         val line = GapLine(
             key = "added-${addedLines++}",
             name = category.name,
-            fromHabit = false,
+            source = GapLineSource.ADDED,
             hint = null,
             categoryId = category.id,
             note = null,
@@ -100,11 +117,17 @@ internal class GapSplitViewModel @Inject constructor(
 
     override fun onSave() {
         val current = state.value
-        val expenses = current.lines.mapNotNull { line ->
+        // A visit's line confirms its card; the others record their expense.
+        val (visited, others) = current.lines.partition { it.transactionId != null }
+        val expenses = others.mapNotNull { line ->
             line.amount.toLongOrNull()?.takeIf { it > 0 }?.let {
                 ReconciledExpense(amount = it, categoryId = line.categoryId, note = line.note)
             }
         }
+        val spent = visited.mapNotNull { line ->
+            val card = line.transactionId ?: return@mapNotNull null
+            line.amount.toLongOrNull()?.takeIf { it > 0 }?.let { card to it }
+        }.toMap()
         viewModelScope.launch {
             val now = clock.instant()
             val account = accountId
@@ -121,6 +144,8 @@ internal class GapSplitViewModel @Inject constructor(
                 // The Cash account always exists.
                 val cash = accounts.accounts.first().first { it.kind == AccountKind.CASH }.id
                 transactions.recordReconciliation(accountId = cash, expenses = expenses + rest, at = now)
+                // The cards of the visits typed are confirmed, the others set aside: the count holds them.
+                visits.settle(amounts = spent, at = now)
                 cashCounts.addCount(amount = counted, countedAt = now, expectedAmount = expected)
             }
             state.update { it.copy(saved = true) }

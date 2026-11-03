@@ -49,12 +49,20 @@ private val IconBoxSize = 40.dp
 internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConfirm: () -> Unit) {
     val palette = CauriTheme.palette
     val operation = card.operation
-    val (icon, tint, background) = when (operation.type) {
-        PendingType.EXPENSE -> Triple(DesignR.drawable.ic_expense, palette.coralText, palette.coralSoft)
-        PendingType.INCOME -> Triple(DesignR.drawable.ic_income, palette.greenText, palette.greenSoft)
-        PendingType.TRANSFER -> Triple(DesignR.drawable.ic_transfer, palette.ink, palette.chip)
+    val visit = operation.stayMinutes != null
+    val (icon, tint, background) = when {
+        // A shop visited: its gold pin, as the places.
+        visit -> Triple(DesignR.drawable.ic_place, palette.goldText, palette.goldSoft)
+        operation.type == PendingType.EXPENSE -> Triple(
+            DesignR.drawable.ic_expense,
+            palette.coralText,
+            palette.coralSoft,
+        )
+        operation.type == PendingType.INCOME -> Triple(DesignR.drawable.ic_income, palette.greenText, palette.greenSoft)
+        else -> Triple(DesignR.drawable.ic_transfer, palette.ink, palette.chip)
     }
-    val kind = stringResource(kindLabel(operation))
+    val kind = operation.stayMinutes?.let { stringResource(R.string.home_card_kind_visit, it) }
+        ?: stringResource(kindLabel(operation))
     val title = operation.toAccountName?.let {
         stringResource(R.string.home_pending_transfer, operation.accountName, it)
     } ?: operation.counterparty?.let(::readableName) ?: kind
@@ -77,12 +85,11 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
                 )
                 Amount(
                     card = card,
-                    tint = if (operation.type ==
-                        PendingType.TRANSFER
-                    ) {
-                        palette.ink
-                    } else {
-                        tint
+                    tint = when {
+                        operation.type == PendingType.TRANSFER -> palette.ink
+                        // A visit spends what the user says: coral as any expense.
+                        visit -> palette.coralText
+                        else -> tint
                     },
                     onEditAmount,
                 )
@@ -188,14 +195,18 @@ private fun kindLabel(operation: PendingOperation) = when {
 }
 
 // « 5 000 F », fees included, or the amount in its own currency for a payment abroad, until the user types what it
-// cost.
+// cost; « Montant ? » for a shop visited with no usual amount yet.
 @Composable
 private fun amount(card: ConfirmationCard): String {
     val foreign = card.operation.foreignAmount
     val currency = card.operation.foreignCurrency
     if (card.amount > 0 || foreign == null || currency == null) {
         // What left the account: the fees of its message included.
-        return stringResource(R.string.home_amount, formatFcfa(card.amount + card.operation.fees))
+        return if (card.amount > 0 || foreign != null) {
+            stringResource(R.string.home_amount, formatFcfa(card.amount + card.operation.fees))
+        } else {
+            stringResource(R.string.home_card_amount_to_type)
+        }
     }
     val digits = Currency.getInstance(currency).defaultFractionDigits.coerceAtLeast(0)
     val format = NumberFormat.getNumberInstance(LocalConfiguration.current.locales[0]).apply {

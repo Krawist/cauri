@@ -4,6 +4,7 @@ import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
 import com.cauri.core.data.database.dao.TransferLinkDao
+import com.cauri.core.data.database.dao.VisitDao
 import com.cauri.core.data.database.entity.AccountBalanceEntity
 import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
@@ -25,6 +26,7 @@ import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.DuplicateService
 import java.time.Clock
+import java.time.Duration
 import java.time.Instant
 import java.util.UUID
 import javax.inject.Inject
@@ -33,32 +35,44 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
 /** Default implementation for [TransactionRepository]. */
-// One function per way the money moves on the accounts, and the edit sheet's read.
-@Suppress("TooManyFunctions")
+// One function per way the money moves on the accounts, and the edit sheet's read; one DAO per table it reads.
+@Suppress("TooManyFunctions", "LongParameterList")
 @Singleton
 internal class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
     private val mergeDao: TransactionMergeDao,
     private val transferLinkDao: TransferLinkDao,
     accountDao: AccountDao,
+    visitDao: VisitDao,
     private val duplicates: DuplicateService,
     private val clock: Clock,
 ) : TransactionRepository {
     override val pending: Flow<List<PendingOperation>> = combine(
         transactionDao.observeByStatus(TransactionStatus.DETECTED),
         accountDao.observeAll(),
-    ) { detected, accounts ->
+        visitDao.observeWithCard(),
+    ) { detected, accounts, visits ->
         val byId = accounts.associateBy { it.id }
+        // How long each visit with a card lasted, by its card.
+        val stays = visits.associate { visit ->
+            visit.transactionId to visit.leftAt?.let { Duration.between(visit.enteredAt, it).toMinutes() }
+        }
         // A fee or the Cash side of a withdrawal has no signal of its own: it rides with the operation read. A fee is
         // on its account and at its time.
         val (transfers, others) = detected.partition { it.transferGroup != null }
-        val fees = others.filter { it.rawSignalId == null && it.type == TransactionType.EXPENSE }
+        val fees = others.filter {
+            it.rawSignalId == null && it.type == TransactionType.EXPENSE && it.origin != TransactionOrigin.VISIT
+        }
             .groupBy({ it.accountId to it.occurredAt }, { it.amount })
             .mapValues { (_, amounts) -> amounts.sum() }
         fun feesOf(vararg sides: TransactionEntity?) =
             sides.filterNotNull().sumOf { fees[it.accountId to it.occurredAt] ?: 0 }
         val single = others.filter { it.rawSignalId != null }.map {
             it.toPending(byId, to = null, fees = if (it.type == TransactionType.EXPENSE) feesOf(it) else 0)
+        }
+        // A shop left with nothing paid: what was spent there in cash, the amount to type.
+        val visited = others.filter { it.origin == TransactionOrigin.VISIT }.map {
+            it.toPending(byId, to = null, fees = 0).copy(stayMinutes = stays[it.id])
         }
         val paired = transfers.groupBy { it.transferGroup }.values.mapNotNull { sides ->
             val out = sides.firstOrNull { it.type == TransactionType.TRANSFER_OUT }
@@ -71,7 +85,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
                     .toPending(byId, to = into?.accountId, fees = feesOf(out, into))
             }
         }
-        (single + paired).sortedByDescending { it.occurredAt }
+        (single + visited + paired).sortedByDescending { it.occurredAt }
     }
 
     override suspend fun getEditable(transactionId: Long): EditableTransaction? {
@@ -100,6 +114,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             pending = transaction.status == TransactionStatus.DETECTED,
             mergeId = mergeDao.getHeldMergeId(transaction.id),
             transferLinkId = transferLinkDao.getHeldLinkId(sides.map { it.id }),
+            proposedAmount = transaction.proposedAmount.takeIf { transaction.amount == 0L },
         )
     }
 
@@ -319,6 +334,8 @@ private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: 
     toAccountKind = to?.let { accounts.getValue(it).kind },
     counterparty = counterparty,
     occurredAt = occurredAt,
+    categoryId = categoryId,
+    proposedAmount = proposedAmount.takeIf { amount == 0L },
 )
 
 private fun TransactionType.toPendingType() = when (this) {

@@ -8,12 +8,14 @@ import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.Habit
+import com.cauri.core.data.model.PendingVisit
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.repository.FakeAccountRepository
 import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeHabitRepository
 import com.cauri.core.data.repository.FakeTransactionRepository
+import com.cauri.core.data.repository.FakeVisitRepository
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -35,6 +37,7 @@ internal class GapSplitViewModelTest {
     private val cashCounts = FakeCashCountRepository()
     private val accounts = FakeAccountRepository()
     private val habits = FakeHabitRepository()
+    private val visits = FakeVisitRepository()
     private val categories = FakeCategoryRepository()
     private val transactions = FakeTransactionRepository()
     private val clock = Clock.fixed(Instant.parse("2026-11-03T20:00:00Z"), ZoneOffset.UTC)
@@ -55,6 +58,7 @@ internal class GapSplitViewModelTest {
             cashCounts = cashCounts,
             accounts = accounts,
             habits = habits,
+            visits = visits,
             categories = categories,
             transactions = transactions,
             clock = clock,
@@ -72,7 +76,14 @@ internal class GapSplitViewModelTest {
         fun `should suggest the habits, grey until typed`() {
             // then
             viewModel.uiState.value.lines shouldContainExactly listOf(
-                GapLine(key = "habit-1", name = "Moto", fromHabit = true, hint = 500, categoryId = 3, note = "Moto"),
+                GapLine(
+                    key = "habit-1",
+                    name = "Moto",
+                    source = GapLineSource.HABIT,
+                    hint = 500,
+                    categoryId = 3,
+                    note = "Moto",
+                ),
             )
         }
 
@@ -122,7 +133,7 @@ internal class GapSplitViewModelTest {
             viewModel.uiState.value.lines.last() shouldBe GapLine(
                 key = "added-0",
                 name = "Transport",
-                fromHabit = false,
+                source = GapLineSource.ADDED,
                 hint = null,
                 categoryId = 3,
                 note = null,
@@ -132,6 +143,38 @@ internal class GapSplitViewModelTest {
 
     @Nested
     inner class OnSave {
+        @Test
+        fun `should confirm the card of a visit with the amount typed for it`() {
+            // given
+            visits.waiting.value = listOf(
+                PendingVisit(
+                    transactionId = 9,
+                    placeName = "Marché Mokolo",
+                    categoryId = 3,
+                    enteredAt = Instant.ofEpochSecond(1_000),
+                    leftAt = Instant.ofEpochSecond(2_500),
+                    proposedAmount = 2_000,
+                ),
+            )
+            val split = GapSplitViewModel(
+                savedState = SavedStateHandle(mapOf("counted" to 3_000L, "expected" to 7_500L)),
+                cashCounts = cashCounts,
+                accounts = accounts,
+                habits = habits,
+                visits = visits,
+                categories = categories,
+                transactions = transactions,
+                clock = clock,
+            )
+            split.onAmountChange(key = "visit-9", amount = "1500")
+
+            // when
+            split.onSave()
+
+            // then
+            visits.settled shouldContainExactly listOf(mapOf(9L to 1_500L))
+        }
+
         @Test
         fun `should record the typed expenses and the rest as miscellaneous cash, at the count`() {
             // given
@@ -179,6 +222,7 @@ internal class GapSplitViewModelTest {
                 cashCounts = cashCounts,
                 accounts = accounts,
                 habits = habits,
+                visits = visits,
                 categories = categories,
                 transactions = transactions,
                 clock = clock,

@@ -4,21 +4,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cauri.core.data.model.Category
 import com.cauri.core.data.model.EntryType
+import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.ConfirmationRepository
 import com.cauri.core.data.repository.TransactionRepository
+import com.cauri.core.data.repository.VisitRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.time.Clock
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * « À confirmer »: the cards of the operations read in messages, pre-filled with Cauri's proposal. ✓ or a swipe right
- * confirms, a swipe left sets aside (« Rien dépensé »), each with a short undo.
+ * « À confirmer »: the cards of the operations read in messages and of the shops visited with nothing paid there,
+ * pre-filled with Cauri's proposal. ✓ or a swipe right confirms, a swipe left sets aside (« Rien dépensé »), each
+ * with a short undo.
  */
 // One function per gesture of the cards.
 @Suppress("TooManyFunctions")
@@ -27,12 +32,16 @@ internal class ConfirmationViewModel @Inject constructor(
     transactions: TransactionRepository,
     private val categories: CategoryRepository,
     private val confirmations: ConfirmationRepository,
+    visits: VisitRepository,
+    clock: Clock,
 ) : ViewModel() {
     private val state = MutableStateFlow(ConfirmationUiState())
 
     val uiState: StateFlow<ConfirmationUiState> = state.asStateFlow()
 
     init {
+        // A payment typed or read during a visit takes its place: the card of the visit goes.
+        viewModelScope.launch { visits.attachTransactions(clock.instant()) }
         viewModelScope.launch {
             transactions.pending.collect { pending ->
                 val known = state.value.cards.associateBy { it.operation.transactionId }
@@ -41,9 +50,10 @@ internal class ConfirmationViewModel @Inject constructor(
                 val cards = pending.filter { it.transactionId != answered }.map { operation ->
                     known[operation.transactionId]?.copy(operation = operation) ?: ConfirmationCard(
                         operation = operation,
-                        suggested = suggestions(operation.accountId, operation.type),
+                        suggested = suggestions(operation),
                         categoryId = null,
-                        amount = operation.amount,
+                        // The usual amount of a shop visited, until the user types another.
+                        amount = operation.amount.takeIf { it > 0 } ?: operation.proposedAmount ?: 0,
                     ).let { it.copy(categoryId = it.suggested.firstOrNull()?.id) }
                 }
                 state.update { it.copy(cards = cards) }
@@ -106,14 +116,23 @@ internal class ConfirmationViewModel @Inject constructor(
 
     fun onUndoShown() = state.update { it.copy(answered = null) }
 
-    private suspend fun suggestions(accountId: Long, type: PendingType): List<Category> = when (type) {
-        PendingType.EXPENSE -> categories.suggested(
-            accountId = accountId,
-            type = EntryType.EXPENSE,
-            limit = SUGGESTIONS,
-        )
-        PendingType.INCOME -> categories.suggested(accountId = accountId, type = EntryType.INCOME, limit = SUGGESTIONS)
-        PendingType.TRANSFER -> emptyList()
+    // The categories suggested for the account and the hour; the one the operation has, a shop's default, first.
+    private suspend fun suggestions(operation: PendingOperation): List<Category> {
+        val suggested = when (operation.type) {
+            PendingType.EXPENSE -> categories.suggested(
+                accountId = operation.accountId,
+                type = EntryType.EXPENSE,
+                limit = SUGGESTIONS,
+            )
+            PendingType.INCOME -> categories.suggested(
+                accountId = operation.accountId,
+                type = EntryType.INCOME,
+                limit = SUGGESTIONS,
+            )
+            PendingType.TRANSFER -> return emptyList()
+        }
+        val own = operation.categoryId?.let { id -> categories.categories.first().firstOrNull { it.id == id } }
+        return (listOfNotNull(own) + suggested).distinctBy { it.id }.take(SUGGESTIONS)
     }
 
     // The card leaves at once; the list follows once the answer is saved.

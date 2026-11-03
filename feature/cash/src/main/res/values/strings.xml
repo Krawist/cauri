@@ -33,6 +33,7 @@
     <string name="cash_split_amount_of">Montant pour %1$s</string>
     <string name="cash_split_assigned">Réparti %1$s F</string>
     <string name="cash_split_from_habit">Une de tes habitudes</string>
+    <string name="cash_split_from_visit">Visite de %1$d min</string>
     <string name="cash_split_hint" translatable="false">≈ %1$s</string>
     <string name="cash_split_noticed">Cauri a repéré ces moments</string>
     <string name="cash_split_of">sur %1$s F</string>

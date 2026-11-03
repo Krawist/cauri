@@ -71,9 +71,9 @@ private const val MAX_AMOUNT = 10_000_000L
 private const val MAX_AMOUNT_DIGITS = 8
 
 /**
- * « À confirmer » and its count, then one card per operation Cauri read in a message, newest first, pre-filled with its
- * proposal. ✓ or a swipe right confirms, a swipe left sets aside (« Rien dépensé »), a tap on the amount edits it and a
- * tap on the card opens the edit sheet through [onEdit]. The visits come first with the places (CAU-33+).
+ * « À confirmer » and its count, then one card per operation Cauri read in a message or shop visited with nothing paid
+ * there, newest first, pre-filled with its proposal. ✓ or a swipe right confirms, a swipe left sets aside (« Rien
+ * dépensé »), a tap on the amount edits it and a tap on the card opens the edit sheet through [onEdit].
  */
 @Composable
 internal fun PendingSection(onEdit: (Long) -> Unit, viewModel: ConfirmationViewModel = hiltViewModel()) {

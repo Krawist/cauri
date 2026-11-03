@@ -4,7 +4,8 @@ import java.time.Instant
 
 /**
  * An operation Cauri read in a message and the user has not confirmed yet (« À confirmer »): one per message, a
- * transfer between two accounts being one operation, its fee riding with it.
+ * transfer between two accounts being one operation, its fee riding with it. A visit to a shop with nothing paid there
+ * is one too: a cash expense whose amount the user types.
  *
  * @property transactionId Transaction read in the message; for a transfer, its outgoing side.
  * @property accountId Account the money left, or arrived on for an income.
@@ -23,6 +24,11 @@ import java.time.Instant
  *   not a transfer.
  * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
  * @property occurredAt When the money moved.
+ * @property categoryId Category it has already, the place's default one for a visit; `null` for none.
+ * @property proposedAmount Amount Cauri proposes when [amount] is still to type, in minor units: the usual one of the
+ *   shop visited; `null` for none.
+ * @property stayMinutes How long the visit lasted, in minutes, for the card of a visit; `null` for an operation read
+ *   in a message.
  */
 data class PendingOperation(
     val transactionId: Long,
@@ -38,4 +44,7 @@ data class PendingOperation(
     val toAccountKind: AccountKind?,
     val counterparty: String?,
     val occurredAt: Instant,
+    val categoryId: Long? = null,
+    val proposedAmount: Long? = null,
+    val stayMinutes: Long? = null,
 )

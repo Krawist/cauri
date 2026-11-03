@@ -13,6 +13,8 @@ import java.time.Instant
  * @property placeId Place of the stay.
  * @property enteredAt When the user entered the place.
  * @property leftAt When the user left it; `null` while they are still there.
+ * @property transactionId Cash expense to confirm the visit created, the user having left with nothing paid there;
+ *   `null` when it created none.
  */
 @Entity(
     tableName = "visits",
@@ -31,4 +33,5 @@ internal data class VisitEntity(
     val placeId: Long,
     val enteredAt: Instant,
     val leftAt: Instant?,
+    val transactionId: Long? = null,
 )

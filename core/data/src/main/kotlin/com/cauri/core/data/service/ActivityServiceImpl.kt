@@ -21,7 +21,11 @@ internal class ActivityServiceImpl @Inject constructor() : ActivityService {
         accounts: Map<Long, AccountEntity>,
         categories: Map<Long, String>,
     ): List<ActivityLine> {
-        val shown = transactions.filter { it.status != TransactionStatus.MERGED }
+        // The card of a visit is an operation once the user says what was spent: waiting or set aside, it is none.
+        val shown = transactions.filter {
+            it.status != TransactionStatus.MERGED &&
+                (it.origin != TransactionOrigin.VISIT || it.status == TransactionStatus.CONFIRMED)
+        }
         // A fee rides with its operation, on its account and at its time: the line shows the whole amount debited.
         val (fees, moves) = shown.partition { it.isFee() }
         val feesOf = fees.groupByTo(mutableMapOf()) { it.accountId to it.occurredAt }

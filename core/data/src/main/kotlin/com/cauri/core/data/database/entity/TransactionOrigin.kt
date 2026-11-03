@@ -13,4 +13,7 @@ internal enum class TransactionOrigin {
 
     /** Created when splitting the gap of a cash count. */
     RECONCILIATION,
+
+    /** Created when the user left a shop with nothing paid there: a cash expense to confirm, its amount to type. */
+    VISIT,
 }

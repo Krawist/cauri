@@ -77,7 +77,7 @@ private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, on
         ) {
             SplitProgress(assigned = state.assigned, gap = state.gap)
             // « Cauri a repéré ces moments » only above the moments Cauri suggested.
-            if (state.lines.any { it.fromHabit }) {
+            if (state.lines.any { it.source != GapLineSource.ADDED }) {
                 Text(
                     text = stringResource(R.string.cash_split_noticed),
                     style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
@@ -244,7 +244,7 @@ private fun GapSplitContentPreview() {
                         GapLine(
                             key = "habit-1",
                             name = "Moto",
-                            fromHabit = true,
+                            source = GapLineSource.HABIT,
                             hint = 500,
                             categoryId = null,
                             note = "Moto",
@@ -253,7 +253,7 @@ private fun GapSplitContentPreview() {
                         GapLine(
                             key = "habit-2",
                             name = "Beignets",
-                            fromHabit = true,
+                            source = GapLineSource.HABIT,
                             hint = 300,
                             categoryId = null,
                             note = "Beignets",

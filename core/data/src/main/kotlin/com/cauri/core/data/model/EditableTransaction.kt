@@ -26,6 +26,8 @@ import java.time.Instant
  *   holds.
  * @property transferLinkId Link that made it a transfer out of two messages, to undo with « Séparer »; `null` when
  *   none holds.
+ * @property proposedAmount Amount Cauri proposes while [amount] is still to type, in minor units: the usual one of the
+ *   shop visited; `null` for none.
  */
 data class EditableTransaction(
     val transactionId: Long,
@@ -44,4 +46,5 @@ data class EditableTransaction(
     val pending: Boolean,
     val mergeId: Long?,
     val transferLinkId: Long?,
+    val proposedAmount: Long? = null,
 )

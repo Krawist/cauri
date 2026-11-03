@@ -24,7 +24,8 @@ internal class CashBalanceServiceImpl @Inject constructor() : CashBalanceService
         return CashBalance(
             amount = amount,
             countedAt = count.countedAt,
-            expensesSinceCount = counted.count { it.type == TransactionType.EXPENSE },
+            // The card of a visit spends nothing until the user says what: it is no expense yet.
+            expensesSinceCount = counted.count { it.type == TransactionType.EXPENSE && it.amount > 0 },
         )
     }
 }

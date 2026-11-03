@@ -76,7 +76,10 @@ internal class EditViewModel @Inject constructor(
             change {
                 EditUiState(
                     transaction = transaction,
-                    amount = transaction.amount.takeIf { amount -> amount > 0 }?.toString().orEmpty(),
+                    // The usual amount of a shop visited, until the user types another.
+                    amount = (transaction.amount.takeIf { amount -> amount > 0 } ?: transaction.proposedAmount)
+                        ?.toString()
+                        .orEmpty(),
                     accounts = it.accounts,
                     accountId = transaction.accountId,
                     categories = categoriesOf(transaction.type),
