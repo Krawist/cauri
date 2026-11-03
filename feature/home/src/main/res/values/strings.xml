@@ -11,6 +11,18 @@
     <string name="home_capture_label">Détection en pause</string>
     <string name="home_capture_text">Aucun message de tes banques ni de Mobile Money depuis plus d\'un mois. Ton téléphone a peut-être arrêté Cauri, ou retiré la lecture des notifications.</string>
     <string name="home_capture_title">Cauri ne reçoit plus tes messages</string>
+    <string name="home_card_amount_ok">OK</string>
+    <string name="home_card_confirm">Valider</string>
+    <string name="home_card_confirmed">Confirmé</string>
+    <string name="home_card_edit_amount">Modifier le montant</string>
+    <string name="home_card_ignore">Ignorer</string>
+    <string name="home_card_kind_deposit">Dépôt</string>
+    <string name="home_card_kind_income">Argent reçu</string>
+    <string name="home_card_kind_payment">Paiement</string>
+    <string name="home_card_kind_transfer">Transfert entre tes comptes</string>
+    <string name="home_card_kind_withdrawal">Retrait</string>
+    <string name="home_card_nothing_spent">Rien dépensé</string>
+    <string name="home_card_set_aside">Mis de côté</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>
     <string name="home_counted">Compté %1$s</string>
@@ -43,5 +55,7 @@
     <string name="home_pending_transfer" translatable="false">%1$s → %2$s</string>
     <string name="home_separator" translatable="false">" · "</string>
     <string name="home_settings">Réglages</string>
+    <string name="home_sign_in" translatable="false">+ %1$s</string>
+    <string name="home_sign_out" translatable="false">− %1$s</string>
     <string name="home_title">Bonjour</string>
 </resources>

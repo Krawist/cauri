@@ -36,8 +36,6 @@ import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Habit
-import com.cauri.core.data.model.PendingOperation
-import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -76,6 +74,7 @@ internal fun HomeScreen(
             CaptureHealth(onCheck = onOpenSettings)
             AccountProposal()
         },
+        pending = { PendingSection() },
     )
     state.editing?.let { draft ->
         HabitSheet(
@@ -95,6 +94,7 @@ private fun HomeContent(
     onCountCash: () -> Unit,
     onOpenSettings: () -> Unit,
     notices: @Composable () -> Unit = {},
+    pending: @Composable () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -116,8 +116,14 @@ private fun HomeContent(
             notices()
             HabitsRow(habits = state.habits, actions = actions)
             BalancesCard(balances = state.balances)
-            PendingSection(pending = state.pending)
+            pending()
         }
+        ConfirmationUndoBar(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .safeDrawingPadding()
+                .padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = UndoBarBottom),
+        )
         state.recorded?.let { recorded ->
             UndoBar(
                 message = stringResource(R.string.home_habit_recorded, recorded.name, formatFcfa(recorded.amount)),
@@ -221,19 +227,6 @@ private fun HomeContentPreview() {
                         ),
                         amount = 12_000,
                         at = Instant.now(),
-                    ),
-                ),
-                pending = listOf(
-                    PendingOperation(
-                        transactionId = 1,
-                        type = PendingType.EXPENSE,
-                        amount = 5_000,
-                        foreignAmount = null,
-                        foreignCurrency = null,
-                        accountName = "Orange Money",
-                        toAccountName = null,
-                        counterparty = "Boulangerie Saker",
-                        occurredAt = Instant.now(),
                     ),
                 ),
             ),

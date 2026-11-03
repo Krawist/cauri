@@ -4,6 +4,7 @@ import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.TransactionDao
 import com.cauri.core.data.database.dao.TransactionMergeDao
 import com.cauri.core.data.database.entity.AccountBalanceEntity
+import com.cauri.core.data.database.entity.AccountEntity
 import com.cauri.core.data.database.entity.AccountEntity.Companion.CASH_ACCOUNT_ID
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionMergeEntity
@@ -41,10 +42,10 @@ internal class TransactionRepositoryImpl @Inject constructor(
         transactionDao.observeByStatus(TransactionStatus.DETECTED),
         accountDao.observeAll(),
     ) { detected, accounts ->
-        val names = accounts.associate { it.id to it.name }
+        val byId = accounts.associateBy { it.id }
         // A fee or the Cash side of a withdrawal has no signal of its own: it rides with the operation read.
         val (transfers, others) = detected.partition { it.transferGroup != null }
-        val single = others.filter { it.rawSignalId != null }.map { it.toPending(names, to = null) }
+        val single = others.filter { it.rawSignalId != null }.map { it.toPending(byId, to = null) }
         val paired = transfers.groupBy { it.transferGroup }.values.mapNotNull { sides ->
             val out = sides.firstOrNull { it.type == TransactionType.TRANSFER_OUT }
             val into = sides.firstOrNull { it.type == TransactionType.TRANSFER_IN }
@@ -52,7 +53,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             out?.takeIf { read.isNotEmpty() }?.let { side ->
                 // One message names the agent of a withdrawal or a deposit; two messages, a transfer between the user's
                 // accounts, name only the other account, already shown.
-                side.copy(counterparty = read.singleOrNull()?.counterparty).toPending(names, to = into?.accountId)
+                side.copy(counterparty = read.singleOrNull()?.counterparty).toPending(byId, to = into?.accountId)
             }
         }
         (single + paired).sortedByDescending { it.occurredAt }
@@ -259,9 +260,10 @@ internal class TransactionRepositoryImpl @Inject constructor(
     override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }
 
-// The card of [this], an operation read in a message, with the names of its accounts.
-private fun TransactionEntity.toPending(names: Map<Long, String>, to: Long?) = PendingOperation(
+// The card of [this], an operation read in a message, with the names and kinds of its accounts.
+private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: Long?) = PendingOperation(
     transactionId = id,
+    accountId = accountId,
     type = when (type) {
         TransactionType.EXPENSE -> PendingType.EXPENSE
         TransactionType.INCOME -> PendingType.INCOME
@@ -270,8 +272,10 @@ private fun TransactionEntity.toPending(names: Map<Long, String>, to: Long?) = P
     amount = amount,
     foreignAmount = foreignAmount,
     foreignCurrency = foreignCurrency,
-    accountName = names.getValue(accountId),
-    toAccountName = to?.let(names::getValue),
+    accountName = accounts.getValue(accountId).name,
+    accountKind = accounts.getValue(accountId).kind,
+    toAccountName = to?.let { accounts.getValue(it).name },
+    toAccountKind = to?.let { accounts.getValue(it).kind },
     counterparty = counterparty,
     occurredAt = occurredAt,
 )

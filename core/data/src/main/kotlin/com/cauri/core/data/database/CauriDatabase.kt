@@ -8,6 +8,7 @@ import com.cauri.core.data.database.dao.AccountBalanceDao
 import com.cauri.core.data.database.dao.AccountDao
 import com.cauri.core.data.database.dao.CashCountDao
 import com.cauri.core.data.database.dao.CategoryDao
+import com.cauri.core.data.database.dao.ConfirmationDao
 import com.cauri.core.data.database.dao.DecisionLogDao
 import com.cauri.core.data.database.dao.HabitDao
 import com.cauri.core.data.database.dao.PlaceDao
@@ -65,6 +66,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun accountBalanceDao(): AccountBalanceDao
 
     abstract fun categoryDao(): CategoryDao
+
+    abstract fun confirmationDao(): ConfirmationDao
 
     abstract fun rawSignalDao(): RawSignalDao
 

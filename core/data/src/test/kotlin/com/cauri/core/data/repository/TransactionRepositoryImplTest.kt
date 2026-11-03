@@ -362,12 +362,15 @@ internal class TransactionRepositoryImplTest {
             pending.map { it.copy(transactionId = 0) } shouldContainExactly listOf(
                 PendingOperation(
                     transactionId = 0,
+                    accountId = momoId,
                     type = PendingType.EXPENSE,
                     amount = 2_500,
                     foreignAmount = null,
                     foreignCurrency = null,
                     accountName = "MTN MoMo",
+                    accountKind = AccountKind.MOBILE_MONEY,
                     toAccountName = null,
+                    toAccountKind = null,
                     counterparty = "Boulangerie",
                     occurredAt = Instant.ofEpochSecond(1_000),
                 ),
@@ -387,9 +390,8 @@ internal class TransactionRepositoryImplTest {
             val pending = repository.pending.first()
 
             // then
-            pending.map { Triple(it.type, it.accountName, it.toAccountName) } shouldContainExactly listOf(
-                Triple(PendingType.TRANSFER, "MTN MoMo", "Cash"),
-            )
+            pending.map { listOf(it.type, it.accountName, it.toAccountName, it.toAccountKind) } shouldContainExactly
+                listOf(listOf(PendingType.TRANSFER, "MTN MoMo", "Cash", AccountKind.CASH))
         }
 
         @Test

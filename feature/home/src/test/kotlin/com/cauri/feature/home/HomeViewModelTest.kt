@@ -10,8 +10,6 @@ import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
-import com.cauri.core.data.model.PendingOperation
-import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.UserProfile
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.repository.FakeAccountRepository
@@ -109,28 +107,6 @@ internal class HomeViewModelTest {
 
             // then
             viewModel.uiState.value.balances shouldContainExactly listOf(balance)
-        }
-
-        @Test
-        fun `should follow the operations to confirm`() {
-            // given
-            val operation = PendingOperation(
-                transactionId = 7,
-                type = PendingType.EXPENSE,
-                amount = 5_000,
-                foreignAmount = null,
-                foreignCurrency = null,
-                accountName = "Orange Money",
-                toAccountName = null,
-                counterparty = "Boulangerie",
-                occurredAt = Instant.ofEpochSecond(1_000),
-            )
-
-            // when
-            transactions.pending.value = listOf(operation)
-
-            // then
-            viewModel.uiState.value.pending shouldContainExactly listOf(operation)
         }
 
         @Test

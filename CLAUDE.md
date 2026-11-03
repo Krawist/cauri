@@ -322,7 +322,21 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   either side. `ProposalService` (JVM tests): the share of proposals confirmed unchanged, category and amount kept, per
   place, merchant or template (`ProposalRepository.acceptance`, `ProposalSource`), for the predictions of CAU-42. No
   screen confirms a detected operation yet (CAU-27): its proposal is measured once confirmed. Checked on the Galaxy
-  S23: the upgrade to v9. Next: CAU-27.
+  S23: the upgrade to v9.
+- [ ] **CAU-27** — « À confirmer » (`PendingSection`, `ConfirmationViewModel`, out of `HomeViewModel`): each card is
+  pre-filled with Cauri's proposal, the categories suggested for its account and hour (the first chosen, kept as
+  `proposedCategoryId`), none for a transfer. The card names what happened in bold (the merchant, or the two accounts of
+  a transfer), the amount signed in the colour of its type, then the account behind its dot, the kind of operation in
+  words (« Paiement », « Retrait », « Dépôt », « Transfert entre tes comptes ») and when. ✓ or a swipe right confirms, a
+  swipe left sets aside (« Rien dépensé » for an expense, « Ignorer » otherwise), the answer given once the card has
+  left the screen, a haptic tick as the finger crosses the point where letting go answers, the colour of the action
+  coming in with the swipe and the list closing smoothly; a tap on the amount types another one (asked first for a
+  payment in another currency); « Confirmé » or « Mis de côté » with « Annuler » for 4 s. `ConfirmationRepository`
+  writes each answer all or none (`ConfirmationDao`): both sides of a transfer, and the open reminder decisions of the
+  transaction closed as `CONFIRMED`, `NOTHING_SPENT` or `DISMISSED` (none exist before CAU-37); « Annuler » puts the
+  operation back as read. A fee stays detected, counted, without card. A tap on the card opens the edit sheet with
+  CAU-28. Checked on the Galaxy S23 in dark mode: ✓, « Annuler », both swipes, the amount field; the haptic tick not
+  felt by me. Next: CAU-28.
 
 Update this section at the end of each ticket.
 

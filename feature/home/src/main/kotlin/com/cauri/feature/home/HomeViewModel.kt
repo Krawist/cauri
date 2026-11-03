@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Home screen, cash first: the greeting, the estimated cash in pocket, the one-tap cash expenses, the balances of the
- * digital accounts and the operations to confirm.
+ * digital accounts; the operations to confirm have their own [ConfirmationViewModel].
  */
 // Injected repositories: one per kind of data the screen shows or changes.
 @Suppress("LongParameterList")
@@ -63,9 +63,7 @@ internal class HomeViewModel @Inject constructor(
             }.collect {}
         }
         viewModelScope.launch {
-            combine(accounts.balances, transactions.pending) { balances, pending ->
-                state.update { it.copy(balances = balances, pending = pending) }
-            }.collect {}
+            accounts.balances.collect { balances -> state.update { it.copy(balances = balances) } }
         }
     }
 
