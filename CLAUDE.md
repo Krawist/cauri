@@ -207,7 +207,17 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (`CountReminders.ACTION_COUNT_CASH`). Réglages: « Rappels de comptage », frequency and hour (19 h to 22 h), saved in
   DataStore. Debug builds show a reminder on demand: `adb shell am broadcast -a com.cauri.debug.SHOW_COUNT_REMINDER
   -e reason WITHDRAWAL -p com.cauri.debug`. Checked on a phone: the four texts, the coin icon and lagoon colour, a tap
-  opens the cash count and clears the notification; the evening check itself not seen firing yet. Next: CAU-18.
+  opens the cash count and clears the notification; the evening check itself not seen firing yet.
+- [ ] **CAU-18** — `CauriNotificationListener` (Hilt) keeps, as raw signals (`RawSignalRepository`, database v3 with the
+  notification's `title`), the notifications of `watched_senders.json` (`:core:capture` assets): the operators' and
+  banks' apps whole, the SMS and mail apps only for the listed senders (`SignalFilterService`, JVM tests). The same
+  notification posted again within 10 minutes is kept once. Watched now, each with its status and where it was
+  checked: apps Orange Cameroun and UBA (to confirm); message apps Samsung Messages, Google Messages, Gmail and Outlook
+  (mails to confirm); senders OrangeMoney, UBACameroon, UBACM INFO and UBA, confirmed on a Galaxy S25 with an Orange
+  SIM. MobileMoney (MTN MoMo) was seen there but sends no operation to that user: to confirm on a phone with an MTN
+  SIM, as the banks' mail senders. Debug builds log the senders seen, never the text (`adb logcat -s CauriCapture`).
+  Checked on two phones: listener bound, other notifications ignored; a kept signal and the rebind after a reboot not
+  seen yet. Next: CAU-19.
 
 Update this section at the end of each ticket.
 

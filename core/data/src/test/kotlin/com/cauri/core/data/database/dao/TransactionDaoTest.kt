@@ -47,6 +47,7 @@ internal class TransactionDaoTest {
             val signalId = database.rawSignalDao().insert(
                 RawSignalEntity(
                     sender = "com.mtn.momo",
+                    title = null,
                     text = "Paiement de 5000 FCFA",
                     receivedAt = Instant.EPOCH,
                     templateVersion = "momo-1",

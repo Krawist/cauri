@@ -1,0 +1,64 @@
+{
+  "apps": [
+    {
+      "packageName": "com.orange.myorange.ocm",
+      "name": "Orange Cameroun",
+      "status": "TO_CONFIRM",
+      "checkedOn": "Installed on a Galaxy S23 and a Galaxy S25 (2026-11-03); no transaction notification seen yet"
+    },
+    {
+      "packageName": "com.ubanquity.redd.uba",
+      "name": "UBA",
+      "status": "TO_CONFIRM",
+      "checkedOn": "Installed on a Galaxy S23 (2026-11-03); no transaction notification seen yet"
+    }
+  ],
+  "messageApps": [
+    {
+      "packageName": "com.samsung.android.messaging",
+      "name": "Samsung Messages",
+      "status": "CONFIRMED",
+      "checkedOn": "Default SMS app of a Galaxy S25 (2026-11-03)"
+    },
+    {
+      "packageName": "com.google.android.apps.messaging",
+      "name": "Google Messages",
+      "status": "CONFIRMED",
+      "checkedOn": "Default SMS app of a Galaxy S23, installed on a Galaxy S25 (2026-11-03)"
+    },
+    {
+      "packageName": "com.google.android.gm",
+      "name": "Gmail",
+      "status": "TO_CONFIRM",
+      "checkedOn": "Installed on a Galaxy S25 (2026-11-03); the banks' mails not seen yet"
+    },
+    {
+      "packageName": "com.microsoft.office.outlook",
+      "name": "Outlook",
+      "status": "TO_CONFIRM",
+      "checkedOn": "Installed on a Galaxy S25 (2026-11-03); the banks' mails not seen yet"
+    }
+  ],
+  "messageSenders": [
+    {
+      "name": "OrangeMoney",
+      "status": "CONFIRMED",
+      "checkedOn": "SMS sender of Orange Money operations on a Galaxy S25 with an Orange SIM (2026-11-03), confirmed by its owner"
+    },
+    {
+      "name": "UBACameroon",
+      "status": "CONFIRMED",
+      "checkedOn": "SMS sender of UBA operations on a Galaxy S25 (2026-11-03), confirmed by its owner"
+    },
+    {
+      "name": "UBACM INFO",
+      "status": "CONFIRMED",
+      "checkedOn": "SMS sender of UBA on a Galaxy S25 (2026-11-03), confirmed by its owner"
+    },
+    {
+      "name": "UBA",
+      "status": "CONFIRMED",
+      "checkedOn": "SMS sender of UBA on a Galaxy S25 (2026-11-03), confirmed by its owner"
+    }
+  ]
+}

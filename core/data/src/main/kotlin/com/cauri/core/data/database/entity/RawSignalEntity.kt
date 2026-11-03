@@ -10,6 +10,7 @@ import java.time.Instant
  *
  * @property id Generated identifier.
  * @property sender Package name of the app that posted the notification.
+ * @property title Title of the notification: for an SMS, its sender (« MobileMoney »…); `null` when it has none.
  * @property text Text of the notification.
  * @property receivedAt When the notification was posted.
  * @property templateVersion Version of the template that parsed it; `null` while no template recognises it.
@@ -18,6 +19,7 @@ import java.time.Instant
 internal data class RawSignalEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val sender: String,
+    val title: String?,
     val text: String,
     val receivedAt: Instant,
     val templateVersion: String?,

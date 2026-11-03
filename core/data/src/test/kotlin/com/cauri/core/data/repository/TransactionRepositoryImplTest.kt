@@ -321,6 +321,7 @@ internal class TransactionRepositoryImplTest {
 
     private fun withdrawalSignal() = RawSignalEntity(
         sender = "com.mtn.momo",
+        title = null,
         text = "Retrait de 20000 FCFA",
         receivedAt = Instant.EPOCH,
         templateVersion = "momo-1",

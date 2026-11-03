@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.cauri.android.library)
     alias(libs.plugins.cauri.android.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -11,5 +12,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.data)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
 }

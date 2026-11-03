@@ -34,6 +34,7 @@ internal class RawSignalDaoTest {
             val later =
                 RawSignalEntity(
                     sender = "com.orange.om",
+                    title = null,
                     text = "Message 2",
                     receivedAt = Instant.ofEpochMilli(2_000),
                     templateVersion = null,
@@ -41,6 +42,7 @@ internal class RawSignalDaoTest {
             val earlier =
                 RawSignalEntity(
                     sender = "com.mtn.momo",
+                    title = null,
                     text = "Message 1",
                     receivedAt = Instant.ofEpochMilli(1_000),
                     templateVersion = null,
@@ -50,6 +52,7 @@ internal class RawSignalDaoTest {
             rawSignalDao.insert(
                 RawSignalEntity(
                     sender = "com.mtn.momo",
+                    title = null,
                     text = "Paiement",
                     receivedAt = Instant.EPOCH,
                     templateVersion = "momo-1",
