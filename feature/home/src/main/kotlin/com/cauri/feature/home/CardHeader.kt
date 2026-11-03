@@ -30,6 +30,7 @@ import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.format.formatMoment
 import com.cauri.core.design.format.readableName
@@ -88,19 +89,30 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
             }
             Details(operation = operation, kind = kind.takeIf { it != title })
         }
-        FilledIconButton(
-            onClick = onConfirm,
-            modifier = Modifier.size(IconBoxSize),
-            colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = palette.accent,
-                contentColor = palette.onAccent,
-            ),
-        ) {
-            Icon(
-                painter = painterResource(DesignR.drawable.ic_check),
-                contentDescription = stringResource(R.string.home_card_confirm),
-            )
-        }
+        ConfirmButton(onConfirm = onConfirm)
+    }
+}
+
+// ✓: confirms the card as Cauri proposed it, felt as a confirmation.
+@Composable
+private fun ConfirmButton(onConfirm: () -> Unit) {
+    val palette = CauriTheme.palette
+    val haptics = rememberCauriHaptics()
+    FilledIconButton(
+        onClick = {
+            haptics.confirm()
+            onConfirm()
+        },
+        modifier = Modifier.size(IconBoxSize),
+        colors = IconButtonDefaults.filledIconButtonColors(
+            containerColor = palette.accent,
+            contentColor = palette.onAccent,
+        ),
+    ) {
+        Icon(
+            painter = painterResource(DesignR.drawable.ic_check),
+            contentDescription = stringResource(R.string.home_card_confirm),
+        )
     }
 }
 

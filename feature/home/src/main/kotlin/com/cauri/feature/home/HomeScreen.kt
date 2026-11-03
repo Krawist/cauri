@@ -39,6 +39,7 @@ import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Habit
+import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -148,15 +149,19 @@ private fun HomeContent(
                 .safeDrawingPadding()
                 .padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = UndoBarBottom),
         )
-        state.recorded?.let { recorded ->
+        AnimatedPresence(
+            value = state.recorded,
+            enter = CauriTheme.motion.barEnter(),
+            exit = CauriTheme.motion.barExit(),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .safeDrawingPadding()
+                .padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = UndoBarBottom),
+        ) { recorded ->
             UndoBar(
                 message = stringResource(R.string.home_habit_recorded, recorded.name, formatFcfa(recorded.amount)),
                 onUndo = actions::onUndo,
                 onDismissed = actions::onUndoDismissed,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .safeDrawingPadding()
-                    .padding(start = CauriSpacing.xl, end = CauriSpacing.xl, bottom = UndoBarBottom),
             )
         }
     }

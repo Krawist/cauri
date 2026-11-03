@@ -43,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cauri.core.data.model.Habit
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
@@ -105,6 +106,7 @@ private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Un
     var dragged by remember { mutableStateOf<Long?>(null) }
     LaunchedEffect(habits) { if (dragged == null) order = habits }
     var offset by remember { mutableFloatStateOf(0f) }
+    val haptics = rememberCauriHaptics()
     val step = with(LocalDensity.current) { (RowHeight + RowGap).toPx() }
     val drop = {
         dragged = null
@@ -129,6 +131,7 @@ private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Un
                     handle = Modifier.pointerInput(habit.id) {
                         detectDragGestures(
                             onDragStart = {
+                                haptics.hold()
                                 dragged = habit.id
                                 offset = 0f
                             },
@@ -140,6 +143,8 @@ private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Un
                                 val from = order.indexOfFirst { it.id == habit.id }
                                 val to = (from + (offset / step).roundToInt()).coerceIn(0, order.lastIndex)
                                 if (to != from) {
+                                    // A step felt each time the line passes another.
+                                    haptics.step()
                                     order = order.toMutableList().apply { add(to, removeAt(from)) }
                                     offset -= (to - from) * step
                                 }

@@ -1,6 +1,7 @@
 package com.cauri.feature.transactions.activity
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,9 @@ import com.cauri.core.data.model.ActivitySort
 import com.cauri.core.data.model.ActivityStatus
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.Spending
+import com.cauri.core.design.component.RollingNumber
+import com.cauri.core.design.component.pressScale
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
@@ -101,7 +105,14 @@ private fun ActivityContent(state: ActivityUiState, actions: ActivityActions, on
             }
         }
         items(items = state.days, key = { it.date?.toEpochDay() ?: Long.MIN_VALUE }) { day ->
-            Day(day = day, today = state.today, onEditTransaction = onEditTransaction)
+            // A day that comes or goes with a filter or a search fades, the others move into place.
+            Box(
+                modifier = Modifier.animateItem(
+                    fadeInSpec = CauriTheme.motion.tween(),
+                    placementSpec = CauriTheme.motion.tween(),
+                    fadeOutSpec = CauriTheme.motion.tween(),
+                ),
+            ) { Day(day = day, today = state.today, onEditTransaction = onEditTransaction) }
         }
     }
 }
@@ -109,18 +120,29 @@ private fun ActivityContent(state: ActivityUiState, actions: ActivityActions, on
 // The four filters on a glass track, the chosen one raised.
 @Composable
 private fun Filters(selected: ActivityFilter, onFilter: (ActivityFilter) -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     GlassSurface(shape = RoundedCornerShape(FilterRadius), modifier = Modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(CauriSpacing.xs)) {
             ActivityFilter.entries.forEach { filter ->
                 val chosen = filter == selected
+                // The raised segment glides to the filter chosen.
+                val fill by animateColorAsState(
+                    if (chosen) palette.segment else palette.segment.copy(alpha = 0f),
+                    CauriTheme.motion.tween(),
+                    label = "segment",
+                )
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(FilterHeight)
+                        .pressScale()
                         .clip(CircleShape)
-                        .then(if (chosen) Modifier.background(palette.segment, CircleShape) else Modifier)
-                        .selectable(selected = chosen, role = Role.Tab, onClick = { onFilter(filter) }),
+                        .background(fill, CircleShape)
+                        .selectable(selected = chosen, role = Role.Tab, onClick = {
+                            if (!chosen) haptics.select()
+                            onFilter(filter)
+                        }),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -162,11 +184,14 @@ private fun Spending(spending: Spending) {
                         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
                         color = color,
                     )
-                    Text(
-                        text = stringResource(R.string.transactions_amount, formatFcfa(amount)),
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = palette.ink,
-                    )
+                    // It rolls to the total of a new period or a new expense.
+                    RollingNumber(value = amount) { shown ->
+                        Text(
+                            text = stringResource(R.string.transactions_amount, formatFcfa(shown)),
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            color = palette.ink,
+                        )
+                    }
                 }
             }
         }

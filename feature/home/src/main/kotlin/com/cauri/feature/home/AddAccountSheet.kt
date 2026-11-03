@@ -43,6 +43,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.component.backdrop
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
 import com.cauri.core.design.glass.GlassSurface
@@ -63,6 +64,7 @@ private val SelectedBorderWidth = 1.5.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddAccountSheet(onDismiss: () -> Unit, viewModel: AddAccountViewModel = hiltViewModel()) {
+    val haptics = rememberCauriHaptics()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val palette = CauriTheme.palette
     val close = {
@@ -84,7 +86,10 @@ internal fun AddAccountSheet(onDismiss: () -> Unit, viewModel: AddAccountViewMod
                 Header(query = state.query, onQuery = viewModel::onQuery)
                 Choices(state = state, onToggle = viewModel::onToggle, modifier = Modifier.weight(1f))
                 Button(
-                    onClick = viewModel::onAdd,
+                    onClick = {
+                        haptics.confirm()
+                        viewModel.onAdd()
+                    },
                     enabled = state.chosen.isNotEmpty(),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -156,6 +161,7 @@ private fun Choices(state: AddAccountUiState, onToggle: (AccountChoice) -> Unit,
 // A glass card as at the onboarding: lagoon fill and border once ticked, the icon, the name and what it is.
 @Composable
 private fun ChoiceRow(choice: AccountChoice, chosen: Boolean, onToggle: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     val shape = RoundedCornerShape(CauriRadius.tile)
     GlassSurface(
@@ -163,7 +169,10 @@ private fun ChoiceRow(choice: AccountChoice, chosen: Boolean, onToggle: () -> Un
         modifier = Modifier
             .fillMaxWidth()
             .then(if (chosen) Modifier.border(SelectedBorderWidth, palette.accent, shape) else Modifier),
-        interaction = Modifier.selectable(selected = chosen, role = Role.Checkbox, onClick = onToggle),
+        interaction = Modifier.selectable(selected = chosen, role = Role.Checkbox, onClick = {
+            haptics.select()
+            onToggle()
+        }),
     ) {
         if (chosen) Box(Modifier.matchParentSize().background(palette.accentSoft))
         Row(

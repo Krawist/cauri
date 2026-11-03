@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -13,6 +14,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.EditableTransaction
 import com.cauri.core.design.component.CauriTextField
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.FcfaVisualTransformation
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.theme.CauriSpacing
@@ -31,6 +33,9 @@ private val AmountHeight = 60.dp
  */
 @Composable
 internal fun EditAmount(state: EditUiState, actions: EditActions) {
+    val haptics = rememberCauriHaptics()
+    // A digit refused over the largest amount is felt, not only read.
+    LaunchedEffect(state.amountTooHigh) { if (state.amountTooHigh) haptics.reject() }
     val palette = CauriTheme.palette
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.xs + 2.dp)) {
         Label(text = stringResource(R.string.transactions_edit_amount))

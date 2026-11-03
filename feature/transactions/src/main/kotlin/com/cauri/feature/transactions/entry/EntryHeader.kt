@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.transactions.R
@@ -56,6 +57,7 @@ internal fun EntryHeader(type: QuickEntryType, onType: (QuickEntryType) -> Unit,
 // « Dépense », « Revenu », « Transfert » on a grey track, the chosen one raised.
 @Composable
 private fun TypeSegments(selected: QuickEntryType, onSelect: (QuickEntryType) -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     Row(modifier = Modifier.background(palette.chip, CircleShape).padding(4.dp)) {
         QuickEntryType.entries.forEach { type ->
@@ -65,7 +67,10 @@ private fun TypeSegments(selected: QuickEntryType, onSelect: (QuickEntryType) ->
                     .height(SegmentHeight)
                     .clip(CircleShape)
                     .background(if (chosen) palette.segment else Color.Transparent)
-                    .selectable(selected = chosen, role = Role.Tab, onClick = { onSelect(type) })
+                    .selectable(selected = chosen, role = Role.Tab, onClick = {
+                        if (!chosen) haptics.select()
+                        onSelect(type)
+                    })
                     .padding(horizontal = CauriSpacing.l),
                 contentAlignment = Alignment.Center,
             ) {

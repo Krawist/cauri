@@ -34,11 +34,23 @@ private val Rows = listOf(listOf("1", "2", "3"), listOf("4", "5", "6"), listOf("
 /** Numeric keypad of the amount: [onDigits] gets a digit or « 000 », [onDelete] erases the last digit. */
 @Composable
 fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
+    // Each key answers with the light tap of a keyboard.
+    val haptics = rememberCauriHaptics()
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
         Rows.forEach { keys ->
             Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s)) {
-                keys.forEach { key -> DigitKey(label = key, onClick = { onDigits(key) }) }
-                if (keys.size < Rows.first().size) DeleteKey(onClick = onDelete)
+                keys.forEach { key ->
+                    DigitKey(label = key, onClick = {
+                        haptics.key()
+                        onDigits(key)
+                    })
+                }
+                if (keys.size < Rows.first().size) {
+                    DeleteKey(onClick = {
+                        haptics.key()
+                        onDelete()
+                    })
+                }
             }
         }
     }
@@ -48,7 +60,8 @@ fun Keypad(onDigits: (String) -> Unit, onDelete: () -> Unit) {
 private fun RowScope.DigitKey(label: String, onClick: () -> Unit) {
     GlassSurface(
         shape = KeyShape,
-        modifier = Modifier.weight(1f).height(KeyHeight),
+        // Each key sinks a little under the finger.
+        modifier = Modifier.weight(1f).height(KeyHeight).pressScale(),
         // Stronger than the cards: each key stands out on the pale shapes of the light mode.
         strong = true,
         interaction = Modifier.clickable(role = Role.Button, onClick = onClick),
@@ -69,6 +82,7 @@ private fun RowScope.DeleteKey(onClick: () -> Unit) {
         modifier = Modifier
             .weight(1f)
             .height(KeyHeight)
+            .pressScale()
             .semantics { contentDescription = description }
             .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,

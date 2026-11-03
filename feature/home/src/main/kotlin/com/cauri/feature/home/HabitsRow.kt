@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.Habit
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.dashedBorder
+import com.cauri.core.design.component.pressScale
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
@@ -87,15 +89,24 @@ internal fun HabitsRow(habits: List<Habit>, actions: HabitActions) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun HabitTile(habit: Habit, actions: HabitActions, modifier: Modifier = Modifier) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     GlassSurface(
         shape = RoundedCornerShape(CauriRadius.control),
-        modifier = modifier.fillMaxHeight(),
+        // A tap records an expense: the tile sinks under the finger.
+        modifier = modifier.fillMaxHeight().pressScale(),
         interaction = Modifier.combinedClickable(
             role = Role.Button,
             onLongClickLabel = stringResource(R.string.home_habit_edit),
-            onLongClick = { actions.onEditHabit(habit) },
-            onClick = { actions.onHabitTap(habit) },
+            onLongClick = {
+                haptics.hold()
+                actions.onEditHabit(habit)
+            },
+            // The expense is recorded at once: the tap feels like a confirmation.
+            onClick = {
+                haptics.confirm()
+                actions.onHabitTap(habit)
+            },
         ),
     ) {
         Column(

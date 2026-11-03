@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -107,13 +108,24 @@ private fun AccountCard(balance: AccountBalance, onClick: () -> Unit) {
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
-                Text(
-                    text = balance.amount?.let { stringResource(R.string.home_amount, formatFcfa(it)) }
-                        ?: stringResource(R.string.home_balance_none),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (balance.amount == null) palette.muted else palette.ink,
-                    maxLines = 1,
-                )
+                val amount = balance.amount
+                if (amount == null) {
+                    Text(
+                        text = stringResource(R.string.home_balance_none),
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                        color = palette.muted,
+                    )
+                } else {
+                    // It rolls to the balance of a new message or of one typed.
+                    RollingNumber(value = amount) { shown ->
+                        Text(
+                            text = stringResource(R.string.home_amount, formatFcfa(shown)),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = palette.ink,
+                            maxLines = 1,
+                        )
+                    }
+                }
             }
         }
     }

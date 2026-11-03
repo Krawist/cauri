@@ -38,6 +38,7 @@ private const val UNDO_MILLIS = 4_000L
 @Composable
 fun UndoBar(message: String, onUndo: () -> Unit, onDismissed: () -> Unit, modifier: Modifier = Modifier) {
     val palette = CauriTheme.palette
+    val haptics = rememberCauriHaptics()
     LaunchedEffect(message) {
         delay(UNDO_MILLIS)
         onDismissed()
@@ -67,7 +68,13 @@ fun UndoBar(message: String, onUndo: () -> Unit, onDismissed: () -> Unit, modifi
                 color = palette.ink,
                 modifier = Modifier.weight(1f),
             )
-            TextButton(onClick = onUndo, colors = ButtonDefaults.textButtonColors(contentColor = palette.accentText)) {
+            TextButton(
+                onClick = {
+                    haptics.select()
+                    onUndo()
+                },
+                colors = ButtonDefaults.textButtonColors(contentColor = palette.accentText),
+            ) {
                 Text(
                     text = stringResource(R.string.undo),
                     style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),

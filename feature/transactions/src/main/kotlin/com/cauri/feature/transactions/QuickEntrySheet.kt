@@ -43,9 +43,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.Account
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.Category
+import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.Keypad
+import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.component.backdrop
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassScreen
@@ -113,18 +116,23 @@ fun QuickEntrySheet(onDismiss: () -> Unit) {
 fun QuickEntryMergeBar(modifier: Modifier = Modifier) {
     val viewModel: QuickEntryViewModel = hiltViewModel()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    if (state.mergeId != null) {
+    AnimatedPresence(
+        value = state.mergeId,
+        enter = CauriTheme.motion.barEnter(),
+        exit = CauriTheme.motion.barExit(),
+        modifier = modifier,
+    ) {
         UndoBar(
             message = stringResource(R.string.transactions_merged),
             onUndo = viewModel::onUndoMerge,
             onDismissed = viewModel::onMergeShown,
-            modifier = modifier,
         )
     }
 }
 
 @Composable
 private fun QuickEntryContent(state: QuickEntryUiState, actions: QuickEntryActions, onClose: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     Column(
         modifier = Modifier
@@ -152,7 +160,10 @@ private fun QuickEntryContent(state: QuickEntryUiState, actions: QuickEntryActio
         }
         Keypad(onDigits = actions::onDigits, onDelete = actions::onDelete)
         Button(
-            onClick = actions::onSave,
+            onClick = {
+                haptics.confirm()
+                actions.onSave()
+            },
             enabled = state.canSave,
             modifier = Modifier.fillMaxWidth().height(SaveHeight),
             shape = CircleShape,
@@ -169,6 +180,9 @@ private fun QuickEntryContent(state: QuickEntryUiState, actions: QuickEntryActio
 // The amount, and under it why a digit was refused.
 @Composable
 private fun Amount(digits: String, tooHigh: Boolean) {
+    val haptics = rememberCauriHaptics()
+    // A digit refused over the largest amount is felt, not only read.
+    LaunchedEffect(tooHigh) { if (tooHigh) haptics.reject() }
     val palette = CauriTheme.palette
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
         AmountText(digits = digits)
@@ -189,21 +203,27 @@ private fun Amount(digits: String, tooHigh: Boolean) {
 @Composable
 private fun AmountText(digits: String) {
     val palette = CauriTheme.palette
-    val text = buildAnnotatedString {
-        withStyle(SpanStyle(color = if (digits.isEmpty()) palette.muted else palette.ink)) {
-            append(formatFcfa(digits.toLongOrNull() ?: 0))
-        }
-        withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
-            append(" ")
-            append(stringResource(R.string.transactions_currency))
-        }
-    }
-    Text(
-        text = text,
-        style = MaterialTheme.typography.displayLarge.copy(fontSize = AmountSize, fontWeight = FontWeight.Bold),
+    val currency = stringResource(R.string.transactions_currency)
+    // Each key rolls the amount to its new value.
+    RollingNumber(
+        value = digits.toLongOrNull() ?: 0,
         modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-    )
+        contentAlignment = Alignment.TopCenter,
+    ) { shown ->
+        val text = buildAnnotatedString {
+            withStyle(SpanStyle(color = if (shown == 0L) palette.muted else palette.ink)) { append(formatFcfa(shown)) }
+            withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
+                append(" ")
+                append(currency)
+            }
+        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.displayLarge.copy(fontSize = AmountSize, fontWeight = FontWeight.Bold),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+        )
+    }
 }
 
 @Composable

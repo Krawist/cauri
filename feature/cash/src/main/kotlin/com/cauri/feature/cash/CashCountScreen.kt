@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.design.component.CauriTextField
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.FcfaVisualTransformation
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
@@ -67,6 +68,7 @@ internal fun CashCountScreen(
 
 @Composable
 private fun CashCountContent(state: CashCountUiState, actions: CashCountActions, onBack: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = CauriSpacing.xl)) {
         Header(onBack = onBack, onClearAll = actions::onClearAll)
@@ -93,7 +95,10 @@ private fun CashCountContent(state: CashCountUiState, actions: CashCountActions,
         CountSummary(total = state.total, expected = state.expected, gap = state.gap)
         val missing = (state.gap ?: 0) > 0
         Button(
-            onClick = actions::onConfirm,
+            onClick = {
+                haptics.confirm()
+                actions.onConfirm()
+            },
             modifier = Modifier.fillMaxWidth().padding(
                 top = CauriSpacing.m,
                 bottom = CauriSpacing.l,

@@ -1,6 +1,8 @@
 package com.cauri
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -15,21 +17,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.BottomBarTab
 import com.cauri.core.design.component.CauriBottomBar
 import com.cauri.core.design.component.backdrop
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
+import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.cash.cashGraph
 import com.cauri.feature.cash.navigateToBalanceGap
 import com.cauri.feature.cash.navigateToCashCount
@@ -107,46 +114,25 @@ private fun CauriNavHost(
         }
         if (notificationTarget != null) onNotificationTargetShown()
     }
-    val destination = navController.currentBackStackEntryAsState().value?.destination
-    val selectedTab = TabRoutes.indexOfFirst { route ->
-        destination?.hierarchy?.any { it.hasRoute(route::class) } == true
-    }
+    val motion = CauriTheme.motion
     GlassScreen(
         // Drawn once behind every screen, which are transparent: glass cards and the bar blur these shapes.
         background = { Box(Modifier.fillMaxSize().backdrop(screenBackdropShapes())) },
-        overlay = {
-            // Only on the tabs: the bar is hidden during the onboarding and on screens opened from a tab.
-            if (selectedTab >= 0) {
-                TabBar(
-                    selectedTab = selectedTab,
-                    onTabSelected = { index -> navController.navigateToTab(TabRoutes[index]) },
-                    onAdd = { quickEntryOpen = true },
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                )
-            }
-            QuickEntryMergeBar(modifier = Modifier.align(Alignment.BottomCenter).aboveBottomBar())
-        },
+        overlay = { TabsOverlay(navController = navController, onAdd = { quickEntryOpen = true }) },
     ) {
-        NavHost(navController = navController, startDestination = startDestination) {
-            onboardingGraph(
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            enterTransition = { if (betweenTabs()) motion.tabEnter() else motion.screenEnter() },
+            exitTransition = { if (betweenTabs()) motion.tabExit() else motion.screenExit() },
+            popEnterTransition = { if (betweenTabs()) motion.tabEnter() else motion.screenPopEnter() },
+            popExitTransition = { if (betweenTabs()) motion.tabExit() else motion.screenPopExit() },
+        ) {
+            cauriGraphs(
                 navController = navController,
-                onCompleted = {
-                    onOnboardingCompleted()
-                    navController.navigate(HomeGraph) {
-                        popUpTo(navController.graph.id) { inclusive = true }
-                    }
-                },
-            )
-            homeGraph(
-                onCountCash = { navController.navigateToCashCount() },
-                onOpenSettings = { navController.navigateToSettings() },
+                onOnboardingCompleted = onOnboardingCompleted,
                 onEditTransaction = { editedTransaction = it },
-                onSplitBalanceGap = navController::navigateToBalanceGap,
             )
-            activityGraph(onEditTransaction = { editedTransaction = it })
-            placeholderTabs()
-            cashGraph(navController = navController, onBack = { navController.popBackStack() })
-            settingsGraph(onBack = { navController.popBackStack() })
         }
     }
     if (quickEntryOpen) {
@@ -154,6 +140,63 @@ private fun CauriNavHost(
     }
     editedTransaction?.let { EditTransactionSheet(transactionId = it, onDismiss = { editedTransaction = null }) }
 }
+
+// The bottom bar, only on the tabs: it goes down during the onboarding and on screens opened from a tab; and the bar
+// of a merge, above it.
+@Composable
+private fun BoxScope.TabsOverlay(navController: NavHostController, onAdd: () -> Unit) {
+    val motion = CauriTheme.motion
+    val destination = navController.currentBackStackEntryAsState().value?.destination
+    val selectedTab = TabRoutes.indexOfFirst { route ->
+        destination?.hierarchy?.any { it.hasRoute(route::class) } == true
+    }
+    AnimatedPresence(
+        value = selectedTab.takeIf { it >= 0 },
+        enter = motion.barEnter(),
+        exit = motion.barExit(),
+        modifier = Modifier.align(Alignment.BottomCenter),
+    ) { tab ->
+        TabBar(
+            selectedTab = tab,
+            onTabSelected = { index -> navController.navigateToTab(TabRoutes[index]) },
+            onAdd = onAdd,
+        )
+    }
+    QuickEntryMergeBar(modifier = Modifier.align(Alignment.BottomCenter).aboveBottomBar())
+}
+
+// Every feature's graph; the features reach each other through these callbacks only.
+private fun NavGraphBuilder.cauriGraphs(
+    navController: NavHostController,
+    onOnboardingCompleted: () -> Unit,
+    onEditTransaction: (Long) -> Unit,
+) {
+    onboardingGraph(
+        navController = navController,
+        onCompleted = {
+            onOnboardingCompleted()
+            navController.navigate(HomeGraph) {
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+        },
+    )
+    homeGraph(
+        onCountCash = { navController.navigateToCashCount() },
+        onOpenSettings = { navController.navigateToSettings() },
+        onEditTransaction = onEditTransaction,
+        onSplitBalanceGap = navController::navigateToBalanceGap,
+    )
+    activityGraph(onEditTransaction = onEditTransaction)
+    placeholderTabs()
+    cashGraph(navController = navController, onBack = { navController.popBackStack() })
+    settingsGraph(onBack = { navController.popBackStack() })
+}
+
+// Whether the navigation goes from a tab to another: tabs fade, side by side, instead of sliding.
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.betweenTabs() =
+    initialState.destination.isTab() && targetState.destination.isTab()
+
+private fun NavDestination.isTab() = TabRoutes.any { route -> hierarchy.any { it.hasRoute(route::class) } }
 
 // Where a bar floats over the screens: above the bottom bar, inside the screen's margins.
 private fun Modifier.aboveBottomBar() =

@@ -30,6 +30,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.component.backdrop
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
@@ -104,6 +105,7 @@ private fun EditContent(state: EditUiState, actions: EditActions) {
 // « Rien dépensé » (« Ignorer » for what is not an expense) while it waits for the user, and « Valider ».
 @Composable
 private fun Answers(state: EditUiState, actions: EditActions) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     val transaction = state.transaction ?: return
     Row(
@@ -112,7 +114,10 @@ private fun Answers(state: EditUiState, actions: EditActions) {
     ) {
         if (transaction.pending) {
             Button(
-                onClick = actions::onDismiss,
+                onClick = {
+                    haptics.reject()
+                    actions.onDismiss()
+                },
                 modifier = Modifier.weight(1f).height(ButtonHeight),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(containerColor = palette.chip, contentColor = palette.coralText),
@@ -130,7 +135,10 @@ private fun Answers(state: EditUiState, actions: EditActions) {
             }
         }
         Button(
-            onClick = actions::onConfirm,
+            onClick = {
+                haptics.confirm()
+                actions.onConfirm()
+            },
             enabled = state.canConfirm,
             modifier = Modifier.weight(CONFIRM_WEIGHT).height(ButtonHeight),
             shape = CircleShape,

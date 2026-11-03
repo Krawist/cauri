@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -37,7 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.design.component.Keypad
+import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.backdrop
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassScreen
@@ -126,29 +129,27 @@ internal fun BalanceSheet(
 @Composable
 private fun TypedAmount(typed: Long?) {
     val palette = CauriTheme.palette
-    val text = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                color = if (typed ==
-                    null
-                ) {
-                    palette.muted
-                } else {
-                    palette.ink
-                },
-            ),
-        ) { append(formatFcfa(typed ?: 0)) }
-        withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
-            append(" ")
-            append(stringResource(R.string.home_currency))
-        }
-    }
-    Text(
-        text = text,
-        style = MaterialTheme.typography.displayLarge.copy(fontSize = AmountSize, fontWeight = FontWeight.Bold),
-        textAlign = TextAlign.Center,
+    val currency = stringResource(R.string.home_currency)
+    // Each key rolls the amount to its new value.
+    RollingNumber(
+        value = typed ?: 0,
         modifier = Modifier.fillMaxWidth(),
-    )
+        contentAlignment = Alignment.TopCenter,
+    ) { shown ->
+        val text = buildAnnotatedString {
+            withStyle(SpanStyle(color = if (shown == 0L) palette.muted else palette.ink)) { append(formatFcfa(shown)) }
+            withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
+                append(" ")
+                append(currency)
+            }
+        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.displayLarge.copy(fontSize = AmountSize, fontWeight = FontWeight.Bold),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }
 
 // « Affiché : 5 000 F » and, once typed, « il manque 1 000 F », « 500 F de plus » or « Juste ».
@@ -178,17 +179,24 @@ private fun Comparison(shown: Long, typed: Long?, gap: Long) {
 // « Répartir l'écart » first when money is missing, « Enregistrer » always: it keeps the balance, the gap unsplit.
 @Composable
 private fun Answers(typed: Long?, splits: Boolean, onSplit: () -> Unit, onSave: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     if (splits) {
         Button(
-            onClick = onSplit,
+            onClick = {
+                haptics.select()
+                onSplit()
+            },
             modifier = Modifier.fillMaxWidth().padding(top = CauriSpacing.s).height(ButtonHeight),
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(containerColor = palette.accent, contentColor = palette.onAccent),
         ) { Text(text = stringResource(R.string.home_balance_split), style = MaterialTheme.typography.titleMedium) }
     }
     Button(
-        onClick = onSave,
+        onClick = {
+            haptics.confirm()
+            onSave()
+        },
         enabled = typed != null,
         modifier = Modifier.fillMaxWidth().padding(top = if (splits) 0.dp else CauriSpacing.s).height(ButtonHeight),
         shape = CircleShape,

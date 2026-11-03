@@ -37,6 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.Category
 import com.cauri.core.design.component.dashedBorder
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.format.formatMoment
 import com.cauri.core.design.glass.GlassSurface
@@ -66,6 +67,7 @@ internal fun GapSplitScreen(onBack: () -> Unit, onSaved: () -> Unit, viewModel: 
 
 @Composable
 private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, onBack: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(horizontal = CauriSpacing.xl)) {
         Header(gap = state.gap, since = state.since, accountName = state.accountName, onBack = onBack)
@@ -88,7 +90,10 @@ private fun GapSplitContent(state: GapSplitUiState, actions: GapSplitActions, on
         }
         Rest(rest = state.rest, digital = state.accountName != null)
         Button(
-            onClick = actions::onSave,
+            onClick = {
+                haptics.confirm()
+                actions.onSave()
+            },
             modifier = Modifier.fillMaxWidth().padding(
                 top = CauriSpacing.m,
                 bottom = CauriSpacing.l,

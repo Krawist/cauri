@@ -397,6 +397,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   Ajouter 2 comptes »; « Disponible aujourd'hui » waits for the budgets (CAU-46). The balance sheet is a glass screen of
   its own as the quick entry, the balance typed on Cauri's keypad, never the phone's (`Keypad` moved to `:core:design`).
   Next: CAU-54.
+- [ ] **CAU-53** — one motion language (`CauriMotion` in `:core:design`, `CauriTheme.motion`): three durations (150,
+  250 and 400 ms), three easings (standard, emphasized for what comes in, exit for what leaves) and the transitions
+  built from them; with « Supprimer les animations » (animator scale 0, read once by `CauriTheme`) every spec snaps and
+  every transition is none. Tabs fade into each other, the other screens slide in a tenth of their width and back
+  (`NavHost` transitions in `:app`); the bottom bar goes down and comes back up; the undo bars rise and go down
+  (`AnimatedPresence`); the cards « À confirmer » grow in and, once answered, fade while their place closes, the section
+  leaving with its last card (`AnimatedItems`); the cash in pocket, the balances, the totals of « Activité » and the
+  amounts of the keypads roll to their new value (`RollingNumber`); the keys, the chips, the filters and the habit tiles
+  sink under the finger (`Modifier.pressScale`) and the selections glide (`animateColorAsState`); the days of « Activité
+  » move into place (`animateItem`). Sheets rise as Material's own. One touch language too (`CauriHaptics`,
+  `rememberCauriHaptics`, played only with the phone's touch vibrations on): a keyboard tap for the keys of the keypads
+  and the « − » « + » of the count, a tick for a choice (chips, filters, tabs, the type of an entry, a row ticked, «
+  Annuler »), a confirmation for what is saved (✓ and a swipe right, a habit tapped, « Enregistrer », « Valider », a
+  count, a balance), a refusal for what is set aside or refused (a swipe left, « Rien dépensé », an amount over the
+  limit), a long press for a habit's sheet and a line picked up to drag, a step each time it passes another, and the
+  threshold of a swipe. Checked on the Galaxy S23 in light mode: a card confirmed shrinking while « Confirmé » rises,
+  the tabs, the balances. « Supprimer les animations » (a system setting, left to the user) and the smoothness on an
+  entry-level phone not checked. Next: CAU-54.
 
 Update this section at the end of each ticket.
 

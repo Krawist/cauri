@@ -25,6 +25,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
@@ -105,12 +106,16 @@ internal fun DenominationTile(
 
 @Composable
 private fun StepButton(sign: String, description: String, fill: Color, color: Color, onClick: () -> Unit) {
+    val haptics = rememberCauriHaptics()
     Box(
         modifier = Modifier
             .size(StepButtonSize)
             .clip(CircleShape)
             .background(fill)
-            .clickable(onClickLabel = description, role = Role.Button, onClick = onClick),
+            .clickable(onClickLabel = description, role = Role.Button, onClick = {
+                haptics.key()
+                onClick()
+            }),
         contentAlignment = Alignment.Center,
     ) {
         Text(text = sign, fontSize = StepSignSize, fontWeight = FontWeight.Medium, color = color)

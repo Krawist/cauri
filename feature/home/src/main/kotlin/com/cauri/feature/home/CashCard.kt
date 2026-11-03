@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.format.formatMoment
 import com.cauri.core.design.glass.GlassSurface
@@ -102,15 +103,19 @@ internal fun CashCard(cash: CashBalance?, onCountCash: () -> Unit, modifier: Mod
 @Composable
 private fun CashAmount(amount: Long) {
     val palette = CauriTheme.palette
-    val text = buildAnnotatedString {
-        withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = palette.muted)) { append("≈ ") }
-        append(formatFcfa(amount))
-        withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
-            append(" ")
-            append(stringResource(R.string.home_currency))
+    val currency = stringResource(R.string.home_currency)
+    // It rolls to its new value after an expense, a withdrawal or a count.
+    RollingNumber(value = amount) { shown ->
+        val text = buildAnnotatedString {
+            withStyle(SpanStyle(fontWeight = FontWeight.Medium, color = palette.muted)) { append("≈ ") }
+            append(formatFcfa(shown))
+            withStyle(SpanStyle(fontSize = CurrencySize, fontWeight = FontWeight.SemiBold, color = palette.muted)) {
+                append(" ")
+                append(currency)
+            }
         }
+        Text(text = text, style = MaterialTheme.typography.displayLarge, color = palette.ink)
     }
-    Text(text = text, style = MaterialTheme.typography.displayLarge, color = palette.ink)
 }
 
 // « Compté hier à 20 h · 3 dépenses depuis »: the expenses only once there are some.

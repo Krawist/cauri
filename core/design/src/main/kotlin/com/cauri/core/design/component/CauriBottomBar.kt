@@ -54,6 +54,7 @@ fun CauriBottomBar(
     onAdd: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val haptics = rememberCauriHaptics()
     val palette = CauriTheme.palette
     GlassSurface(
         shape = CircleShape,
@@ -72,14 +73,23 @@ fun CauriBottomBar(
         ) {
             val middle = tabs.size / 2
             tabs.forEachIndexed { index, tab ->
-                if (index == middle) AddButton(label = addLabel, onClick = onAdd)
+                if (index == middle) {
+                    AddButton(label = addLabel, onClick = {
+                        haptics.select()
+                        onAdd()
+                    })
+                }
                 val selected = index == selectedTab
                 Box(
                     modifier = Modifier
                         .size(TabSize)
                         // Round press feedback, like the bar and the « + » button.
                         .clip(CircleShape)
-                        .selectable(selected = selected, role = Role.Tab, onClick = { onTabSelected(index) })
+                        .selectable(selected = selected, role = Role.Tab, onClick = {
+                            // A tick only when the tab changes.
+                            if (!selected) haptics.select()
+                            onTabSelected(index)
+                        })
                         .semantics { contentDescription = tab.label },
                     contentAlignment = Alignment.Center,
                 ) {
