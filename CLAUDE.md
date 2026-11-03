@@ -183,7 +183,7 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   is confirmed. The cash balance goes up by the amount withdrawn (tested). Nothing creates withdrawals yet: parsing
   comes with CAU-18 to CAU-21, the « Retrait au guichet » row with « Activité » (CAU-30).
 - [ ] **CAU-14** — habits (`HabitEntity`, `HabitRepository`, database v2 by auto-migration): glass tiles on Accueil,
-  three a line on two lines at most, more scrolling inside them, and « Ajouter une habitude », dashed, under them; a tap
+  three a line on two lines at most, more scrolling inside them, and « + Ajouter une habitude », dashed, under them; a tap
   records a confirmed cash expense (named after the habit, in its category) with « Annuler » for 4 s; a long-press opens
   the habit sheet (name, amount, category, delete), which leads to « Mes habitudes », reordered by dragging the handles.
   The first habits come from the kept pack categories (Moto, Beignets, Taxi, Crédit). « Ajouter une habitude » opens the

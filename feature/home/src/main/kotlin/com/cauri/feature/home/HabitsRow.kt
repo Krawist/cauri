@@ -12,21 +12,25 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.Habit
+import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -37,6 +41,7 @@ import com.cauri.core.design.theme.CauriTheme
 private val TileGap = CauriSpacing.s
 private val TileHeight = 56.dp
 private val AddButtonHeight = CauriSpacing.touchTarget
+private val AddIconSize = 18.dp
 
 // Three habits a line, as in the mockup; two lines at most, the others scroll inside them.
 private const val HABITS_PER_LINE = 3
@@ -125,10 +130,21 @@ private fun AddHabitButton(onClick: () -> Unit) {
             .clickable(role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = stringResource(R.string.home_habit_add),
-            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = palette.accentText,
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = painterResource(DesignR.drawable.ic_nav_add),
+                contentDescription = null,
+                tint = palette.accentText,
+                modifier = Modifier.size(AddIconSize),
+            )
+            Text(
+                text = stringResource(R.string.home_habit_add),
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = palette.accentText,
+            )
+        }
     }
 }
