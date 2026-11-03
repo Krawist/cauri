@@ -4,14 +4,36 @@ import com.cauri.core.capture.battery.FakeBatteryService
 import com.cauri.core.capture.permission.FakePermissionService
 import com.cauri.core.capture.permission.LocationAccess
 import com.cauri.core.capture.permission.PermissionStatus
+import com.cauri.core.data.model.CountReminderFrequency
+import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class SettingsViewModelTest {
     private val permissions = FakePermissionService()
     private val battery = FakeBatteryService()
+    private val preferences = FakeUserPreferencesRepository()
+
+    @BeforeEach
+    fun setUp() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
 
     @Nested
     inner class UiState {
@@ -27,10 +49,11 @@ internal class SettingsViewModelTest {
             battery.restricted = false
 
             // when
-            val viewModel = SettingsViewModel(permissions, battery)
+            val viewModel = SettingsViewModel(permissions, battery, preferences)
 
             // then
-            viewModel.uiState.value shouldBe SettingsUiState(permissions = given, batteryUnrestricted = true)
+            viewModel.uiState.value.permissions shouldBe given
+            viewModel.uiState.value.batteryUnrestricted.shouldBeTrue()
         }
     }
 
@@ -39,7 +62,7 @@ internal class SettingsViewModelTest {
         @Test
         fun `should show the notifications allowed in the system settings`() {
             // given
-            val viewModel = SettingsViewModel(permissions, battery)
+            val viewModel = SettingsViewModel(permissions, battery, preferences)
             permissions.status = permissions.status.copy(notificationsAllowed = true)
 
             // when
@@ -53,7 +76,7 @@ internal class SettingsViewModelTest {
         fun `should show the location taken back in the system settings`() {
             // given
             permissions.status = permissions.status.copy(location = LocationAccess.ALWAYS)
-            val viewModel = SettingsViewModel(permissions, battery)
+            val viewModel = SettingsViewModel(permissions, battery, preferences)
             permissions.status = permissions.status.copy(location = LocationAccess.DENIED)
 
             // when
@@ -66,7 +89,7 @@ internal class SettingsViewModelTest {
         @Test
         fun `should show the battery restriction lifted in the system settings`() {
             // given
-            val viewModel = SettingsViewModel(permissions, battery)
+            val viewModel = SettingsViewModel(permissions, battery, preferences)
             battery.restricted = false
 
             // when
@@ -74,6 +97,23 @@ internal class SettingsViewModelTest {
 
             // then
             viewModel.uiState.value.batteryUnrestricted.shouldBeTrue()
+        }
+    }
+
+    @Nested
+    inner class OnReminderChange {
+        @Test
+        fun `should save the user's choice and show it`() {
+            // given
+            val viewModel = SettingsViewModel(permissions, battery, preferences)
+            val chosen = CountReminderSettings(frequency = CountReminderFrequency.EVERY_EVENING, hour = 21)
+
+            // when
+            viewModel.onReminderChange(chosen)
+
+            // then
+            preferences.countReminder.value shouldBe chosen
+            viewModel.uiState.value.countReminder shouldBe chosen
         }
     }
 }

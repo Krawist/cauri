@@ -45,6 +45,11 @@ class FakeTransactionRepository : TransactionRepository {
         reconciliations += expenses to countedAt
     }
 
+    /** What [hasCashWithdrawalSince] answers. */
+    var cashWithdrawn = false
+
+    override suspend fun hasCashWithdrawalSince(since: Instant) = cashWithdrawn
+
     override suspend fun deleteTransaction(id: Long) {
         cashExpenses.removeAll { it.id == id }
     }

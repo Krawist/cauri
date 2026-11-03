@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Debug builds only: shows a count reminder on demand, to check it without waiting for the evening.
+             adb shell am broadcast -a com.cauri.debug.SHOW_COUNT_REMINDER -e reason WITHDRAWAL -p com.cauri.debug -->
+        <receiver
+            android:name=".reminder.DebugCountReminderReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cauri.debug.SHOW_COUNT_REMINDER" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

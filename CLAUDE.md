@@ -199,7 +199,15 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   « Reste non identifié ». « Enregistrer » records one confirmed cash expense per typed line and the rest, without
   category nor note (shown « Divers cash »), at the time of the count (`TransactionRepository.recordReconciliation`),
   then the count. Visits join the moments with the places tickets (CAU-33+). `formatMoment` and `dashedBorder` moved
-  to `:core:design`. Checked on a phone. Next: CAU-17.
+  to `:core:design`. Checked on a phone.
+- [ ] **CAU-17** — `CountReminderService` (`:core:data`, JVM tests): from the chosen hour until 23 h, at most once a
+  day, never on a day already counted; « Quand c'est utile » after a withdrawal today, 3 cash expenses since the count
+  or a count 3 days old, « Chaque soir » otherwise too, « Jamais ». `CountReminderWorker` (`:feature:cash`, WorkManager
+  + Hilt, checked every hour, scheduled by `CauriApplication`) shows the notification, which opens the cash count
+  (`CountReminders.ACTION_COUNT_CASH`). Réglages: « Rappels de comptage », frequency and hour (19 h to 22 h), saved in
+  DataStore. Debug builds show a reminder on demand: `adb shell am broadcast -a com.cauri.debug.SHOW_COUNT_REMINDER
+  -e reason WITHDRAWAL -p com.cauri.debug`. Checked on a phone: the four texts, the coin icon and lagoon colour, a tap
+  opens the cash count and clears the notification; the evening check itself not seen firing yet. Next: CAU-18.
 
 Update this section at the end of each ticket.
 

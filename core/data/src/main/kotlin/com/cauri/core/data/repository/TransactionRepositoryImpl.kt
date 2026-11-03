@@ -79,5 +79,12 @@ internal class TransactionRepositoryImpl @Inject constructor(private val transac
         )
     }
 
+    override suspend fun hasCashWithdrawalSince(since: Instant): Boolean = transactionDao.existsOnAccountAfter(
+        accountId = CASH_ACCOUNT_ID,
+        type = TransactionType.TRANSFER_IN,
+        after = since,
+        excluded = TransactionStatus.DISMISSED,
+    )
+
     override suspend fun deleteTransaction(id: Long) = transactionDao.delete(id)
 }

@@ -1,6 +1,8 @@
 package com.cauri.core.data.preferences
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import com.cauri.core.data.model.CountReminderFrequency
+import com.cauri.core.data.model.CountReminderSettings
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
@@ -8,6 +10,7 @@ import com.cauri.core.data.model.UserProfile
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import java.io.File
+import java.time.LocalDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -79,6 +82,42 @@ internal class UserPreferencesRepositoryImplTest {
 
             // then
             repository.profile.first() shouldBe second
+        }
+    }
+
+    @Nested
+    inner class CountReminder {
+        @Test
+        fun `should remind when useful, from 20 h, until the user chooses`() = scope.runTest {
+            // when
+            val settings = repository.countReminder.first()
+
+            // then
+            settings shouldBe CountReminderSettings(frequency = CountReminderFrequency.WHEN_USEFUL, hour = 20)
+        }
+
+        @Test
+        fun `should keep the user's choice`() = scope.runTest {
+            // given
+            val chosen = CountReminderSettings(frequency = CountReminderFrequency.EVERY_EVENING, hour = 21)
+
+            // when
+            repository.saveCountReminder(chosen)
+
+            // then
+            repository.countReminder.first() shouldBe chosen
+        }
+    }
+
+    @Nested
+    inner class LastCountReminder {
+        @Test
+        fun `should keep the day of the last reminder`() = scope.runTest {
+            // when
+            repository.setLastCountReminder(LocalDate.of(2026, 11, 3))
+
+            // then
+            repository.lastCountReminder.first() shouldBe LocalDate.of(2026, 11, 3)
         }
     }
 }

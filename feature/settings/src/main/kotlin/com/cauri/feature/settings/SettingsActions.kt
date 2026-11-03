@@ -1,5 +1,7 @@
 package com.cauri.feature.settings
 
+import com.cauri.core.data.model.CountReminderSettings
+
 /** What the user can do on the settings screen. */
 internal interface SettingsActions {
     fun onBack()
@@ -11,4 +13,9 @@ internal interface SettingsActions {
     fun onLocation()
 
     fun onBattery()
+
+    /** Opens or closes the sheet of the cash count reminders. */
+    fun onCountReminder(open: Boolean)
+
+    fun onCountReminderChange(settings: CountReminderSettings)
 }

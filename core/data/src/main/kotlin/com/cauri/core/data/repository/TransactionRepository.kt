@@ -26,6 +26,9 @@ interface TransactionRepository {
      */
     suspend fun recordReconciliation(expenses: List<ReconciledExpense>, countedAt: Instant)
 
+    /** Whether cash was withdrawn after [since], a withdrawal « Rien dépensé » left aside. */
+    suspend fun hasCashWithdrawalSince(since: Instant): Boolean
+
     /** Deletes the transaction [id], such as an expense the user undid right away. */
     suspend fun deleteTransaction(id: Long)
 }

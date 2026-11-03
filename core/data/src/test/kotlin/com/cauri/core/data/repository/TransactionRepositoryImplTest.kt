@@ -16,6 +16,8 @@ import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -238,6 +240,51 @@ internal class TransactionRepositoryImplTest {
                 Triple(TransactionOrigin.RECONCILIATION, 2_500L, null),
             )
             cashCounts.balance.first().shouldNotBeNull().amount shouldBe 3_000
+        }
+    }
+
+    @Nested
+    inner class HasCashWithdrawalSince {
+        @Test
+        fun `should find a withdrawal after the time`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            repository.recordWithdrawal(
+                Withdrawal(
+                    accountId = momoId,
+                    amount = 20_000,
+                    fee = null,
+                    occurredAt = Instant.ofEpochSecond(2_000),
+                    rawSignalId = null,
+                ),
+            )
+
+            // when
+            val withdrawn = repository.hasCashWithdrawalSince(Instant.ofEpochSecond(1_000))
+
+            // then
+            withdrawn.shouldBeTrue()
+        }
+
+        @Test
+        fun `should not count a withdrawal from before the time`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            repository.recordWithdrawal(
+                Withdrawal(
+                    accountId = momoId,
+                    amount = 20_000,
+                    fee = null,
+                    occurredAt = Instant.ofEpochSecond(500),
+                    rawSignalId = null,
+                ),
+            )
+
+            // when
+            val withdrawn = repository.hasCashWithdrawalSince(Instant.ofEpochSecond(1_000))
+
+            // then
+            withdrawn.shouldBeFalse()
         }
     }
 

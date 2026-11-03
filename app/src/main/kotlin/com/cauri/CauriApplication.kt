@@ -1,11 +1,29 @@
 package com.cauri
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.cauri.core.design.glass.supportsGlassBlur
+import com.cauri.feature.cash.reminder.CountReminders
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
-internal class CauriApplication : Application() {
+internal class CauriApplication :
+    Application(),
+    Configuration.Provider {
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     /** Whether glass surfaces blur, chosen once per process, never per frame or per screen. */
     val glassBlur: Boolean by lazy { supportsGlassBlur() }
+
+    // Workers get their dependencies from Hilt; WorkManager starts on demand with this configuration.
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
+
+    override fun onCreate() {
+        super.onCreate()
+        CountReminders.schedule(this)
+    }
 }

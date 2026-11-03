@@ -21,6 +21,13 @@
     <string name="cash_count_total_question">Combien as-tu en poche ?</string>
     <string name="cash_count_type_total">Saisir le total directement</string>
     <string name="cash_currency" translatable="false">F</string>
+    <string name="cash_reminder_channel">Rappels de comptage</string>
+    <string name="cash_reminder_channel_description">Le soir, une suggestion de compter ton cash quand c\'est utile.</string>
+    <string name="cash_reminder_days">Ton dernier comptage date de quelques jours. Deux minutes suffisent pour le remettre à jour.</string>
+    <string name="cash_reminder_evening">Deux minutes pour garder ton cash à jour.</string>
+    <string name="cash_reminder_expenses">Plusieurs dépenses cash depuis ton dernier comptage : vérifie ce qu\'il te reste.</string>
+    <string name="cash_reminder_title">Et si tu comptais ton cash ?</string>
+    <string name="cash_reminder_withdrawal">Tu as retiré de l\'argent aujourd\'hui : un comptage garde ton cash à jour.</string>
     <string name="cash_split_add">+ Autre dépense</string>
     <string name="cash_split_added">Ajoutée par toi</string>
     <string name="cash_split_amount_of">Montant pour %1$s</string>

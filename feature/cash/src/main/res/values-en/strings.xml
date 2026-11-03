@@ -18,6 +18,13 @@
     <string name="cash_count_total">Total counted</string>
     <string name="cash_count_total_question">How much do you have on you?</string>
     <string name="cash_count_type_total">Type the total instead</string>
+    <string name="cash_reminder_channel">Count reminders</string>
+    <string name="cash_reminder_channel_description">In the evening, a suggestion to count your cash when it helps.</string>
+    <string name="cash_reminder_days">Your last count is a few days old. Two minutes are enough to update it.</string>
+    <string name="cash_reminder_evening">Two minutes to keep your cash up to date.</string>
+    <string name="cash_reminder_expenses">Several cash expenses since your last count: check what you have left.</string>
+    <string name="cash_reminder_title">How about counting your cash?</string>
+    <string name="cash_reminder_withdrawal">You withdrew money today: a count keeps your cash up to date.</string>
     <string name="cash_split_add">+ Other expense</string>
     <string name="cash_split_added">Added by you</string>
     <string name="cash_split_amount_of">Amount for %1$s</string>

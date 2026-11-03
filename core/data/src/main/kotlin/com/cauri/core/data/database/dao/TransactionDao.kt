@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.cauri.core.data.database.entity.TransactionEntity
 import com.cauri.core.data.database.entity.TransactionStatus
+import com.cauri.core.data.database.entity.TransactionType
 import java.time.Instant
 import kotlinx.coroutines.flow.Flow
 
@@ -42,6 +43,18 @@ internal interface TransactionDao {
         after: Instant,
         excluded: TransactionStatus,
     ): Flow<List<TransactionEntity>>
+
+    /** Whether [accountId] has a transaction of [type] after [after], not [excluded]. */
+    @Query(
+        "SELECT EXISTS(SELECT 1 FROM transactions WHERE accountId = :accountId AND type = :type " +
+            "AND occurredAt > :after AND status != :excluded)",
+    )
+    suspend fun existsOnAccountAfter(
+        accountId: Long,
+        type: TransactionType,
+        after: Instant,
+        excluded: TransactionStatus,
+    ): Boolean
 
     /** The transactions with [status], newest first. */
     @Query("SELECT * FROM transactions WHERE status = :status ORDER BY occurredAt DESC")

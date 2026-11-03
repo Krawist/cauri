@@ -190,7 +190,8 @@ Size: M. Dependencies: CAU-15. Mockup: « Répartir l'écart » (interactive).
 
 ### CAU-17 · Send cash count reminders
 
-A notification suggests counting the cash, for example in the evening after a day with many cash expenses or a withdrawal. Frequency adjustable in the settings.
+A notification suggests counting the cash, for example in the evening after a day with many cash 
+expenses or a withdrawal. Frequency adjustable in the settings.
 
 - No more than one count reminder a day.
 - The notification opens the count screen directly.

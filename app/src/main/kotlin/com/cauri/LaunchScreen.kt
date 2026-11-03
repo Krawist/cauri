@@ -29,7 +29,7 @@ import com.cauri.core.design.theme.CauriTheme
 import kotlin.time.Duration.Companion.seconds
 
 /** How long the launch screen stays before the home screen or the onboarding opens. */
-internal val LaunchDuration = 5.seconds
+internal val LaunchDuration = 2.seconds
 
 // Same tile as the system splash (res/drawable/splash_icon.xml), so the hand-off does not move.
 private val TileSize = 96.dp

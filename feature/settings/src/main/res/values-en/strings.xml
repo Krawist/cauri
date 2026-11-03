@@ -7,6 +7,21 @@
     <string name="settings_battery_section">Running</string>
     <string name="settings_battery_text">Otherwise your phone may stop Cauri, which would then miss your payments.</string>
     <string name="settings_battery_unrestricted">Free</string>
+    <string name="settings_count_reminder">Count reminders</string>
+    <string name="settings_count_reminder_every_evening">Every evening</string>
+    <string name="settings_count_reminder_every_evening_short">Every evening</string>
+    <string name="settings_count_reminder_every_evening_text">As long as you haven\'t counted that day.</string>
+    <string name="settings_count_reminder_from">From %1$d:00</string>
+    <string name="settings_count_reminder_hour">From</string>
+    <string name="settings_count_reminder_hour_value">%1$d:00</string>
+    <string name="settings_count_reminder_never">Never</string>
+    <string name="settings_count_reminder_never_text">You count whenever you like, from the home screen.</string>
+    <string name="settings_count_reminder_none">No reminder</string>
+    <string name="settings_count_reminder_when_useful">When it helps</string>
+    <string name="settings_count_reminder_when_useful_short">When useful</string>
+    <string name="settings_count_reminder_when_useful_text">After a withdrawal, several cash expenses or a few days without a count.</string>
+    <string name="settings_count_reminder_why">A reminder in the evening, one a day at most, to keep your cash up to date.</string>
+    <string name="settings_done">Done</string>
     <string name="settings_hint">Tap a row to change it in Android\'s settings.</string>
     <string name="settings_location">Location</string>
     <string name="settings_location_always">Always</string>
@@ -19,5 +34,6 @@
     <string name="settings_off">Off</string>
     <string name="settings_permissions">Permissions</string>
     <string name="settings_refused">Refused</string>
+    <string name="settings_reminders">Reminders</string>
     <string name="settings_title">Settings</string>
 </resources>

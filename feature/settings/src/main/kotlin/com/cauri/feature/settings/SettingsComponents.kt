@@ -78,7 +78,7 @@ internal fun RowGroup(content: @Composable () -> Unit) {
 internal fun SettingRow(
     @DrawableRes icon: Int,
     @StringRes title: Int,
-    @StringRes text: Int,
+    text: String,
     status: StatusPill,
     onClick: () -> Unit,
 ) {
@@ -103,7 +103,7 @@ internal fun SettingRow(
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
                 color = palette.ink,
             )
-            Text(text = stringResource(text), style = MaterialTheme.typography.bodySmall, color = palette.muted)
+            Text(text = text, style = MaterialTheme.typography.bodySmall, color = palette.muted)
         }
         Text(
             text = stringResource(status.label),
@@ -138,6 +138,11 @@ internal fun granted(@StringRes label: Int) =
 @Composable
 internal fun refused(@StringRes label: Int = R.string.settings_refused) =
     StatusPill(label = label, fill = CauriTheme.palette.coralSoft, color = CauriTheme.palette.coralText)
+
+/** Lagoon status: a setting the user turned on. */
+@Composable
+internal fun active(@StringRes label: Int) =
+    StatusPill(label = label, fill = CauriTheme.palette.accentSoft, color = CauriTheme.palette.accentText)
 
 /** Neutral status, for what is optional, such as the location. */
 @Composable

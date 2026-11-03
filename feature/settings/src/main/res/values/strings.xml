@@ -7,6 +7,21 @@
     <string name="settings_battery_section">Fonctionnement</string>
     <string name="settings_battery_text">Sinon ton téléphone peut arrêter Cauri, qui raterait alors tes paiements.</string>
     <string name="settings_battery_unrestricted">Libre</string>
+    <string name="settings_count_reminder">Rappels de comptage</string>
+    <string name="settings_count_reminder_every_evening">Chaque soir</string>
+    <string name="settings_count_reminder_every_evening_short">Chaque soir</string>
+    <string name="settings_count_reminder_every_evening_text">Tant que tu n\'as pas compté dans la journée.</string>
+    <string name="settings_count_reminder_from">À partir de %1$d h</string>
+    <string name="settings_count_reminder_hour">À partir de</string>
+    <string name="settings_count_reminder_hour_value">%1$d h</string>
+    <string name="settings_count_reminder_never">Jamais</string>
+    <string name="settings_count_reminder_never_text">Tu comptes quand tu veux, depuis l\'accueil.</string>
+    <string name="settings_count_reminder_none">Aucun rappel</string>
+    <string name="settings_count_reminder_when_useful">Quand c\'est utile</string>
+    <string name="settings_count_reminder_when_useful_short">Si utile</string>
+    <string name="settings_count_reminder_when_useful_text">Après un retrait, plusieurs dépenses cash ou quelques jours sans comptage.</string>
+    <string name="settings_count_reminder_why">Un rappel le soir, un seul par jour, pour garder ton cash à jour.</string>
+    <string name="settings_done">Terminé</string>
     <string name="settings_hint">Touche une ligne pour la changer dans les réglages d\'Android.</string>
     <string name="settings_location">Localisation</string>
     <string name="settings_location_always">Toujours</string>
@@ -19,5 +34,6 @@
     <string name="settings_off">Désactivé</string>
     <string name="settings_permissions">Autorisations</string>
     <string name="settings_refused">Refusé</string>
+    <string name="settings_reminders">Rappels</string>
     <string name="settings_title">Réglages</string>
 </resources>
