@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- « Cash dans ta poche » on the home screen, as the card of Accueil: the label in gold, the amount, what is available
      today, and « + » for the quick entry. -->
+<!-- A widget draws with Android's own views (RemoteViews): android:tint, never AppCompat's app:tint. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -52,5 +54,6 @@
         android:contentDescription="@string/widget_add"
         android:padding="12dp"
         android:src="@drawable/ic_nav_add"
-        android:tint="@color/widget_on_accent" />
+        android:tint="@color/widget_on_accent"
+        tools:ignore="UseAppTint" />
 </LinearLayout>
