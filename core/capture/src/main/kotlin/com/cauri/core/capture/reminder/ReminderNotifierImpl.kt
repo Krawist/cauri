@@ -24,6 +24,8 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 
 /** Default implementation for [ReminderNotifier]. */
+// One builder per notification and per intent it sends.
+@Suppress("TooManyFunctions")
 @Singleton
 internal class ReminderNotifierImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -102,7 +104,8 @@ internal class ReminderNotifierImpl @Inject constructor(
         )
     }
 
-    // « 5 000 F payés à Boulangerie Saker », « MoMo · c'est quoi ? » and the likely categories.
+    // « 5 000 F payés à Boulangerie Saker », « MoMo · c'est quoi ? », the two likely categories and « Autre », which
+    // opens the card's edit sheet.
     private suspend fun payment(builder: NotificationCompat.Builder, operation: PendingOperation, name: String?) {
         val amount = formatFcfa(operation.amount + operation.fees)
         builder.setContentTitle(
@@ -120,6 +123,22 @@ internal class ReminderNotifierImpl @Inject constructor(
                 },
             )
         }
+        builder.addAction(0, context.getString(R.string.reminder_other_category), openEdit(operation.transactionId))
+    }
+
+    // Opens the app on the edit sheet of the card [transactionId]; the app clears the notification.
+    private fun openEdit(transactionId: Long): PendingIntent {
+        val intent = checkNotNull(context.packageManager.getLaunchIntentForPackage(context.packageName)) {
+            "Cauri has a launcher activity"
+        }.setAction(EditFromNotification.ACTION_EDIT_TRANSACTION)
+            .putExtra(EditFromNotification.EXTRA_TRANSACTION, transactionId)
+            .putExtra(EditFromNotification.EXTRA_NOTIFICATION, notificationId(transactionId))
+        return PendingIntent.getActivity(
+            context,
+            notificationId(transactionId),
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
     }
 
     // The answer of a button, to the receiver; one request per card, answer and [choice] among the buttons of the same
@@ -194,7 +213,9 @@ internal class ReminderNotifierImpl @Inject constructor(
 
     private companion object {
         const val CHANNEL_ID = "reminders"
-        const val CATEGORIES = 3
+
+        // Two categories and « Autre »: Android shows three buttons at most.
+        const val CATEGORIES = 2
         const val REPLIES = 4
         const val SUMMARY_NOTIFICATION = 9_999
         const val NOTIFICATION_BASE = 10_000L

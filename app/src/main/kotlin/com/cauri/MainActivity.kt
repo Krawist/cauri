@@ -9,8 +9,10 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cauri.core.capture.reminder.EditFromNotification
 import com.cauri.core.design.theme.CauriTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +28,7 @@ internal class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         // Only a fresh start: a restored activity already showed the screen its intent asked for.
-        if (savedInstanceState == null) notificationTarget = NotificationTarget.of(intent?.action)
+        if (savedInstanceState == null) opened(intent)
         setContent {
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             CauriTheme(glassBlur = (application as CauriApplication).glassBlur) {
@@ -42,6 +44,14 @@ internal class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        NotificationTarget.of(intent.action)?.let { notificationTarget = it }
+        opened(intent)
+    }
+
+    // The screen [intent] asks for, and the notification it came from cleared when it asks to.
+    private fun opened(intent: Intent?) {
+        NotificationTarget.of(intent)?.let { notificationTarget = it }
+        intent?.getIntExtra(EditFromNotification.EXTRA_NOTIFICATION, 0)?.takeIf { it != 0 }?.let {
+            NotificationManagerCompat.from(this).cancel(it)
+        }
     }
 }

@@ -103,11 +103,13 @@ internal fun CauriApp(
 private val MergeBarBottom = 100.dp
 
 // The screen a notification asked for.
-private fun NavHostController.open(target: NotificationTarget) = when (target) {
-    NotificationTarget.CASH_COUNT -> navigateToCashCount()
-    NotificationTarget.SETTINGS -> navigateToSettings()
-    NotificationTarget.SUGGESTED_PLACE -> navigateToSuggestedPlace()
-    NotificationTarget.EVENING_SUMMARY -> navigateToEveningSummary()
+private fun NavHostController.open(target: NotificationTarget, onEdit: (Long) -> Unit) = when (target) {
+    NotificationTarget.CashCount -> navigateToCashCount()
+    NotificationTarget.Settings -> navigateToSettings()
+    NotificationTarget.SuggestedPlace -> navigateToSuggestedPlace()
+    NotificationTarget.EveningSummaryScreen -> navigateToEveningSummary()
+    // The sheet shows over the screen the app opens on.
+    is NotificationTarget.EditTransaction -> onEdit(target.transactionId)
 }
 
 // The tabs of the bottom bar, in order, by the route of their graph.
@@ -128,7 +130,7 @@ private fun CauriNavHost(
     // A notification opens its screen, once the onboarding is done.
     LaunchedEffect(notificationTarget) {
         if (notificationTarget != null) {
-            if (onboardingCompleted) navController.open(notificationTarget)
+            if (onboardingCompleted) navController.open(notificationTarget, onEdit = { editedTransaction = it })
             onNotificationTargetShown()
         }
     }

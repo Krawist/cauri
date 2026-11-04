@@ -660,6 +660,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   on the Galaxy S23 in dark mode: the emergency fund created at 100 000 F, a tontine added. An estimate, a split going
   to a saving and an envelope not seen on a phone.
 
+- [ ] **CAU-31** — the actions of the notifications, most of them there since CAU-37 (a category button confirms the
+  payment with it; a visit's usual amount, « Rien » or the amount typed in the notification confirms a cash expense at
+  the place). As the mockup, a payment now offers the two likely categories and « Autre », which opens the app on the
+  edit sheet of its card (`EditFromNotification`, `NotificationTarget.EditTransaction`, now a sealed interface) and
+  clears the notification. By decision the visit keeps one amount: Android shows three buttons at most, and the mockup's
+  second amount would take the place of « Autre montant ». Checked on the Galaxy S23 with a made-up payment: the
+  buttons, « Autre » opening the sheet, the notification gone.
+
 Update this section at the end of each ticket.
 
 ## Way of working

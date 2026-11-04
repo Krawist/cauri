@@ -13,6 +13,7 @@
     <string name="reminder_open">Open</string>
     <string name="reminder_other_amount">Other amount</string>
     <string name="reminder_other_amount_hint">Other amount in F</string>
+    <string name="reminder_other_category">Other</string>
     <string name="reminder_payment_text">%1$s · what was it?</string>
     <string name="reminder_payment_title">%1$s F paid to %2$s</string>
     <string name="reminder_payment_title_alone">%1$s F paid</string>
