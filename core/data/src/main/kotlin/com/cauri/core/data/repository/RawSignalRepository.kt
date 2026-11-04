@@ -15,6 +15,15 @@ interface RawSignalRepository {
     /** The signals no template read yet, oldest first: to read when they arrive, and again when templates change. */
     suspend fun unparsed(): List<RawSignal>
 
+    /**
+     * The signals no template read that the phone's model was never asked about, received since [since], the oldest
+     * first, [limit] at most.
+     */
+    suspend fun unreadByModel(since: Instant, limit: Int): List<RawSignal>
+
+    /** Remembers that the phone's model was asked about the signal [id]: it is never asked again. */
+    suspend fun markReadByModel(id: Long)
+
     /** When the last signal was received; `null` while Cauri kept none. */
     suspend fun lastReceivedAt(): Instant?
 }

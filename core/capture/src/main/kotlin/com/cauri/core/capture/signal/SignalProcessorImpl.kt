@@ -1,5 +1,6 @@
 package com.cauri.core.capture.signal
 
+import com.cauri.core.ai.LanguageModel
 import com.cauri.core.capture.reminder.ReminderDecider
 import com.cauri.core.data.model.NewAccount
 import com.cauri.core.data.model.RawSignal
@@ -10,8 +11,11 @@ import com.cauri.core.data.repository.TransactionRepository
 import com.cauri.core.data.repository.TransferRepository
 import com.cauri.core.data.repository.VisitRepository
 import com.cauri.core.parsing.MessageParser
+import com.cauri.core.parsing.ModelMessageReader
+import com.cauri.core.parsing.model.ParsedMessage
 import com.cauri.core.parsing.model.ReceivedMessage
 import java.time.Clock
+import java.time.Duration
 import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,6 +38,8 @@ internal class SignalProcessorImpl @Inject constructor(
     private val preferencesRepository: UserPreferencesRepository,
     private val visitRepository: VisitRepository,
     private val reminders: ReminderDecider,
+    private val languageModel: LanguageModel,
+    private val modelReader: ModelMessageReader,
     private val clock: Clock,
 ) : SignalProcessor {
     // The listener and the screens may ask at the same time: a signal must be read only once.
@@ -50,17 +56,10 @@ internal class SignalProcessorImpl @Inject constructor(
                     message = signal.toMessage(),
                     catalog = templateCatalogRepository.catalog,
                     zone = ZoneId.systemDefault(),
-                )?.let { parsed ->
-                    val account = accountRepository.accountOf(parsed.provider)
-                    if (account != null) {
-                        transactionRepository.recordDetected(
-                            detectionService.detect(signal = signal, parsed = parsed, account = account),
-                        )
-                    } else if (knownAccount(parsed.provider) != null) {
-                        preferencesRepository.proposeAccount(parsed.provider)
-                    }
-                }
+                )?.let { record(signal, it) }
             }
+            // Then the phone's model, when it has one, for the messages no template knows.
+            if (languageModel.isAvailable()) readWithModel()
             // A transfer between two accounts comes as two messages: once both are read, they become one transfer.
             transferRepository.linkTransfers()
             // A payment read during a visit to a shop is what was spent there.
@@ -68,6 +67,30 @@ internal class SignalProcessorImpl @Inject constructor(
             // Each new card: notify now, in the evening, or not at all.
             reminders.decidePending()
         }
+    }
+
+    // The operation [parsed] in [signal], on its account; an account the user does not have is offered instead.
+    private suspend fun record(signal: RawSignal, parsed: ParsedMessage) {
+        val account = accountRepository.accountOf(parsed.provider)
+        if (account != null) {
+            val operation = detectionService.detect(signal = signal, parsed = parsed, account = account)
+            transactionRepository.recordDetected(operation)
+        } else if (knownAccount(parsed.provider) != null) {
+            preferencesRepository.proposeAccount(parsed.provider)
+        }
+    }
+
+    // Each recent message no template read is asked about once, a few at a time: the model takes seconds each. Only
+    // what it copied from the message is kept (ModelMessageReader); the operation waits « à confirmer » as any other.
+    private suspend fun readWithModel() {
+        rawSignalRepository.unreadByModel(since = clock.instant() - MODEL_WINDOW, limit = MODEL_BATCH)
+            .forEach { signal ->
+                val message = signal.toMessage()
+                // No answer, such as AICore busy: the message is asked about again next time.
+                val answer = languageModel.answer(modelReader.prompt(message)) ?: return@forEach
+                rawSignalRepository.markReadByModel(signal.id)
+                modelReader.read(answer, message, templateCatalogRepository.catalog)?.let { record(signal, it) }
+            }
     }
 
     override suspend fun follow(provider: String) {
@@ -85,4 +108,10 @@ internal class SignalProcessorImpl @Inject constructor(
 
     private fun RawSignal.toMessage() =
         ReceivedMessage(packageName = sender, title = title, text = text, receivedAt = receivedAt)
+
+    private companion object {
+        // An older message is history: what it reports was spent long ago.
+        val MODEL_WINDOW: Duration = Duration.ofDays(7)
+        const val MODEL_BATCH = 10
+    }
 }

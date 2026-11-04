@@ -13,7 +13,10 @@ import java.time.Instant
  * @property title Title of the notification: for an SMS, its sender (« MobileMoney »…); `null` when it has none.
  * @property text Text of the notification.
  * @property receivedAt When the notification was posted.
- * @property templateVersion Version of the template that parsed it; `null` while no template recognises it.
+ * @property templateVersion Version of the template that parsed it, `model.gemini-nano@1` when the phone's model read
+ *   it; `null` while none recognises it.
+ * @property modelReadAt When the phone's model was asked about it, whatever it found; `null` while it was not: a
+ *   message is asked about once.
  */
 @Entity(tableName = "raw_signals")
 internal data class RawSignalEntity(
@@ -23,4 +26,5 @@ internal data class RawSignalEntity(
     val text: String,
     val receivedAt: Instant,
     val templateVersion: String?,
+    val modelReadAt: Instant? = null,
 )

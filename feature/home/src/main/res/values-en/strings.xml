@@ -43,6 +43,7 @@
     <string name="home_card_kind_visit">Visit of %1$d min</string>
     <string name="home_card_kind_withdrawal">Withdrawal</string>
     <string name="home_card_nothing_spent">Nothing spent</string>
+    <string name="home_card_read_by_model">%1$s · read by the AI</string>
     <string name="home_card_set_aside">Set aside</string>
     <string name="home_cash_label">Cash in your pocket</string>
     <string name="home_count_cash">Count my cash</string>

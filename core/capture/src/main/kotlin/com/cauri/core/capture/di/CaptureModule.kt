@@ -46,6 +46,8 @@ import com.cauri.core.engine.SummaryTime
 import com.cauri.core.engine.SummaryTimeImpl
 import com.cauri.core.parsing.MessageParser
 import com.cauri.core.parsing.MessageParserImpl
+import com.cauri.core.parsing.ModelMessageReader
+import com.cauri.core.parsing.ModelMessageReaderImpl
 import com.cauri.core.parsing.TemplateCatalogReader
 import com.cauri.core.parsing.TemplateCatalogReaderImpl
 import dagger.Binds
@@ -75,6 +77,9 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindMessageParser(impl: MessageParserImpl): MessageParser
+
+    @Binds
+    abstract fun bindModelMessageReader(impl: ModelMessageReaderImpl): ModelMessageReader
 
     @Binds
     abstract fun bindPermissionService(impl: PermissionServiceImpl): PermissionService

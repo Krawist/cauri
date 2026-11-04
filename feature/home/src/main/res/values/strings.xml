@@ -46,6 +46,7 @@
     <string name="home_card_kind_visit">Visite de %1$d min</string>
     <string name="home_card_kind_withdrawal">Retrait</string>
     <string name="home_card_nothing_spent">Rien dépensé</string>
+    <string name="home_card_read_by_model">%1$s · lu par l\'IA</string>
     <string name="home_card_set_aside">Mis de côté</string>
     <string name="home_cash_label">Cash dans ta poche</string>
     <string name="home_count_cash">Compter mon cash</string>

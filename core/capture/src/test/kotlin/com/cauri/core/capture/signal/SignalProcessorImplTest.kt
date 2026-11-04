@@ -1,5 +1,6 @@
 package com.cauri.core.capture.signal
 
+import com.cauri.core.ai.FakeLanguageModel
 import com.cauri.core.capture.reminder.CountingDecider
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.DetectedType
@@ -11,6 +12,7 @@ import com.cauri.core.data.repository.FakeTransactionRepository
 import com.cauri.core.data.repository.FakeTransferRepository
 import com.cauri.core.data.repository.FakeVisitRepository
 import com.cauri.core.parsing.MessageParserImpl
+import com.cauri.core.parsing.ModelMessageReaderImpl
 import com.cauri.core.parsing.model.Direction
 import com.cauri.core.parsing.model.MessageKind
 import com.cauri.core.parsing.model.MessageTemplate
@@ -32,6 +34,7 @@ internal class SignalProcessorImplTest {
     private val transfers = FakeTransferRepository()
     private val preferences = FakeUserPreferencesRepository()
     private val visits = FakeVisitRepository()
+    private val model = FakeLanguageModel().apply { available = false }
 
     // A made-up template: the processing, not the operators' formats, is tested here.
     private val processor = SignalProcessorImpl(
@@ -61,6 +64,8 @@ internal class SignalProcessorImplTest {
         preferencesRepository = preferences,
         visitRepository = visits,
         reminders = CountingDecider(),
+        languageModel = model,
+        modelReader = ModelMessageReaderImpl(),
         clock = Clock.systemUTC(),
     )
 
@@ -117,6 +122,39 @@ internal class SignalProcessorImplTest {
 
             // then
             transfers.linkRuns shouldBe 1
+        }
+
+        @Test
+        fun `should have the phone's model read a message no template recognises, once`() = runTest {
+            // given
+            val accountId = accounts.createAccount(orangeMoney())
+            payment(text = "Achat 1500 FCFA chez Boulangerie Test")
+            model.available = true
+            model.answer = """{"kind": "PAYMENT", "direction": "DEBIT", "amount": "1500"}"""
+            processor.process()
+
+            // when
+            processor.process()
+
+            // then
+            transactions.detected.map { Triple(it.accountId, it.amount, it.templateVersion) } shouldContainExactly
+                listOf(Triple(accountId, 1_500L, "model.gemini-nano@1"))
+            model.prompts.size shouldBe 1
+        }
+
+        @Test
+        fun `should keep nothing the model computed`() = runTest {
+            // given
+            accounts.createAccount(orangeMoney())
+            payment(text = "Achat 1500 FCFA, frais 50 FCFA")
+            model.available = true
+
+            // when
+            model.answer = """{"kind": "PAYMENT", "direction": "DEBIT", "amount": "1550"}"""
+            processor.process()
+
+            // then
+            transactions.detected.shouldBeEmpty()
         }
 
         @Test
@@ -187,7 +225,8 @@ internal class SignalProcessorImplTest {
             sender = "com.samsung.android.messaging",
             title = "OrangeMoney",
             text = text,
-            receivedAt = Instant.ofEpochSecond(1_000),
+            // Recent: the model reads the messages of the last week only.
+            receivedAt = Instant.now(),
         )
     }
 

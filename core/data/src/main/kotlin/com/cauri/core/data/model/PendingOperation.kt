@@ -30,6 +30,7 @@ import java.time.Instant
  * @property stayMinutes How long the visit lasted, in minutes, for the card of a visit; `null` for an operation read
  *   in a message.
  * @property placeId Place it was made at, the shop for a visit; `null` when unknown.
+ * @property readByModel Whether the phone's model read its message, no template knowing it: to check more closely.
  */
 data class PendingOperation(
     val transactionId: Long,
@@ -49,4 +50,5 @@ data class PendingOperation(
     val proposedAmount: Long? = null,
     val stayMinutes: Long? = null,
     val placeId: Long? = null,
+    val readByModel: Boolean = false,
 )

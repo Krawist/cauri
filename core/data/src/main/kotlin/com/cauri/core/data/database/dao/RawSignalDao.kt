@@ -30,4 +30,18 @@ internal interface RawSignalDao {
     /** The signals no template recognised yet, oldest first, to replay when a template is added. */
     @Query("SELECT * FROM raw_signals WHERE templateVersion IS NULL ORDER BY receivedAt")
     suspend fun getUnparsed(): List<RawSignalEntity>
+
+    /**
+     * The signals no template recognised that the phone's model was never asked about, received since [since], the
+     * oldest first, [limit] at most.
+     */
+    @Query(
+        "SELECT * FROM raw_signals WHERE templateVersion IS NULL AND modelReadAt IS NULL AND receivedAt >= :since " +
+            "ORDER BY receivedAt LIMIT :limit",
+    )
+    suspend fun getUnreadByModel(since: Instant, limit: Int): List<RawSignalEntity>
+
+    /** Remembers that the phone's model was asked about the signal [id] at [at]. */
+    @Query("UPDATE raw_signals SET modelReadAt = :at WHERE id = :id")
+    suspend fun setModelReadAt(id: Long, at: Instant)
 }

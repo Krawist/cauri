@@ -25,19 +25,12 @@ class MessageParserImpl @Inject constructor() : MessageParser {
         val text = message.text.replace(SPACES, " ").trim()
         return catalog.templates
             .asSequence()
-            .filter { template -> sentBy(template = template, message = message) }
+            .filter { template -> template.isSentBy(message) }
             .firstNotNullOfOrNull { template ->
                 pattern(template).find(text)?.let { match ->
                     read(template = template, match = match, receivedAt = message.receivedAt, zone = zone)
                 }
             }
-    }
-
-    private fun sentBy(template: MessageTemplate, message: ReceivedMessage): Boolean {
-        val title = message.title?.trim()
-        return template.senders.any { sender ->
-            sender == message.packageName || sender.trim().equals(title, ignoreCase = true)
-        }
     }
 
     private fun pattern(template: MessageTemplate): Regex =

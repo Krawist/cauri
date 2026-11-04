@@ -707,6 +707,16 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   the Galaxy S23, which has no AICore: the field hidden. Reading a text not tried on a phone (the S25 has Gemini Nano:
   with the user's go-ahead).
 
+- [ ] **CAU-50 (messages)** — at the user's request, the phone's model also reads, as a fallback, the messages of a
+  known sender no template recognises (`ModelMessageReader` in `:core:parsing`, JVM tests): `SignalProcessor` asks it,
+  when available, after the templates, about each message of the last 7 days it was never asked about, 10 at a time
+  (`raw_signals.modelReadAt`, database v23; a message without answer is asked again). The model only names the kind and
+  the direction and copies the amount, the fees and the balance; code keeps the operation only when each is written in
+  the message, on the account of the sender's one provider, in its templates' currency. It is recorded « à confirmer »
+  as any other (template `model.gemini-nano@1`), its card saying « Paiement · lu par l'IA »
+  (`PendingOperation.readByModel`). By decision, an operation the model read stays once a template comes. Checked on the
+  Galaxy S23: the upgrade to v23 (no AICore there, so no reading).
+
 Update this section at the end of each ticket.
 
 ## Way of working

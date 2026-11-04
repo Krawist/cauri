@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.ai)
     implementation(projects.core.data)
     implementation(projects.core.design)
     implementation(projects.core.engine)
@@ -28,6 +29,7 @@ dependencies {
     testFixturesImplementation(projects.core.engine)
     testFixturesImplementation(libs.kotlinx.coroutines.core)
 
+    testImplementation(testFixtures(projects.core.ai))
     testImplementation(testFixtures(projects.core.data))
     testImplementation(libs.kotlinx.coroutines.test)
 }

@@ -61,8 +61,10 @@ internal fun CardHeader(card: ConfirmationCard, onEditAmount: () -> Unit, onConf
         operation.type == PendingType.INCOME -> Triple(DesignR.drawable.ic_income, palette.greenText, palette.greenSoft)
         else -> Triple(DesignR.drawable.ic_transfer, palette.ink, palette.chip)
     }
-    val kind = operation.stayMinutes?.let { stringResource(R.string.home_card_kind_visit, it) }
+    val read = operation.stayMinutes?.let { stringResource(R.string.home_card_kind_visit, it) }
         ?: stringResource(kindLabel(operation))
+    // No template knew the message: the phone's model read it, to check more closely.
+    val kind = if (operation.readByModel) stringResource(R.string.home_card_read_by_model, read) else read
     val title = operation.toAccountName?.let {
         stringResource(R.string.home_pending_transfer, operation.accountName, it)
     } ?: operation.counterparty?.let(::readableName) ?: kind

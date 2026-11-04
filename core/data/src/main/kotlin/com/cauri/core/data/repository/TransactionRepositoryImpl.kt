@@ -51,7 +51,9 @@ internal class TransactionRepositoryImpl @Inject constructor(
         transactionDao.observeByStatus(TransactionStatus.DETECTED),
         accountDao.observeAll(),
         visitDao.observeWithCard(),
-    ) { detected, accounts, visits ->
+        transactionDao.observeReadByModel(),
+    ) { detected, accounts, visits, readByModel ->
+        val byModel = readByModel.toSet()
         val byId = accounts.associateBy { it.id }
         // How long each visit with a card lasted, by its card.
         val stays = visits.associate { visit ->
@@ -69,6 +71,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             sides.filterNotNull().sumOf { fees[it.accountId to it.occurredAt] ?: 0 }
         val single = others.filter { it.rawSignalId != null }.map {
             it.toPending(byId, to = null, fees = if (it.type == TransactionType.EXPENSE) feesOf(it) else 0)
+                .copy(readByModel = it.id in byModel)
         }
         // A shop left with nothing paid: what was spent there in cash, the amount to type.
         val visited = others.filter { it.origin == TransactionOrigin.VISIT }.map {
@@ -83,6 +86,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
                 // accounts, name only the other account, already shown.
                 side.copy(counterparty = read.singleOrNull()?.counterparty)
                     .toPending(byId, to = into?.accountId, fees = feesOf(out, into))
+                    .copy(readByModel = read.any { it.id in byModel })
             }
         }
         (single + visited + paired).sortedByDescending { it.occurredAt }

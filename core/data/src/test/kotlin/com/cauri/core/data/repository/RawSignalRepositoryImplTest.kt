@@ -10,8 +10,10 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
+import java.time.Clock
 import java.time.Duration
 import java.time.Instant
+import java.time.ZoneOffset
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -25,7 +27,7 @@ internal class RawSignalRepositoryImplTest {
     @BeforeEach
     fun setUp() {
         database = inMemoryDatabase()
-        repository = RawSignalRepositoryImpl(database.rawSignalDao())
+        repository = RawSignalRepositoryImpl(database.rawSignalDao(), CLOCK)
     }
 
     @AfterEach
@@ -189,5 +191,35 @@ internal class RawSignalRepositoryImplTest {
             // then
             last.shouldBeNull()
         }
+    }
+
+    @Nested
+    inner class UnreadByModel {
+        @Test
+        fun `should give the signals no template read that the model was never asked about`() = runTest {
+            // given
+            val asked = database.rawSignalDao().insert(signal(text = "Asked", templateVersion = null))
+            database.rawSignalDao().insert(signal(text = "Read", templateVersion = "orange-money.payment@1"))
+            database.rawSignalDao().insert(signal(text = "Waiting", templateVersion = null))
+
+            // when
+            repository.markReadByModel(asked)
+
+            // then
+            repository.unreadByModel(since = Instant.EPOCH, limit = 10).map { it.text } shouldContainExactly
+                listOf("Waiting")
+        }
+    }
+
+    private fun signal(text: String, templateVersion: String?) = RawSignalEntity(
+        sender = "com.samsung.android.messaging",
+        title = "OrangeMoney",
+        text = text,
+        receivedAt = CLOCK.instant(),
+        templateVersion = templateVersion,
+    )
+
+    private companion object {
+        val CLOCK: Clock = Clock.fixed(Instant.parse("2026-11-04T12:00:00Z"), ZoneOffset.UTC)
     }
 }

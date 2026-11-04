@@ -82,6 +82,13 @@ internal interface TransactionDao {
     @Query("SELECT * FROM transactions WHERE splitGroup = :splitGroup ORDER BY id")
     suspend fun getBySplitGroup(splitGroup: String): List<TransactionEntity>
 
+    /** The waiting transactions the phone's model read in their message, again after each change. */
+    @Query(
+        "SELECT transactions.id FROM transactions JOIN raw_signals ON raw_signals.id = transactions.rawSignalId " +
+            "WHERE transactions.status = 'DETECTED' AND raw_signals.templateVersion LIKE 'model.%'",
+    )
+    fun observeReadByModel(): Flow<List<Long>>
+
     /** The transactions with [status], newest first. */
     @Query("SELECT * FROM transactions WHERE status = :status ORDER BY occurredAt DESC")
     fun observeByStatus(status: TransactionStatus): Flow<List<TransactionEntity>>
