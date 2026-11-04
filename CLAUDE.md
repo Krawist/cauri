@@ -97,6 +97,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:core:capture`         | Permissions, notifications, signals, health, geofences    | 10–24, 33      |
 | `:core:parsing`         | Message templates and parsing (pure Kotlin)               | 19, 20         |
 | `:core:engine`          | Reminder rules, guardrails, bandit (pure Kotlin)          | 37–42          |
+| `:core:ai`              | The phone's language model (Gemini Nano), never a number | 50             |
 
 Goals (phase 3) will get their own module when their ticket starts.
 
@@ -690,6 +691,18 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   sauvegarde » under the profile step opens the restore alone (`navigateToRestore`). Checked on the Galaxy S23 with
   made-up data: a backup written to Téléchargements (10 Ko), restored, the app restarting on Accueil with its data. From
   the onboarding of a new phone not tried on a phone.
+
+- [ ] **CAU-50** — « taxi 1500, beignets 500 » in the quick entry (`FreeTextEntry`, `FreeTextViewModel` in
+  `:feature:transactions`): by decision on Gemini Nano (`:core:ai`, `LanguageModel`, `GeminiNanoModel` on ML Kit's
+  Prompt API 1.0.0-beta4, through AICore), the field shown only for an expense on a phone whose model is available, its
+  download started on a phone that can get it, hidden everywhere else. The model only extracts (`FreeTextReader` in
+  `:core:parsing`, JVM tests): a JSON list of label, amount as written and one of the user's categories, at temperature
+  0; code keeps an expense only when its amount is written in the text (« 1500 », « 1 500 », « 1.500 », up to 10 000 000
+  F) and its category is one of the user's, so that an amount the model added or converted is left out. The expenses
+  read wait for the user, each removable, then « Enregistrer 2 dépenses » records them confirmed on the account chosen,
+  named as written, the category as Cauri's proposal (`ManualEntry.fromFreeText`, origin `NATURAL_LANGUAGE`). Checked on
+  the Galaxy S23, which has no AICore: the field hidden. Reading a text not tried on a phone (the S25 has Gemini Nano:
+  with the user's go-ahead).
 
 Update this section at the end of each ticket.
 

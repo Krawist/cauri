@@ -22,6 +22,8 @@ datastore = "1.1.7"
 work = "2.10.3"
 kotlinxCoroutines = "1.10.2"
 playServicesLocation = "21.3.0"
+# Gemini Nano on the phones that have it, through AICore (CAU-50).
+mlkitGenaiPrompt = "1.0.0-beta4"
 # Haze 2.x needs Compose 1.12 and Kotlin 2.4: stay on 1.6 until the stack moves.
 haze = "1.6.10"
 kotlinxSerialization = "1.8.1"
@@ -64,6 +66,7 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+mlkit-genai-prompt = { module = "com.google.mlkit:genai-prompt", version.ref = "mlkitGenaiPrompt" }
 
 # Used by build-logic
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

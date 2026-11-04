@@ -209,7 +209,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             accountId = entry.accountId,
             type = if (entry.type == EntryType.INCOME) TransactionType.INCOME else TransactionType.EXPENSE,
             status = TransactionStatus.CONFIRMED,
-            origin = TransactionOrigin.MANUAL,
+            origin = if (entry.fromFreeText) TransactionOrigin.NATURAL_LANGUAGE else TransactionOrigin.MANUAL,
             amount = entry.amount,
             occurredAt = entry.occurredAt,
             categoryId = entry.categoryId,

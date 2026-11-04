@@ -66,6 +66,15 @@
     <string name="transactions_edit_rest_none">Left without category: %1$s F</string>
     <string name="transactions_edit_separate">Separate</string>
     <string name="transactions_edit_split">Split across several categories</string>
+    <string name="transactions_free_text_hint">Or write: taxi 1500, doughnuts 500</string>
+    <string name="transactions_free_text_no_category">No category</string>
+    <string name="transactions_free_text_nothing">Cauri found no expense with its amount in this text.</string>
+    <string name="transactions_free_text_read">Read the text</string>
+    <string name="transactions_free_text_remove">Remove</string>
+    <plurals name="transactions_free_text_save">
+        <item quantity="one">Save %1$d expense</item>
+        <item quantity="other">Save %1$d expenses</item>
+    </plurals>
     <string name="transactions_from">From</string>
     <string name="transactions_help_lines">Tap a line to change it, split it or separate what Cauri joined.</string>
     <string name="transactions_merged">Merged with an operation from a message</string>

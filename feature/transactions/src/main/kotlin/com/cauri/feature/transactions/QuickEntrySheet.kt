@@ -57,6 +57,7 @@ import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.transactions.entry.EntryChip
 import com.cauri.feature.transactions.entry.EntryChipHeight
 import com.cauri.feature.transactions.entry.EntryHeader
+import com.cauri.feature.transactions.entry.FreeTextEntry
 import com.cauri.feature.transactions.entry.QuickEntryActions
 import com.cauri.feature.transactions.entry.QuickEntryType
 import com.cauri.feature.transactions.entry.QuickEntryUiState
@@ -143,6 +144,8 @@ private fun QuickEntryContent(state: QuickEntryUiState, actions: QuickEntryActio
         verticalArrangement = Arrangement.spacedBy(CauriSpacing.l),
     ) {
         EntryHeader(type = state.type, onType = actions::onType, onClose = onClose)
+        // Several expenses at once in words, on the phones whose model reads them (CAU-50).
+        if (state.type == QuickEntryType.EXPENSE) FreeTextEntry(accountId = state.accountId, onSaved = onClose)
         Amount(digits = state.amount, tooHigh = state.amountTooHigh)
         if (state.type == QuickEntryType.TRANSFER) {
             Label(text = stringResource(R.string.transactions_from))

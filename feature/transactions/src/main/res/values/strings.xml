@@ -72,6 +72,17 @@
     <string name="transactions_edit_separate">Séparer</string>
     <string name="transactions_edit_split">Répartir sur plusieurs catégories</string>
     <string name="transactions_foreign_amount" translatable="false">%1$s %2$s</string>
+    <string name="transactions_free_text_amount" translatable="false">%1$s F</string>
+    <string name="transactions_free_text_hint">Ou écris : taxi 1500, beignets 500</string>
+    <string name="transactions_free_text_no_category">Sans catégorie</string>
+    <string name="transactions_free_text_nothing">Cauri n\'a pas trouvé de dépense avec son montant dans ce texte.</string>
+    <string name="transactions_free_text_read">Lire le texte</string>
+    <string name="transactions_free_text_remove">Retirer</string>
+    <plurals name="transactions_free_text_save">
+        <item quantity="one">Enregistrer %1$d dépense</item>
+        <item quantity="many">Enregistrer %1$d dépenses</item>
+        <item quantity="other">Enregistrer %1$d dépenses</item>
+    </plurals>
     <string name="transactions_from">De</string>
     <string name="transactions_help_lines">Touche une ligne pour la modifier, la répartir ou séparer ce que Cauri a réuni.</string>
     <string name="transactions_merged">Fusionné avec une opération reçue par message</string>

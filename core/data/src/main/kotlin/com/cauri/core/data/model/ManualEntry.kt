@@ -13,6 +13,8 @@ import java.time.Instant
  * @property occurredAt When the money moved.
  * @property proposedCategoryId Category Cauri proposed for the entry, whatever the user chose; `null` when it proposed
  *   none.
+ * @property fromFreeText Whether it was read by the on-device model in a free text the user typed, rather than typed
+ *   on the keypad.
  */
 data class ManualEntry(
     val accountId: Long,
@@ -22,4 +24,5 @@ data class ManualEntry(
     val note: String?,
     val occurredAt: Instant,
     val proposedCategoryId: Long? = null,
+    val fromFreeText: Boolean = false,
 )
