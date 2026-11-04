@@ -3780,5 +3780,73 @@
       "reference": "CO146292.4246.C98808",
       "occurredAt": "2026-01-15T10:00:00Z"
     }
+  },
+  {
+    "sender": "UBA Cameroon",
+    "packageName": "com.google.android.gm",
+    "text": "Opération sur votre compte UBA\nCeci pour vous informer qu une operation a eu lieu sur votre compte UBA, avec les details suivants:\n\nNom Du Compte: ATANGANA MBALLA JEAN\nType Operation: Débit\nMontant Operation: XAF37,450.00\nDevise: XAF\nNumero Compte: 045XXXXXXX17\nDetails Operation: MSC-POS PUR @SUPERMARCHE DU CENTRE >C\nDate/Heure: 14-10-2026 18:42:10\nSolde: XAF4,218,600.00",
+    "expected": {
+      "templateId": "uba.mail.debit",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 37450,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4218600,
+      "counterparty": "SUPERMARCHE DU CENTRE",
+      "reference": null,
+      "occurredAt": "2026-10-14T17:42:10Z"
+    }
+  },
+  {
+    "sender": "UBA Cameroon",
+    "packageName": "com.google.android.gm",
+    "text": "Opération sur votre compte UBA\nCeci pour vous informer qu une operation a eu lieu sur votre compte UBA, avec les details suivants:\n\nNom Du Compte: ATANGANA MBALLA JEAN\nType Operation: Crédit\nMontant Operation: XAF185,300.00\nDevise: XAF\nNumero Compte: 045XXXXXXX17\nDetails Operation: UBA CAMERO-ENTREPRISE TEST\nDate/Heure: 02-10-2026 09:15:00\nSolde: XAF3,904,250.00",
+    "expected": {
+      "templateId": "uba.mail.credit",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 185300,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 3904250,
+      "counterparty": "ENTREPRISE TEST",
+      "reference": null,
+      "occurredAt": "2026-10-02T08:15:00Z"
+    }
+  },
+  {
+    "sender": "UBA Cameroon",
+    "packageName": "com.google.android.gm",
+    "text": "Opération sur votre compte UBA\nCeci pour vous informer qu une operation a eu lieu sur votre compte UBA, avec les details suivants:\n\nNom Du Compte: ATANGANA MBALLA JEAN\nType Operation: Débit\nMontant Operation: XAF10,000.00\nDevise: XAF\nNumero Compte: 045XXXXXXX17\nDetails Operation: B2W/REF123456/123456789/ORANGEMONEYCM\nDate/Heure: 21-10-2026 07:30:05\nSolde: XAF4,208,600.00",
+    "expected": {
+      "templateId": "uba.mail.transfer-to-orange-money",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 10000,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 4208600,
+      "counterparty": "ORANGEMONEYCM",
+      "reference": "REF123456",
+      "occurredAt": "2026-10-21T06:30:05Z"
+    }
+  },
+  {
+    "sender": "UBA Cameroon",
+    "packageName": "com.google.android.gm",
+    "text": "Opération sur votre compte UBA\nCeci pour vous informer qu une operation a eu lieu sur votre compte UBA, avec les details suivants:\n\nNom Du Compte: ATANGANA MBALLA JEAN\nType Operation: Débit\nMontant Operation: XAF2,500.00\nDevise: XAF\nNumero Compte: 045XXXXXXX17\nDetails Operation: MSC-POS PUR @BOULANGERIE TEST >C\nDate/Heure: 22-10-2026 12:00:00",
+    "expected": {
+      "templateId": "uba.mail.debit",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 2500,
+      "currency": "XAF",
+      "fees": null,
+      "balance": null,
+      "counterparty": "BOULANGERIE TEST",
+      "reference": null,
+      "occurredAt": "2026-10-22T11:00:00Z"
+    }
   }
 ]

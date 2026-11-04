@@ -733,6 +733,15 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   a handle, or `LONG_PRESS` on the whole row, and the gap between rows): « Mes habitudes » and the sub-categories use it
   too. A long press moving a category checked on the S23; a merge and an archive not tried on a phone.
 
+- [ ] **CAU-20 (UBA mails)** — three templates for the mails of UBA (catalogue 2026.11.04), written from two real mails
+  given by the user and kept anonymised in `collected_messages.json` (now with the `packageName` of a mail): « Type
+  Operation: Débit » to Orange Money (`B2W/…/ORANGEMONEYCM`, a transfer), any other debit (a payment, the merchant after
+  « POS PUR @ »), and « Crédit » (money received, the sender after « UBA CAMERO- »); the account's name and number never
+  read, the balance read when the notification shows it. By decision the templates name the mail apps (Gmail, Outlook)
+  as senders, the wording of the mail being UBA's own. Not working yet: the capture keeps a mail only from a sender
+  listed in `watched_senders.json`, and the name Gmail shows for these mails is not known yet; nor whether Gmail's
+  notification holds the whole mail.
+
 Update this section at the end of each ticket.
 
 ## Way of working

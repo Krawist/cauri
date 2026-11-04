@@ -72,7 +72,7 @@ internal class MessageTemplatesTest {
     }
 
     private fun received(message: CollectedMessage) = ReceivedMessage(
-        packageName = "com.samsung.android.messaging",
+        packageName = message.packageName ?: "com.samsung.android.messaging",
         title = message.sender,
         text = message.text,
         receivedAt = RECEIVED_AT,

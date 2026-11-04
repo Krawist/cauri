@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.03",
+  "version": "2026.11.04",
   "templates": [
     {
       "id": "orange-money.transfer-sent",
@@ -273,6 +273,51 @@
       "direction": "DEBIT",
       "currency": "XAF",
       "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.mail.transfer-to-orange-money",
+      "version": 1,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.mail.debit",
+      "version": 1,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?(?:\\S*POS PUR @?)?(?<counterparty>.+?)(?: >\\S*)? Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.mail.credit",
+      "version": 1,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "Type Operation ?: ?Cr[ée]dit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?(?:UBA CAMERO-)?(?<counterparty>.+?) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
       "decimalSeparator": ".",
       "dateFormat": "dd-MM-yyyy HH:mm:ss"
     }
