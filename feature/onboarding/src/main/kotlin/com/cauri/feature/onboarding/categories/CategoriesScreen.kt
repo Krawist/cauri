@@ -25,7 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -64,17 +64,18 @@ internal fun CategoriesScreen(
     viewModel: CategoriesViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+    // The resources of the current configuration: the names are saved in the language the user sees.
+    val resources = LocalResources.current
     LaunchedEffect(state.answered) {
         state.answered?.let { answers ->
             onCategoriesChosen(
-                answers.pack.map { NewCategory(name = context.getString(it.label), nature = it.nature) } +
+                answers.pack.map { NewCategory(name = resources.getString(it.label), nature = it.nature) } +
                     answers.added.map { NewCategory(name = it, nature = CategoryNature.EXPENSE) },
                 answers.habits.map {
                     FirstHabit(
-                        name = context.getString(it.label),
+                        name = resources.getString(it.label),
                         amount = it.amount,
-                        categoryName = context.getString(it.category.label),
+                        categoryName = resources.getString(it.category.label),
                     )
                 },
             )
