@@ -45,6 +45,23 @@ internal class ModelMessageReaderImplTest {
         }
 
         @Test
+        fun `should read an amount whose thousands a comma groups`() {
+            // given
+            val message = MESSAGE.copy(
+                text = "DEBIT Montant: XAF12,345.00 Desc: MSC-PUR @ TEST Solde: XAF1,234,567.00 .",
+            )
+            val answer = """{"kind": "PAYMENT", "direction": "DEBIT", "amount": "12,345.00",
+                "balance": "1,234,567.00"}"""
+
+            // when
+            val parsed = reader.read(answer, message, CATALOG)
+
+            // then
+            parsed?.amount shouldBe 12_345
+            parsed?.balance shouldBe 1_234_567
+        }
+
+        @Test
         fun `should leave the message unread when an amount is not in it`() {
             // given
             val answer = """{"kind": "PAYMENT", "direction": "DEBIT", "amount": "2550", "fees": null}"""

@@ -3898,5 +3898,38 @@
       "reference": "OR702846NB15QX",
       "occurredAt": "2026-10-28T19:47:03Z"
     }
+  },
+  {
+    "sender": "UBA",
+    "text": "DEBIT \n Montant: XAF4,990.00 \n Compte: 512XXXXXXX37 \n Desc: MSC-PUR @ MDTERM-Google Play            Mou \n Date: 17-10-2026 08:22:45 \n Solde: XAF783,210.00 .",
+    "expected": {
+      "templateId": "uba.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4990,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 783210,
+      "counterparty": "MDTERM-Google Play Mou",
+      "reference": null,
+      "occurredAt": "2026-10-17T07:22:45Z"
+    }
+  },
+  {
+    "sender": "UBACameroun.Alert",
+    "packageName": "com.google.android.gm",
+    "text": "UBA Transaction Notification Services (UBA ALERT)\nMontant Operation: XAF4,990.00 \nDetails Operation: MSC-PUR @ MDTERM-Google Play Mou \nDate/Heure: 17-10-2026 08:22:45 \nSolde: XAF783,210.00 \n",
+    "expected": {
+      "templateId": "uba.mail.card-payment",
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "amount": 4990,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 783210,
+      "counterparty": "MDTERM-Google Play Mou",
+      "reference": null,
+      "occurredAt": "2026-10-17T07:22:45Z"
+    }
   }
 ]

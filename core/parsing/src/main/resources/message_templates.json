@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.06",
+  "version": "2026.11.07",
   "templates": [
     {
       "id": "orange-money.transfer-sent",
@@ -252,7 +252,7 @@
     },
     {
       "id": "uba.card-payment",
-      "version": 1,
+      "version": 2,
       "provider": "UBA",
       "senders": [
         "UBA"
@@ -260,7 +260,7 @@
       "kind": "PAYMENT",
       "direction": "DEBIT",
       "currency": "XAF",
-      "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?\\S*POS PUR @?(?<counterparty>.+?)(?: >\\S*)? Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
+      "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?(?:\\S+ )?\\S*PUR @? ?(?<counterparty>.+?)(?: >\\S*)? Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
       "decimalSeparator": ".",
       "dateFormat": "dd-MM-yyyy HH:mm:ss"
     },
@@ -338,6 +338,21 @@
       "direction": "DEBIT",
       "currency": "XAF",
       "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?(?:\\S*POS PUR @?)?(?<counterparty>.+?)(?: >\\S*)? Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.mail.card-payment",
+      "version": 1,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "(?:Type Operation ?: ?D[ée]bit )?Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?(?:\\S+ )?\\S*PUR @? ?(?<counterparty>.+?)(?: >\\S*)? Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
       "decimalSeparator": ".",
       "dateFormat": "dd-MM-yyyy HH:mm:ss"
     },

@@ -806,6 +806,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   `collected_messages.json`. The Orange Money SMS of that transfer never reached Cauri (hidden or never sent): its
   balance is estimated (CAU-25).
 
+- [ ] **CAU-20 (UBA card payments online)** — on the owner's S25, a Google Play payment by UBA card gave nothing: the
+  SMS writes « MSC-PUR @ » where a shop writes « MSC-POS PUR @ », and the model's answer was refused, its amounts «
+  15,376.00 » not found in the message. Catalogue 2026.11.07: `uba.card-payment` v2 reads both, and
+  `uba.mail.card-payment` reads the mail of a purchase whose « Type Operation » Gmail hides, after `uba.mail.debit`.
+  `ModelMessageReaderImpl` now finds the amounts whose thousands a comma or a dot groups (CAU-50). Two samples
+  anonymised in `collected_messages.json`. Not checked on a phone: the waiting debit is read again when Accueil opens.
+
 Update this section at the end of each ticket.
 
 ## Way of working

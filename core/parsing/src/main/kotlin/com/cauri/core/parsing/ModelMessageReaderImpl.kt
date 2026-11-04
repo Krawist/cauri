@@ -82,9 +82,15 @@ class ModelMessageReaderImpl @Inject constructor() : ModelMessageReader {
         }
     }
 
-    // Every amount written in [text], in minor units: digits grouped by spaces or not, decimals after a dot or a comma.
+    // Every amount written in [text], in minor units: digits grouped by thousands or not (« 2 500 », « 15,376.00 »,
+    // « 1.500 »), decimals after a dot or a comma; grouped digits without decimals are read both ways.
     private fun writtenAmounts(text: String, digits: Int): Set<Long> = AMOUNT.findAll(text)
-        .mapNotNull { readAmount(it.value.replace(',', DECIMAL), DECIMAL, digits) }
+        .flatMap { match ->
+            listOfNotNull(
+                readAmount(match.value.replace(',', DECIMAL), DECIMAL, digits),
+                match.value.takeIf { GROUPED.matches(it) }?.let { readAmount(it, null, digits) },
+            )
+        }
         .toSet()
 
     // What the model answers; a field it forgot is `null`.
@@ -99,7 +105,8 @@ class ModelMessageReaderImpl @Inject constructor() : ModelMessageReader {
     )
 
     private companion object {
-        val AMOUNT = Regex("\\d{1,3}(?:[ \\u00A0\\u202F]\\d{3})+(?:[.,]\\d+)?|\\d+(?:[.,]\\d+)?")
+        val AMOUNT = Regex("\\d{1,3}(?:[ \\u00A0\\u202F,.]\\d{3})+(?:[.,]\\d+)?|\\d+(?:[.,]\\d+)?")
+        val GROUPED = Regex("\\d{1,3}(?:[ \\u00A0\\u202F,.]\\d{3})+")
         const val DECIMAL = '.'
     }
 }
