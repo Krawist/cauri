@@ -513,24 +513,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 
 - [ ] **CAU-38** — the guardrails of the reminders (`ReminderGuardrails`, `:core:engine`, JVM tests), applied before the
   rules decide, which choose among what they allow (rules now « rules-2 », without the night and the spacing): never a
-  notification in the quiet hours, past the daily cap, within 30 minutes of the last one, nor, by decision (to
-  validate), while the user is at home or at work (an open visit there, `VisitRepository.atHomeOrWork`): the evening
-  summary instead; with « Rappels après une visite » off, by decision (to validate), a visit is skipped, its card still
-  waiting in « À confirmer ». « Rappels intelligents » (`RemindersScreen`, `RemindersViewModel`, `:feature:settings`),
-  opened from a row of Réglages: the switch, « Heures de silence » (a sheet, start and end an hour a step, 22:00 – 07:00
-  by default), « Rappels par jour » from 1 to 10 (4 by default, as the mockup), « Lieux sans rappel » listing home, work
-  and the shops without reminder, a tap opening « Mes lieux ». Saved in DataStore (`ReminderSettings`). The rows «
-  Récapitulatif du soir » and « Ce que Cauri a appris » come with CAU-39 and CAU-41. Checked on the Galaxy S23 in dark
-  mode: the screen, the sheet, the cap; a guardrail at work on a real decision not seen on a phone. Next: CAU-39.
+  notification in the quiet hours, past the daily cap, within 30 minutes of the last one, nor, by decision, while the
+  user is at home or at work (an open visit there, `VisitRepository.atHomeOrWork`): the evening summary instead; with «
+  Rappels après une visite » off, by decision, a visit is skipped, its card still waiting in « À confirmer ». « Rappels
+  intelligents » (`RemindersScreen`, `RemindersViewModel`, `:feature:settings`), opened from a row of Réglages: the
+  switch, « Heures de silence » (a sheet, start and end an hour a step, 22:00 – 07:00 by default), « Rappels par jour »
+  from 1 to 10 (4 by default, as the mockup), « Lieux sans rappel » listing home, work and the shops without reminder, a
+  tap opening « Mes lieux ». Saved in DataStore (`ReminderSettings`). The rows « Récapitulatif du soir » and « Ce que
+  Cauri a appris » come with CAU-39 and CAU-41. Checked on the Galaxy S23 in dark mode: the screen, the sheet, the cap;
+  a guardrail at work on a real decision not seen on a phone. Next: CAU-39.
 
 - [ ] **CAU-39** — the evening summary: `EveningSummaryWorker` (`:core:capture`, every quarter of an hour, scheduled by
   `CauriApplication`) has `EveningSummarySender` (JVM tests) send, once a day and before 23 h, « Récapitulatif : 4
   éléments à confirmer » with « Ouvrir », only when cards wait, by decision every card of « À confirmer » and not only
   those the engine kept for the summary (`lastEveningSummary` in DataStore). Its time (`SummaryTime`, `:core:engine`,
   JVM tests) is the one chosen in « Rappels intelligents » (« Récapitulatif du soir », a sheet: « Automatique » or 19:00
-  to 22:00 by half hours), else, by decision (to validate), the median time of the user's answers given in the evening
-  (18 h to 23 h) over 30 days (`DecisionLogRepository.answerTimes`), to the half hour, between 18:00 and 22:00, once 10
-  answers show it; 20:30 before. A tap opens « Ce soir » (`EveningSummaryScreen`, `:feature:home`,
+  to 22:00 by half hours), else, by decision, the median time of the user's answers given in the evening (18 h to 23 h)
+  over 30 days (`DecisionLogRepository.answerTimes`), to the half hour, between 18:00 and 22:00, once 10 answers show
+  it; 20:30 before. A tap opens « Ce soir » (`EveningSummaryScreen`, `:feature:home`,
   `NotificationTarget.EVENING_SUMMARY`, outside the graph of the tab: no bottom bar): « Dépensé aujourd'hui » and « Dont
   cash », one line per card (« Visite de 25 min · cash », the amount in a pill or « Montant ? » dashed, ✓), a swipe to
   the left sets it aside, a tap on the amount types it, on the line opens the edit sheet; « Tout valider (n) » confirms
@@ -542,18 +542,18 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 
 - [ ] **CAU-40** — the outcomes of the decisions and their rewards. The answers close them as before (`CONFIRMED`,
   `NOTHING_SPENT`, `DISMISSED`), a late one, such as from the evening summary, now correcting a `TIMEOUT`; a cash count
-  closes those of the visits it settles (`VisitDao.settle`), by decision (to validate): an amount found `MISSED` after a
-  skip, `CONFIRMED` otherwise, the cards it sets aside `TIMEOUT`. `ReminderLearningWorker` (`:core:capture`, once a day,
+  closes those of the visits it settles (`VisitDao.settle`), by decision: an amount found `MISSED` after a skip,
+  `CONFIRMED` otherwise, the cards it sets aside `TIMEOUT`. `ReminderLearningWorker` (`:core:capture`, once a day,
   charging and idle, scheduled by `CauriApplication`) has `DecisionLogRepository.attributeOutcomes` give the others
-  theirs (`OutcomeService`, JVM tests), again and again the same: a visit whose card went, paid during it, by decision
-  (to validate), typed by hand `MISSED` after a skip and `CONFIRMED` otherwise, read in a message `NOTHING_SPENT` (no
-  cash); a card waiting 3 days `TIMEOUT`. Left out of the training (`decision_log.excluded`, database v18,
-  `DecisionExclusion`): a notification set aside within 2 seconds (`ACCIDENTAL`), and, by decision, a notification
-  Android did not show, Cauri's notifications being off, as « never seen » (`UNSEEN`, at decision time). The rewards are
-  `RewardTable` (`:core:engine`, « rewards-1 », JVM tests), values from -1 to 1 per action and outcome, applied at
-  training time (CAU-41), by decision (to validate): a notification confirmed 1, set aside or timed out -0.5, the
-  summary quieter (0.7 to -0.3), a skip right when nothing was spent (0.5) and -1 for any expense missed. Checked on the
-  Galaxy S23: the upgrade to v18. Next: CAU-41.
+  theirs (`OutcomeService`, JVM tests), again and again the same: a visit whose card went, paid during it, by decision,
+  typed by hand `MISSED` after a skip and `CONFIRMED` otherwise, read in a message `NOTHING_SPENT` (no cash); a card
+  waiting 3 days `TIMEOUT`. Left out of the training (`decision_log.excluded`, database v18, `DecisionExclusion`): a
+  notification set aside within 2 seconds (`ACCIDENTAL`), and, by decision, a notification Android did not show, Cauri's
+  notifications being off, as « never seen » (`UNSEEN`, at decision time). The rewards are `RewardTable`
+  (`:core:engine`, « rewards-1 », JVM tests), values from -1 to 1 per action and outcome, applied at training time
+  (CAU-41), by decision: a notification confirmed 1, set aside or timed out -0.5, the summary quieter (0.7 to -0.3), a
+  skip right when nothing was spent (0.5) and -1 for any expense missed. Checked on the Galaxy S23: the upgrade to v18.
+  Next: CAU-41.
 
 - [ ] **CAU-41** — the contextual bandit: `Bandit` (`:core:engine`, JVM tests), linear Thompson sampling over the three
   actions, one Bayesian linear regression of the reward per action (λ 1, the weights drawn with a spread of 0.5),
@@ -562,17 +562,16 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   the outcomes, then train on the valid decisions (closed, not left out, same layout of the features) of the last 90
   days and since the last start from zero (`learningSince` in DataStore), the rewards of `RewardTable` applied then, and
   publish the model in one write as the next version (`bandit_models`, database v19, `BanditRepository`); the same log
-  publishes nothing new, and a model can be rebuilt from the log at any time. By decision (to validate), the bandit
-  takes over once 150 decisions are valid, 15 of each action; the rules decide until then, and their score stays a
-  feature. `ReminderDecider` logs « bandit-3 » and the probability when the bandit decides. « Rappels intelligents »
-  shows « Ce que Cauri a appris » (`LessonsCard`, gold, as the mockup), by decision told from the log rather than from
-  the weights: the two hours the user answers most in (10 answers at least), the shop where a visit leads to an expense
-  7 times in 10 or more, the one 2 in 10 or less (5 visits at least), « Appris sur 214 réponses en 6 semaines », «
-  Repartir de zéro » (a dialog) forgetting the models and the decisions before it; « Cauri apprend de tes réponses… »
-  while nothing is learnt. Debug builds run the nightly learning on demand (`adb shell am broadcast -a
-  com.cauri.debug.LEARN_REMINDERS -p com.cauri.debug`). Checked on the Galaxy S23 in dark mode: the upgrade to v19, the
-  card while learning, the dialog, the learning on demand without error. A model trained on real answers not seen: the
-  phone has 3. Next: CAU-42.
+  publishes nothing new, and a model can be rebuilt from the log at any time. By decision, the bandit takes over once
+  150 decisions are valid, 15 of each action; the rules decide until then, and their score stays a feature.
+  `ReminderDecider` logs « bandit-3 » and the probability when the bandit decides. « Rappels intelligents » shows « Ce
+  que Cauri a appris » (`LessonsCard`, gold, as the mockup), by decision told from the log rather than from the weights:
+  the two hours the user answers most in (10 answers at least), the shop where a visit leads to an expense 7 times in 10
+  or more, the one 2 in 10 or less (5 visits at least), « Appris sur 214 réponses en 6 semaines », « Repartir de zéro »
+  (a dialog) forgetting the models and the decisions before it; « Cauri apprend de tes réponses… » while nothing is
+  learnt. Debug builds run the nightly learning on demand (`adb shell am broadcast -a com.cauri.debug.LEARN_REMINDERS -p
+  com.cauri.debug`). Checked on the Galaxy S23 in dark mode: the upgrade to v19, the card while learning, the dialog,
+  the learning on demand without error. A model trained on real answers not seen: the phone has 3. Next: CAU-42.
 
 - [ ] **CAU-42** — the category of a card is now predicted per merchant and per place (`CategoryRepository.predicted`,
   `CategoryPredictionService` with JVM tests): the categories the user confirmed before with the same merchant (case and
