@@ -7,6 +7,7 @@ import com.cauri.core.capture.health.CaptureHealth
 import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.capture.reminder.EveningSummary
 import com.cauri.core.capture.reminder.ReminderLearning
+import com.cauri.core.capture.reminder.ReminderNotificationSweeper
 import com.cauri.core.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
 import com.cauri.feature.places.discovery.PlaceDiscovery
@@ -27,6 +28,9 @@ internal class CauriApplication :
     @Inject
     lateinit var cashWidget: CashWidgetUpdater
 
+    @Inject
+    lateinit var reminderNotifications: ReminderNotificationSweeper
+
     /** Whether glass surfaces blur, chosen once per process, never per frame or per screen. */
     val glassBlur: Boolean by lazy { supportsGlassBlur() }
 
@@ -43,5 +47,6 @@ internal class CauriApplication :
         EveningSummary.schedule(this)
         ReminderLearning.schedule(this)
         cashWidget.start()
+        reminderNotifications.start()
     }
 }

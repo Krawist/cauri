@@ -309,6 +309,8 @@ internal class ReminderDeciderImplTest {
         override suspend fun showSummary(count: Int) = true
 
         override fun dismiss(transactionId: Long) = Unit
+
+        override fun keepOnly(transactionIds: Set<Long>) = Unit
     }
 
     private companion object {

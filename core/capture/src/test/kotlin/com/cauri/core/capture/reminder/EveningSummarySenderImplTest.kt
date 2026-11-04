@@ -150,6 +150,8 @@ internal class EveningSummarySenderImplTest {
         }
 
         override fun dismiss(transactionId: Long) = Unit
+
+        override fun keepOnly(transactionIds: Set<Long>) = Unit
     }
 
     private companion object {

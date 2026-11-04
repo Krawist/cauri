@@ -20,6 +20,8 @@ import com.cauri.core.capture.reminder.ReminderDecider
 import com.cauri.core.capture.reminder.ReminderDeciderImpl
 import com.cauri.core.capture.reminder.ReminderLearner
 import com.cauri.core.capture.reminder.ReminderLearnerImpl
+import com.cauri.core.capture.reminder.ReminderNotificationSweeper
+import com.cauri.core.capture.reminder.ReminderNotificationSweeperImpl
 import com.cauri.core.capture.reminder.ReminderNotifier
 import com.cauri.core.capture.reminder.ReminderNotifierImpl
 import com.cauri.core.capture.signal.DetectionService
@@ -86,6 +88,9 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindPlaceWatcher(impl: PlaceWatcherImpl): PlaceWatcher
+
+    @Binds
+    abstract fun bindReminderNotificationSweeper(impl: ReminderNotificationSweeperImpl): ReminderNotificationSweeper
 
     @Binds
     abstract fun bindReminderDecider(impl: ReminderDeciderImpl): ReminderDecider

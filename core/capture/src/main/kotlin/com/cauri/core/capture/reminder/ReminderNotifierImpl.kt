@@ -66,6 +66,15 @@ internal class ReminderNotifierImpl @Inject constructor(
     override fun dismiss(transactionId: Long) =
         NotificationManagerCompat.from(context).cancel(notificationId(transactionId))
 
+    override fun keepOnly(transactionIds: Set<Long>) {
+        val manager = NotificationManagerCompat.from(context)
+        val kept = transactionIds.map(::notificationId).toSet()
+        manager.activeNotifications
+            .map { it.id }
+            .filter { it in NOTIFICATION_BASE until NOTIFICATION_BASE + NOTIFICATION_SPAN && it !in kept }
+            .forEach(manager::cancel)
+    }
+
     // « Marché Mokolo : combien as-tu dépensé ? », the usual amount, « Rien » and « Autre montant ».
     private suspend fun visit(builder: NotificationCompat.Builder, operation: PendingOperation, name: String?) {
         val category = operation.categoryId?.let { id -> categories.categories.first().firstOrNull { it.id == id } }

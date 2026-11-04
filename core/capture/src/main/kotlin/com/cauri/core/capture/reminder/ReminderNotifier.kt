@@ -19,4 +19,7 @@ internal interface ReminderNotifier {
 
     /** Takes the notification of the card [transactionId] off, once answered. */
     fun dismiss(transactionId: Long)
+
+    /** Takes off the notifications of the cards not among [transactionIds]: answered elsewhere, such as in the app. */
+    fun keepOnly(transactionIds: Set<Long>)
 }
