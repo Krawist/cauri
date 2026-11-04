@@ -8,6 +8,8 @@ import com.cauri.core.data.repository.ActivityRepository
 import com.cauri.core.data.repository.ActivityRepositoryImpl
 import com.cauri.core.data.repository.AvailableRepository
 import com.cauri.core.data.repository.AvailableRepositoryImpl
+import com.cauri.core.data.repository.BackupRepository
+import com.cauri.core.data.repository.BackupRepositoryImpl
 import com.cauri.core.data.repository.BanditRepository
 import com.cauri.core.data.repository.BanditRepositoryImpl
 import com.cauri.core.data.repository.BudgetRepository
@@ -59,6 +61,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindAvailableRepository(impl: AvailableRepositoryImpl): AvailableRepository
+
+    @Binds
+    abstract fun bindBackupRepository(impl: BackupRepositoryImpl): BackupRepository
 
     @Binds
     abstract fun bindBudgetRepository(impl: BudgetRepositoryImpl): BudgetRepository

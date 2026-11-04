@@ -99,5 +99,6 @@
     <string name="profile_occupation_self_employed">Self-employed</string>
     <string name="profile_occupation_student">Student</string>
     <string name="profile_occupation_trader">Trader</string>
+    <string name="profile_restore">Used Cauri before? Restore a backup</string>
     <string name="profile_title">Let\'s get to know you</string>
 </resources>

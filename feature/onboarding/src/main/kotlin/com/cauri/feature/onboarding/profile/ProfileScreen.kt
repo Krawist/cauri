@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,7 +34,11 @@ private const val PROFILE_STEP = 1
 
 /** Profile step of the onboarding: [onProfileAnswered] receives the three answers once given. */
 @Composable
-internal fun ProfileScreen(onProfileAnswered: (ProfileAnswers) -> Unit, viewModel: ProfileViewModel = hiltViewModel()) {
+internal fun ProfileScreen(
+    onProfileAnswered: (ProfileAnswers) -> Unit,
+    onRestore: () -> Unit,
+    viewModel: ProfileViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(state.answered) {
         state.answered?.let { answers ->
@@ -46,9 +52,12 @@ internal fun ProfileScreen(onProfileAnswered: (ProfileAnswers) -> Unit, viewMode
         onOccupationSelect = viewModel::onOccupationSelect,
         onIncomeTypeSelect = viewModel::onIncomeTypeSelect,
         onContinue = viewModel::onContinue,
+        onRestore = onRestore,
     )
 }
 
+// Parameters: one per answer of the step, « Continuer » and the restore.
+@Suppress("LongParameterList")
 @Composable
 private fun ProfileContent(
     state: ProfileUiState,
@@ -56,6 +65,7 @@ private fun ProfileContent(
     onOccupationSelect: (Occupation) -> Unit,
     onIncomeTypeSelect: (IncomeType) -> Unit,
     onContinue: () -> Unit,
+    onRestore: () -> Unit,
 ) {
     OnboardingStep(
         step = PROFILE_STEP,
@@ -84,6 +94,11 @@ private fun ProfileContent(
         QuestionLabel(R.string.profile_income, modifier = Modifier.padding(top = CauriSpacing.xxl))
         IncomeTypeChoices(selected = state.incomeType, onSelect = onIncomeTypeSelect)
         if (ProfileField.INCOME_TYPE in state.missingFields) MissingAnswer(R.string.onboarding_choice_missing)
+
+        // A new phone: everything comes back from a backup instead (CAU-48).
+        TextButton(onClick = onRestore, modifier = Modifier.padding(top = CauriSpacing.xl)) {
+            Text(text = stringResource(R.string.profile_restore), color = CauriTheme.palette.accentText)
+        }
     }
 }
 
@@ -102,6 +117,7 @@ private fun ProfileContentPreview() {
                 onOccupationSelect = {},
                 onIncomeTypeSelect = {},
                 onContinue = {},
+                onRestore = {},
             )
         }
     }

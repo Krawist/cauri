@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="backup_cancel">Annuler</string>
+    <string name="backup_export">Sauvegarder dans un fichier</string>
+    <string name="backup_failed">Le fichier n\'a pas pu être lu ou écrit. Réessaie avec un autre emplacement.</string>
+    <string name="backup_hint">Sans la phrase secrète, personne ne peut lire la sauvegarde, et Cauri non plus : note-la à un endroit sûr.</string>
+    <string name="backup_mismatch">Les deux phrases secrètes sont différentes.</string>
+    <string name="backup_not_a_backup">Ce fichier n\'est pas une sauvegarde de Cauri.</string>
+    <string name="backup_passphrase">Phrase secrète</string>
+    <string name="backup_passphrase_again">La même, encore une fois</string>
+    <string name="backup_restore">Restaurer une sauvegarde</string>
+    <string name="backup_restore_confirm">Remplacer</string>
+    <string name="backup_restore_confirm_text">Les données de ce téléphone seront remplacées par celles de la sauvegarde, puis Cauri redémarrera.</string>
+    <string name="backup_restore_confirm_title">Remplacer les données ?</string>
+    <string name="backup_restore_text">Choisis le fichier de ta sauvegarde et tape la phrase secrète avec laquelle tu l\'as faite.</string>
+    <string name="backup_restored">Données restaurées. Cauri redémarre…</string>
+    <string name="backup_saved">Sauvegarde enregistrée.</string>
+    <string name="backup_text">Toutes tes données dans un fichier chiffré, que tu gardes où tu veux : sur le téléphone, une carte mémoire ou Drive. Il permet de tout retrouver sur un nouveau téléphone.</string>
+    <string name="backup_title">Sauvegarde chiffrée</string>
+    <string name="backup_too_new">Cette sauvegarde vient d\'une version plus récente de Cauri : mets d\'abord Cauri à jour.</string>
+    <string name="backup_too_short">La phrase secrète doit avoir au moins 8 caractères.</string>
+    <string name="backup_wrong_passphrase">Cette phrase secrète n\'ouvre pas la sauvegarde.</string>
     <string name="income_amount" translatable="false">%1$s F</string>
     <string name="income_currency" translatable="false">F</string>
     <string name="income_each">À chaque revenu</string>
@@ -71,6 +91,8 @@
     <string name="reminders_title">Rappels intelligents</string>
     <string name="settings_allowed">Autorisé</string>
     <string name="settings_back">Retour</string>
+    <string name="settings_backup">Sauvegarde chiffrée</string>
+    <string name="settings_backup_text">Toutes tes données dans un fichier que toi seul peux ouvrir</string>
     <string name="settings_battery">Batterie de Cauri</string>
     <string name="settings_battery_restricted">Limitée</string>
     <string name="settings_battery_section">Fonctionnement</string>
@@ -90,6 +112,7 @@
     <string name="settings_count_reminder_when_useful_short">Si utile</string>
     <string name="settings_count_reminder_when_useful_text">Après un retrait, plusieurs dépenses cash ou quelques jours sans comptage.</string>
     <string name="settings_count_reminder_why">Un rappel le soir, un seul par jour, pour garder ton cash à jour.</string>
+    <string name="settings_data_section">Données</string>
     <string name="settings_done">Terminé</string>
     <string name="settings_hint">Touche une ligne pour la changer dans les réglages d\'Android.</string>
     <string name="settings_ignored">Ignoré</string>

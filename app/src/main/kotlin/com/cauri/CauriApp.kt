@@ -55,6 +55,7 @@ import com.cauri.feature.onboarding.onboardingGraph
 import com.cauri.feature.places.navigateToPlaces
 import com.cauri.feature.places.navigateToSuggestedPlace
 import com.cauri.feature.places.placesGraph
+import com.cauri.feature.settings.navigateToRestore
 import com.cauri.feature.settings.navigateToSettings
 import com.cauri.feature.settings.settingsGraph
 import com.cauri.feature.transactions.ActivityGraph
@@ -207,6 +208,7 @@ private fun NavGraphBuilder.cauriGraphs(
                 popUpTo(navController.graph.id) { inclusive = true }
             }
         },
+        onRestore = { navController.navigateToRestore() },
     )
     homeGraph(
         navController = navController,

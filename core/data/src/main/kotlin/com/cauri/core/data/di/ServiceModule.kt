@@ -6,6 +6,8 @@ import com.cauri.core.data.service.ActivityService
 import com.cauri.core.data.service.ActivityServiceImpl
 import com.cauri.core.data.service.AvailableService
 import com.cauri.core.data.service.AvailableServiceImpl
+import com.cauri.core.data.service.BackupService
+import com.cauri.core.data.service.BackupServiceImpl
 import com.cauri.core.data.service.BudgetService
 import com.cauri.core.data.service.BudgetServiceImpl
 import com.cauri.core.data.service.CashBalanceService
@@ -50,6 +52,9 @@ import dagger.hilt.components.SingletonComponent
 internal abstract class ServiceModule {
     @Binds
     abstract fun bindInsightsService(impl: InsightsServiceImpl): InsightsService
+
+    @Binds
+    abstract fun bindBackupService(impl: BackupServiceImpl): BackupService
 
     @Binds
     abstract fun bindBudgetService(impl: BudgetServiceImpl): BudgetService

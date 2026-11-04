@@ -25,6 +25,9 @@ internal interface SettingsActions {
     /** Opens « Répartir mes revenus ». */
     fun onIncome()
 
+    /** Opens « Sauvegarde chiffrée ». */
+    fun onBackup()
+
     /** Opens or closes the sheet of the cash count reminders. */
     fun onCountReminder(open: Boolean)
 

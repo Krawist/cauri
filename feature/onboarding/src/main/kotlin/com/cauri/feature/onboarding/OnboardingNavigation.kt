@@ -49,7 +49,7 @@ internal data object BackgroundLocationRoute
  * [OnboardingViewModel] of the graph, which saves them all after the last one: the permissions, given or put off.
  * The onboarding ends there.
  */
-fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: () -> Unit) {
+fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: () -> Unit, onRestore: () -> Unit) {
     navigation<OnboardingGraph>(startDestination = ProfileRoute) {
         composable<ProfileRoute> { entry ->
             val onboarding = onboardingViewModel(navController, entry)
@@ -58,6 +58,7 @@ fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: (
                     onboarding.onProfileAnswered(answers)
                     navController.navigate(HabitsRoute)
                 },
+                onRestore = onRestore,
             )
         }
         composable<HabitsRoute> { entry ->

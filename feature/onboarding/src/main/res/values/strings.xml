@@ -102,5 +102,6 @@
     <string name="profile_occupation_self_employed">Indépendant·e</string>
     <string name="profile_occupation_student">Étudiant·e</string>
     <string name="profile_occupation_trader">Commerçant·e</string>
+    <string name="profile_restore">Déjà utilisé Cauri ? Restaurer une sauvegarde</string>
     <string name="profile_title">Faisons connaissance</string>
 </resources>

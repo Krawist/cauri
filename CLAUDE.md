@@ -678,6 +678,19 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   intent of the widget's « + » and of the tile opening the quick entry. The widget on a home screen and the tile in the
   quick settings not placed on a phone yet (the launcher's own gestures).
 
+- [ ] **CAU-48** — the encrypted backup (`BackupRepository`, `BackupService` with JVM tests, `javax.crypto` only, by
+  decision no Google Drive library): Réglages › « Sauvegarde chiffrée » (`BackupScreen`, `BackupViewModel`) writes the
+  database and the preferences, zipped and encrypted with AES-256-GCM under a key derived from the user's passphrase
+  (PBKDF2-HMAC-SHA256, 600 000 iterations, a random salt and nonce each time, the header authenticated), to a file the
+  user chooses with Android's picker (`cauri-2026-11-04.cauri`: the phone, a memory card, Drive…). The passphrase has 8
+  characters at least, typed twice; nobody, Cauri neither, opens the file without it. « Restaurer une sauvegarde » asks
+  before replacing the data of the phone, refuses a wrong passphrase or a changed file, a file that is no backup and one
+  from a newer Cauri (its `user_version`), then closes the database, replaces the files and starts the app again in a
+  new process; an older backup is migrated as the app starts. On a new phone, « Déjà utilisé Cauri ? Restaurer une
+  sauvegarde » under the profile step opens the restore alone (`navigateToRestore`). Checked on the Galaxy S23 with
+  made-up data: a backup written to Téléchargements (10 Ko), restored, the app restarting on Accueil with its data. From
+  the onboarding of a new phone not tried on a phone.
+
 Update this section at the end of each ticket.
 
 ## Way of working

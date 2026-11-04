@@ -37,6 +37,7 @@ internal fun SettingsScreen(
     onOpenPlaces: () -> Unit,
     onOpenReminders: () -> Unit,
     onOpenIncome: () -> Unit,
+    onOpenBackup: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,7 +48,7 @@ internal fun SettingsScreen(
     }
     // Named apart from the action it backs, which shares its name.
     val back = onBack
-    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders, onOpenIncome) {
+    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders, onOpenIncome, onOpenBackup) {
         object : SettingsActions {
             override fun onBack() = back()
 
@@ -64,6 +65,8 @@ internal fun SettingsScreen(
             override fun onSmartReminders() = onOpenReminders()
 
             override fun onIncome() = onOpenIncome()
+
+            override fun onBackup() = onOpenBackup()
 
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
@@ -132,6 +135,22 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
             )
             IgnoredAccountsGroup(accounts = state.ignoredAccounts, actions = actions)
         }
+        DataGroup(actions = actions)
+    }
+}
+
+// « Sauvegarde chiffrée », last.
+@Composable
+private fun DataGroup(actions: SettingsActions) {
+    SectionLabel(stringResource(R.string.settings_data_section), modifier = Modifier.padding(top = CauriSpacing.xxl))
+    RowGroup {
+        SettingRow(
+            icon = DesignR.drawable.ic_check,
+            title = stringResource(R.string.settings_backup),
+            text = stringResource(R.string.settings_backup_text),
+            status = null,
+            onClick = actions::onBackup,
+        )
     }
 }
 
@@ -285,6 +304,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onSmartReminders() = Unit
 
     override fun onIncome() = Unit
+
+    override fun onBackup() = Unit
 
     override fun onCountReminder(open: Boolean) = Unit
 

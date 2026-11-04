@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="backup_cancel">Cancel</string>
+    <string name="backup_export">Back up to a file</string>
+    <string name="backup_failed">The file could not be read or written. Try another place.</string>
+    <string name="backup_hint">Without the passphrase nobody can read the backup, Cauri neither: write it down somewhere safe.</string>
+    <string name="backup_mismatch">The two passphrases differ.</string>
+    <string name="backup_not_a_backup">This file is not a backup of Cauri.</string>
+    <string name="backup_passphrase">Passphrase</string>
+    <string name="backup_passphrase_again">The same, once more</string>
+    <string name="backup_restore">Restore a backup</string>
+    <string name="backup_restore_confirm">Replace</string>
+    <string name="backup_restore_confirm_text">The data of this phone will be replaced by those of the backup, then Cauri will restart.</string>
+    <string name="backup_restore_confirm_title">Replace the data?</string>
+    <string name="backup_restore_text">Choose the file of your backup and type the passphrase you made it with.</string>
+    <string name="backup_restored">Data restored. Cauri restarts…</string>
+    <string name="backup_saved">Backup saved.</string>
+    <string name="backup_text">All your data in an encrypted file you keep wherever you like: on the phone, a memory card or Drive. It brings everything back on a new phone.</string>
+    <string name="backup_title">Encrypted backup</string>
+    <string name="backup_too_new">This backup comes from a newer Cauri: update Cauri first.</string>
+    <string name="backup_too_short">The passphrase needs at least 8 characters.</string>
+    <string name="backup_wrong_passphrase">This passphrase does not open the backup.</string>
     <string name="income_each">With each income</string>
     <string name="income_each_hint">Only money that has arrived is split, never money you expect. Smaller incomes go to the budgets.</string>
     <string name="income_fixed">Fixed costs</string>
@@ -68,6 +88,8 @@
     <string name="reminders_title">Smart reminders</string>
     <string name="settings_allowed">Allowed</string>
     <string name="settings_back">Back</string>
+    <string name="settings_backup">Encrypted backup</string>
+    <string name="settings_backup_text">All your data in a file only you can open</string>
     <string name="settings_battery">Cauri\'s battery</string>
     <string name="settings_battery_restricted">Limited</string>
     <string name="settings_battery_section">Running</string>
@@ -87,6 +109,7 @@
     <string name="settings_count_reminder_when_useful_short">When useful</string>
     <string name="settings_count_reminder_when_useful_text">After a withdrawal, several cash expenses or a few days without a count.</string>
     <string name="settings_count_reminder_why">A reminder in the evening, one a day at most, to keep your cash up to date.</string>
+    <string name="settings_data_section">Data</string>
     <string name="settings_done">Done</string>
     <string name="settings_hint">Tap a row to change it in Android\'s settings.</string>
     <string name="settings_ignored">Ignored</string>
