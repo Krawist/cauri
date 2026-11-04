@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
+import androidx.annotation.RequiresApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import java.util.Locale
@@ -23,52 +24,56 @@ internal class AddressServiceImpl @Inject constructor(@ApplicationContext privat
 
     override suspend fun search(query: String): List<FoundAddress> {
         if (!Geocoder.isPresent() || query.isBlank()) return emptyList()
-        return geocode { listener ->
+        return geocode { done ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocationName(query, MAX_RESULTS, SOUTH, WEST, NORTH, EAST, listener)
+                geocoder.getFromLocationName(query, MAX_RESULTS, SOUTH, WEST, NORTH, EAST, listener(done))
             } else {
                 @Suppress("DEPRECATION") // The listener exists from Android 13 only.
-                listener.onGeocode(geocoder.getFromLocationName(query, MAX_RESULTS, SOUTH, WEST, NORTH, EAST).orEmpty())
+                done(geocoder.getFromLocationName(query, MAX_RESULTS, SOUTH, WEST, NORTH, EAST).orEmpty())
             }
         }.mapNotNull { it.toFound() }
     }
 
     override suspend fun addressAt(latitude: Double, longitude: Double): FoundAddress? {
         if (!Geocoder.isPresent()) return null
-        return geocode { listener ->
+        return geocode { done ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(latitude, longitude, 1, listener)
+                geocoder.getFromLocation(latitude, longitude, 1, listener(done))
             } else {
                 @Suppress("DEPRECATION") // The listener exists from Android 13 only.
-                listener.onGeocode(geocoder.getFromLocation(latitude, longitude, 1).orEmpty())
+                done(geocoder.getFromLocation(latitude, longitude, 1).orEmpty())
             }
         }.firstNotNullOfOrNull { it.toFound() }
     }
 
-    // Runs a request of the geocoder off the main thread, empty when it fails, is offline or takes too long.
-    private suspend fun geocode(request: (Geocoder.GeocodeListener) -> Unit): List<Address> =
+    // Runs a request of the geocoder off the main thread, which gives what it found to its callback; empty when it
+    // fails, is offline or takes too long. The callback is a function of ours: Android's listener does not exist
+    // before Android 13, and naming it there would end the app.
+    private suspend fun geocode(request: ((List<Address>) -> Unit) -> Unit): List<Address> =
         withContext(Dispatchers.IO) {
             withTimeoutOrNull(TIMEOUT_MILLIS) {
                 suspendCancellableCoroutine { continuation ->
-                    val listener = object : Geocoder.GeocodeListener {
-                        override fun onGeocode(addresses: MutableList<Address>) {
-                            if (continuation.isActive) continuation.resume(addresses.toList())
-                        }
-
-                        override fun onError(errorMessage: String?) {
-                            if (continuation.isActive) continuation.resume(emptyList())
-                        }
+                    val done = { addresses: List<Address> ->
+                        if (continuation.isActive) continuation.resume(addresses)
                     }
                     try {
-                        request(listener)
+                        request(done)
                     } catch (_: IOException) {
-                        listener.onError(null)
+                        done(emptyList())
                     } catch (_: IllegalArgumentException) {
-                        listener.onError(null)
+                        done(emptyList())
                     }
                 }
             }.orEmpty()
         }
+
+    // Android's listener of a request, from Android 13, handing what it found, or nothing, to [done].
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun listener(done: (List<Address>) -> Unit) = object : Geocoder.GeocodeListener {
+        override fun onGeocode(addresses: MutableList<Address>) = done(addresses.toList())
+
+        override fun onError(errorMessage: String?) = done(emptyList())
+    }
 
     // The place or street, then the neighbourhood and the town; `null` without a position or a name.
     private fun Address.toFound(): FoundAddress? {
