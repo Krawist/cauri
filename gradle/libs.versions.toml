@@ -1,6 +1,6 @@
 # Same versions as Eifi, which already builds on this machine. Adjust them at the first sync if needed.
 [versions]
-agp = "9.5.0"
+agp = "9.4.0"
 kotlin = "2.4.21"
 compileSdk = "37"
 targetSdk = "36"
