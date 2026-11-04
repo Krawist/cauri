@@ -13,6 +13,7 @@ import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.DetectedOperation
 import com.cauri.core.data.model.DetectedType
 import com.cauri.core.data.model.PendingType
+import com.cauri.core.data.service.BalanceServiceImpl
 import com.cauri.core.data.service.DuplicateServiceImpl
 import com.cauri.core.data.service.TransferLinkServiceImpl
 import io.kotest.matchers.collections.shouldContainExactly
@@ -44,6 +45,7 @@ internal class TransferRepositoryImplTest {
             database.accountDao(),
             database.visitDao(),
             DuplicateServiceImpl(),
+            BalanceServiceImpl(),
             CLOCK,
         )
         repository = TransferRepositoryImpl(

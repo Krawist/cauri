@@ -24,6 +24,7 @@ import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.RecordedEntry
 import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
+import com.cauri.core.data.service.BalanceService
 import com.cauri.core.data.service.DuplicateService
 import java.time.Clock
 import java.time.Duration
@@ -45,6 +46,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
     accountDao: AccountDao,
     visitDao: VisitDao,
     private val duplicates: DuplicateService,
+    private val balances: BalanceService,
     private val clock: Clock,
 ) : TransactionRepository {
     override val pending: Flow<List<PendingOperation>> = combine(
@@ -147,6 +149,21 @@ internal class TransactionRepositoryImpl @Inject constructor(
         transactionDao.insertAll(listOfNotNull(out, into, fee))
     }
 
+    // The balance the message gave after [operation], or the one before it moved by the operation when the bank forgot
+    // to update it (BalanceService); `null` when the message gave none.
+    private suspend fun balanceAfter(operation: DetectedOperation) = operation.balance?.let { read ->
+        AccountBalanceEntity(
+            accountId = operation.accountId,
+            amount = balances.afterOperation(
+                read = read,
+                previous = mergeDao.getBalanceAt(accountId = operation.accountId, at = operation.occurredAt),
+                change = operation.change(),
+            ),
+            at = operation.occurredAt,
+            rawSignalId = operation.rawSignalId,
+        )
+    }
+
     override suspend fun recordDetected(operation: DetectedOperation) {
         val type = when (operation.type) {
             DetectedType.EXPENSE -> TransactionType.EXPENSE
@@ -199,7 +216,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
         )
         mergeDao.insertParsed(
             transactions = listOfNotNull(manual?.let { duplicates.merged(detected, it) } ?: detected, cash, fee),
-            balance = operation.balanceRead(),
+            balance = balanceAfter(operation),
             rawSignalId = operation.rawSignalId,
             templateVersion = operation.templateVersion,
             entry = manual,
@@ -349,7 +366,8 @@ private fun TransactionType.toPendingType() = when (this) {
     TransactionType.TRANSFER_OUT, TransactionType.TRANSFER_IN -> PendingType.TRANSFER
 }
 
-// The balance the message gave after the operation; `null` when it gave none.
-private fun DetectedOperation.balanceRead() = balance?.let {
-    AccountBalanceEntity(accountId = accountId, amount = it, at = occurredAt, rawSignalId = rawSignalId)
+// What [this] moved on its account, fees included: positive when money arrived.
+private fun DetectedOperation.change() = when (type) {
+    DetectedType.INCOME, DetectedType.DEPOSIT -> amount
+    DetectedType.EXPENSE, DetectedType.WITHDRAWAL -> -(amount + (fee ?: 0))
 }

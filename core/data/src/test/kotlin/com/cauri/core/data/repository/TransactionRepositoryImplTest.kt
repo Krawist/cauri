@@ -26,6 +26,7 @@ import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.CashBalanceServiceImpl
+import com.cauri.core.data.service.BalanceServiceImpl
 import com.cauri.core.data.service.DuplicateServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.booleans.shouldBeFalse
@@ -61,6 +62,7 @@ internal class TransactionRepositoryImplTest {
             database.accountDao(),
             database.visitDao(),
             DuplicateServiceImpl(),
+            BalanceServiceImpl(),
             CLOCK,
         )
     }
@@ -320,6 +322,30 @@ internal class TransactionRepositoryImplTest {
                     rawSignalId = signalId,
                 ),
             )
+        }
+
+        @Test
+        fun `should move by the operation a balance the bank forgot to update`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            database.accountBalanceDao().insert(
+                AccountBalanceEntity(
+                    accountId = momoId,
+                    amount = 12_500,
+                    at = Instant.ofEpochSecond(500),
+                    rawSignalId = null,
+                ),
+            )
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = 100)
+                    .copy(balance = 12_500),
+            )
+
+            // then
+            database.accountBalanceDao().observeLatest().first().single().amount shouldBe 9_900
         }
 
         @Test

@@ -742,6 +742,13 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   listed in `watched_senders.json`, and the name Gmail shows for these mails is not known yet; nor whether Gmail's
   notification holds the whole mail.
 
+- [ ] **CAU-25 (stale balances)** — at the user's request, a balance a bank forgot to update (UBA sometimes repeats the
+  balance before the operation) is moved by the operation (`BalanceService`, JVM tests): by decision, when a message
+  reports an operation that moved money but gives the very balance the account had just before (read or typed), the
+  balance kept is that one plus or minus what moved, fees included, computed by code; the raw message stays as received.
+  The next balance read, or one the user types, replaces it as before. An operation in another currency moves nothing
+  known and keeps the balance read. Not seen on a phone (the S23 locked).
+
 Update this section at the end of each ticket.
 
 ## Way of working
