@@ -798,6 +798,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   comptes »; the balance its own message gives replaces it (`TransactionMergeDao.attachSide`), and an estimate is never
   taken for a balance the bank forgot to update. Not checked on a phone.
 
+- [ ] **CAU-20 (UBA credits from Orange Money)** — on the owner's S25, a transfer Orange Money → UBA gave nothing: no
+  template read the UBA credit « CREDIT … Desc: W2B/…/ORANGEMONEYCM » nor its mail, and Gmail's notification shows only
+  part of a mail, « Type Operation » or « Devise » missing. Catalogue 2026.11.06: `uba.transfer-from-orange-money` (SMS)
+  and `uba.mail.transfer-from-orange-money`, both own-account transfers (CAU-23); the mail templates no longer need «
+  Devise », nor « Type Operation » for a transfer, its way given by `B2W` or `W2B`. Three samples anonymised in
+  `collected_messages.json`. The Orange Money SMS of that transfer never reached Cauri (hidden or never sent): its
+  balance is estimated (CAU-25).
+
 Update this section at the end of each ticket.
 
 ## Way of working

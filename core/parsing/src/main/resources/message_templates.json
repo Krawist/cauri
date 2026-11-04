@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.05",
+  "version": "2026.11.06",
   "templates": [
     {
       "id": "orange-money.transfer-sent",
@@ -280,8 +280,23 @@
       "ownAccount": true
     },
     {
+      "id": "uba.transfer-from-orange-money",
+      "version": 1,
+      "provider": "UBA",
+      "senders": [
+        "UBA"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "^CREDIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?W2B/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss",
+      "ownAccount": true
+    },
+    {
       "id": "uba.mail.transfer-to-orange-money",
-      "version": 2,
+      "version": 3,
       "provider": "UBA",
       "senders": [
         "com.google.android.gm",
@@ -290,28 +305,13 @@
       "kind": "TRANSFER",
       "direction": "DEBIT",
       "currency": "XAF",
-      "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "pattern": "(?:Type Operation ?: ?D[ée]bit )?Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
       "decimalSeparator": ".",
       "dateFormat": "dd-MM-yyyy HH:mm:ss",
       "ownAccount": true
     },
     {
-      "id": "uba.mail.debit",
-      "version": 1,
-      "provider": "UBA",
-      "senders": [
-        "com.google.android.gm",
-        "com.microsoft.office.outlook"
-      ],
-      "kind": "PAYMENT",
-      "direction": "DEBIT",
-      "currency": "XAF",
-      "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?(?:\\S*POS PUR @?)?(?<counterparty>.+?)(?: >\\S*)? Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
-      "decimalSeparator": ".",
-      "dateFormat": "dd-MM-yyyy HH:mm:ss"
-    },
-    {
-      "id": "uba.mail.credit",
+      "id": "uba.mail.transfer-from-orange-money",
       "version": 1,
       "provider": "UBA",
       "senders": [
@@ -321,7 +321,38 @@
       "kind": "TRANSFER",
       "direction": "CREDIT",
       "currency": "XAF",
-      "pattern": "Type Operation ?: ?Cr[ée]dit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?(?:UBA CAMERO-)?(?<counterparty>.+?) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "pattern": "(?:Type Operation ?: ?Cr[ée]dit )?Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?W2B/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss",
+      "ownAccount": true
+    },
+    {
+      "id": "uba.mail.debit",
+      "version": 2,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "PAYMENT",
+      "direction": "DEBIT",
+      "currency": "XAF",
+      "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?(?:\\S*POS PUR @?)?(?<counterparty>.+?)(?: >\\S*)? Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
+      "decimalSeparator": ".",
+      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+    },
+    {
+      "id": "uba.mail.credit",
+      "version": 2,
+      "provider": "UBA",
+      "senders": [
+        "com.google.android.gm",
+        "com.microsoft.office.outlook"
+      ],
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "currency": "XAF",
+      "pattern": "Type Operation ?: ?Cr[ée]dit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) .*?Details Operation ?: ?(?:UBA CAMERO-)?(?<counterparty>.+?) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
       "decimalSeparator": ".",
       "dateFormat": "dd-MM-yyyy HH:mm:ss"
     }

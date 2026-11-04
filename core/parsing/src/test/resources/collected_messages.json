@@ -3848,5 +3848,55 @@
       "reference": null,
       "occurredAt": "2026-10-22T11:00:00Z"
     }
+  },
+  {
+    "sender": "UBA",
+    "text": "CREDIT \n Montant: XAF12,750.00 \n Compte: 318XXXXXXX46 \n Desc: W2B/OR517203KQ41PZ/698214573306/ORANGEMONEYCM \n Date: 21-09-2026 16:05:31 \n Solde: XAF2,904,115.00 .",
+    "expected": {
+      "templateId": "uba.transfer-from-orange-money",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 12750,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 2904115,
+      "counterparty": "ORANGEMONEYCM",
+      "reference": "OR517203KQ41PZ",
+      "occurredAt": "2026-09-21T15:05:31Z"
+    }
+  },
+  {
+    "sender": "UBACameroun.Alert",
+    "packageName": "com.google.android.gm",
+    "text": "UBA Transaction Notification Services (UBA ALERT)\nType Operation: Crédit \nMontant Operation: XAF8,200.00 \nDetails Operation: W2B/OR639125MD72TB/677403918852/ORANGEMONEYCM \nDate/Heure: 12-10-2026 09:14:56 \nSolde: XAF1,375,640.00",
+    "expected": {
+      "templateId": "uba.mail.transfer-from-orange-money",
+      "kind": "TRANSFER",
+      "direction": "CREDIT",
+      "amount": 8200,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 1375640,
+      "counterparty": "ORANGEMONEYCM",
+      "reference": "OR639125MD72TB",
+      "occurredAt": "2026-10-12T08:14:56Z"
+    }
+  },
+  {
+    "sender": "UBACameroun.Alert",
+    "packageName": "com.google.android.gm",
+    "text": "UBA Transaction Notification Services (UBA ALERT)\nMontant Operation: XAF3,500.00 \nDetails Operation: B2W/OR702846NB15QX/655120347798/ORANGEMONEYCM \nDate/Heure: 28-10-2026 20:47:03 \nSolde: XAF912,380.00 \n",
+    "expected": {
+      "templateId": "uba.mail.transfer-to-orange-money",
+      "kind": "TRANSFER",
+      "direction": "DEBIT",
+      "amount": 3500,
+      "currency": "XAF",
+      "fees": null,
+      "balance": 912380,
+      "counterparty": "ORANGEMONEYCM",
+      "reference": "OR702846NB15QX",
+      "occurredAt": "2026-10-28T19:47:03Z"
+    }
   }
 ]
