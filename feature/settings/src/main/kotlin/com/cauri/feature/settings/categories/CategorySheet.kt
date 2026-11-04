@@ -49,6 +49,7 @@ import com.cauri.core.data.model.CategoryColor
 import com.cauri.core.data.model.CategoryIcon
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.design.component.CauriTextField
+import com.cauri.core.design.component.ReorderPickUp
 import com.cauri.core.design.component.ReorderableColumn
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
@@ -230,6 +231,7 @@ private fun SubCategories(draft: CategoryDraft, state: CategoriesUiState, action
                     key = { it.id },
                     step = SubRowHeight,
                     onReorder = { order -> actions.onReorder(order.map { it.id }) },
+                    pickUp = ReorderPickUp.TOUCH,
                 ) { sub, moving, drag ->
                     SubRow(sub = sub, moving = moving, drag = drag, last = sub.id == subs.last().id, actions = actions)
                 }

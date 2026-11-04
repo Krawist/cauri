@@ -1,7 +1,6 @@
 package com.cauri.feature.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,39 +23,27 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.compositeOver
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.cauri.core.data.model.Habit
-import com.cauri.core.design.component.rememberCauriHaptics
+import com.cauri.core.design.component.ReorderPickUp
+import com.cauri.core.design.component.ReorderableColumn
 import com.cauri.core.design.format.formatFcfa
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
-import kotlin.math.roundToInt
 
 private val ButtonHeight = 56.dp
 private val RowHeight = 60.dp
 private val RowGap = CauriSpacing.s
 private val HandleWidth = 52.dp
 private val DraggedElevation = 12.dp
-private const val DRAGGED_SCALE = 1.03f
 
 /** « Mes habitudes »: the habits in the order of the row, dragged by their handle to reorder them. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,63 +84,18 @@ internal fun ManageHabitsSheet(habits: List<Habit>, actions: HabitActions) {
     }
 }
 
-// The dragged row follows the finger; it swaps with a neighbour once past half of it, and the new order is saved when
-// the finger lifts.
+// The habits, each dragged by its handle; the new order is saved when the finger lifts.
 @Composable
 private fun ReorderableHabits(habits: List<Habit>, onReorder: (List<Long>) -> Unit) {
-    // One state for the sheet's lifetime, which the drags read: it follows the habits once they are saved.
-    var order by remember { mutableStateOf(habits) }
-    var dragged by remember { mutableStateOf<Long?>(null) }
-    LaunchedEffect(habits) { if (dragged == null) order = habits }
-    var offset by remember { mutableFloatStateOf(0f) }
-    val haptics = rememberCauriHaptics()
-    val step = with(LocalDensity.current) { (RowHeight + RowGap).toPx() }
-    val drop = {
-        dragged = null
-        offset = 0f
-        onReorder(order.map { it.id })
-    }
-    Column(verticalArrangement = Arrangement.spacedBy(RowGap)) {
-        order.forEach { habit ->
-            // Keyed by habit: once the order changes, each line keeps its own drag and offset.
-            key(habit.id) {
-                val moving = habit.id == dragged
-                HabitLine(
-                    habit = habit,
-                    moving = moving,
-                    modifier = Modifier
-                        .zIndex(if (moving) 1f else 0f)
-                        .graphicsLayer {
-                            translationY = if (moving) offset else 0f
-                            scaleX = if (moving) DRAGGED_SCALE else 1f
-                            scaleY = if (moving) DRAGGED_SCALE else 1f
-                        },
-                    handle = Modifier.pointerInput(habit.id) {
-                        detectDragGestures(
-                            onDragStart = {
-                                haptics.hold()
-                                dragged = habit.id
-                                offset = 0f
-                            },
-                            onDragEnd = drop,
-                            onDragCancel = drop,
-                            onDrag = { change, amount ->
-                                change.consume()
-                                offset += amount.y
-                                val from = order.indexOfFirst { it.id == habit.id }
-                                val to = (from + (offset / step).roundToInt()).coerceIn(0, order.lastIndex)
-                                if (to != from) {
-                                    // A step felt each time the line passes another.
-                                    haptics.step()
-                                    order = order.toMutableList().apply { add(to, removeAt(from)) }
-                                    offset -= (to - from) * step
-                                }
-                            },
-                        )
-                    },
-                )
-            }
-        }
+    ReorderableColumn(
+        items = habits,
+        key = { it.id },
+        step = RowHeight,
+        onReorder = { order -> onReorder(order.map { it.id }) },
+        pickUp = ReorderPickUp.TOUCH,
+        gap = RowGap,
+    ) { habit, moving, drag ->
+        HabitLine(habit = habit, moving = moving, modifier = Modifier, handle = drag)
     }
 }
 

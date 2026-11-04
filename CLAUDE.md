@@ -729,7 +729,9 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   »; a merge moves everything of the category (transactions and proposals, sub-categories, habits, places, fixed costs,
   envelopes; its budget dropped) into the other after a confirmation, then deletes it, never undone
   (`CategoryDao.merge`, all or none). Checked on the Galaxy S23 in dark mode: the upgrade to v24, the list, the sheet, a
-  sub-category added and shown open. Reordering, a merge and an archive not tried on a phone.
+  sub-category added and shown open. `ReorderableColumn` is the one drag to reorder of the app (`ReorderPickUp.TOUCH` by
+  a handle, or `LONG_PRESS` on the whole row, and the gap between rows): « Mes habitudes » and the sub-categories use it
+  too. A long press moving a category checked on the S23; a merge and an archive not tried on a phone.
 
 Update this section at the end of each ticket.
 
