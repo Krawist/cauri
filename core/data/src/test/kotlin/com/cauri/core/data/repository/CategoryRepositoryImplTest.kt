@@ -10,6 +10,8 @@ import com.cauri.core.data.database.entity.TransactionStatus
 import com.cauri.core.data.database.entity.TransactionType
 import com.cauri.core.data.database.inMemoryDatabase
 import com.cauri.core.data.model.AccountKind
+import com.cauri.core.data.model.CategoryColor
+import com.cauri.core.data.model.CategoryIcon
 import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.EntryType
 import com.cauri.core.data.model.NewCategory
@@ -17,6 +19,7 @@ import com.cauri.core.data.model.PendingOperation
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.PlaceKind
 import com.cauri.core.data.service.CategoryPredictionServiceImpl
+import com.cauri.core.data.service.CategoryStyleServiceImpl
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -42,6 +45,7 @@ internal class CategoryRepositoryImplTest {
             database.categoryDao(),
             CategorySuggestionServiceImpl(),
             CategoryPredictionServiceImpl(),
+            CategoryStyleServiceImpl(),
             CLOCK,
         )
     }
@@ -102,7 +106,7 @@ internal class CategoryRepositoryImplTest {
     @Nested
     inner class Categories {
         @Test
-        fun `should list the active categories by name`() = runTest {
+        fun `should list the active categories in the order they were created`() = runTest {
             // given
             repository.createCategories(
                 listOf(
@@ -115,7 +119,124 @@ internal class CategoryRepositoryImplTest {
             val categories = repository.categories.first()
 
             // then
-            categories.map { it.name } shouldContainExactly listOf("Alimentation", "Transport")
+            categories.map { it.name } shouldContainExactly listOf("Transport", "Alimentation")
+        }
+
+        @Test
+        fun `should give a category the user did not dress Cauri's icon and colour`() = runTest {
+            // when
+            repository.createCategories(listOf(NewCategory(name = "Transport", nature = CategoryNature.EXPENSE)))
+
+            // then
+            repository.categories.first().single().let { it.icon to it.color } shouldBe
+                (CategoryIcon.TRANSPORT to CategoryColor.GOLD)
+        }
+    }
+
+    @Nested
+    inner class Update {
+        @Test
+        fun `should rename and dress the category`() = runTest {
+            // given
+            val (id) = repository.createCategories(
+                listOf(NewCategory(name = "Transport", nature = CategoryNature.EXPENSE)),
+            )
+
+            // when
+            repository.update(id, name = " Déplacements ", icon = CategoryIcon.HOUSE, color = CategoryColor.CORAL)
+
+            // then
+            repository.categories.first().single().let { Triple(it.name, it.icon, it.color) } shouldBe
+                Triple("Déplacements", CategoryIcon.HOUSE, CategoryColor.CORAL)
+        }
+    }
+
+    @Nested
+    inner class Archive {
+        @Test
+        fun `should archive a category with its sub-categories, and bring them back`() = runTest {
+            // given
+            val (transport) = repository.createCategories(
+                listOf(NewCategory(name = "Transport", nature = CategoryNature.EXPENSE)),
+            )
+            repository.createCategories(
+                listOf(NewCategory(name = "Taxi", nature = CategoryNature.EXPENSE, parentId = transport)),
+            )
+            repository.archive(transport)
+
+            // when
+            val archived = repository.archived.first().map { it.name }
+            repository.restore(transport)
+
+            // then
+            archived shouldContainExactly listOf("Taxi", "Transport")
+            repository.categories.first().map { it.name } shouldContainExactly listOf("Transport", "Taxi")
+        }
+    }
+
+    @Nested
+    inner class Reorder {
+        @Test
+        fun `should keep the order the user chose`() = runTest {
+            // given
+            val ids = repository.createCategories(
+                listOf(
+                    NewCategory(name = "Transport", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE),
+                ),
+            )
+
+            // when
+            repository.reorder(ids.reversed())
+
+            // then
+            repository.categories.first().map { it.name } shouldContainExactly listOf("Alimentation", "Transport")
+        }
+    }
+
+    @Nested
+    inner class Merge {
+        @Test
+        fun `should move the transactions and the sub-categories into the other, then delete it`() = runTest {
+            // given
+            val (food, snacks) = repository.createCategories(
+                listOf(
+                    NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE),
+                    NewCategory(name = "Snacks", nature = CategoryNature.EXPENSE),
+                ),
+            )
+            repository.createCategories(
+                listOf(NewCategory(name = "Beignets", nature = CategoryNature.EXPENSE, parentId = snacks)),
+            )
+            val expense = database.transactionDao().insert(
+                cashExpense(categoryId = snacks, at = "2026-11-02T08:00:00Z"),
+            )
+
+            // when
+            repository.merge(from = snacks, into = food)
+
+            // then
+            database.transactionDao().getById(expense)?.categoryId shouldBe food
+            repository.categories.first().map { it.name to it.parentId } shouldContainExactly
+                listOf("Alimentation" to null, "Beignets" to food)
+        }
+    }
+
+    @Nested
+    inner class MonthTotals {
+        @Test
+        fun `should count what each category spent this month`() = runTest {
+            // given
+            val (food) = repository.createCategories(
+                listOf(NewCategory(name = "Alimentation", nature = CategoryNature.EXPENSE)),
+            )
+            database.transactionDao().insert(cashExpense(categoryId = food, at = "2026-11-01T08:00:00Z"))
+
+            // when
+            database.transactionDao().insert(cashExpense(categoryId = food, at = "2026-10-31T08:00:00Z"))
+
+            // then
+            repository.monthTotals.first() shouldBe mapOf(food to 500L)
         }
     }
 

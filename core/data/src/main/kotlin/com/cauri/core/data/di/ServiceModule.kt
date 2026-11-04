@@ -10,6 +10,8 @@ import com.cauri.core.data.service.BackupService
 import com.cauri.core.data.service.BackupServiceImpl
 import com.cauri.core.data.service.BudgetService
 import com.cauri.core.data.service.BudgetServiceImpl
+import com.cauri.core.data.service.CategoryStyleService
+import com.cauri.core.data.service.CategoryStyleServiceImpl
 import com.cauri.core.data.service.CashBalanceService
 import com.cauri.core.data.service.CashBalanceServiceImpl
 import com.cauri.core.data.service.CategoryPredictionService
@@ -55,6 +57,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindBackupService(impl: BackupServiceImpl): BackupService
+
+    @Binds
+    abstract fun bindCategoryStyleService(impl: CategoryStyleServiceImpl): CategoryStyleService
 
     @Binds
     abstract fun bindBudgetService(impl: BudgetServiceImpl): BudgetService

@@ -21,11 +21,12 @@ internal interface BudgetDao {
 
     /**
      * The expenses counted since [since] that have a category, of every account: confirmed or waiting, never set
-     * aside nor merged, and the cards still at 0 left out.
+     * aside nor merged, and the cards still at 0 left out; a sub-category's counted in its parent.
      */
     @Query(
-        "SELECT categoryId, amount, occurredAt FROM transactions WHERE type = 'EXPENSE' " +
-            "AND status IN ('DETECTED', 'CONFIRMED') AND amount > 0 AND categoryId IS NOT NULL " +
+        "SELECT COALESCE(categories.parentId, transactions.categoryId) AS categoryId, amount, occurredAt " +
+            "FROM transactions JOIN categories ON categories.id = transactions.categoryId " +
+            "WHERE type = 'EXPENSE' AND transactions.status IN ('DETECTED', 'CONFIRMED') AND amount > 0 " +
             "AND occurredAt >= :since",
     )
     suspend fun getSpending(since: Instant): List<CategorySpend>

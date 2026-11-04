@@ -34,7 +34,9 @@ internal class BudgetRepositoryImpl @Inject constructor(
     override suspend fun suggestions(): List<BudgetSuggestion> {
         val now = clock.instant()
         val set = budgetDao.observeAll().first().map { it.categoryId }.toSet()
-        val expenses = categories.categories.first().filter { it.nature == CategoryNature.EXPENSE && it.id !in set }
+        // A budget is for a top-level category: its sub-categories count in it.
+        val expenses = categories.categories.first()
+            .filter { it.nature == CategoryNature.EXPENSE && it.parentId == null && it.id !in set }
         val suggested = service.suggest(
             spending = budgetDao.getSpending(since = now - BudgetService.WINDOW),
             firstTransactionAt = budgetDao.getFirstTransactionAt(),

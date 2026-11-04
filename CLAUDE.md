@@ -717,6 +717,20 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (`PendingOperation.readByModel`). By decision, an operation the model read stays once a template comes. Checked on the
   Galaxy S23: the upgrade to v23 (no AICore there, so no reading).
 
+- [ ] **CAU-56** — « Catégories » (`CategoriesScreen`, `CategoriesViewModel`, `:feature:settings`), opened from Réglages
+  › Argent, as the mockups: « Dépenses · 9 », « Revenus · 2 », « Épargne · 2 », each category with its badge (icon and
+  colour; by decision Cauri's own from its name while the user chose none, `CategoryStyleService` with JVM tests), its
+  sub-categories and what it counted this month (`CategoryRepository.monthTotals`, its sub-categories in it), the
+  chevron opening them with their amounts and « + Sous-catégorie »; a long press moves a category (`ReorderableColumn`,
+  new in `:core:design`; by decision the order is the one of the pickers), « Archivées · Santé » brings one back. Its
+  sheet (`CategorySheet`): name, eleven icons, five colours, its sub-categories (added, removed by archiving, reordered
+  by their handles), « Fusionner avec… » and « Archiver ». Database v24: `categories.icon`, `color`, `position`. By
+  decision a sub-category is a category of its own in every picker, counted in its parent by the budgets and « Analyses
+  »; a merge moves everything of the category (transactions and proposals, sub-categories, habits, places, fixed costs,
+  envelopes; its budget dropped) into the other after a confirmation, then deletes it, never undone
+  (`CategoryDao.merge`, all or none). Checked on the Galaxy S23 in dark mode: the upgrade to v24, the list, the sheet, a
+  sub-category added and shown open. Reordering, a merge and an archive not tried on a phone.
+
 Update this section at the end of each ticket.
 
 ## Way of working

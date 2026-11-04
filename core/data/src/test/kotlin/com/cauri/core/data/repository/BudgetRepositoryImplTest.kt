@@ -13,6 +13,7 @@ import com.cauri.core.data.model.CategoryNature
 import com.cauri.core.data.model.NewCategory
 import com.cauri.core.data.service.BudgetServiceImpl
 import com.cauri.core.data.service.CategoryPredictionServiceImpl
+import com.cauri.core.data.service.CategoryStyleServiceImpl
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -39,6 +40,7 @@ internal class BudgetRepositoryImplTest {
             database.categoryDao(),
             CategorySuggestionServiceImpl(),
             CategoryPredictionServiceImpl(),
+            CategoryStyleServiceImpl(),
             CLOCK,
         )
         repository = BudgetRepositoryImpl(database.budgetDao(), categories, BudgetServiceImpl(), CLOCK)

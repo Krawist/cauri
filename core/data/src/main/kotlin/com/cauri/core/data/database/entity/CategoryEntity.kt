@@ -1,9 +1,12 @@
 package com.cauri.core.data.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.cauri.core.data.model.CategoryColor
+import com.cauri.core.data.model.CategoryIcon
 import com.cauri.core.data.model.CategoryNature
 
 /**
@@ -14,6 +17,9 @@ import com.cauri.core.data.model.CategoryNature
  * @property parentId Category this one belongs to; `null` for a top-level category.
  * @property nature Whether it counts spending, income or savings.
  * @property status Active, or archived by the user (its transactions keep it).
+ * @property icon Icon chosen by the user; `null` for the one Cauri chooses from its name.
+ * @property color Colour chosen by the user; `null` for the one Cauri chooses from its name.
+ * @property position Place in the list the user ordered, from 0; equal ones by name.
  */
 @Entity(
     tableName = "categories",
@@ -26,4 +32,7 @@ internal data class CategoryEntity(
     val parentId: Long?,
     val nature: CategoryNature,
     val status: CategoryStatus,
+    val icon: CategoryIcon? = null,
+    val color: CategoryColor? = null,
+    @ColumnInfo(defaultValue = "0") val position: Int = 0,
 )

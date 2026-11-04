@@ -20,6 +20,53 @@
     <string name="backup_too_new">Cette sauvegarde vient d\'une version plus récente de Cauri : mets d\'abord Cauri à jour.</string>
     <string name="backup_too_short">La phrase secrète doit avoir au moins 8 caractères.</string>
     <string name="backup_wrong_passphrase">Cette phrase secrète n\'ouvre pas la sauvegarde.</string>
+    <string name="category_list_add">Ajouter</string>
+    <string name="category_list_add_sub">+ Sous-catégorie</string>
+    <string name="category_list_add_sub_hint">Nouvelle sous-catégorie : Taxi, Carburant…</string>
+    <string name="category_list_amount" translatable="false">%1$s F</string>
+    <string name="category_list_archive">Archiver</string>
+    <string name="category_list_archive_hint">Archiver garde l\'historique ; la catégorie n\'est simplement plus proposée.</string>
+    <string name="category_list_archived">Archivées · %1$s</string>
+    <string name="category_list_archived_text">Elles ne sont plus proposées. Touche-en une pour la retrouver, avec ses sous-catégories.</string>
+    <string name="category_list_archived_title">Catégories archivées</string>
+    <string name="category_list_cancel">Annuler</string>
+    <string name="category_list_close">Replier</string>
+    <string name="category_list_close_list">Fermer</string>
+    <string name="category_list_color">Couleur</string>
+    <string name="category_list_hint">Maintiens une catégorie pour la déplacer. Touche-la pour la modifier ou la fusionner.</string>
+    <string name="category_list_icon">Icône</string>
+    <string name="category_list_kind_expense">Dépense</string>
+    <string name="category_list_kind_income">Revenu</string>
+    <string name="category_list_kind_saving">Épargne</string>
+    <string name="category_list_merge">Fusionner avec…</string>
+    <string name="category_list_merge_confirm">Fusionner</string>
+    <string name="category_list_merge_confirm_text">Ses opérations, sous-catégories, habitudes, lieux et charges fixes passent dans %2$s, puis %1$s disparaît. Impossible d\'annuler.</string>
+    <string name="category_list_merge_confirm_title">Fusionner %1$s dans %2$s ?</string>
+    <string name="category_list_merge_title">Fusionner %1$s avec…</string>
+    <string name="category_list_month_expenses">%1$s · dépenses du mois</string>
+    <string name="category_list_month_income">%1$s · revenus du mois</string>
+    <string name="category_list_month_saving">%1$s · épargne du mois</string>
+    <string name="category_list_move">Déplacer</string>
+    <string name="category_list_name">Nom</string>
+    <string name="category_list_name_hint">Transport, Santé…</string>
+    <string name="category_list_new">Nouvelle catégorie</string>
+    <string name="category_list_new_sub">Nouvelle sous-catégorie</string>
+    <string name="category_list_no_sub">Aucune sous-catégorie</string>
+    <string name="category_list_open">Voir les sous-catégories</string>
+    <string name="category_list_remove">Retirer %1$s</string>
+    <string name="category_list_restore">Retrouver</string>
+    <string name="category_list_save">Enregistrer</string>
+    <string name="category_list_sheet_total">%1$s · %2$s F ce mois</string>
+    <plurals name="category_list_subs">
+        <item quantity="one">%1$d sous-catégorie</item>
+        <item quantity="many">%1$d sous-catégories</item>
+        <item quantity="other">%1$d sous-catégories</item>
+    </plurals>
+    <string name="category_list_subs_label">Sous-catégories</string>
+    <string name="category_list_tab_expenses">Dépenses · %1$d</string>
+    <string name="category_list_tab_income">Revenus · %1$d</string>
+    <string name="category_list_tab_saving">Épargne · %1$d</string>
+    <string name="category_list_title">Catégories</string>
     <string name="income_amount" translatable="false">%1$s F</string>
     <string name="income_currency" translatable="false">F</string>
     <string name="income_each">À chaque revenu</string>
@@ -98,6 +145,8 @@
     <string name="settings_battery_section">Fonctionnement</string>
     <string name="settings_battery_text">Sinon ton téléphone peut arrêter Cauri, qui raterait alors tes paiements.</string>
     <string name="settings_battery_unrestricted">Libre</string>
+    <string name="settings_categories">Catégories</string>
+    <string name="settings_categories_text">Leurs noms, icônes et sous-catégories, ce qu\'elles ont compté ce mois</string>
     <string name="settings_count_reminder">Rappels de comptage</string>
     <string name="settings_count_reminder_every_evening">Chaque soir</string>
     <string name="settings_count_reminder_every_evening_short">Chaque soir</string>

@@ -14,6 +14,7 @@ import com.cauri.core.data.model.NewCategory
 import com.cauri.core.data.model.NewGoal
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.service.CategoryPredictionServiceImpl
+import com.cauri.core.data.service.CategoryStyleServiceImpl
 import com.cauri.core.data.service.CategorySuggestionServiceImpl
 import com.cauri.core.data.service.FixedCostServiceImpl
 import com.cauri.core.data.service.GoalServiceImpl
@@ -199,6 +200,7 @@ internal class GoalRepositoryImplTest {
         database.categoryDao(),
         CategorySuggestionServiceImpl(),
         CategoryPredictionServiceImpl(),
+        CategoryStyleServiceImpl(),
         CLOCK,
     )
 

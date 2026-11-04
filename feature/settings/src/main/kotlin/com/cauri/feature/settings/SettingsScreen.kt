@@ -31,12 +31,15 @@ import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 
 /** Settings: each permission and the battery with their status; a tap opens the system screen where it is changed. */
+// One callback per screen Réglages leads to.
+@Suppress("LongParameterList")
 @Composable
 internal fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPlaces: () -> Unit,
     onOpenReminders: () -> Unit,
     onOpenIncome: () -> Unit,
+    onOpenCategories: () -> Unit,
     onOpenBackup: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
@@ -48,7 +51,8 @@ internal fun SettingsScreen(
     }
     // Named apart from the action it backs, which shares its name.
     val back = onBack
-    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders, onOpenIncome, onOpenBackup) {
+    val opens = listOf(onOpenPlaces, onOpenReminders, onOpenIncome, onOpenCategories, onOpenBackup)
+    val actions = remember(viewModel, context, back, opens) {
         object : SettingsActions {
             override fun onBack() = back()
 
@@ -65,6 +69,8 @@ internal fun SettingsScreen(
             override fun onSmartReminders() = onOpenReminders()
 
             override fun onIncome() = onOpenIncome()
+
+            override fun onCategories() = onOpenCategories()
 
             override fun onBackup() = onOpenBackup()
 
@@ -154,7 +160,7 @@ private fun DataGroup(actions: SettingsActions) {
     }
 }
 
-// « Répartir mes revenus », first: the money before the permissions.
+// « Répartir mes revenus » and « Catégories », first: the money before the permissions.
 @Composable
 private fun MoneyGroup(actions: SettingsActions) {
     SectionLabel(stringResource(R.string.settings_money_section))
@@ -165,6 +171,14 @@ private fun MoneyGroup(actions: SettingsActions) {
             text = stringResource(R.string.settings_income_text),
             status = null,
             onClick = actions::onIncome,
+        )
+        Separator()
+        SettingRow(
+            icon = R.drawable.ic_category_tag,
+            title = stringResource(R.string.settings_categories),
+            text = stringResource(R.string.settings_categories_text),
+            status = null,
+            onClick = actions::onCategories,
         )
     }
 }
@@ -304,6 +318,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onSmartReminders() = Unit
 
     override fun onIncome() = Unit
+
+    override fun onCategories() = Unit
 
     override fun onBackup() = Unit
 

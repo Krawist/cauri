@@ -72,7 +72,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         GoalEntity::class,
         GoalContributionEntity::class,
     ],
-    version = 23,
+    version = 24,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -95,6 +95,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 20, to = 21),
         AutoMigration(from = 21, to = 22),
         AutoMigration(from = 22, to = 23),
+        AutoMigration(from = 23, to = 24),
     ],
 )
 @TypeConverters(DatabaseConverters::class)

@@ -25,6 +25,9 @@ internal interface SettingsActions {
     /** Opens « Répartir mes revenus ». */
     fun onIncome()
 
+    /** Opens « Catégories ». */
+    fun onCategories()
+
     /** Opens « Sauvegarde chiffrée ». */
     fun onBackup()
 
