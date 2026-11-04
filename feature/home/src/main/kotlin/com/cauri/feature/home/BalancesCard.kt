@@ -140,10 +140,11 @@ private fun AccountCard(balance: AccountBalance, onClick: () -> Unit) {
                         color = palette.muted,
                     )
                 } else {
-                    // It rolls to the balance of a new message or of one typed.
+                    // It rolls to the balance of a new message or of one typed; « ≈ » while Cauri estimates it.
+                    val sign = if (balance.estimated) "≈ " else ""
                     RollingNumber(value = amount) { shown ->
                         Text(
-                            text = stringResource(R.string.home_amount, formatFcfa(shown)),
+                            text = sign + stringResource(R.string.home_amount, formatFcfa(shown)),
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                             color = palette.ink,
                             maxLines = 1,

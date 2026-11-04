@@ -9,5 +9,7 @@ import java.time.Instant
  * @property amount Balance in minor units of the account's currency; negative for an overdrawn bank account; `null`
  *   before a message gave one or the user typed one.
  * @property at When the account had this balance; `null` with [amount].
+ * @property estimated Whether Cauri estimated it, from a transfer whose message on this account never came: shown
+ *   with « ≈ ».
  */
-data class AccountBalance(val account: Account, val amount: Long?, val at: Instant?)
+data class AccountBalance(val account: Account, val amount: Long?, val at: Instant?, val estimated: Boolean = false)

@@ -158,7 +158,12 @@ internal class TransactionRepositoryImpl @Inject constructor(
             accountId = operation.accountId,
             amount = balances.afterOperation(
                 read = read,
-                previous = mergeDao.getBalanceBefore(accountId = operation.accountId, at = operation.occurredAt),
+                // An estimate is not what the bank wrote: a message giving the same balance updated it.
+                previous = mergeDao.getBalanceBefore(
+                    accountId = operation.accountId,
+                    at = operation.occurredAt,
+                    withEstimates = false,
+                ),
                 change = operation.change(),
             ),
             at = operation.occurredAt,
@@ -207,7 +212,10 @@ internal class TransactionRepositoryImpl @Inject constructor(
         )
         mergeDao.insertParsed(
             transactions = listOfNotNull(manual?.let { duplicates.merged(detected, it) } ?: detected, cash, fee),
-            balance = balanceAfter(operation),
+            balances = listOfNotNull(
+                balanceAfter(operation),
+                cash?.takeIf { operation.counterpartAccountId != null }?.let { estimateOn(it) },
+            ),
             rawSignalId = operation.rawSignalId,
             templateVersion = operation.templateVersion,
             entry = manual,
@@ -304,10 +312,25 @@ internal class TransactionRepositoryImpl @Inject constructor(
             credit = transfer.credit,
             fees = listOfNotNull(transfer.fee, operation.fee?.let { feeOf(read, it) }),
             balance = balanceAfter(operation),
+            estimatedAt = side.occurredAt,
             rawSignalId = operation.rawSignalId,
             templateVersion = operation.templateVersion,
         )
         return true
+    }
+
+    // The balance of the account of [side], a transfer between the user's accounts read in the message of the other
+    // side, estimated until its own message gives it: the one before moved by the transfer; `null` without one before.
+    private suspend fun estimateOn(side: TransactionEntity): AccountBalanceEntity? {
+        val before = mergeDao.getBalanceBefore(accountId = side.accountId, at = side.occurredAt, withEstimates = true)
+            ?: return null
+        return AccountBalanceEntity(
+            accountId = side.accountId,
+            amount = if (side.type == TransactionType.TRANSFER_IN) before + side.amount else before - side.amount,
+            at = side.occurredAt,
+            rawSignalId = null,
+            estimated = true,
+        )
     }
 
     // The fee [amount] a message gave, an expense on the account of [side].
@@ -331,7 +354,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
     // Marks the signal of [operation] read, recording nothing.
     private suspend fun markRead(operation: DetectedOperation) = mergeDao.insertParsed(
         transactions = emptyList(),
-        balance = null,
+        balances = emptyList(),
         rawSignalId = operation.rawSignalId,
         templateVersion = operation.templateVersion,
         entry = null,

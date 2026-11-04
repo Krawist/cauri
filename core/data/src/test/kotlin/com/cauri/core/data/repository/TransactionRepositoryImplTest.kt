@@ -399,6 +399,76 @@ internal class TransactionRepositoryImplTest {
         }
 
         @Test
+        fun `should estimate the balance of the other account of a transfer from its first message`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(momo().copy(name = "UBA", provider = "UBA"))
+            val omId = database.accountDao().insert(momo())
+            database.accountBalanceDao().insert(
+                AccountBalanceEntity(
+                    accountId = omId,
+                    amount = 10_000,
+                    at = Instant.ofEpochSecond(500),
+                    rawSignalId = null,
+                ),
+            )
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = ubaId, type = DetectedType.TRANSFER_OUT, fee = null)
+                    .copy(counterpartAccountId = omId),
+            )
+
+            // then
+            database.accountBalanceDao().observeLatest().first().map { it.copy(id = 0) } shouldContainExactly listOf(
+                AccountBalanceEntity(
+                    accountId = omId,
+                    amount = 12_500,
+                    at = Instant.ofEpochSecond(1_000),
+                    rawSignalId = null,
+                    estimated = true,
+                ),
+            )
+        }
+
+        @Test
+        fun `should replace the estimated balance by the one the message of the other side gives`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(momo().copy(name = "UBA", provider = "UBA"))
+            val omId = database.accountDao().insert(momo())
+            database.accountBalanceDao().insert(
+                AccountBalanceEntity(
+                    accountId = omId,
+                    amount = 10_000,
+                    at = Instant.ofEpochSecond(500),
+                    rawSignalId = null,
+                ),
+            )
+            val debit = database.rawSignalDao().insert(unparsedSignal())
+            val credit = database.rawSignalDao().insert(unparsedSignal().copy(text = "Reçu 2500 FCFA"))
+            repository.recordDetected(
+                operation(rawSignalId = debit, accountId = ubaId, type = DetectedType.TRANSFER_OUT, fee = null)
+                    .copy(counterpartAccountId = omId),
+            )
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = credit, accountId = omId, type = DetectedType.INCOME, fee = null)
+                    .copy(balance = 12_500, occurredAt = Instant.ofEpochSecond(1_005)),
+            )
+
+            // then
+            database.accountBalanceDao().observeLatest().first().map { it.copy(id = 0) } shouldContainExactly listOf(
+                AccountBalanceEntity(
+                    accountId = omId,
+                    amount = 12_500,
+                    at = Instant.ofEpochSecond(1_005),
+                    rawSignalId = credit,
+                ),
+            )
+        }
+
+        @Test
         fun `should record once an operation the bank wrote in an SMS and a mail`() = runTest {
             // given
             val ubaId = database.accountDao().insert(momo())

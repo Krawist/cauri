@@ -1,5 +1,6 @@
 package com.cauri.core.data.database.entity
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -14,8 +15,10 @@ import java.time.Instant
  * @property accountId Account it is the balance of.
  * @property amount Balance in minor units of the account's currency; negative for an overdrawn bank account.
  * @property at When the account had this balance: the time of the operation.
- * @property rawSignalId Signal the balance was read in, `null` for a balance the user typed. A signal gives at most one
- *   balance.
+ * @property rawSignalId Signal the balance was read in, `null` for a balance the user typed or Cauri estimated. A
+ *   signal gives at most one balance.
+ * @property estimated Whether Cauri estimated it: the balance before moved by a transfer whose message on this account
+ *   never came (Android hides some), replaced by the balance that message gives.
  */
 @Entity(
     tableName = "account_balances",
@@ -31,4 +34,5 @@ internal data class AccountBalanceEntity(
     val amount: Long,
     val at: Instant,
     val rawSignalId: Long?,
+    @ColumnInfo(defaultValue = "0") val estimated: Boolean = false,
 )

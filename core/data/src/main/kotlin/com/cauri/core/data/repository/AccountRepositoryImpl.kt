@@ -34,7 +34,12 @@ internal class AccountRepositoryImpl @Inject constructor(
                 .sortedBy { it.kind.ordinal }
                 .map { account ->
                     val balance = latest[account.id]
-                    AccountBalance(account = account.toModel(), amount = balance?.amount, at = balance?.at)
+                    AccountBalance(
+                        account = account.toModel(),
+                        amount = balance?.amount,
+                        at = balance?.at,
+                        estimated = balance?.estimated == true,
+                    )
                 }
         }
 

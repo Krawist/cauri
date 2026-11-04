@@ -17,32 +17,32 @@ import java.time.Instant
 @Dao
 internal interface TransactionMergeDao {
     /**
-     * Inserts [transactions] and the account's [balance], read in the raw signal [rawSignalId] by [templateVersion],
-     * and marks the signal read. With [merge], the first transaction is kept for the manual entry [entry], set aside,
-     * and the merge is logged.
-     */
-    /**
-     * The balance [accountId] had before [at], strictly: never one a message of the same operation gave; `null`
-     * before the first.
+     * The balance [accountId] had before [at], strictly: never one a message of the same operation gave; one Cauri
+     * estimated only [withEstimates]; `null` before the first.
      */
     @Query(
         "SELECT amount FROM account_balances WHERE accountId = :accountId AND at < :at " +
-            "ORDER BY at DESC, id DESC LIMIT 1",
+            "AND (:withEstimates OR estimated = 0) ORDER BY at DESC, id DESC LIMIT 1",
     )
-    suspend fun getBalanceBefore(accountId: Long, at: Instant): Long?
+    suspend fun getBalanceBefore(accountId: Long, at: Instant, withEstimates: Boolean): Long?
 
+    /**
+     * Inserts [transactions] and the [balances] they give, the one read in the raw signal [rawSignalId] by
+     * [templateVersion] and the one Cauri estimated, and marks the signal read. With [merge], the first transaction is
+     * kept for the manual entry [entry], set aside, and the merge is logged.
+     */
     @Transaction
     @Suppress("LongParameterList") // Everything one signal writes, in one transaction.
     suspend fun insertParsed(
         transactions: List<TransactionEntity>,
-        balance: AccountBalanceEntity?,
+        balances: List<AccountBalanceEntity>,
         rawSignalId: Long,
         templateVersion: String,
         entry: TransactionEntity?,
         merge: TransactionMergeEntity?,
     ) {
         val ids = insertTransactions(transactions)
-        balance?.let { insertBalance(it) }
+        balances.forEach { insertBalance(it) }
         markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
         if (entry != null && merge != null) {
             updateTransaction(entry.copy(status = TransactionStatus.MERGED))
@@ -51,13 +51,9 @@ internal interface TransactionMergeDao {
     }
 
     /**
-     * Inserts the manual entry [entry], set aside, updates [kept], the detected transaction of the same operation, with
-     * the user's values, logs [merge] and returns its id.
-     */
-    /**
      * Attaches the message [rawSignalId] read by [templateVersion] to a transfer between the user's accounts recorded
      * from the message of its other side, all or none: both sides as [debit] and [credit], the [fees] it brings and the
-     * [balance] it gave.
+     * [balance] it gave, in place of the one Cauri estimated at [estimatedAt].
      */
     @Transaction
     @Suppress("LongParameterList") // Everything one signal writes, in one transaction.
@@ -66,16 +62,24 @@ internal interface TransactionMergeDao {
         credit: TransactionEntity,
         fees: List<TransactionEntity>,
         balance: AccountBalanceEntity?,
+        estimatedAt: Instant,
         rawSignalId: Long,
         templateVersion: String,
     ) {
         updateTransaction(debit)
         updateTransaction(credit)
         insertTransactions(fees)
-        balance?.let { insertBalance(it) }
+        balance?.let {
+            deleteEstimate(accountId = it.accountId, at = estimatedAt)
+            insertBalance(it)
+        }
         markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
     }
 
+    /**
+     * Inserts the manual entry [entry], set aside, updates [kept], the detected transaction of the same operation, with
+     * the user's values, logs [merge] and returns its id.
+     */
     @Transaction
     suspend fun insertMerged(entry: TransactionEntity, kept: TransactionEntity, merge: TransactionMergeEntity): Long {
         val entryId = insertTransactions(listOf(entry.copy(status = TransactionStatus.MERGED))).first()
@@ -126,6 +130,9 @@ internal interface TransactionMergeDao {
 
     @Insert
     suspend fun insertBalance(balance: AccountBalanceEntity)
+
+    @Query("DELETE FROM account_balances WHERE accountId = :accountId AND at = :at AND estimated = 1")
+    suspend fun deleteEstimate(accountId: Long, at: Instant)
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransaction(id: Long): TransactionEntity?

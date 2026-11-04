@@ -790,6 +790,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   (`TransferLinkService.waitingSide`, `TransactionMergeDao.attachSide`): no second card, the gap a fee, the balance it
   gives kept. Both ways. Not checked on a phone: the S23 was not plugged in.
 
+- [ ] **CAU-25 (estimated balances)** — Android 15 hides from Cauri the notifications it takes for a one-time code: on
+  the owner's S25 the SMS of OrangeMoney « Votre transfert de 1000 FCFA … depuis votre compte UBA »
+  (`mSensitiveContent`), so the transfer was read from the UBA side only and the Orange Money balance stayed. At the
+  user's request, a transfer between the user's accounts read from one message now estimates the balance of the other
+  account, the one before moved by the amount (`account_balances.estimated`, database v25), shown with « ≈ » in « Mes
+  comptes »; the balance its own message gives replaces it (`TransactionMergeDao.attachSide`), and an estimate is never
+  taken for a balance the bank forgot to update. Not checked on a phone.
+
 Update this section at the end of each ticket.
 
 ## Way of working
