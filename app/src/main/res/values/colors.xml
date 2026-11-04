@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="cauri_background">#F6F2EA</color>
+    <color name="widget_accent">#0F7B76</color>
+    <color name="widget_gold">#7A5719</color>
+    <color name="widget_ink">#0E1A1C</color>
+    <color name="widget_muted">#55666A</color>
+    <color name="widget_on_accent">#FFFFFF</color>
+    <color name="widget_surface">#FBF8F2</color>
 </resources>

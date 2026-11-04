@@ -668,6 +668,16 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   second amount would take the place of « Autre montant ». Checked on the Galaxy S23 with a made-up payment: the
   buttons, « Autre » opening the sheet, the notification gone.
 
+- [ ] **CAU-32** — the home screen widget « Cash dans ta poche » (`CashWidgetProvider`, `CashWidgetUpdater` in `:app`,
+  `RemoteViews` by decision: no Glance library): « ≈ 7 500 F », « Disponible aujourd'hui 12 500 F » once known (CAU-46),
+  and a lagoon « + » that opens the quick entry; a tap elsewhere opens the app. No periodic job (`updatePeriodMillis`
+  0): `CauriApplication` starts the updater, which redraws the widgets on each change of the cash or the available
+  amount, and a widget just added asks once. Opaque, its colours mirroring the palette light and dark (a home screen
+  cannot blur). The quick settings tile « Ajouter une dépense » (`QuickEntryTileService`) opens the app on the quick
+  entry too (`QuickEntryLaunch.ACTION_QUICK_ENTRY`, `NotificationTarget.QuickEntry`). Checked on the Galaxy S23: the
+  intent of the widget's « + » and of the tile opening the quick entry. The widget on a home screen and the tile in the
+  quick settings not placed on a phone yet (the launcher's own gestures).
+
 Update this section at the end of each ticket.
 
 ## Way of working

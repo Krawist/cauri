@@ -7,4 +7,11 @@
     <string name="tab_goals">Objectifs</string>
     <string name="tab_home">Accueil</string>
     <string name="tab_insights">Analyses</string>
+    <string name="tile_label">Ajouter une dépense</string>
+    <string name="widget_add">Ajouter une dépense</string>
+    <string name="widget_available">Disponible aujourd\'hui %1$s F</string>
+    <string name="widget_cash_amount" translatable="false">≈ %1$s F</string>
+    <string name="widget_cash_label">Cash dans ta poche</string>
+    <string name="widget_cash_none">Compte ton cash</string>
+    <string name="widget_description">Ton cash en poche et une dépense en un geste</string>
 </resources>

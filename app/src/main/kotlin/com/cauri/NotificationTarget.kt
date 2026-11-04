@@ -6,8 +6,9 @@ import com.cauri.core.capture.reminder.EditFromNotification
 import com.cauri.core.capture.reminder.EveningSummary
 import com.cauri.feature.cash.reminder.CountReminders
 import com.cauri.feature.places.discovery.PlaceDiscovery
+import com.cauri.widget.QuickEntryLaunch
 
-/** A screen a notification opens the app on. */
+/** A screen a notification, the widget or the quick settings tile opens the app on. */
 internal sealed interface NotificationTarget {
     /** A count reminder: the cash count. */
     data object CashCount : NotificationTarget
@@ -28,6 +29,9 @@ internal sealed interface NotificationTarget {
      */
     data class EditTransaction(val transactionId: Long) : NotificationTarget
 
+    /** The « + » of the widget, or the quick settings tile: the quick entry. */
+    data object QuickEntry : NotificationTarget
+
     companion object {
         /** The screen [intent] asks for; `null` for an ordinary launch. */
         fun of(intent: Intent?): NotificationTarget? = when (intent?.action) {
@@ -37,6 +41,7 @@ internal sealed interface NotificationTarget {
             EveningSummary.ACTION_OPEN_SUMMARY -> EveningSummaryScreen
             EditFromNotification.ACTION_EDIT_TRANSACTION ->
                 intent.getLongExtra(EditFromNotification.EXTRA_TRANSACTION, 0).takeIf { it > 0 }?.let(::EditTransaction)
+            QuickEntryLaunch.ACTION_QUICK_ENTRY -> QuickEntry
             else -> null
         }
     }

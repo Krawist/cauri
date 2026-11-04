@@ -103,14 +103,16 @@ internal fun CauriApp(
 private val MergeBarBottom = 100.dp
 
 // The screen a notification asked for.
-private fun NavHostController.open(target: NotificationTarget, onEdit: (Long) -> Unit) = when (target) {
-    NotificationTarget.CashCount -> navigateToCashCount()
-    NotificationTarget.Settings -> navigateToSettings()
-    NotificationTarget.SuggestedPlace -> navigateToSuggestedPlace()
-    NotificationTarget.EveningSummaryScreen -> navigateToEveningSummary()
-    // The sheet shows over the screen the app opens on.
-    is NotificationTarget.EditTransaction -> onEdit(target.transactionId)
-}
+private fun NavHostController.open(target: NotificationTarget, onEdit: (Long) -> Unit, onQuickEntry: () -> Unit) =
+    when (target) {
+        NotificationTarget.CashCount -> navigateToCashCount()
+        NotificationTarget.Settings -> navigateToSettings()
+        NotificationTarget.SuggestedPlace -> navigateToSuggestedPlace()
+        NotificationTarget.EveningSummaryScreen -> navigateToEveningSummary()
+        // The sheets show over the screen the app opens on.
+        is NotificationTarget.EditTransaction -> onEdit(target.transactionId)
+        NotificationTarget.QuickEntry -> onQuickEntry()
+    }
 
 // The tabs of the bottom bar, in order, by the route of their graph.
 private val TabRoutes = listOf(HomeGraph, ActivityGraph, GoalsGraph, InsightsGraph)
@@ -130,7 +132,13 @@ private fun CauriNavHost(
     // A notification opens its screen, once the onboarding is done.
     LaunchedEffect(notificationTarget) {
         if (notificationTarget != null) {
-            if (onboardingCompleted) navController.open(notificationTarget, onEdit = { editedTransaction = it })
+            if (onboardingCompleted) {
+                navController.open(
+                    target = notificationTarget,
+                    onEdit = { editedTransaction = it },
+                    onQuickEntry = { quickEntryOpen = true },
+                )
+            }
             onNotificationTargetShown()
         }
     }

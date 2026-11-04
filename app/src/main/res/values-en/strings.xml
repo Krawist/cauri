@@ -5,4 +5,10 @@
     <string name="tab_goals">Goals</string>
     <string name="tab_home">Home</string>
     <string name="tab_insights">Insights</string>
+    <string name="tile_label">Add an expense</string>
+    <string name="widget_add">Add an expense</string>
+    <string name="widget_available">Available today %1$s F</string>
+    <string name="widget_cash_label">Cash in your pocket</string>
+    <string name="widget_cash_none">Count your cash</string>
+    <string name="widget_description">Your cash in pocket and an expense in one tap</string>
 </resources>
