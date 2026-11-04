@@ -3,6 +3,8 @@
     <string name="add_expense">Ajouter une dépense</string>
     <string name="app_name" translatable="false">Cauri</string>
     <string name="launch_wordmark" translatable="false">cauri</string>
+    <string name="lock_text">Cauri est verrouillé. Déverrouille-le avec la sécurité de ton téléphone.</string>
+    <string name="lock_unlock">Déverrouiller</string>
     <string name="tab_activity">Activité</string>
     <string name="tab_goals">Objectifs</string>
     <string name="tab_home">Accueil</string>

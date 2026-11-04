@@ -31,6 +31,9 @@ internal interface SettingsActions {
     /** Opens « Sauvegarde chiffrée ». */
     fun onBackup()
 
+    /** Turns the lock of Cauri on or off, after the phone's security; without screen lock, opens where to set one. */
+    fun onLock()
+
     /** Opens or closes the sheet of the cash count reminders. */
     fun onCountReminder(open: Boolean)
 

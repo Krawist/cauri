@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,10 +48,10 @@ private const val BLOB_RADIUS = 0.7f
 
 /**
  * Launch screen: the logo tile in the centre of the screen, on the blurred lagoon and gold shapes, with the wordmark
- * under it.
+ * under it; [bottom] at the foot of the screen, such as the lock's « Déverrouiller » (CAU-57).
  */
 @Composable
-internal fun LaunchScreen(modifier: Modifier = Modifier) {
+internal fun LaunchScreen(modifier: Modifier = Modifier, bottom: @Composable BoxScope.() -> Unit = {}) {
     val palette = CauriTheme.palette
     Box(
         modifier = modifier
@@ -99,6 +100,7 @@ internal fun LaunchScreen(modifier: Modifier = Modifier) {
                 )
             }
         }
+        bottom()
     }
 }
 

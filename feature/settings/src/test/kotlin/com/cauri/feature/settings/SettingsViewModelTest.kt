@@ -4,6 +4,7 @@ import com.cauri.core.capture.battery.FakeBatteryService
 import com.cauri.core.capture.permission.FakePermissionService
 import com.cauri.core.capture.permission.LocationAccess
 import com.cauri.core.capture.permission.PermissionStatus
+import com.cauri.core.capture.security.FakeAppLockService
 import com.cauri.core.capture.signal.FakeSignalProcessor
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CountReminderFrequency
@@ -30,6 +31,7 @@ internal class SettingsViewModelTest {
     private val battery = FakeBatteryService()
     private val preferences = FakeUserPreferencesRepository()
     private val processor = FakeSignalProcessor()
+    private val lock = FakeAppLockService()
 
     @BeforeEach
     fun setUp() {
@@ -55,7 +57,7 @@ internal class SettingsViewModelTest {
             battery.restricted = false
 
             // when
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
 
             // then
             viewModel.uiState.value.permissions shouldBe given
@@ -68,7 +70,7 @@ internal class SettingsViewModelTest {
         @Test
         fun `should show the notifications allowed in the system settings`() {
             // given
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
             permissions.status = permissions.status.copy(notificationsAllowed = true)
 
             // when
@@ -82,7 +84,7 @@ internal class SettingsViewModelTest {
         fun `should show the location taken back in the system settings`() {
             // given
             permissions.status = permissions.status.copy(location = LocationAccess.ALWAYS)
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
             permissions.status = permissions.status.copy(location = LocationAccess.DENIED)
 
             // when
@@ -95,7 +97,7 @@ internal class SettingsViewModelTest {
         @Test
         fun `should show the battery restriction lifted in the system settings`() {
             // given
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
             battery.restricted = false
 
             // when
@@ -111,7 +113,7 @@ internal class SettingsViewModelTest {
         @Test
         fun `should save the user's choice and show it`() {
             // given
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
             val chosen = CountReminderSettings(frequency = CountReminderFrequency.EVERY_EVENING, hour = 21)
 
             // when
@@ -131,7 +133,7 @@ internal class SettingsViewModelTest {
             processor.ignoredAccounts.value = listOf(
                 NewAccount(name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF"),
             )
-            val viewModel = SettingsViewModel(permissions, battery, preferences, processor)
+            val viewModel = SettingsViewModel(permissions, battery, preferences, processor, lock)
 
             // when
             viewModel.onFollowAccount("UBA")

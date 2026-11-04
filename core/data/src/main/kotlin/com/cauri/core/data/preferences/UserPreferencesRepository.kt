@@ -29,6 +29,11 @@ interface UserPreferencesRepository {
 
     suspend fun saveIncomeSplit(settings: IncomeSplitSettings)
 
+    /** Whether Cauri is locked by the phone's security (CAU-57); off until the user turns it on. */
+    val appLock: Flow<Boolean>
+
+    suspend fun setAppLock(on: Boolean)
+
     /** Whether the emergency fund was created once: deleted, it is not created again. */
     val emergencyFundCreated: Flow<Boolean>
 

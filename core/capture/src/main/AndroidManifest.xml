@@ -4,6 +4,9 @@
     <!-- Android forgets the geofences of the places at a restart: PlaceBootReceiver has them registered again. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Android's dialog of the phone's security, which locks Cauri (CAU-57); granted at install, never asked. -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
     <!-- Lets PermissionServiceImpl check that this phone has the screen of Cauri's listener alone (Android 11+). -->
     <queries>
         <intent>

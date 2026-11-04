@@ -24,6 +24,10 @@ import com.cauri.core.capture.reminder.ReminderNotificationSweeper
 import com.cauri.core.capture.reminder.ReminderNotificationSweeperImpl
 import com.cauri.core.capture.reminder.ReminderNotifier
 import com.cauri.core.capture.reminder.ReminderNotifierImpl
+import com.cauri.core.capture.security.AppLockService
+import com.cauri.core.capture.security.AppLockServiceImpl
+import com.cauri.core.capture.security.DeviceSecurity
+import com.cauri.core.capture.security.DeviceSecurityImpl
 import com.cauri.core.capture.signal.DetectionService
 import com.cauri.core.capture.signal.DetectionServiceImpl
 import com.cauri.core.capture.signal.SignalFilterService
@@ -67,6 +71,12 @@ internal abstract class CaptureModule {
 
     @Binds
     abstract fun bindBatteryService(impl: BatteryServiceImpl): BatteryService
+
+    @Binds
+    abstract fun bindDeviceSecurity(impl: DeviceSecurityImpl): DeviceSecurity
+
+    @Binds
+    abstract fun bindAppLockService(impl: AppLockServiceImpl): AppLockService
 
     @Binds
     abstract fun bindDetectionService(impl: DetectionServiceImpl): DetectionService

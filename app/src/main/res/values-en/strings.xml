@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add_expense">Add an expense</string>
+    <string name="lock_text">Cauri is locked. Unlock it with your phone\'s security.</string>
+    <string name="lock_unlock">Unlock</string>
     <string name="tab_activity">Activity</string>
     <string name="tab_goals">Goals</string>
     <string name="tab_home">Home</string>

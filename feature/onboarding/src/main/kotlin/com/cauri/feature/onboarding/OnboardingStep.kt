@@ -40,12 +40,13 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 
 // Profile, payment habits, categories, accounts and permissions.
-private const val ONBOARDING_STEPS = 5
+private const val ONBOARDING_STEPS = 6
 
 private val StepWidth = 22.dp
 private val StepHeight = 6.dp
@@ -157,7 +158,7 @@ internal fun LocalOnlyNote() {
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(painter = painterResource(R.drawable.ic_lock), contentDescription = null, tint = palette.muted)
+        Icon(painter = painterResource(DesignR.drawable.ic_lock), contentDescription = null, tint = palette.muted)
         Spacer(Modifier.width(CauriSpacing.xs + 2.dp))
         Text(
             text = stringResource(R.string.onboarding_local_only),

@@ -68,6 +68,12 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         }
     }
 
+    override val appLock: Flow<Boolean> = dataStore.data.map { it[AppLock] ?: false }
+
+    override suspend fun setAppLock(on: Boolean) {
+        dataStore.edit { it[AppLock] = on }
+    }
+
     override val emergencyFundCreated: Flow<Boolean> = dataStore.data.map { it[EmergencyFundCreated] ?: false }
 
     override suspend fun setEmergencyFundCreated() {
@@ -210,6 +216,7 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
         val LearningSince = longPreferencesKey("reminders_learning_since")
         val SeenHelp = stringSetPreferencesKey("help_seen")
+        val AppLock = booleanPreferencesKey("security_app_lock")
         val EmergencyFundCreated = booleanPreferencesKey("goals_emergency_fund_created")
         val SavingsRate = intPreferencesKey("income_savings_rate")
         val SplitThreshold = longPreferencesKey("income_split_threshold")

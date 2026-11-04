@@ -18,6 +18,7 @@ import com.cauri.feature.onboarding.permissions.BackgroundLocationScreen
 import com.cauri.feature.onboarding.permissions.LocationScreen
 import com.cauri.feature.onboarding.permissions.NotificationsScreen
 import com.cauri.feature.onboarding.profile.ProfileScreen
+import com.cauri.feature.onboarding.security.SecurityScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -34,6 +35,9 @@ internal data object CategoriesRoute
 
 @Serializable
 internal data object AccountsRoute
+
+@Serializable
+internal data object SecurityRoute
 
 @Serializable
 internal data object NotificationsRoute
@@ -84,10 +88,11 @@ fun NavGraphBuilder.onboardingGraph(navController: NavController, onCompleted: (
             AccountsScreen(
                 onAccountsChosen = { accounts ->
                     onboarding.onAccountsChosen(accounts)
-                    navController.navigate(NotificationsRoute)
+                    navController.navigate(SecurityRoute)
                 },
             )
         }
+        composable<SecurityRoute> { SecurityScreen(onDone = { navController.navigate(NotificationsRoute) }) }
         composable<NotificationsRoute> { NotificationsScreen(onDone = { navController.navigate(LocationRoute) }) }
         composable<LocationRoute> { entry ->
             val onboarding = onboardingViewModel(navController, entry)

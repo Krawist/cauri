@@ -24,4 +24,6 @@
     </plurals>
     <string name="reminder_visit_stay">Visit of %1$d min</string>
     <string name="reminder_visit_title">%1$s: how much did you spend?</string>
+    <string name="security_prompt_subtitle">With your fingerprint, your face or your phone\'s code</string>
+    <string name="security_prompt_title">Unlock Cauri</string>
 </resources>

@@ -101,4 +101,16 @@
     <string name="profile_occupation_trader">Trader</string>
     <string name="profile_restore">Used Cauri before? Restore a backup</string>
     <string name="profile_title">Let\'s get to know you</string>
+    <string name="security_enable">Turn the lock on</string>
+    <string name="security_hidden">Nothing to see from outside</string>
+    <string name="security_hidden_text">Cauri does not show in the recent apps, and no screenshot can be taken.</string>
+    <string name="security_minute">After a minute away</string>
+    <string name="security_minute_text">Answering an SMS asks nothing; past that, or on a restart, Cauri locks.</string>
+    <string name="security_no_screen_lock">Your phone has no screen lock: add a code, a pattern or a fingerprint, then come back here.</string>
+    <string name="security_set_screen_lock">Add a screen lock</string>
+    <string name="security_settings_hint">You can turn it on or off in Settings, always after identifying yourself.</string>
+    <string name="security_subtitle">Cauri holds your accounts and spending. Lock it with your phone\'s security.</string>
+    <string name="security_title">Protect your money</string>
+    <string name="security_unlock">Your fingerprint, face or code</string>
+    <string name="security_unlock_text">The ones that already unlock your phone: nothing new to remember.</string>
 </resources>

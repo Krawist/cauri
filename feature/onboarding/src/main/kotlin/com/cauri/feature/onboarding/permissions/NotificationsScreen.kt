@@ -34,7 +34,7 @@ import com.cauri.feature.onboarding.LocalOnlyNote
 import com.cauri.feature.onboarding.OnboardingStep
 import com.cauri.feature.onboarding.R
 
-internal const val PERMISSIONS_STEP = 5
+internal const val PERMISSIONS_STEP = 6
 
 /**
  * Notification access, the first permission: Android grants it in its settings, so the status is read again when the

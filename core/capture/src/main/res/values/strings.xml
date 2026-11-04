@@ -24,4 +24,6 @@
     </plurals>
     <string name="reminder_visit_stay">Visite de %1$d min</string>
     <string name="reminder_visit_title">%1$s : combien as-tu dépensé ?</string>
+    <string name="security_prompt_subtitle">Avec ton empreinte, ton visage ou le code de ton téléphone</string>
+    <string name="security_prompt_title">Déverrouiller Cauri</string>
 </resources>

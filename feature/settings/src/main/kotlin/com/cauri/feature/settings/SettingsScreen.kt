@@ -1,6 +1,7 @@
 package com.cauri.feature.settings
 
 import android.content.res.Configuration
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ internal fun SettingsScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val activity = LocalActivity.current
     LifecycleResumeEffect(Unit) {
         viewModel.refresh()
         onPauseOrDispose {}
@@ -73,6 +75,14 @@ internal fun SettingsScreen(
             override fun onCategories() = onOpenCategories()
 
             override fun onBackup() = onOpenBackup()
+
+            override fun onLock() {
+                if (viewModel.uiState.value.lockAvailable) {
+                    activity?.let(viewModel::onToggleLock)
+                } else {
+                    context.startActivity(viewModel.securitySettings())
+                }
+            }
 
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
@@ -141,15 +151,23 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
             )
             IgnoredAccountsGroup(accounts = state.ignoredAccounts, actions = actions)
         }
-        DataGroup(actions = actions)
+        DataGroup(lockEnabled = state.lockEnabled, actions = actions)
     }
 }
 
-// « Sauvegarde chiffrée », last.
+// « Verrouillage de Cauri » and « Sauvegarde chiffrée », last.
 @Composable
-private fun DataGroup(actions: SettingsActions) {
+private fun DataGroup(lockEnabled: Boolean, actions: SettingsActions) {
     SectionLabel(stringResource(R.string.settings_data_section), modifier = Modifier.padding(top = CauriSpacing.xxl))
     RowGroup {
+        SettingRow(
+            icon = DesignR.drawable.ic_lock,
+            title = stringResource(R.string.settings_lock),
+            text = stringResource(R.string.settings_lock_text),
+            status = if (lockEnabled) active(R.string.settings_lock_on) else off(R.string.settings_off),
+            onClick = actions::onLock,
+        )
+        Separator()
         SettingRow(
             icon = DesignR.drawable.ic_check,
             title = stringResource(R.string.settings_backup),
@@ -322,6 +340,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onCategories() = Unit
 
     override fun onBackup() = Unit
+
+    override fun onLock() = Unit
 
     override fun onCountReminder(open: Boolean) = Unit
 

@@ -104,4 +104,16 @@
     <string name="profile_occupation_trader">Commerçant·e</string>
     <string name="profile_restore">Déjà utilisé Cauri ? Restaurer une sauvegarde</string>
     <string name="profile_title">Faisons connaissance</string>
+    <string name="security_enable">Activer le verrouillage</string>
+    <string name="security_hidden">Rien à voir de l\'extérieur</string>
+    <string name="security_hidden_text">Cauri n\'apparaît pas dans les apps récentes, et aucune capture d\'écran n\'est possible.</string>
+    <string name="security_minute">Après une minute ailleurs</string>
+    <string name="security_minute_text">Répondre à un SMS ne redemande rien ; au-delà, ou au redémarrage, Cauri se verrouille.</string>
+    <string name="security_no_screen_lock">Ton téléphone n\'a pas de verrou d\'écran : ajoute un code, un schéma ou une empreinte, puis reviens ici.</string>
+    <string name="security_set_screen_lock">Ajouter un verrou d\'écran</string>
+    <string name="security_settings_hint">Tu pourras l\'activer ou le désactiver dans Réglages, toujours après t\'être identifié.</string>
+    <string name="security_subtitle">Cauri garde tes comptes et tes dépenses. Verrouille-le avec la sécurité de ton téléphone.</string>
+    <string name="security_title">Protège ton argent</string>
+    <string name="security_unlock">Ton empreinte, ton visage ou ton code</string>
+    <string name="security_unlock_text">Ceux qui déverrouillent déjà ton téléphone : rien de nouveau à retenir.</string>
 </resources>

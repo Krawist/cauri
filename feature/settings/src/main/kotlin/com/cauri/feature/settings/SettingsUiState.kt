@@ -13,6 +13,8 @@ import com.cauri.core.data.model.NewAccount
  * @property countReminder The user's choice for the cash count reminders.
  * @property choosingReminder Whether the sheet to change [countReminder] is open.
  * @property ignoredAccounts Accounts whose messages the user chose not to follow, by name.
+ * @property lockEnabled Whether Cauri is locked by the phone's security (CAU-57).
+ * @property lockAvailable Whether the phone has a screen lock, which the lock of Cauri needs.
  */
 internal data class SettingsUiState(
     val permissions: PermissionStatus,
@@ -23,6 +25,8 @@ internal data class SettingsUiState(
     ),
     val choosingReminder: Boolean = false,
     val ignoredAccounts: List<NewAccount> = emptyList(),
+    val lockEnabled: Boolean = false,
+    val lockAvailable: Boolean = false,
 )
 
 // Until the stored choice is read; the same default as the preferences.

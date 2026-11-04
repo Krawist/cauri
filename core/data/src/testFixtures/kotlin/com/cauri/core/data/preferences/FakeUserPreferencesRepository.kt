@@ -20,6 +20,7 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
         ReminderSettings(quietFrom = 22, quietUntil = 7, dailyCap = 4, visitReminders = true),
     )
     override val incomeSplit = MutableStateFlow(IncomeSplitSettings(savingsRate = 10, threshold = 10_000))
+    override val appLock = MutableStateFlow(false)
     override val emergencyFundCreated = MutableStateFlow(false)
     override val seenHelp = MutableStateFlow<Set<String>>(emptySet())
     override val learningSince = MutableStateFlow<Instant?>(null)
@@ -47,6 +48,10 @@ class FakeUserPreferencesRepository : UserPreferencesRepository {
 
     override suspend fun saveIncomeSplit(settings: IncomeSplitSettings) {
         incomeSplit.value = settings
+    }
+
+    override suspend fun setAppLock(on: Boolean) {
+        appLock.value = on
     }
 
     override suspend fun setEmergencyFundCreated() {

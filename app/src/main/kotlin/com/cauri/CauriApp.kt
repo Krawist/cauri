@@ -1,6 +1,7 @@
 package com.cauri
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cauri.core.capture.security.DeviceSecurity
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.AnimatedPresence
 import com.cauri.core.design.component.BottomBarTab
@@ -70,13 +72,20 @@ import kotlinx.coroutines.delay
  *
  * @param notificationTarget Screen a notification asked for; `null` otherwise. [onNotificationTargetShown] once it is
  *   shown.
+ * @param lock Whether the app is locked by the phone's [security] (CAU-57): the lock screen covers it until
+ *   [onUnlocked].
  */
+// Parameters: the state of the app, what a notification asked for and the lock.
+@Suppress("LongParameterList")
 @Composable
 internal fun CauriApp(
     uiState: MainUiState,
     onOnboardingCompleted: () -> Unit,
     notificationTarget: NotificationTarget?,
     onNotificationTargetShown: () -> Unit,
+    lock: AppLockUiState,
+    security: DeviceSecurity,
+    onUnlocked: () -> Unit,
 ) {
     // Saved so that a configuration change (rotation, dark mode) does not show the launch screen again.
     var launchShown by rememberSaveable { mutableStateOf(false) }
@@ -85,7 +94,7 @@ internal fun CauriApp(
         launchShown = true
     }
     // The preferences load in a few milliseconds: the launch screen covers it.
-    if (launchShown && uiState is MainUiState.Ready) {
+    if (launchShown && uiState is MainUiState.Ready && lock.enabled != null) {
         // One help bubble at a time, whatever the screen.
         CompositionLocalProvider(LocalHelpBubbles provides hiltViewModel<HelpBubblesViewModel>()) {
             CauriNavHost(
@@ -94,6 +103,12 @@ internal fun CauriApp(
                 notificationTarget = notificationTarget,
                 onNotificationTargetShown = onNotificationTargetShown,
             )
+        }
+        // Over the screens, which keep their state: it takes every touch until the user is recognised.
+        if (lock.locked) {
+            Box(Modifier.fillMaxSize().clickable(interactionSource = null, indication = null) {}) {
+                LockScreen(security = security, onUnlocked = onUnlocked)
+            }
         }
     } else {
         LaunchScreen()

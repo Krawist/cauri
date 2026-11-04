@@ -757,6 +757,21 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   mail of UBA through Gmail: read by `uba.mail.debit`, the expense « à confirmer », its stale balance of 500 000 F moved
   to 495 750 F (CAU-25). A real mail in Gmail's notification, whole up to « Solde », not seen yet.
 
+- [ ] **CAU-57** — Cauri locked by the phone's own security (`DeviceSecurity` on Android's `BiometricPrompt`, no
+  library: the fingerprint or the face when the phone knows them, else the screen lock's code; permission
+  `USE_BIOMETRIC`, granted at install). The onboarding offers it in a step of its own, now the fifth before the
+  permissions (« Protège ton argent », `SecurityScreen`): « Activer le verrouillage » asks the phone's security once to
+  know it works, a phone without screen lock is sent to its security settings, « Plus tard » never blocks. Réglages ›
+  Données › « Verrouillage de Cauri » turns it on or off, by decision always after the phone's security, from inside the
+  app too (`AppLockService`, one implementation for both, JVM tests; `appLock` in DataStore). Once on
+  (`AppLockViewModel`, JVM tests), the app is locked at start and, by decision, again after more than a minute away (to
+  answer an SMS in peace), the lock screen being the launch screen with « Déverrouiller » (`LockScreen`; `LaunchScreen`
+  takes a `bottom`), over the screens, which keep their state; by decision Cauri's preview is hidden in the recent apps
+  and no screenshot nor recording can be taken (`FLAG_SECURE`). The notifications stay as they are: they hold nothing of
+  the user's own (by decision). `ic_lock` moved to `:core:design`. Checked on the Galaxy S23: Android's dialog opening
+  from Réglages and cancelled, the lock staying off. Turning it on, the lock screen and the relock after a minute not
+  tried: they need the owner's fingerprint or code.
+
 Update this section at the end of each ticket.
 
 ## Way of working

@@ -168,6 +168,9 @@
     <string name="settings_location_always">Always</string>
     <string name="settings_location_text">To remind you of an expense when you leave a market or a shop. Optional.</string>
     <string name="settings_location_while_in_use">App open</string>
+    <string name="settings_lock">Lock Cauri</string>
+    <string name="settings_lock_on">On</string>
+    <string name="settings_lock_text">Your fingerprint, face or code to open Cauri, after a minute away</string>
     <string name="settings_money_section">Money</string>
     <string name="settings_notification_access">Reading notifications</string>
     <string name="settings_notification_access_text">Cauri reads the messages from MoMo, Orange Money and your banks to record your payments for you.</string>
