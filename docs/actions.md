@@ -46,7 +46,8 @@ Needs Cauri's notifications allowed; nothing shows otherwise.
 adb shell am broadcast -a com.cauri.debug.RECORD_SIGNAL -e title OrangeMoney -e text "Paiement de BOUTIQUE ALPHA reussi par 690000000 ATANGANA MBALLA. ID transaction:MP261103.1210.A12345, Montant:2500 FCFA. Solde: 12500.00 FCFA." -p com.cauri.debug
 ```
 
-Keeps the message as a raw signal, as if Samsung Messages had shown it (`com.samsung.android.messaging`, received now),
+Keeps the message as a raw signal, as if Samsung Messages had shown it (`com.samsung.android.messaging`, received now;
+another app with `app`, such as Gmail for a mail of UBA),
 then reads the unread signals as the listener does (CAU-21): the templates, the transaction « à confirmer », the offer
 to follow an account the user does not have, the merges (CAU-22) and the transfers (CAU-23). It does not need the
 access to the notifications.
@@ -55,6 +56,7 @@ access to the notifications.
 |---------|------|---------|--------------------------------------------------------------------------------------|
 | `title` | text | none    | SMS sender, as the notification titles it: `OrangeMoney`, `UBA`…                     |
 | `text`  | text | empty   | Text of the message; anonymised examples in `core/parsing/src/test/resources/collected_messages.json` |
+| `app`   | text | `com.samsung.android.messaging` | App that shows it: `com.google.android.gm` for a mail           |
 
 The same message sent again within 10 minutes is kept once. The signal and its transactions stay in the database: use
 a test phone, as the cash estimate and the balances change.

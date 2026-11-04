@@ -59,6 +59,16 @@
       "name": "UBA",
       "status": "CONFIRMED",
       "checkedOn": "SMS sender of UBA on a Galaxy S25 (2026-11-03), confirmed by its owner"
+    },
+    {
+      "name": "UBA Transaction Notification Services (UBA ALERT)",
+      "status": "CONFIRMED",
+      "checkedOn": "Mail sender of UBA operations, given by its owner (2026-11-04); a mail not seen in a notification yet"
+    },
+    {
+      "name": "UBACameroun.Alert",
+      "status": "CONFIRMED",
+      "checkedOn": "Mail sender of UBA operations, given by its owner (2026-11-04); a mail not seen in a notification yet"
     }
   ]
 }

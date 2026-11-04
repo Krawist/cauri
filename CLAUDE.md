@@ -749,6 +749,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   The next balance read, or one the user types, replaces it as before. An operation in another currency moves nothing
   known and keeps the balance read. Not seen on a phone (the S23 locked).
 
+- [ ] **CAU-18 (UBA mails)** — the mail senders of UBA given by the user, « UBA Transaction Notification Services (UBA
+  ALERT) » and « UBACameroun.Alert », are watched in the mail apps (`watched_senders.json`); the debug broadcast
+  `RECORD_SIGNAL` takes the app that shows a message (`app`, Gmail for a mail). Checked on the Galaxy S23 with a made-up
+  mail of UBA through Gmail: read by `uba.mail.debit`, the expense « à confirmer », its stale balance of 500 000 F moved
+  to 495 750 F (CAU-25). A real mail in Gmail's notification, whole up to « Solde », not seen yet.
+
 Update this section at the end of each ticket.
 
 ## Way of working
