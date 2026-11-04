@@ -67,6 +67,9 @@ internal object DatabaseModule {
     fun provideBudgetDao(database: CauriDatabase) = database.budgetDao()
 
     @Provides
+    fun provideAvailableDao(database: CauriDatabase) = database.availableDao()
+
+    @Provides
     fun provideFixedCostDao(database: CauriDatabase) = database.fixedCostDao()
 
     @Provides

@@ -13,6 +13,7 @@ import com.cauri.core.data.model.PaymentHabit
 import com.cauri.core.data.model.UserProfile
 import com.cauri.core.data.preferences.FakeUserPreferencesRepository
 import com.cauri.core.data.repository.FakeAccountRepository
+import com.cauri.core.data.repository.FakeAvailableRepository
 import com.cauri.core.data.repository.FakeCashCountRepository
 import com.cauri.core.data.repository.FakeCategoryRepository
 import com.cauri.core.data.repository.FakeHabitRepository
@@ -43,13 +44,14 @@ internal class HomeViewModelTest {
     private val habits = FakeHabitRepository()
     private val transactions = FakeTransactionRepository()
     private val accounts = FakeAccountRepository()
+    private val available = FakeAvailableRepository()
     private val clock = Clock.fixed(Instant.parse("2026-11-03T08:30:00Z"), ZoneOffset.UTC)
     private lateinit var viewModel: HomeViewModel
 
     @BeforeEach
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
-        viewModel = HomeViewModel(preferences, cashCounts, categories, accounts, habits, transactions, clock)
+        viewModel = HomeViewModel(preferences, cashCounts, categories, accounts, available, habits, transactions, clock)
     }
 
     @AfterEach
@@ -59,6 +61,15 @@ internal class HomeViewModelTest {
 
     @Nested
     inner class UiState {
+        @Test
+        fun `should show what is available today`() {
+            // when
+            available.today.value = 12_500
+
+            // then
+            viewModel.uiState.value.available shouldBe 12_500
+        }
+
         @Test
         fun `should show the first letter of the name in capitals`() {
             // when

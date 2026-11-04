@@ -14,6 +14,8 @@ import java.time.LocalDate
  * @property initial First letter of the user's name, in capitals, on the profile button; empty until it is read.
  * @property cash Estimated cash in pocket; `null` until it is read, or before the first count.
  * @property balances Balances of the digital accounts, as their last message gave them.
+ * @property available What can be spent each day until the end of the month, in FCFA; `null` before the first
+ *   income of the month.
  * @property habits One-tap cash expenses, in the order of the row.
  * @property categories Spending categories a habit can record into, by name.
  * @property recorded Expense just recorded with a tap, while it can be undone; `null` otherwise.
@@ -26,6 +28,7 @@ internal data class HomeUiState(
     val initial: String = "",
     val cash: CashBalance? = null,
     val balances: List<AccountBalance> = emptyList(),
+    val available: Long? = null,
     val habits: List<Habit> = emptyList(),
     val categories: List<Category> = emptyList(),
     val recorded: RecordedHabit? = null,

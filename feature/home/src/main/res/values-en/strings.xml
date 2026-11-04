@@ -14,6 +14,7 @@
     <string name="home_add_account_none">No account found</string>
     <string name="home_add_account_search">Search an account</string>
     <string name="home_add_account_title">Add an account</string>
+    <string name="home_available">Available today</string>
     <string name="home_balance_even">Even</string>
     <string name="home_balance_hint">Type the balance your operator\'s app shows.</string>
     <string name="home_balance_missing">%1$s F missing</string>

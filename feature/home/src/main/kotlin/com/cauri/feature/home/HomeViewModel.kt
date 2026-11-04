@@ -7,6 +7,7 @@ import com.cauri.core.data.model.Habit
 import com.cauri.core.data.model.NewHabit
 import com.cauri.core.data.preferences.UserPreferencesRepository
 import com.cauri.core.data.repository.AccountRepository
+import com.cauri.core.data.repository.AvailableRepository
 import com.cauri.core.data.repository.CashCountRepository
 import com.cauri.core.data.repository.CategoryRepository
 import com.cauri.core.data.repository.HabitRepository
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 
 /**
  * Home screen, cash first: the greeting, the estimated cash in pocket, the one-tap cash expenses, the balances of the
- * digital accounts; the operations to confirm have their own [ConfirmationViewModel].
+ * digital accounts and what is available today; the operations to confirm have their own [ConfirmationViewModel].
  */
 // Injected repositories: one per kind of data the screen shows or changes.
 @Suppress("LongParameterList")
@@ -34,6 +35,7 @@ internal class HomeViewModel @Inject constructor(
     cashCounts: CashCountRepository,
     categories: CategoryRepository,
     accounts: AccountRepository,
+    available: AvailableRepository,
     private val habits: HabitRepository,
     private val transactions: TransactionRepository,
     private val clock: Clock,
@@ -64,6 +66,9 @@ internal class HomeViewModel @Inject constructor(
         }
         viewModelScope.launch {
             accounts.balances.collect { balances -> state.update { it.copy(balances = balances) } }
+        }
+        viewModelScope.launch {
+            available.today.collect { today -> state.update { it.copy(available = today) } }
         }
     }
 

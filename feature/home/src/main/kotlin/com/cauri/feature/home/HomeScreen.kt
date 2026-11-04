@@ -139,7 +139,12 @@ private fun HomeContent(
             }
             CashCard(cash = state.cash, onCountCash = onCountCash)
             // The accounts right under the cash, the habits under them.
-            BalancesCard(balances = state.balances, onBalance = onBalance, onAddAccount = onAddAccount)
+            BalancesCard(
+                balances = state.balances,
+                available = state.available,
+                onBalance = onBalance,
+                onAddAccount = onAddAccount,
+            )
             HabitsRow(habits = state.habits, actions = actions)
             notices()
             pending()

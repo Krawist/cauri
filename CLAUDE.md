@@ -635,6 +635,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   on the Galaxy S23 in dark mode: the card of a made-up income, the rate moved to 15 %, the split kept, a fixed cost
   typed. A suggestion and « Payée » not seen on a phone (no history of months).
 
+- [ ] **CAU-46** — « Disponible aujourd'hui » faces « Mes comptes » on Accueil (`AvailableRepository`,
+  `AvailableService` with JVM tests): the money received this month (incomes confirmed or waiting, the money a count
+  found and the transfers between the user's accounts left out), minus the savings the splits put aside (CAU-43), the
+  fixed costs not paid yet and what was spent (fees and fixed costs paid included), divided by the days left in the
+  month, today included, by decision never below 0 and rounded down to 100 F; by decision hidden before the first income
+  of the month. The widget shows it with CAU-32. Checked on the Galaxy S23 in dark mode: 0 F with a rent of 50 000 F
+  above the 20 000 F received.
+
 Update this section at the end of each ticket.
 
 ## Way of working

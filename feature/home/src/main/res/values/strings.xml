@@ -16,6 +16,7 @@
     <string name="home_add_account_search">Rechercher un compte</string>
     <string name="home_add_account_title">Ajouter un compte</string>
     <string name="home_amount" translatable="false">%1$s F</string>
+    <string name="home_available">Disponible aujourd\'hui</string>
     <string name="home_balance_even">Juste</string>
     <string name="home_balance_hint">Tape le solde que montre l\'app de ton opérateur.</string>
     <string name="home_balance_missing">il manque %1$s F</string>

@@ -59,15 +59,20 @@ private val ScreenMargin = 20.dp
 @Composable
 internal fun BalancesCard(
     balances: List<AccountBalance>,
+    available: Long?,
     onBalance: (AccountBalance) -> Unit,
     onAddAccount: () -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(CauriSpacing.s + 2.dp)) {
-        Text(
-            text = stringResource(R.string.home_balances_label),
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = CauriTheme.palette.ink,
-        )
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(
+                text = stringResource(R.string.home_balances_label),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                color = CauriTheme.palette.ink,
+                modifier = Modifier.weight(1f),
+            )
+            available?.let { Available(amount = it) }
+        }
         Row(
             modifier = Modifier
                 .height(IntrinsicSize.Min)
@@ -78,6 +83,26 @@ internal fun BalancesCard(
         ) {
             balances.forEach { AccountCard(balance = it, onClick = { onBalance(it) }) }
             AddAccountCard(onClick = onAddAccount)
+        }
+    }
+}
+
+// « Disponible aujourd'hui 12 500 F », the amount in bold, rolling to its new value.
+@Composable
+private fun Available(amount: Long) {
+    val palette = CauriTheme.palette
+    Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.xs), verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(R.string.home_available),
+            style = MaterialTheme.typography.bodySmall,
+            color = palette.muted,
+        )
+        RollingNumber(value = amount) { shown ->
+            Text(
+                text = stringResource(R.string.home_amount, formatFcfa(shown)),
+                style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                color = palette.ink,
+            )
         }
     }
 }

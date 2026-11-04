@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cauri.core.data.database.dao.AccountBalanceDao
 import com.cauri.core.data.database.dao.AccountDao
+import com.cauri.core.data.database.dao.AvailableDao
 import com.cauri.core.data.database.dao.BanditModelDao
 import com.cauri.core.data.database.dao.BudgetDao
 import com.cauri.core.data.database.dao.CashCountDao
@@ -118,6 +119,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun banditModelDao(): BanditModelDao
 
     abstract fun budgetDao(): BudgetDao
+
+    abstract fun availableDao(): AvailableDao
 
     abstract fun fixedCostDao(): FixedCostDao
 
