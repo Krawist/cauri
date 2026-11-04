@@ -97,7 +97,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:core:capture`         | Permissions, notifications, signals, health, geofences    | 10–24, 33      |
 | `:core:parsing`         | Message templates and parsing (pure Kotlin)               | 19, 20         |
 | `:core:engine`          | Reminder rules, guardrails, bandit (pure Kotlin)          | 37–42          |
-| `:core:ai`              | The phone's language model (Gemini Nano), never a number | 50             |
+| `:core:ai`              | The phone's language model (Gemini Nano), never a number  | 50             |
 
 Goals (phase 3) will get their own module when their ticket starts.
 
