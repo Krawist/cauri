@@ -325,6 +325,26 @@ internal class TransactionRepositoryImplTest {
         }
 
         @Test
+        fun `should record once an operation the bank wrote in an SMS and a mail`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(momo())
+            val sms = database.rawSignalDao().insert(unparsedSignal())
+            val mail = database.rawSignalDao().insert(unparsedSignal().copy(sender = "com.google.android.gm"))
+            repository.recordDetected(
+                operation(rawSignalId = sms, accountId = ubaId, type = DetectedType.EXPENSE, fee = null),
+            )
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = mail, accountId = ubaId, type = DetectedType.EXPENSE, fee = null),
+            )
+
+            // then
+            repository.pending.first().map { it.amount } shouldContainExactly listOf(2_500L)
+            database.rawSignalDao().getUnparsed().shouldBeEmpty()
+        }
+
+        @Test
         fun `should move by the operation a balance the bank forgot to update`() = runTest {
             // given
             val momoId = database.accountDao().insert(momo())

@@ -16,6 +16,13 @@ internal interface DuplicateService {
     fun sameOperation(transaction: TransactionEntity, candidates: List<TransactionEntity>): TransactionEntity?
 
     /**
+     * Whether one of [candidates] is already the operation [transaction] reports, read in another signal: on the same
+     * account, of the same type and amount, at the very same second. A bank writes one operation in an SMS and a mail
+     * (UBA), both dated by it; messages without a date of their own never match, as they are dated when received.
+     */
+    fun repeated(transaction: TransactionEntity, candidates: List<TransactionEntity>): Boolean
+
+    /**
      * [detected] with the values of the user's [manual] entry: its category, note and place win, the message fills in
      * the rest, and the operation is confirmed.
      */

@@ -26,6 +26,16 @@ internal class DuplicateServiceImpl @Inject constructor() : DuplicateService {
         }
         .minByOrNull { gap(it, transaction) }
 
+    override fun repeated(transaction: TransactionEntity, candidates: List<TransactionEntity>): Boolean =
+        candidates.any { candidate ->
+            candidate.rawSignalId != null &&
+                candidate.rawSignalId != transaction.rawSignalId &&
+                candidate.accountId == transaction.accountId &&
+                candidate.type == transaction.type &&
+                candidate.amount == transaction.amount &&
+                candidate.occurredAt == transaction.occurredAt
+        }
+
     override fun merged(detected: TransactionEntity, manual: TransactionEntity): TransactionEntity = detected.copy(
         status = TransactionStatus.CONFIRMED,
         categoryId = manual.categoryId ?: detected.categoryId,

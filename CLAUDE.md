@@ -772,6 +772,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   from Réglages and cancelled, the lock staying off. Turning it on, the lock screen and the relock after a minute not
   tried: they need the owner's fingerprint or code.
 
+- [ ] **CAU-22 (repeated messages)** — a bank writes one operation in an SMS and a mail (UBA), both dated by it to the
+  second: seen on the owner's Galaxy S25, a transfer UBA → Orange Money gave two debits « à confirmer ». By decision a
+  message repeating an operation another signal already reported (same account, type and amount, the very same second)
+  is read and records nothing (`DuplicateService.repeated`, JVM tests); messages without a date of their own never
+  match, as they are dated when received. The duplicate already on that phone stays, to set aside by hand. The Orange
+  Money credit of that transfer never reached the listener (no notification of OrangeMoney in Samsung Messages): to
+  understand with its owner.
+
 Update this section at the end of each ticket.
 
 ## Way of working

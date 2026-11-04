@@ -10,6 +10,9 @@ import java.time.Duration
 import java.time.Instant
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.provider.CsvSource
+import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.booleans.shouldBeFalse
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
@@ -133,6 +136,43 @@ internal class DuplicateServiceImplTest {
 
             // then
             merged shouldBe detected.copy(status = TransactionStatus.CONFIRMED, categoryId = 4, note = "Pain")
+        }
+    }
+
+    @Nested
+    inner class Repeated {
+        @Test
+        fun `should know an operation another message gave at the same second`() {
+            // given
+            val sms = detected(id = 1, at = NOON)
+
+            // when
+            val repeated = service.repeated(detected(id = 0, at = NOON).copy(rawSignalId = 10), listOf(sms))
+
+            // then
+            repeated.shouldBeTrue()
+        }
+
+        @ParameterizedTest
+        @CsvSource("1, 2500", "0, 3000")
+        fun `should tell apart another second or another amount`(seconds: Long, amount: Long) {
+            // given
+            val sms = detected(id = 1, at = NOON)
+
+            // when
+            val repeated = service.repeated(
+                detected(id = 0, at = NOON.plusSeconds(seconds)).copy(rawSignalId = 10, amount = amount),
+                listOf(sms),
+            )
+
+            // then
+            repeated.shouldBeFalse()
+        }
+
+        @Test
+        fun `should never take a typed entry for a repeated message`() {
+            // when & then
+            service.repeated(detected(id = 0, at = NOON), listOf(manual(id = 1, at = NOON))).shouldBeFalse()
         }
     }
 

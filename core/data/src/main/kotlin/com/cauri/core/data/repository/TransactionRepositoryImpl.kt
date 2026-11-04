@@ -210,6 +210,8 @@ internal class TransactionRepositoryImpl @Inject constructor(
             )
         }
         val fee = operation.fee?.let { plain.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
+        // The bank wrote it in another message already (an SMS and a mail, UBA): the signal is read, nothing more.
+        if (repeated(detected)) return markRead(operation)
         val manual = duplicates.sameOperation(
             transaction = detected,
             candidates = sameOperation(detected, status = TransactionStatus.CONFIRMED),
@@ -267,6 +269,23 @@ internal class TransactionRepositoryImpl @Inject constructor(
     }
 
     // The transactions of the same account around [transaction], with [status]: the service picks the same operation.
+    // Whether another signal reported [transaction] already, counted whatever its status.
+    private suspend fun repeated(transaction: TransactionEntity) = duplicates.repeated(
+        transaction = transaction,
+        candidates = TransactionStatus.entries.filter { it !in TransactionStatus.NOT_COUNTED }
+            .flatMap { sameOperation(transaction, status = it) },
+    )
+
+    // Marks the signal of [operation] read, recording nothing.
+    private suspend fun markRead(operation: DetectedOperation) = mergeDao.insertParsed(
+        transactions = emptyList(),
+        balance = null,
+        rawSignalId = operation.rawSignalId,
+        templateVersion = operation.templateVersion,
+        entry = null,
+        merge = null,
+    )
+
     private suspend fun sameOperation(transaction: TransactionEntity, status: TransactionStatus) =
         transactionDao.getAround(
             accountId = transaction.accountId,
