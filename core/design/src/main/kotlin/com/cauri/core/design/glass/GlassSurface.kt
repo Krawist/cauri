@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -13,9 +14,10 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.cauri.core.design.theme.CauriTheme
-import dev.chrisbanes.haze.HazeStyle
-import dev.chrisbanes.haze.HazeTint
-import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.blur.HazeBlurStyle
+import dev.chrisbanes.haze.blur.HazeColorEffect
+import dev.chrisbanes.haze.blur.hazeBlur
 
 private val GlassBlurRadius = 24.dp
 private val GlassBorderWidth = 1.dp
@@ -43,16 +45,18 @@ fun GlassSurface(
     val palette = CauriTheme.palette
     val tint = if (strong) palette.glassStrong else palette.glass
     val hazeState = LocalGlassHazeState.current
+    // Styles compare by identity: one per background and tint, kept across recompositions.
+    val style = remember(palette.background, tint) {
+        HazeBlurStyle {
+            backgroundColor(palette.background)
+            colorEffects(listOf(HazeColorEffect.tint(tint)))
+            blurRadius(GlassBlurRadius)
+            noiseFactor(0f)
+        }
+    }
     val fill = if (LocalGlassBlur.current && hazeState != null) {
-        Modifier.hazeEffect(
-            state = hazeState,
-            style = HazeStyle(
-                backgroundColor = palette.background,
-                tint = HazeTint(tint),
-                blurRadius = GlassBlurRadius,
-                noiseFactor = 0f,
-            ),
-        )
+        // The layers of the glass screen below this surface, as the zIndex of their sources orders them.
+        Modifier.hazeBlur(input = HazeInput.Sources(hazeState), style = style)
     } else {
         Modifier.background(tint.compositeOver(palette.background))
     }

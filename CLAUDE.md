@@ -54,7 +54,8 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 
 ## Stack and conventions
 
-- Kotlin, Jetpack Compose, Material 3 under the Cauri theme. minSdk 29 (Android 10), compile/target 36. JDK 17.
+- Kotlin, Jetpack Compose, Material 3 under the Cauri theme. minSdk 29 (Android 10), compile 37, target 36. JDK 17.
+  AGP 9.5 (Kotlin built in: no `kotlin.android` plugin), Gradle 9.6, Kotlin 2.4.21, Compose 1.12, KSP 2.3.
 - UDF architecture: `@HiltViewModel` + state in `StateFlow`, coroutines. Hilt (KSP), Room, DataStore and type-safe
   Navigation Compose (`@Serializable` routes).
 - Navigation: each feature exposes its graph object (`HomeGraph`, `CashGraph`…) and a `NavGraphBuilder.xxxGraph(...)`
@@ -133,10 +134,12 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 - [ ] **CAU-51** — logo coin (SVG masters in `core/design/logo/`, vector drawables), silhouette for notifications and
   themed icons, adaptive launcher icon, system splash handing off to the Compose launch screen (`LaunchDuration`,
   2 s). Launch screen and splash checked on a phone in light and dark mode; launcher icon not checked on a device.
-- [ ] **CAU-03** — `GlassScreen` (background, content and overlay layers) and `GlassSurface` with Haze 1.6.10 (2.x
-  needs Compose 1.12 and Kotlin 2.4); blur from Android 12 on phones not flagged low-RAM, decided once per process in
-  `CauriApplication`, opaque tinted fallback otherwise. Checked on a Galaxy S23; smooth scrolling on an entry-level
-  Tecno or Infinix not verified.
+- [ ] **CAU-03** — `GlassScreen` (background, content and overlay layers) and `GlassSurface` with Haze 2.1.0 (`hazeBlur`
+  from `haze-blur`, its `HazeBlurStyle` remembered per background and tint, the sources of the glass screen as input);
+  blur from Android 12 on phones not flagged low-RAM, decided once per process in `CauriApplication`, opaque tinted
+  fallback otherwise. Haze 2 brought the stack with it, at the user's request: Kotlin 2.4.21, Compose BOM 2026.09.00
+  (Compose 1.12), AGP 9.5 with Gradle 9.6 and compileSdk 37 (target 36 kept), KSP 2.3.13, Hilt 2.60.1. Checked on a
+  Galaxy S23, after the upgrade too; smooth scrolling on an entry-level Tecno or Infinix not verified.
 - [ ] **CAU-04** — floating glass `CauriBottomBar` (Accueil, Activité, « + », Objectifs, Analyses), shown on the tabs
   only; « + » opens `QuickEntrySheet` from `:feature:transactions`; Objectifs and Analyses are placeholders in `:app`
   until their phase 3 modules. Back from a tab returns to Accueil, then leaves the app (checked on a phone). The
