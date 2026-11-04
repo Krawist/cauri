@@ -15,6 +15,7 @@ import com.cauri.core.data.database.dao.ConfirmationDao
 import com.cauri.core.data.database.dao.DecisionLogDao
 import com.cauri.core.data.database.dao.DiscoveryDao
 import com.cauri.core.data.database.dao.FixedCostDao
+import com.cauri.core.data.database.dao.GoalDao
 import com.cauri.core.data.database.dao.HabitDao
 import com.cauri.core.data.database.dao.IncomeSplitDao
 import com.cauri.core.data.database.dao.InsightsDao
@@ -32,6 +33,8 @@ import com.cauri.core.data.database.entity.CashCountEntity
 import com.cauri.core.data.database.entity.CategoryEntity
 import com.cauri.core.data.database.entity.DecisionLogEntity
 import com.cauri.core.data.database.entity.FixedCostEntity
+import com.cauri.core.data.database.entity.GoalContributionEntity
+import com.cauri.core.data.database.entity.GoalEntity
 import com.cauri.core.data.database.entity.HabitEntity
 import com.cauri.core.data.database.entity.IncomeSplitEntity
 import com.cauri.core.data.database.entity.PlaceEntity
@@ -66,8 +69,10 @@ import com.cauri.core.data.database.entity.VisitEntity
         BudgetEntity::class,
         FixedCostEntity::class,
         IncomeSplitEntity::class,
+        GoalEntity::class,
+        GoalContributionEntity::class,
     ],
-    version = 21,
+    version = 22,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -88,6 +93,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 18, to = 19),
         AutoMigration(from = 19, to = 20),
         AutoMigration(from = 20, to = 21),
+        AutoMigration(from = 21, to = 22),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -125,6 +131,8 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun fixedCostDao(): FixedCostDao
 
     abstract fun incomeSplitDao(): IncomeSplitDao
+
+    abstract fun goalDao(): GoalDao
 
     abstract fun insightsDao(): InsightsDao
 

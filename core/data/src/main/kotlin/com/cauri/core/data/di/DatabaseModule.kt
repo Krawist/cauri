@@ -73,6 +73,9 @@ internal object DatabaseModule {
     fun provideFixedCostDao(database: CauriDatabase) = database.fixedCostDao()
 
     @Provides
+    fun provideGoalDao(database: CauriDatabase) = database.goalDao()
+
+    @Provides
     fun provideIncomeSplitDao(database: CauriDatabase) = database.incomeSplitDao()
 
     @Provides

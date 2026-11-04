@@ -90,6 +90,7 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
 | `:feature:transactions` | Quick entry, edit sheet, activity                         | 26, 28, 30     |
 | `:feature:settings`     | Settings: permission and battery statuses, reminders      | 10, 11, 38     |
 | `:feature:places`       | « Mes lieux », the screen of a place                      | 33             |
+| `:feature:goals`        | « Objectifs »: savings, tontines, envelopes               | 44             |
 | `:feature:insights`     | « Analyses »: budgets suggested, insights                 | 45, 47         |
 | `:core:design`          | Theme, palette light and dark, glass surface, components  | 02, 03         |
 | `:core:data`            | DataStore preferences, Room database                      | 05, 12, 13     |
@@ -642,6 +643,22 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   month, today included, by decision never below 0 and rounded down to 100 F; by decision hidden before the first income
   of the month. The widget shows it with CAU-32. Checked on the Galaxy S23 in dark mode: 0 F with a rent of 50 000 F
   above the 20 000 F received.
+
+- [ ] **CAU-44** — « Objectifs » (`:feature:goals`, `GoalsScreen`, `GoalsViewModel`; `GoalRepository`, `GoalService`
+  with JVM tests; database v22 with `goals` and `goal_contributions`), as the mockup: « Mis de côté en novembre » (what
+  was put aside this month), then the goals in their order. By decision the money is only counted, never moved: the
+  savings of each income split (CAU-43) go to the first saving not reached, shown in gold, « Mettre en premier »
+  choosing it; the sheet of a saving puts money aside or takes it back by hand (« Verser », « Reprendre »). A saving has
+  an amount, a deadline or none, its share and bar, and « vers juin 2027 »: the savings to come estimated cautiously,
+  the 25th percentile of the income of the last 6 full months times the savings rate, filling the savings one after the
+  other from next month (« après l'échéance » past its deadline, « Date estimée après un mois de revenus » before). By
+  decision a tontine is a contribution a month, made a fixed cost (deleted with it), and the day the user takes the pot
+  (« 25 000 F par mois · levée le 15 déc. »): the pot, when it arrives, is an income like another. The emergency fund,
+  by decision, is created first the first time « Objectifs » opens, without deadline, a month of spending (the last 30
+  days, rounded up to 5 000 F; 50 000 F before any), never again once deleted. « Imprévus famille » of the mockup is an
+  envelope: an amount a month for a category, « reste 18 000 F » and « 12 000 utilisés sur 30 000 F ce mois ». Checked
+  on the Galaxy S23 in dark mode: the emergency fund created at 100 000 F, a tontine added. An estimate, a split going
+  to a saving and an envelope not seen on a phone.
 
 Update this section at the end of each ticket.
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="goals_amount_envelope">Amount a month</string>
+    <string name="goals_amount_hint">0</string>
+    <string name="goals_amount_saving">Amount to put aside</string>
+    <string name="goals_amount_tontine">Contribution a month</string>
+    <string name="goals_category">Category</string>
+    <string name="goals_category_missing">Choose the category of the envelope.</string>
+    <string name="goals_contribution_day">Contribution day</string>
+    <string name="goals_date_choose">Choose</string>
+    <string name="goals_date_none">None</string>
+    <string name="goals_deadline">Deadline</string>
+    <string name="goals_delete">Delete</string>
+    <string name="goals_edit">Goal</string>
+    <string name="goals_emergency_fund">Emergency fund</string>
+    <string name="goals_envelope_left">%1$s F left</string>
+    <string name="goals_envelope_over">%1$s F over</string>
+    <string name="goals_envelope_used">%1$s used of %2$s F this month</string>
+    <string name="goals_estimate">around %1$s</string>
+    <string name="goals_estimate_late">around %1$s, after the deadline</string>
+    <string name="goals_estimate_later">Date estimated after a month of income</string>
+    <string name="goals_holds">Put aside: %1$s F</string>
+    <string name="goals_kind_envelope">Envelope</string>
+    <string name="goals_kind_saving">Saving</string>
+    <string name="goals_kind_tontine">Tontine</string>
+    <string name="goals_move_first">Put first</string>
+    <string name="goals_name">Name</string>
+    <string name="goals_name_envelope_hint">Family emergencies…</string>
+    <string name="goals_name_saving_hint">Moto, back to school…</string>
+    <string name="goals_name_tontine_hint">Neighbourhood tontine…</string>
+    <string name="goals_new">New goal</string>
+    <string name="goals_payout">Payout</string>
+    <string name="goals_put_aside">Put aside in %1$s</string>
+    <string name="goals_put_aside_text">Paid in as the income arrives, before any spending</string>
+    <string name="goals_put_in">Put in</string>
+    <string name="goals_reached">Reached</string>
+    <string name="goals_save">Save</string>
+    <string name="goals_saved">%1$s / %2$s F</string>
+    <string name="goals_share">%1$d %%</string>
+    <string name="goals_take_back">Take back</string>
+    <string name="goals_title">Goals</string>
+    <string name="goals_tontine_contribution">%1$s F a month</string>
+    <string name="goals_tontine_payout">%1$s · payout on %2$s</string>
+</resources>

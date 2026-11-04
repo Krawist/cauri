@@ -58,6 +58,7 @@ internal class AvailableRepositoryImplTest {
                 database.transactionDao().insert(transaction(TransactionType.TRANSFER_IN, 40_000, "11-03"))
                 IncomeSplitRepositoryImpl(
                     dao = database.incomeSplitDao(),
+                    goals = database.goalDao(),
                     fixedCosts = fixedCosts,
                     preferences = FakeUserPreferencesRepository(),
                     service = IncomeSplitServiceImpl(),

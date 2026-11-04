@@ -22,6 +22,8 @@ import com.cauri.core.data.service.DuplicateService
 import com.cauri.core.data.service.DuplicateServiceImpl
 import com.cauri.core.data.service.FixedCostService
 import com.cauri.core.data.service.FixedCostServiceImpl
+import com.cauri.core.data.service.GoalService
+import com.cauri.core.data.service.GoalServiceImpl
 import com.cauri.core.data.service.IncomeSplitService
 import com.cauri.core.data.service.IncomeSplitServiceImpl
 import com.cauri.core.data.service.InsightsService
@@ -57,6 +59,9 @@ internal abstract class ServiceModule {
 
     @Binds
     abstract fun bindFixedCostService(impl: FixedCostServiceImpl): FixedCostService
+
+    @Binds
+    abstract fun bindGoalService(impl: GoalServiceImpl): GoalService
 
     @Binds
     abstract fun bindIncomeSplitService(impl: IncomeSplitServiceImpl): IncomeSplitService

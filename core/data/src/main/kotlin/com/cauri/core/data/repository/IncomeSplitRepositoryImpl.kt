@@ -1,5 +1,6 @@
 package com.cauri.core.data.repository
 
+import com.cauri.core.data.database.dao.GoalDao
 import com.cauri.core.data.database.dao.IncomeSplitDao
 import com.cauri.core.data.database.entity.IncomeSplitEntity
 import com.cauri.core.data.model.IncomeSplit
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.map
 @Singleton
 internal class IncomeSplitRepositoryImpl @Inject constructor(
     private val dao: IncomeSplitDao,
+    private val goals: GoalDao,
     private val fixedCosts: FixedCostRepository,
     private val preferences: UserPreferencesRepository,
     private val service: IncomeSplitService,
@@ -49,7 +51,8 @@ internal class IncomeSplitRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun split(transactionId: Long, split: IncomeSplit) = dao.insert(
+    // The savings go to the first saving not reached (CAU-44).
+    override suspend fun split(transactionId: Long, split: IncomeSplit) = goals.split(
         IncomeSplitEntity(
             transactionId = transactionId,
             savings = split.savings,

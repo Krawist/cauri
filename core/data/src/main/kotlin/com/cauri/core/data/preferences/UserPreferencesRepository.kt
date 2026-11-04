@@ -29,6 +29,11 @@ interface UserPreferencesRepository {
 
     suspend fun saveIncomeSplit(settings: IncomeSplitSettings)
 
+    /** Whether the emergency fund was created once: deleted, it is not created again. */
+    val emergencyFundCreated: Flow<Boolean>
+
+    suspend fun setEmergencyFundCreated()
+
     /** The help bubbles the user closed, by identifier: they never show again. */
     val seenHelp: Flow<Set<String>>
 

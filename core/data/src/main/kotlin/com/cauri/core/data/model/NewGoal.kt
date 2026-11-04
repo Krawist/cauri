@@ -1,0 +1,25 @@
+package com.cauri.core.data.model
+
+import java.time.LocalDate
+
+/**
+ * A goal to save, as the user typed it.
+ *
+ * @property name What the user calls it.
+ * @property kind Saving, tontine or envelope.
+ * @property amount In minor units of XAF: the amount to put aside for a saving, the contribution a month for a tontine,
+ *   the amount a month for an envelope.
+ * @property deadline Day the saving should be reached by; `null` without deadline, and for the other kinds.
+ * @property payoutDate Day the user takes the pot of a tontine; `null` when not known, and for the other kinds.
+ * @property dayOfMonth Day of the month a tontine's contribution is paid; `null` for the other kinds.
+ * @property categoryId Category an envelope keeps money for; `null` for the other kinds.
+ */
+data class NewGoal(
+    val name: String,
+    val kind: GoalKind,
+    val amount: Long,
+    val deadline: LocalDate? = null,
+    val payoutDate: LocalDate? = null,
+    val dayOfMonth: Int? = null,
+    val categoryId: Long? = null,
+)

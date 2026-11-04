@@ -24,6 +24,8 @@ import com.cauri.core.data.repository.DiscoveryRepository
 import com.cauri.core.data.repository.DiscoveryRepositoryImpl
 import com.cauri.core.data.repository.FixedCostRepository
 import com.cauri.core.data.repository.FixedCostRepositoryImpl
+import com.cauri.core.data.repository.GoalRepository
+import com.cauri.core.data.repository.GoalRepositoryImpl
 import com.cauri.core.data.repository.HabitRepository
 import com.cauri.core.data.repository.HabitRepositoryImpl
 import com.cauri.core.data.repository.IncomeSplitRepository
@@ -63,6 +65,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     abstract fun bindFixedCostRepository(impl: FixedCostRepositoryImpl): FixedCostRepository
+
+    @Binds
+    abstract fun bindGoalRepository(impl: GoalRepositoryImpl): GoalRepository
 
     @Binds
     abstract fun bindIncomeSplitRepository(impl: IncomeSplitRepositoryImpl): IncomeSplitRepository

@@ -68,6 +68,12 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         }
     }
 
+    override val emergencyFundCreated: Flow<Boolean> = dataStore.data.map { it[EmergencyFundCreated] ?: false }
+
+    override suspend fun setEmergencyFundCreated() {
+        dataStore.edit { it[EmergencyFundCreated] = true }
+    }
+
     override val seenHelp: Flow<Set<String>> = dataStore.data.map { it[SeenHelp].orEmpty() }
 
     override suspend fun markHelpSeen(id: String) {
@@ -204,6 +210,7 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
         val LearningSince = longPreferencesKey("reminders_learning_since")
         val SeenHelp = stringSetPreferencesKey("help_seen")
+        val EmergencyFundCreated = booleanPreferencesKey("goals_emergency_fund_created")
         val SavingsRate = intPreferencesKey("income_savings_rate")
         val SplitThreshold = longPreferencesKey("income_split_threshold")
         const val DEFAULT_SAVINGS_RATE = 10

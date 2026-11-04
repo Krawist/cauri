@@ -36,6 +36,7 @@ internal class IncomeSplitRepositoryImplTest {
         database = inMemoryDatabase()
         repository = IncomeSplitRepositoryImpl(
             dao = database.incomeSplitDao(),
+            goals = database.goalDao(),
             fixedCosts = fixedCosts,
             preferences = preferences,
             service = IncomeSplitServiceImpl(),
