@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="income_amount" translatable="false">%1$s F</string>
+    <string name="income_currency" translatable="false">F</string>
+    <string name="income_each">À chaque revenu</string>
+    <string name="income_each_hint">Seul l\'argent arrivé est réparti, jamais celui que tu attends. Les revenus plus petits vont aux budgets.</string>
+    <string name="income_fixed">Charges fixes</string>
+    <string name="income_fixed_add">+ Ajouter une charge fixe</string>
+    <string name="income_fixed_amount">Montant par mois</string>
+    <string name="income_fixed_amount_hint">50 000</string>
+    <string name="income_fixed_day">Jour du mois</string>
+    <string name="income_fixed_delete">Supprimer cette charge</string>
+    <string name="income_fixed_edit">Charge fixe</string>
+    <string name="income_fixed_hint">Cauri garde l\'argent des charges pas encore payées ce mois, et reconnaît leur paiement à leur nom, à leur marchand ou à leur catégorie.</string>
+    <string name="income_fixed_name">Nom</string>
+    <string name="income_fixed_name_hint">Loyer, scolarité, ENEO…</string>
+    <string name="income_fixed_new">Nouvelle charge fixe</string>
+    <string name="income_fixed_paid">Payée</string>
+    <string name="income_fixed_save">Enregistrer</string>
+    <string name="income_fixed_value">%1$s F · le %2$d du mois</string>
+    <string name="income_rate" translatable="false">%1$d %%</string>
+    <string name="income_savings">Épargne</string>
+    <string name="income_savings_text">La part mise de côté dès la réception</string>
+    <string name="income_suggestion_no">Non</string>
+    <string name="income_suggestion_text">Environ %1$s F le %2$d · vu %3$d mois de suite. Une charge fixe ?</string>
+    <string name="income_suggestion_title">%1$s revient chaque mois</string>
+    <string name="income_suggestion_yes">Oui, c\'est fixe</string>
+    <string name="income_threshold">À partir de</string>
+    <string name="income_threshold_text">Cauri propose de répartir les revenus de ce montant ou plus</string>
+    <string name="income_title">Répartir mes revenus</string>
     <string name="reminders_after_visits">Rappels après une visite</string>
     <string name="reminders_after_visits_text">Seulement dans tes commerces</string>
     <string name="reminders_daily_cap">Rappels par jour</string>
@@ -16,11 +44,9 @@
         <item quantity="one">Appris sur %1$d réponses en %2$d semaine</item>
         <item quantity="other">Appris sur %1$d réponses en %2$d semaines</item>
     </plurals>
-    <string name="reminders_less">Moins</string>
     <string name="reminders_lesson_hours">Tu confirmes surtout entre %1$d h et %2$d h.</string>
     <string name="reminders_lesson_often">%1$s : une visite donne une dépense %2$d fois sur 10, Cauri te le demande à chaque fois.</string>
     <string name="reminders_lesson_rarely">%1$s : tu passes sans rien dépenser, Cauri ne te dérange plus.</string>
-    <string name="reminders_more">Plus</string>
     <string name="reminders_quiet_from">Début</string>
     <string name="reminders_quiet_hours">Heures de silence</string>
     <string name="reminders_quiet_hours_none">Aucune</string>
@@ -69,10 +95,13 @@
     <string name="settings_ignored">Ignoré</string>
     <string name="settings_ignored_account_text">Cauri ne lit pas ses messages. Touche pour le suivre.</string>
     <string name="settings_ignored_accounts">Comptes ignorés</string>
+    <string name="settings_income">Répartir mes revenus</string>
+    <string name="settings_income_text">L\'épargne et les charges fixes, mises de côté à chaque revenu</string>
     <string name="settings_location">Localisation</string>
     <string name="settings_location_always">Toujours</string>
     <string name="settings_location_text">Pour te rappeler une dépense quand tu quittes un marché ou une boutique. Facultatif.</string>
     <string name="settings_location_while_in_use">App ouverte</string>
+    <string name="settings_money_section">Argent</string>
     <string name="settings_notification_access">Lecture des notifications</string>
     <string name="settings_notification_access_text">Cauri lit les messages de MoMo, Orange Money et de tes banques pour noter tes paiements à ta place.</string>
     <string name="settings_notifications">Notifications de Cauri</string>

@@ -1,4 +1,4 @@
-package com.cauri.feature.settings.reminders
+package com.cauri.core.design.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,22 +20,20 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.cauri.core.design.component.pressScale
-import com.cauri.core.design.component.rememberCauriHaptics
+import com.cauri.core.design.R
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
-import com.cauri.feature.settings.R
 
 private val StepButtonSize = 32.dp
 private val ValueWidth = 20.dp
 
 /** « − 4 + »: [value] between two round buttons, each a step of one; a bound reached greys its button. */
 @Composable
-internal fun Stepper(value: Int, canLower: Boolean, canRaise: Boolean, onStep: (Int) -> Unit, label: String? = null) {
+fun Stepper(value: Int, canLower: Boolean, canRaise: Boolean, onStep: (Int) -> Unit, label: String? = null) {
     Row(horizontalArrangement = Arrangement.spacedBy(CauriSpacing.s), verticalAlignment = Alignment.CenterVertically) {
         StepButton(
             sign = "−",
-            description = stringResource(R.string.reminders_less),
+            description = stringResource(R.string.stepper_less),
             enabled = canLower,
             onClick = { onStep(-1) },
         )
@@ -48,7 +46,7 @@ internal fun Stepper(value: Int, canLower: Boolean, canRaise: Boolean, onStep: (
         )
         StepButton(
             sign = "+",
-            description = stringResource(R.string.reminders_more),
+            description = stringResource(R.string.stepper_more),
             enabled = canRaise,
             onClick = { onStep(1) },
         )

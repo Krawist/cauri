@@ -36,6 +36,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.design.R as DesignR
+import com.cauri.core.design.component.Stepper
 import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme

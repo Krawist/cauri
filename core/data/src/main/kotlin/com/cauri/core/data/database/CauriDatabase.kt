@@ -13,7 +13,9 @@ import com.cauri.core.data.database.dao.CategoryDao
 import com.cauri.core.data.database.dao.ConfirmationDao
 import com.cauri.core.data.database.dao.DecisionLogDao
 import com.cauri.core.data.database.dao.DiscoveryDao
+import com.cauri.core.data.database.dao.FixedCostDao
 import com.cauri.core.data.database.dao.HabitDao
+import com.cauri.core.data.database.dao.IncomeSplitDao
 import com.cauri.core.data.database.dao.InsightsDao
 import com.cauri.core.data.database.dao.PlaceDao
 import com.cauri.core.data.database.dao.RawSignalDao
@@ -28,7 +30,9 @@ import com.cauri.core.data.database.entity.BudgetEntity
 import com.cauri.core.data.database.entity.CashCountEntity
 import com.cauri.core.data.database.entity.CategoryEntity
 import com.cauri.core.data.database.entity.DecisionLogEntity
+import com.cauri.core.data.database.entity.FixedCostEntity
 import com.cauri.core.data.database.entity.HabitEntity
+import com.cauri.core.data.database.entity.IncomeSplitEntity
 import com.cauri.core.data.database.entity.PlaceEntity
 import com.cauri.core.data.database.entity.PlaceSuggestionEntity
 import com.cauri.core.data.database.entity.RawSignalEntity
@@ -59,8 +63,10 @@ import com.cauri.core.data.database.entity.VisitEntity
         PlaceSuggestionEntity::class,
         BanditModelEntity::class,
         BudgetEntity::class,
+        FixedCostEntity::class,
+        IncomeSplitEntity::class,
     ],
-    version = 20,
+    version = 21,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3),
@@ -80,6 +86,7 @@ import com.cauri.core.data.database.entity.VisitEntity
         AutoMigration(from = 17, to = 18),
         AutoMigration(from = 18, to = 19),
         AutoMigration(from = 19, to = 20),
+        AutoMigration(from = 20, to = 21),
     ],
 )
 @TypeConverters(DatabaseConverters::class)
@@ -111,6 +118,10 @@ internal abstract class CauriDatabase : RoomDatabase() {
     abstract fun banditModelDao(): BanditModelDao
 
     abstract fun budgetDao(): BudgetDao
+
+    abstract fun fixedCostDao(): FixedCostDao
+
+    abstract fun incomeSplitDao(): IncomeSplitDao
 
     abstract fun insightsDao(): InsightsDao
 

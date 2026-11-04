@@ -3,6 +3,8 @@ package com.cauri.feature.settings
 import com.cauri.core.data.model.CountReminderSettings
 
 /** What the user can do on the settings screen. */
+// One function per row of the screen.
+@Suppress("TooManyFunctions")
 internal interface SettingsActions {
     fun onBack()
 
@@ -19,6 +21,9 @@ internal interface SettingsActions {
 
     /** Opens « Rappels intelligents ». */
     fun onSmartReminders()
+
+    /** Opens « Répartir mes revenus ». */
+    fun onIncome()
 
     /** Opens or closes the sheet of the cash count reminders. */
     fun onCountReminder(open: Boolean)

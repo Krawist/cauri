@@ -10,6 +10,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import com.cauri.core.data.model.CountReminderFrequency
 import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.model.IncomeSplitSettings
 import com.cauri.core.data.model.IncomeType
 import com.cauri.core.data.model.Occupation
 import com.cauri.core.data.model.PaymentHabit
@@ -51,6 +52,20 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
                 LocalTime.of(minutes / MINUTES_PER_HOUR, minutes % MINUTES_PER_HOUR)
             },
         )
+    }
+
+    override val incomeSplit: Flow<IncomeSplitSettings> = dataStore.data.map {
+        IncomeSplitSettings(
+            savingsRate = it[SavingsRate] ?: DEFAULT_SAVINGS_RATE,
+            threshold = it[SplitThreshold] ?: DEFAULT_SPLIT_THRESHOLD,
+        )
+    }
+
+    override suspend fun saveIncomeSplit(settings: IncomeSplitSettings) {
+        dataStore.edit {
+            it[SavingsRate] = settings.savingsRate
+            it[SplitThreshold] = settings.threshold
+        }
     }
 
     override val seenHelp: Flow<Set<String>> = dataStore.data.map { it[SeenHelp].orEmpty() }
@@ -189,6 +204,10 @@ internal class UserPreferencesRepositoryImpl @Inject constructor(private val dat
         val LastSummaryDay = longPreferencesKey("reminders_summary_last_day")
         val LearningSince = longPreferencesKey("reminders_learning_since")
         val SeenHelp = stringSetPreferencesKey("help_seen")
+        val SavingsRate = intPreferencesKey("income_savings_rate")
+        val SplitThreshold = longPreferencesKey("income_split_threshold")
+        const val DEFAULT_SAVINGS_RATE = 10
+        const val DEFAULT_SPLIT_THRESHOLD = 10_000L
         const val DEFAULT_REMINDER_HOUR = 20
         const val DEFAULT_QUIET_FROM = 22
         const val DEFAULT_QUIET_UNTIL = 7

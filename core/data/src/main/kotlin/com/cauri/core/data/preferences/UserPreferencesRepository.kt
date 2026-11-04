@@ -1,6 +1,7 @@
 package com.cauri.core.data.preferences
 
 import com.cauri.core.data.model.CountReminderSettings
+import com.cauri.core.data.model.IncomeSplitSettings
 import com.cauri.core.data.model.ReminderSettings
 import com.cauri.core.data.model.UserProfile
 import java.time.Instant
@@ -22,6 +23,11 @@ interface UserPreferencesRepository {
 
     /** The user's limits on the smart reminders; quiet from 22 h to 7 h, 4 a day and after visits until changed. */
     val reminders: Flow<ReminderSettings>
+
+    /** How the user wants their incomes split; 10 % put aside from 10 000 F until changed. */
+    val incomeSplit: Flow<IncomeSplitSettings>
+
+    suspend fun saveIncomeSplit(settings: IncomeSplitSettings)
 
     /** The help bubbles the user closed, by identifier: they never show again. */
     val seenHelp: Flow<Set<String>>

@@ -76,6 +76,11 @@
     <string name="home_habits_title">Mes habitudes</string>
     <string name="home_help_cards">Glisse une carte à droite pour la valider, à gauche si tu n\'as rien dépensé. Touche-la pour la modifier.</string>
     <string name="home_help_habits">Touche une habitude pour noter la dépense en cash, appuie longtemps pour la modifier.</string>
+    <string name="home_income_label">Revenu reçu</string>
+    <string name="home_income_skip">Pas cette fois</string>
+    <string name="home_income_split">Répartir</string>
+    <string name="home_income_text">Mets ton épargne de côté avant de dépenser : Cauri te propose une répartition.</string>
+    <string name="home_income_title">%1$s F sur %2$s</string>
     <string name="home_mark_mtn" translatable="false">MTN</string>
     <string name="home_mark_orange" translatable="false">OM</string>
     <string name="home_pending_title">À confirmer</string>
@@ -84,6 +89,16 @@
     <string name="home_settings">Réglages</string>
     <string name="home_sign_in" translatable="false">+ %1$s</string>
     <string name="home_sign_out" translatable="false">− %1$s</string>
+    <string name="home_split_budgets">Budgets et dépenses</string>
+    <string name="home_split_budgets_detail">Pour le reste du mois</string>
+    <string name="home_split_confirm">Valider la répartition</string>
+    <string name="home_split_fixed">Charges fixes</string>
+    <string name="home_split_fixed_none">Aucune à payer ce mois</string>
+    <string name="home_split_hint">L\'épargne d\'abord, puis les charges fixes du mois, puis le reste pour tes budgets.</string>
+    <string name="home_split_rate" translatable="false">%1$d %%</string>
+    <string name="home_split_savings">Épargne</string>
+    <string name="home_split_savings_detail">Mise de côté dès la réception</string>
+    <string name="home_split_title">Répartir %1$s F</string>
     <string name="home_summary_all_done">Tout est confirmé pour aujourd\'hui.</string>
     <string name="home_summary_back">Retour</string>
     <string name="home_summary_cash">Dont cash</string>

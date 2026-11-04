@@ -9,5 +9,7 @@
     <string name="moment_today">aujourd\'hui à %1$s</string>
     <string name="moment_weekday">%1$s à %2$s</string>
     <string name="moment_yesterday">hier à %1$s</string>
+    <string name="stepper_less">Moins</string>
+    <string name="stepper_more">Plus</string>
     <string name="undo">Annuler</string>
 </resources>

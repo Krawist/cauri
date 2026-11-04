@@ -36,6 +36,7 @@ internal fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPlaces: () -> Unit,
     onOpenReminders: () -> Unit,
+    onOpenIncome: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -46,7 +47,7 @@ internal fun SettingsScreen(
     }
     // Named apart from the action it backs, which shares its name.
     val back = onBack
-    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders) {
+    val actions = remember(viewModel, context, back, onOpenPlaces, onOpenReminders, onOpenIncome) {
         object : SettingsActions {
             override fun onBack() = back()
 
@@ -61,6 +62,8 @@ internal fun SettingsScreen(
             override fun onPlaces() = onOpenPlaces()
 
             override fun onSmartReminders() = onOpenReminders()
+
+            override fun onIncome() = onOpenIncome()
 
             override fun onCountReminder(open: Boolean) = viewModel.onChooseReminder(open)
 
@@ -90,7 +93,11 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
             color = palette.ink,
             modifier = Modifier.padding(top = CauriSpacing.xl, bottom = CauriSpacing.xxl),
         )
-        SectionLabel(stringResource(R.string.settings_permissions))
+        MoneyGroup(actions = actions)
+        SectionLabel(
+            stringResource(R.string.settings_permissions),
+            modifier = Modifier.padding(top = CauriSpacing.xxl),
+        )
         PermissionsGroup(status = state.permissions, actions = actions)
         PlacesGroup(actions = actions)
         SectionLabel(
@@ -125,6 +132,21 @@ private fun SettingsContent(state: SettingsUiState, actions: SettingsActions) {
             )
             IgnoredAccountsGroup(accounts = state.ignoredAccounts, actions = actions)
         }
+    }
+}
+
+// « Répartir mes revenus », first: the money before the permissions.
+@Composable
+private fun MoneyGroup(actions: SettingsActions) {
+    SectionLabel(stringResource(R.string.settings_money_section))
+    RowGroup {
+        SettingRow(
+            icon = DesignR.drawable.ic_income,
+            title = stringResource(R.string.settings_income),
+            text = stringResource(R.string.settings_income_text),
+            status = null,
+            onClick = actions::onIncome,
+        )
     }
 }
 
@@ -245,6 +267,8 @@ private fun SettingsContentPreview() {
 }
 
 /** Actions that do nothing, for previews. */
+// One function per row of the screen.
+@Suppress("TooManyFunctions")
 private object PreviewSettingsActions : SettingsActions {
     override fun onBack() = Unit
 
@@ -259,6 +283,8 @@ private object PreviewSettingsActions : SettingsActions {
     override fun onPlaces() = Unit
 
     override fun onSmartReminders() = Unit
+
+    override fun onIncome() = Unit
 
     override fun onCountReminder(open: Boolean) = Unit
 

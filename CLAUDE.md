@@ -617,6 +617,24 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   categories; a budget, an overrun and a habit not seen on a phone (none on it). Next: CAU-43, CAU-44, CAU-46, CAU-48
   and CAU-50, to clarify.
 
+- [ ] **CAU-43** — the split of the incomes (database v21 with `fixed_costs` and `income_splits`): by decision, an
+  income of 10 000 F or more (the user's threshold, `IncomeSplitSettings` in DataStore) arrived within a week, read in a
+  message or typed, the money a count found left out, brings on Accueil the card « Revenu reçu · 150 000 F sur Orange
+  Money » (`IncomeSplitViewModel`), « Répartir » or « Pas cette fois » (all of it to the budgets, never offered again).
+  The sheet (`IncomeSplitSheet`, a glass screen of its own) puts the savings first, by decision a share of each income
+  (10 % by default, moved by 5 % up to 50 % for this income only, rounded down to 100 F), then what the fixed costs of
+  the month not paid yet need, then the rest for the budgets, over a bar of the three; « Valider la répartition » keeps
+  it (`IncomeSplitRepository`, `IncomeSplitService` with JVM tests: what earlier incomes kept for the fixed costs pays
+  those paid since first). By decision the fixed costs are found then confirmed (`FixedCostService`, JVM tests): an
+  expense paid once a month in 2 months at least of the current one and the three before, the amounts within 10 %, by
+  merchant, else by category and amount; Réglages › « Répartir mes revenus » (`IncomeScreen`) asks « ENEO revient chaque
+  mois » (« Oui, c'est fixe », « Non », never asked again), lists the fixed costs (« Payée » once an expense of the
+  month has the same merchant, its name as merchant, note or category, or its category for about its amount) and adds or
+  edits them (name, amount a month, day). The savings rate and the threshold are set there too. `Stepper` moved to
+  `:core:design`. The savings are only counted: goals (CAU-44) and « Disponible aujourd'hui » (CAU-46) use them. Checked
+  on the Galaxy S23 in dark mode: the card of a made-up income, the rate moved to 15 %, the split kept, a fixed cost
+  typed. A suggestion and « Payée » not seen on a phone (no history of months).
+
 Update this section at the end of each ticket.
 
 ## Way of working

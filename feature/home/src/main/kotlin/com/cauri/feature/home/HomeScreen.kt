@@ -60,7 +60,7 @@ private val UndoBarBottom = 100.dp
 
 /**
  * Home screen, cash first: the greeting, « Cash dans ta poche » with « Compter mon cash », « Mes comptes », the one-tap
- * cash expenses, the notices and the operations to confirm.
+ * cash expenses, the notices (an income to split among them) and the operations to confirm.
  */
 @Composable
 internal fun HomeScreen(
@@ -81,6 +81,7 @@ internal fun HomeScreen(
         onOpenSettings = onOpenSettings,
         notices = {
             CaptureHealth(onCheck = onOpenSettings)
+            IncomeSplit()
             AccountProposal()
         },
         pending = { PendingSection(onEdit = onEditTransaction) },
