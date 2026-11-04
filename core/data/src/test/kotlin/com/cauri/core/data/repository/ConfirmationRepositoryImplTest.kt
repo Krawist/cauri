@@ -19,6 +19,7 @@ import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.TransactionEdit
 import com.cauri.core.data.service.BalanceServiceImpl
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.TransferLinkServiceImpl
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -50,6 +51,7 @@ internal class ConfirmationRepositoryImplTest {
             database.visitDao(),
             DuplicateServiceImpl(),
             BalanceServiceImpl(),
+            TransferLinkServiceImpl(),
             CLOCK,
         )
         repository = ConfirmationRepositoryImpl(database.confirmationDao(), CLOCK)

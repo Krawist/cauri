@@ -12,6 +12,8 @@ import java.time.Duration
 import java.time.Instant
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 internal class TransferLinkServiceImplTest {
     private val service = TransferLinkServiceImpl()
@@ -164,6 +166,43 @@ internal class TransferLinkServiceImplTest {
             transfer.fee.shouldBeNull()
         }
     }
+
+    @Nested
+    inner class WaitingSide {
+        @Test
+        fun `should find the side waiting for the credit that arrived, a little less than left`() {
+            // given
+            val waiting = waitingCredit(amount = 10_000, at = NOON)
+
+            // when
+            val side = service.waitingSide(
+                message = credit(id = 2, amount = 9_800, at = NOON.plusSeconds(600))
+                    .copy(type = TransactionType.TRANSFER_IN),
+                sides = listOf(waiting),
+            )
+
+            // then
+            side shouldBe waiting
+        }
+
+        @ParameterizedTest
+        @CsvSource("9000, 600", "10000, 2400", "10500, 600")
+        fun `should find no side for too little, too late or too much`(amount: Long, seconds: Long) {
+            // when
+            val side = service.waitingSide(
+                message = credit(id = 2, amount = amount, at = NOON.plusSeconds(seconds))
+                    .copy(type = TransactionType.TRANSFER_IN),
+                sides = listOf(waitingCredit(amount = 10_000, at = NOON)),
+            )
+
+            // then
+            side.shouldBeNull()
+        }
+    }
+
+    // The side on Orange Money of a transfer recorded from the debit's message: no signal of its own yet.
+    private fun waitingCredit(amount: Long, at: Instant) = credit(id = 1, amount = amount, at = at)
+        .copy(type = TransactionType.TRANSFER_IN, rawSignalId = null, transferGroup = "group")
 
     // A debit on UBA read in signal 10 + id.
     private fun debit(id: Long, amount: Long, at: Instant) = TransactionEntity(

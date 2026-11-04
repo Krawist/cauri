@@ -26,6 +26,7 @@ import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
 import com.cauri.core.data.service.BalanceService
 import com.cauri.core.data.service.DuplicateService
+import com.cauri.core.data.service.TransferLinkService
 import java.time.Clock
 import java.time.Duration
 import java.time.Instant
@@ -47,6 +48,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
     visitDao: VisitDao,
     private val duplicates: DuplicateService,
     private val balances: BalanceService,
+    private val transferLinks: TransferLinkService,
     private val clock: Clock,
 ) : TransactionRepository {
     override val pending: Flow<List<PendingOperation>> = combine(
@@ -165,12 +167,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun recordDetected(operation: DetectedOperation) {
-        val type = when (operation.type) {
-            DetectedType.EXPENSE -> TransactionType.EXPENSE
-            DetectedType.INCOME -> TransactionType.INCOME
-            DetectedType.WITHDRAWAL -> TransactionType.TRANSFER_OUT
-            DetectedType.DEPOSIT -> TransactionType.TRANSFER_IN
-        }
+        val type = operation.type.toTransactionType()
         val transfer = type == TransactionType.TRANSFER_OUT || type == TransactionType.TRANSFER_IN
         val detected = TransactionEntity(
             accountId = operation.accountId,
@@ -198,20 +195,12 @@ internal class TransactionRepositoryImpl @Inject constructor(
             foreignCurrency = null,
             proposedAmount = null,
         )
-        // The Cash side goes the other way: a withdrawal arrives on Cash, a deposit leaves it.
-        val cash = detected.transferGroup?.let {
-            plain.copy(
-                accountId = CASH_ACCOUNT_ID,
-                type = if (type == TransactionType.TRANSFER_OUT) {
-                    TransactionType.TRANSFER_IN
-                } else {
-                    TransactionType.TRANSFER_OUT
-                },
-            )
-        }
+        val cash = detected.transferGroup?.let { otherSide(plain, operation) }
         val fee = operation.fee?.let { plain.copy(type = TransactionType.EXPENSE, amount = it, transferGroup = null) }
         // The bank wrote it in another message already (an SMS and a mail, UBA): the signal is read, nothing more.
         if (repeated(detected)) return markRead(operation)
+        // The other side of a transfer between the user's accounts read first: this message is the side it waits for.
+        if (attached(operation, detected)) return
         val manual = duplicates.sameOperation(
             transaction = detected,
             candidates = sameOperation(detected, status = TransactionStatus.CONFIRMED),
@@ -268,7 +257,70 @@ internal class TransactionRepositoryImpl @Inject constructor(
             ?.let { mergeDao.undoMerge(merge = it, undoneAt = clock.instant()) }
     }
 
-    // The transactions of the same account around [transaction], with [status]: the service picks the same operation.
+    // The other side of [plain], read in [operation], going the other way: a withdrawal arrives on Cash, a deposit
+    // leaves it, and a transfer between the user's accounts arrives on or leaves the other account.
+    private fun otherSide(plain: TransactionEntity, operation: DetectedOperation) = plain.copy(
+        accountId = operation.counterpartAccountId ?: CASH_ACCOUNT_ID,
+        type = when (plain.type) {
+            TransactionType.TRANSFER_OUT -> TransactionType.TRANSFER_IN
+            else -> TransactionType.TRANSFER_OUT
+        },
+    )
+
+    // Attaches [operation], read as [detected], to the side of a transfer between the user's accounts that waits for
+    // it, recorded from the message of the other side; `false` when none waits for it.
+    private suspend fun attached(operation: DetectedOperation, detected: TransactionEntity): Boolean {
+        val way = when (detected.type) {
+            TransactionType.INCOME, TransactionType.TRANSFER_IN -> TransactionType.TRANSFER_IN
+            TransactionType.EXPENSE, TransactionType.TRANSFER_OUT -> TransactionType.TRANSFER_OUT
+        }
+        val message = detected.copy(type = way)
+        val sides = TransactionStatus.entries.filter { it !in TransactionStatus.NOT_COUNTED }
+            .flatMap {
+                transactionDao.getAround(
+                    accountId = message.accountId,
+                    status = it,
+                    from = message.occurredAt - TransferLinkService.WINDOW,
+                    to = message.occurredAt + TransferLinkService.WINDOW,
+                )
+            }
+        val side = transferLinks.waitingSide(message, sides)
+        val group = side?.transferGroup
+        val other = group?.let { transactionDao.getByTransferGroup(it).firstOrNull { other -> other.id != side.id } }
+        if (side == null || group == null || other == null) return false
+        val read = side.copy(
+            amount = message.amount,
+            rawSignalId = message.rawSignalId,
+            counterparty = message.counterparty,
+            proposedAmount = message.amount,
+        )
+        val transfer = if (way == TransactionType.TRANSFER_IN) {
+            transferLinks.linked(debit = other, credit = read, group = group)
+        } else {
+            transferLinks.linked(debit = read, credit = other, group = group)
+        }
+        mergeDao.attachSide(
+            debit = transfer.debit,
+            credit = transfer.credit,
+            fees = listOfNotNull(transfer.fee, operation.fee?.let { feeOf(read, it) }),
+            balance = balanceAfter(operation),
+            rawSignalId = operation.rawSignalId,
+            templateVersion = operation.templateVersion,
+        )
+        return true
+    }
+
+    // The fee [amount] a message gave, an expense on the account of [side].
+    private fun feeOf(side: TransactionEntity, amount: Long) = side.copy(
+        id = 0,
+        type = TransactionType.EXPENSE,
+        amount = amount,
+        rawSignalId = null,
+        transferGroup = null,
+        counterparty = null,
+        proposedAmount = null,
+    )
+
     // Whether another signal reported [transaction] already, counted whatever its status.
     private suspend fun repeated(transaction: TransactionEntity) = duplicates.repeated(
         transaction = transaction,
@@ -286,6 +338,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
         merge = null,
     )
 
+    // The transactions of the same account around [transaction], with [status]: the service picks the same operation.
     private suspend fun sameOperation(transaction: TransactionEntity, status: TransactionStatus) =
         transactionDao.getAround(
             accountId = transaction.accountId,
@@ -379,6 +432,13 @@ private fun TransactionEntity.toPending(accounts: Map<Long, AccountEntity>, to: 
     placeId = placeId,
 )
 
+private fun DetectedType.toTransactionType() = when (this) {
+    DetectedType.EXPENSE -> TransactionType.EXPENSE
+    DetectedType.INCOME -> TransactionType.INCOME
+    DetectedType.WITHDRAWAL, DetectedType.TRANSFER_OUT -> TransactionType.TRANSFER_OUT
+    DetectedType.DEPOSIT, DetectedType.TRANSFER_IN -> TransactionType.TRANSFER_IN
+}
+
 private fun TransactionType.toPendingType() = when (this) {
     TransactionType.EXPENSE -> PendingType.EXPENSE
     TransactionType.INCOME -> PendingType.INCOME
@@ -387,6 +447,6 @@ private fun TransactionType.toPendingType() = when (this) {
 
 // What [this] moved on its account, fees included: positive when money arrived.
 private fun DetectedOperation.change() = when (type) {
-    DetectedType.INCOME, DetectedType.DEPOSIT -> amount
-    DetectedType.EXPENSE, DetectedType.WITHDRAWAL -> -(amount + (fee ?: 0))
+    DetectedType.INCOME, DetectedType.DEPOSIT, DetectedType.TRANSFER_IN -> amount
+    DetectedType.EXPENSE, DetectedType.WITHDRAWAL, DetectedType.TRANSFER_OUT -> -(amount + (fee ?: 0))
 }

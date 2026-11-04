@@ -19,6 +19,9 @@ import java.time.Instant
  *   message gives none, or gives it in another currency.
  * @property counterparty Merchant or person on the other side, as the message names them; `null` when unknown.
  * @property occurredAt When the money moved.
+ * @property counterpartAccountId The user's other account of a [DetectedType.TRANSFER_OUT] or a
+ *   [DetectedType.TRANSFER_IN]; `null` for the other types, the Cash account being the other side of a withdrawal or a
+ *   deposit.
  */
 data class DetectedOperation(
     val rawSignalId: Long,
@@ -32,4 +35,5 @@ data class DetectedOperation(
     val balance: Long?,
     val counterparty: String?,
     val occurredAt: Instant,
+    val counterpartAccountId: Long? = null,
 )

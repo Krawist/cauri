@@ -1,5 +1,7 @@
 package com.cauri.core.data.service
 
+import java.time.Duration
+
 import com.cauri.core.data.database.entity.TransactionEntity
 
 /**
@@ -14,6 +16,18 @@ internal interface TransferLinkService {
      */
     fun pairs(transactions: List<TransactionEntity>): List<Pair<TransactionEntity, TransactionEntity>>
 
+    /**
+     * Among [sides], the side of a transfer between the user's accounts that waits for its own message, the one
+     * [message] is: on its account, going the same way, within 30 minutes, the credit equal to the debit or smaller by
+     * at most 3 %; the closest amount, then the closest in time. `null` when none waits for it.
+     */
+    fun waitingSide(message: TransactionEntity, sides: List<TransactionEntity>): TransactionEntity?
+
     /** [debit] and [credit] as the two sides of the transfer [group], the gap between them as a fee on the debit. */
     fun linked(debit: TransactionEntity, credit: TransactionEntity, group: String): LinkedTransfer
+
+    companion object {
+        /** Largest gap in time between the two sides of a transfer. */
+        val WINDOW: Duration = Duration.ofMinutes(30)
+    }
 }

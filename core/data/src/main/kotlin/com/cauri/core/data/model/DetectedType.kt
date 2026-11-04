@@ -13,4 +13,10 @@ enum class DetectedType {
 
     /** Cash put into the account: a transfer from the Cash account. */
     DEPOSIT,
+
+    /** Money sent to another account of the user's own: [DetectedOperation.counterpartAccountId]. */
+    TRANSFER_OUT,
+
+    /** Money received from another account of the user's own: [DetectedOperation.counterpartAccountId]. */
+    TRANSFER_IN,
 }

@@ -782,6 +782,14 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   Money credit of that transfer never reached the listener (no notification of OrangeMoney in Samsung Messages): to
   understand with its owner.
 
+- [ ] **CAU-23** (transfers from one message) — a transfer between the user's accounts is recorded from its first
+  message: the templates that name an own account (`ownAccount`, catalogue 2026.11.05: Orange Money from and to the
+  bank, UBA to Orange Money by SMS and mail) give `TRANSFER_OUT` or `TRANSFER_IN` when the account named is followed
+  (`DetectionService`, name or provider, accents and case ignored), one card « UBA → Orange Money » at once; the message
+  of the other side, within 30 minutes and at most 3 % less, attaches to the waiting side
+  (`TransferLinkService.waitingSide`, `TransactionMergeDao.attachSide`): no second card, the gap a fee, the balance it
+  gives kept. Both ways. Not checked on a phone: the S23 was not plugged in.
+
 Update this section at the end of each ticket.
 
 ## Way of working

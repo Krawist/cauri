@@ -20,6 +20,7 @@ import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -73,7 +74,12 @@ internal class SignalProcessorImpl @Inject constructor(
     private suspend fun record(signal: RawSignal, parsed: ParsedMessage) {
         val account = accountRepository.accountOf(parsed.provider)
         if (account != null) {
-            val operation = detectionService.detect(signal = signal, parsed = parsed, account = account)
+            val operation = detectionService.detect(
+                signal = signal,
+                parsed = parsed,
+                account = account,
+                accounts = accountRepository.accounts.first(),
+            )
             transactionRepository.recordDetected(operation)
         } else if (knownAccount(parsed.provider) != null) {
             preferencesRepository.proposeAccount(parsed.provider)

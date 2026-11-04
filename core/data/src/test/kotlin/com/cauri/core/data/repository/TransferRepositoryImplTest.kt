@@ -46,6 +46,7 @@ internal class TransferRepositoryImplTest {
             database.visitDao(),
             DuplicateServiceImpl(),
             BalanceServiceImpl(),
+            TransferLinkServiceImpl(),
             CLOCK,
         )
         repository = TransferRepositoryImpl(

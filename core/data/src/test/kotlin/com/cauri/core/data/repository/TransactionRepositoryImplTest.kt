@@ -25,9 +25,10 @@ import com.cauri.core.data.model.PendingType
 import com.cauri.core.data.model.ReconciledExpense
 import com.cauri.core.data.model.SplitPart
 import com.cauri.core.data.model.Withdrawal
-import com.cauri.core.data.service.CashBalanceServiceImpl
 import com.cauri.core.data.service.BalanceServiceImpl
+import com.cauri.core.data.service.CashBalanceServiceImpl
 import com.cauri.core.data.service.DuplicateServiceImpl
+import com.cauri.core.data.service.TransferLinkServiceImpl
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -63,6 +64,7 @@ internal class TransactionRepositoryImplTest {
             database.visitDao(),
             DuplicateServiceImpl(),
             BalanceServiceImpl(),
+            TransferLinkServiceImpl(),
             CLOCK,
         )
     }
@@ -346,6 +348,54 @@ internal class TransactionRepositoryImplTest {
 
             // then
             database.accountBalanceDao().observeLatest().first().single().amount shouldBe 10_000
+        }
+
+        @Test
+        fun `should record a transfer to the user's own account from its first message`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(momo().copy(name = "UBA", provider = "UBA"))
+            val omId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = ubaId, type = DetectedType.TRANSFER_OUT, fee = null)
+                    .copy(counterpartAccountId = omId),
+            )
+
+            // then
+            repository.pending.first().map { Triple(it.accountId, it.type, it.toAccountName) } shouldContainExactly
+                listOf(Triple(ubaId, PendingType.TRANSFER, "MTN MoMo"))
+        }
+
+        @Test
+        fun `should attach the message of the other side to the transfer, what did not arrive a fee`() = runTest {
+            // given
+            val ubaId = database.accountDao().insert(momo().copy(name = "UBA", provider = "UBA"))
+            val omId = database.accountDao().insert(momo())
+            val debit = database.rawSignalDao().insert(unparsedSignal())
+            val credit = database.rawSignalDao().insert(unparsedSignal().copy(text = "Reçu 2450 FCFA"))
+            repository.recordDetected(
+                operation(rawSignalId = debit, accountId = ubaId, type = DetectedType.TRANSFER_OUT, fee = null)
+                    .copy(counterpartAccountId = omId),
+            )
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = credit, accountId = omId, type = DetectedType.INCOME, fee = null)
+                    .copy(amount = 2_450, balance = 12_450),
+            )
+
+            // then
+            val sides = database.transactionDao().observeByStatus(TransactionStatus.DETECTED).first()
+            sides.map { Triple(it.accountId, it.type, it.amount) } shouldContainExactlyInAnyOrder listOf(
+                Triple(ubaId, TransactionType.TRANSFER_OUT, 2_450L),
+                Triple(omId, TransactionType.TRANSFER_IN, 2_450L),
+                Triple(ubaId, TransactionType.EXPENSE, 50L),
+            )
+            sides.single { it.accountId == omId }.rawSignalId shouldBe credit
+            database.accountBalanceDao().observeLatest().first().single().amount shouldBe 12_450
+            database.rawSignalDao().getUnparsed().shouldBeEmpty()
         }
 
         @Test

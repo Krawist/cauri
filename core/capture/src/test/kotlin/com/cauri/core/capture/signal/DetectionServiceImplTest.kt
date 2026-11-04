@@ -27,7 +27,12 @@ internal class DetectionServiceImplTest {
             val parsed = parsed(kind = MessageKind.PAYMENT, direction = Direction.DEBIT, currency = "XAF", fees = 50)
 
             // when
-            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = emptyList(),
+            )
 
             // then
             operation shouldBe DetectedOperation(
@@ -59,7 +64,12 @@ internal class DetectionServiceImplTest {
             val parsed = parsed(kind = kind, direction = direction, currency = "XAF", fees = null)
 
             // when
-            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = emptyList(),
+            )
 
             // then
             operation.type shouldBe expected
@@ -71,7 +81,12 @@ internal class DetectionServiceImplTest {
             val parsed = parsed(kind = MessageKind.PAYMENT, direction = Direction.DEBIT, currency = "XAF", fees = 0)
 
             // when
-            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = emptyList(),
+            )
 
             // then
             operation.fee.shouldBeNull()
@@ -83,7 +98,12 @@ internal class DetectionServiceImplTest {
             val parsed = parsed(kind = MessageKind.PAYMENT, direction = Direction.DEBIT, currency = "USD", fees = 10)
 
             // when
-            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = emptyList(),
+            )
 
             // then
             Triple(operation.amount, operation.fee, operation.foreignAmount to operation.foreignCurrency) shouldBe
@@ -96,10 +116,70 @@ internal class DetectionServiceImplTest {
             val parsed = parsed(kind = MessageKind.PAYMENT, direction = Direction.DEBIT, currency = "USD", fees = null)
 
             // when
-            val operation = service.detect(signal = signal(), parsed = parsed, account = orangeMoney())
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = emptyList(),
+            )
 
             // then
             operation.balance.shouldBeNull()
+        }
+
+        @Test
+        fun `should make a transfer to the user's own account the template names`() {
+            // given
+            val parsed = parsed(kind = MessageKind.TRANSFER, direction = Direction.DEBIT, currency = "XAF", fees = null)
+                .copy(counterparty = "UBA UBA 221--407", ownAccount = true)
+
+            // when
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = listOf(orangeMoney(), uba()),
+            )
+
+            // then
+            operation.type shouldBe DetectedType.TRANSFER_OUT
+            operation.counterpartAccountId shouldBe 3
+        }
+
+        @Test
+        fun `should keep an expense when the account named is not followed`() {
+            // given
+            val parsed = parsed(kind = MessageKind.TRANSFER, direction = Direction.DEBIT, currency = "XAF", fees = null)
+                .copy(counterparty = "BICEC 0123", ownAccount = true)
+
+            // when
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = listOf(orangeMoney(), uba()),
+            )
+
+            // then
+            operation.type shouldBe DetectedType.EXPENSE
+        }
+
+        @Test
+        fun `should never take a person for an account of the user's own`() {
+            // given
+            val parsed = parsed(kind = MessageKind.TRANSFER, direction = Direction.DEBIT, currency = "XAF", fees = null)
+                .copy(counterparty = "KOUBA MARTIN")
+
+            // when
+            val operation = service.detect(
+                signal = signal(),
+                parsed = parsed,
+                account = orangeMoney(),
+                accounts = listOf(orangeMoney(), uba()),
+            )
+
+            // then
+            operation.type shouldBe DetectedType.EXPENSE
         }
     }
 
@@ -110,6 +190,8 @@ internal class DetectionServiceImplTest {
         text = "Paiement",
         receivedAt = Instant.ofEpochSecond(1_000),
     )
+
+    private fun uba() = Account(id = 3, name = "UBA", kind = AccountKind.BANK, provider = "UBA", currency = "XAF")
 
     private fun orangeMoney() = Account(
         id = 2,

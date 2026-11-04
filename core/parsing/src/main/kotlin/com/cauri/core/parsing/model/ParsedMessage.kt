@@ -18,6 +18,7 @@ import java.time.Instant
  * @property reference Reference of the operation given by the operator; `null` when the message gives none.
  * @property occurredAt When the operation happened: the date of the message, or the time of the notification when the
  *   message has no date.
+ * @property ownAccount Whether [counterparty] names an account of the user's own: a transfer between their accounts.
  */
 data class ParsedMessage(
     val templateId: String,
@@ -32,4 +33,5 @@ data class ParsedMessage(
     val counterparty: String?,
     val reference: String?,
     val occurredAt: Instant,
+    val ownAccount: Boolean = false,
 )

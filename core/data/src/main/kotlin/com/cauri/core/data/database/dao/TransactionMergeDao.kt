@@ -54,6 +54,28 @@ internal interface TransactionMergeDao {
      * Inserts the manual entry [entry], set aside, updates [kept], the detected transaction of the same operation, with
      * the user's values, logs [merge] and returns its id.
      */
+    /**
+     * Attaches the message [rawSignalId] read by [templateVersion] to a transfer between the user's accounts recorded
+     * from the message of its other side, all or none: both sides as [debit] and [credit], the [fees] it brings and the
+     * [balance] it gave.
+     */
+    @Transaction
+    @Suppress("LongParameterList") // Everything one signal writes, in one transaction.
+    suspend fun attachSide(
+        debit: TransactionEntity,
+        credit: TransactionEntity,
+        fees: List<TransactionEntity>,
+        balance: AccountBalanceEntity?,
+        rawSignalId: Long,
+        templateVersion: String,
+    ) {
+        updateTransaction(debit)
+        updateTransaction(credit)
+        insertTransactions(fees)
+        balance?.let { insertBalance(it) }
+        markParsed(rawSignalId = rawSignalId, templateVersion = templateVersion)
+    }
+
     @Transaction
     suspend fun insertMerged(entry: TransactionEntity, kept: TransactionEntity, merge: TransactionMergeEntity): Long {
         val entryId = insertTransactions(listOf(entry.copy(status = TransactionStatus.MERGED))).first()

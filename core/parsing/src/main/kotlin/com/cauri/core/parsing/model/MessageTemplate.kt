@@ -23,6 +23,8 @@ import kotlinx.serialization.Serializable
  * @property dateFormat `java.time` pattern of the `date` group, with the time (« dd/MM/yyyy HH:mm »); `null` when the
  *   message has no date, and the time of the notification is used.
  * @property dateLocale Language of the month and day names in the date, as a BCP 47 tag.
+ * @property ownAccount Whether the other side is an account of the user's own, named in `counterparty`: a transfer
+ *   between their accounts (« vers votre compte UBA »), never a person.
  */
 @Serializable
 data class MessageTemplate(
@@ -37,4 +39,5 @@ data class MessageTemplate(
     val decimalSeparator: Char? = null,
     val dateFormat: String? = null,
     val dateLocale: String = "fr",
+    val ownAccount: Boolean = false,
 )

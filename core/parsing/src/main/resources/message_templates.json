@@ -1,5 +1,5 @@
 {
-  "version": "2026.11.04",
+  "version": "2026.11.05",
   "templates": [
     {
       "id": "orange-money.transfer-sent",
@@ -81,7 +81,7 @@
     },
     {
       "id": "orange-money.from-bank",
-      "version": 1,
+      "version": 2,
       "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
@@ -90,11 +90,12 @@
       "direction": "CREDIT",
       "currency": "XAF",
       "pattern": "^Votre transfert de (?<amount>[\\d.,]+) ?FCFA sur votre compte Orange Money depuis votre compte (?<counterparty>.+?) est reussi\\. Frais ?: ?(?<fees>[\\d.,]+) ?FCFA\\. Votre nouveau solde Orange Money ?: ?(?<balance>[\\d.,]+) ?FCFA\\. (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
-      "decimalSeparator": "."
+      "decimalSeparator": ".",
+      "ownAccount": true
     },
     {
       "id": "orange-money.to-bank",
-      "version": 1,
+      "version": 2,
       "provider": "ORANGE_MONEY",
       "senders": [
         "OrangeMoney"
@@ -103,7 +104,8 @@
       "direction": "DEBIT",
       "currency": "XAF",
       "pattern": "^Votre transfert de (?<amount>[\\d.,]+) ?FCFA de votre compte Orange Money vers votre compte (?<counterparty>.+?) est reussi\\. Frais ?: ?(?<fees>[\\d.,]+) ?FCFA\\. Votre nouveau solde ?: ?(?<balance>[\\d.,]+) ?FCFA\\. (?<reference>[A-Z]{2}\\d{6}\\.\\d{4}\\.[A-Z]\\d{5})",
-      "decimalSeparator": "."
+      "decimalSeparator": ".",
+      "ownAccount": true
     },
     {
       "id": "orange-money.deposit",
@@ -264,7 +266,7 @@
     },
     {
       "id": "uba.transfer-to-orange-money",
-      "version": 1,
+      "version": 2,
       "provider": "UBA",
       "senders": [
         "UBA"
@@ -274,11 +276,12 @@
       "currency": "XAF",
       "pattern": "^DEBIT Montant ?: ?XAF(?<amount>[\\d.,]+) Compte ?: ?\\S+ Desc ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date ?: ?(?<date>\\S+ \\S+) Solde ?: ?XAF(?<balance>[\\d.,]+)",
       "decimalSeparator": ".",
-      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+      "dateFormat": "dd-MM-yyyy HH:mm:ss",
+      "ownAccount": true
     },
     {
       "id": "uba.mail.transfer-to-orange-money",
-      "version": 1,
+      "version": 2,
       "provider": "UBA",
       "senders": [
         "com.google.android.gm",
@@ -289,7 +292,8 @@
       "currency": "XAF",
       "pattern": "Type Operation ?: ?D[ée]bit Montant Operation ?: ?XAF ?(?<amount>[\\d.,]+) ?Devise ?: ?XAF .*?Details Operation ?: ?B2W/(?<reference>[^/ ]+)/\\d+/(?<counterparty>ORANGEMONEYCM) Date/Heure ?: ?(?<date>\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})(?: Solde ?: ?XAF ?(?<balance>[\\d.,]+))?",
       "decimalSeparator": ".",
-      "dateFormat": "dd-MM-yyyy HH:mm:ss"
+      "dateFormat": "dd-MM-yyyy HH:mm:ss",
+      "ownAccount": true
     },
     {
       "id": "uba.mail.debit",

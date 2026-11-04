@@ -64,6 +64,7 @@ class MessageParserImpl @Inject constructor() : MessageParser {
                 counterparty = group(COUNTERPARTY),
                 reference = group(REFERENCE),
                 occurredAt = date ?: receivedAt,
+                ownAccount = template.ownAccount,
             )
         }
     }

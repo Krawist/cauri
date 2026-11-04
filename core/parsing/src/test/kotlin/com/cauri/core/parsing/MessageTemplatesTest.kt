@@ -43,10 +43,11 @@ internal class MessageTemplatesTest {
 
             // then
             parsed shouldBe message.expected?.let {
+                val template = catalog.templates.single { template -> template.id == it.templateId }
                 ParsedMessage(
                     templateId = it.templateId,
-                    templateVersion = 1,
-                    provider = catalog.templates.single { template -> template.id == it.templateId }.provider,
+                    templateVersion = template.version,
+                    provider = template.provider,
                     kind = it.kind,
                     direction = it.direction,
                     amount = it.amount,
@@ -56,6 +57,7 @@ internal class MessageTemplatesTest {
                     counterparty = it.counterparty,
                     reference = it.reference,
                     occurredAt = Instant.parse(it.occurredAt),
+                    ownAccount = template.ownAccount,
                 )
             }
         }
