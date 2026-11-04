@@ -749,7 +749,9 @@ figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
   reports an operation that moved money but gives the very balance the account had just before (read or typed), the
   balance kept is that one plus or minus what moved, fees included, computed by code; the raw message stays as received.
   The next balance read, or one the user types, replaces it as before. An operation in another currency moves nothing
-  known and keeps the balance read. Not seen on a phone (the S23 locked).
+  known and keeps the balance read. The balance before is strictly older than the operation: on the owner's S25 the mail
+  of a transfer, repeating the SMS's right balance at the same second, was taken for a stale one and the amount taken
+  off twice (fixed; a repeated message records nothing since CAU-22).
 
 - [ ] **CAU-18 (UBA mails)** — the mail senders of UBA given by the user, « UBA Transaction Notification Services (UBA
   ALERT) » and « UBACameroun.Alert », are watched in the mail apps (`watched_senders.json`); the debug broadcast

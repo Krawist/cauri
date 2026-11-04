@@ -21,12 +21,15 @@ internal interface TransactionMergeDao {
      * and marks the signal read. With [merge], the first transaction is kept for the manual entry [entry], set aside,
      * and the merge is logged.
      */
-    /** The balance [accountId] had at [at] or just before, the last recorded of one time; `null` before the first. */
+    /**
+     * The balance [accountId] had before [at], strictly: never one a message of the same operation gave; `null`
+     * before the first.
+     */
     @Query(
-        "SELECT amount FROM account_balances WHERE accountId = :accountId AND at <= :at " +
+        "SELECT amount FROM account_balances WHERE accountId = :accountId AND at < :at " +
             "ORDER BY at DESC, id DESC LIMIT 1",
     )
-    suspend fun getBalanceAt(accountId: Long, at: Instant): Long?
+    suspend fun getBalanceBefore(accountId: Long, at: Instant): Long?
 
     @Transaction
     @Suppress("LongParameterList") // Everything one signal writes, in one transaction.

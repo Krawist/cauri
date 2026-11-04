@@ -156,7 +156,7 @@ internal class TransactionRepositoryImpl @Inject constructor(
             accountId = operation.accountId,
             amount = balances.afterOperation(
                 read = read,
-                previous = mergeDao.getBalanceAt(accountId = operation.accountId, at = operation.occurredAt),
+                previous = mergeDao.getBalanceBefore(accountId = operation.accountId, at = operation.occurredAt),
                 change = operation.change(),
             ),
             at = operation.occurredAt,

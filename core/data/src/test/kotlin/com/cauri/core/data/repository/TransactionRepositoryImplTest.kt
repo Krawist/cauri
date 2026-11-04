@@ -325,6 +325,30 @@ internal class TransactionRepositoryImplTest {
         }
 
         @Test
+        fun `should never take the balance of the same operation for the one before it`() = runTest {
+            // given
+            val momoId = database.accountDao().insert(momo())
+            val signalId = database.rawSignalDao().insert(unparsedSignal())
+            database.accountBalanceDao().insert(
+                AccountBalanceEntity(
+                    accountId = momoId,
+                    amount = 10_000,
+                    at = Instant.ofEpochSecond(1_000),
+                    rawSignalId = null,
+                ),
+            )
+
+            // when
+            repository.recordDetected(
+                operation(rawSignalId = signalId, accountId = momoId, type = DetectedType.EXPENSE, fee = null)
+                    .copy(balance = 10_000),
+            )
+
+            // then
+            database.accountBalanceDao().observeLatest().first().single().amount shouldBe 10_000
+        }
+
+        @Test
         fun `should record once an operation the bank wrote in an SMS and a mail`() = runTest {
             // given
             val ubaId = database.accountDao().insert(momo())
