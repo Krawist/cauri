@@ -29,7 +29,7 @@ import com.cauri.core.data.model.HabitCost
 import com.cauri.core.data.model.Insights
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.format.formatFcfa
-import com.cauri.core.design.glass.GlassSurface
+import io.github.krawist.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import java.time.YearMonth

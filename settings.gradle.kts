@@ -34,6 +34,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "cauri"
 
+// Shared modules of the kit, such as its glass surfaces.
+includeBuild("../Kit")
+
 include(":app")
 include(":feature:onboarding")
 include(":feature:home")

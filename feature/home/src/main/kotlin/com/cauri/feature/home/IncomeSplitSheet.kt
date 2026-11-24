@@ -35,12 +35,12 @@ import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.IncomeSplitProposal
 import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.Stepper
-import com.cauri.core.design.component.backdrop
+import io.github.krawist.design.component.backdrop
 import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.format.formatFcfa
-import com.cauri.core.design.glass.GlassScreen
-import com.cauri.core.design.glass.GlassSurface
+import io.github.krawist.design.glass.GlassScreen
+import io.github.krawist.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme

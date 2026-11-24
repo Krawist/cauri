@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
-import com.cauri.core.design.component.BackdropShape
-import com.cauri.core.design.component.backdrop
+import io.github.krawist.design.component.BackdropShape
+import io.github.krawist.design.component.backdrop
 import com.cauri.core.design.theme.CauriTheme
 import kotlin.time.Duration.Companion.seconds
 

@@ -8,6 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.haze)
-    implementation(libs.haze.blur)
+    // Glass surfaces and backdrop of the kit, used by every screen.
+    api("io.github.krawist:design")
 }

@@ -39,10 +39,10 @@ import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.data.model.AccountKind
 import com.cauri.core.data.model.CashBalance
 import com.cauri.core.data.model.Habit
-import com.cauri.core.design.component.AnimatedPresence
+import io.github.krawist.design.component.AnimatedPresence
 import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.format.formatFcfa
-import com.cauri.core.design.glass.GlassSurface
+import io.github.krawist.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import java.time.Duration

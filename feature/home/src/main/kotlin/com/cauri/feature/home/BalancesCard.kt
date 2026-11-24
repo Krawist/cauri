@@ -36,7 +36,7 @@ import com.cauri.core.design.component.RollingNumber
 import com.cauri.core.design.component.bleed
 import com.cauri.core.design.component.dashedBorder
 import com.cauri.core.design.format.formatFcfa
-import com.cauri.core.design.glass.GlassSurface
+import io.github.krawist.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme

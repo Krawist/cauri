@@ -33,13 +33,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cauri.core.capture.security.DeviceSecurity
 import com.cauri.core.design.R as DesignR
-import com.cauri.core.design.component.AnimatedPresence
+import io.github.krawist.design.component.AnimatedPresence
 import com.cauri.core.design.component.BottomBarTab
 import com.cauri.core.design.component.CauriBottomBar
 import com.cauri.core.design.component.LocalHelpBubbles
-import com.cauri.core.design.component.backdrop
+import io.github.krawist.design.component.backdrop
 import com.cauri.core.design.component.screenBackdropShapes
-import com.cauri.core.design.glass.GlassScreen
+import io.github.krawist.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.cash.cashGraph

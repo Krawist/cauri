@@ -11,7 +11,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
-import com.cauri.core.design.glass.LocalGlassBlur
+import io.github.krawist.design.glass.GlassColors
+import io.github.krawist.design.glass.GlassTheme
 
 /**
  * Cauri theme. Follows the phone's dark mode; screens read the full palette through [CauriTheme.palette].
@@ -51,6 +52,15 @@ fun CauriTheme(
             error = palette.coralText,
         )
     }
+    val glassColors = remember(palette) {
+        GlassColors(
+            background = palette.background,
+            fill = palette.glass,
+            strongFill = palette.glassStrong,
+            border = palette.glassBorder,
+            shadow = palette.shadow,
+        )
+    }
     val context = LocalContext.current
     // « Supprimer les animations » sets the animator scale to 0: Cauri then moves nothing.
     val motion = remember(context) {
@@ -61,10 +71,11 @@ fun CauriTheme(
     }
     CompositionLocalProvider(
         LocalCauriPalette provides palette,
-        LocalGlassBlur provides glassBlur,
         LocalCauriMotion provides motion,
     ) {
-        MaterialTheme(colorScheme = colorScheme, typography = CauriTypography, content = content)
+        GlassTheme(colors = glassColors, blur = glassBlur) {
+            MaterialTheme(colorScheme = colorScheme, typography = CauriTypography, content = content)
+        }
     }
 }
 

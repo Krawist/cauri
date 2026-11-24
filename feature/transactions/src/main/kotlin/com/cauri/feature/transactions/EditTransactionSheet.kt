@@ -29,10 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.PendingType
-import com.cauri.core.design.component.backdrop
+import io.github.krawist.design.component.backdrop
 import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
-import com.cauri.core.design.glass.GlassScreen
+import io.github.krawist.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.transactions.edit.EditActions

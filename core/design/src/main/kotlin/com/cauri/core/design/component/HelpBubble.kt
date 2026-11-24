@@ -1,5 +1,6 @@
 package com.cauri.core.design.component
 
+import io.github.krawist.design.component.AnimatedPresence
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

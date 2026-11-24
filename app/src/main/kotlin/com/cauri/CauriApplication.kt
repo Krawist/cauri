@@ -8,7 +8,7 @@ import com.cauri.core.capture.place.PlaceWatcher
 import com.cauri.core.capture.reminder.EveningSummary
 import com.cauri.core.capture.reminder.ReminderLearning
 import com.cauri.core.capture.reminder.ReminderNotificationSweeper
-import com.cauri.core.design.glass.supportsGlassBlur
+import io.github.krawist.design.glass.supportsGlassBlur
 import com.cauri.feature.cash.reminder.CountReminders
 import com.cauri.feature.places.discovery.PlaceDiscovery
 import com.cauri.widget.CashWidgetUpdater

@@ -1,5 +1,6 @@
 package com.cauri.core.design.component
 
+import io.github.krawist.design.component.backdrop
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

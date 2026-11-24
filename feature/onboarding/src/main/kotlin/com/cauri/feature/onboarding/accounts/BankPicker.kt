@@ -29,10 +29,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import com.cauri.core.data.model.Bank
-import com.cauri.core.design.component.BackdropShape
+import io.github.krawist.design.component.BackdropShape
 import com.cauri.core.design.component.CauriTextField
-import com.cauri.core.design.component.backdrop
-import com.cauri.core.design.glass.GlassScreen
+import io.github.krawist.design.component.backdrop
+import io.github.krawist.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 import com.cauri.feature.onboarding.R

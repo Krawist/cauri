@@ -121,6 +121,10 @@ iOS-inspired, modern look: translucent "glass" surfaces with a background blur (
 opaque tinted fallback on the others (CAU-03). Inter font (to embed, CAU-02). Large amounts in bold with tabular
 figures. Cards 20 to 28 radius, touch targets ≥ 44 dp.
 
+The glass layer (`GlassTheme`, `GlassScreen`, `GlassSurface`, `supportsGlassBlur()`), the `backdrop` modifier and
+`AnimatedPresence` come from the kit (`io.github.krawist:design`, LIB-02): `CauriTheme` gives the glass its colours
+from the palette, and `screenBackdropShapes()` (the shapes of Cauri) stays in `:core:design`.
+
 ## Progress
 
 - [x] **Skeleton** — multi-module project, convention plugins, CI, debug/release signing, Hilt, type-safe navigation

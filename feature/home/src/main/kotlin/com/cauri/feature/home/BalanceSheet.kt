@@ -39,11 +39,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cauri.core.data.model.AccountBalance
 import com.cauri.core.design.component.Keypad
 import com.cauri.core.design.component.RollingNumber
-import com.cauri.core.design.component.backdrop
+import io.github.krawist.design.component.backdrop
 import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.component.screenBackdropShapes
 import com.cauri.core.design.format.formatFcfa
-import com.cauri.core.design.glass.GlassScreen
+import io.github.krawist.design.glass.GlassScreen
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
 

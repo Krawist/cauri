@@ -47,7 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cauri.core.data.model.PendingType
 import com.cauri.core.design.R as DesignR
 import com.cauri.core.design.component.AnimatedItems
-import com.cauri.core.design.component.AnimatedPresence
+import io.github.krawist.design.component.AnimatedPresence
 import com.cauri.core.design.component.CauriHaptics
 import com.cauri.core.design.component.CauriTextField
 import com.cauri.core.design.component.HelpBubble
@@ -55,7 +55,7 @@ import com.cauri.core.design.component.UndoBar
 import com.cauri.core.design.component.pressScale
 import com.cauri.core.design.component.rememberCauriHaptics
 import com.cauri.core.design.format.FcfaVisualTransformation
-import com.cauri.core.design.glass.GlassSurface
+import io.github.krawist.design.glass.GlassSurface
 import com.cauri.core.design.theme.CauriRadius
 import com.cauri.core.design.theme.CauriSpacing
 import com.cauri.core.design.theme.CauriTheme
