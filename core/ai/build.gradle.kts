@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.cauri.android.library)
-    alias(libs.plugins.cauri.android.hilt)
+    alias(libs.plugins.krawist.android.library)
+    alias(libs.plugins.krawist.android.hilt)
 }
 
 android {

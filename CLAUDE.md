@@ -61,10 +61,11 @@ Before implementing a screen, look at its mockup. Amounts, names and dates in th
   Navigation Compose (`@Serializable` routes).
 - Navigation: each feature exposes its graph object (`HomeGraph`, `CashGraph`…) and a `NavGraphBuilder.xxxGraph(...)`
   extension; `:app` (`CauriApp.kt`) wires them. Features never navigate to each other directly: they take callbacks.
-- Gradle Kotlin DSL, `gradle/libs.versions.toml` catalog, convention plugins in `build-logic/`:
-  `cauri.android.application`, `cauri.android.library`, `cauri.android.compose`, `cauri.android.feature` (library +
-  compose + Hilt + navigation + `:core:design`), `cauri.android.hilt`, `cauri.android.room` (schemas in `schemas/`),
-  `cauri.jvm.library` (pure Kotlin).
+- Gradle Kotlin DSL. The version catalog and the convention plugins come from the kit, checked out next to this
+  repository (`../Kit`, see its README): `io.github.krawist.android.application`, `…android.library`,
+  `…android.compose`, `…android.feature` (library + compose + Hilt + navigation + `:core:design`), `…android.hilt`,
+  `…android.room` (schemas in `schemas/`), `io.github.krawist.jvm.library` (pure Kotlin). A new library goes in the
+  catalog of the kit.
 - Kotlin sources in `src/main/kotlin` and `src/test/kotlin`. Type-safe module accessors:
   `implementation(projects.core.design)`.
 - Pure business logic (parsing, matching, cash balance, reminder rules, bandit) in Kotlin without Android dependencies

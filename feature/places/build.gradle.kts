@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.cauri.android.feature)
+    alias(libs.plugins.krawist.android.feature)
 }
 
 android {

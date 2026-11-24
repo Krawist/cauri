@@ -28,7 +28,7 @@ Fix formatting with `./gradlew ktlintFormat`.
 
 ## First sync
 
-The dependency versions in `gradle/libs.versions.toml` are the ones Eifi already builds with on this machine, but the skeleton was written without access to the Maven repositories and has not been compiled yet. If the first sync fails on a missing or incompatible version, adjust the catalog: Android Studio suggests the available versions.
+The build needs the kit checked out next to this repository (`../Kit`): it holds the version catalog and the convention plugins. See its README.
 
 ## Signing
 
@@ -55,7 +55,6 @@ core/data               DataStore preferences, Room database
 core/capture            notification listening (MoMo, Orange Money, banks, SMS)
 core/parsing            message templates and parsing (pure Kotlin)
 core/engine             reminder rules and contextual bandit (pure Kotlin)
-build-logic/            Gradle convention plugins
 config/                 detekt rules
 .github/workflows/      CI workflow
 ```

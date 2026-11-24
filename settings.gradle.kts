@@ -1,5 +1,5 @@
 pluginManagement {
-    includeBuild("build-logic")
+    includeBuild("../Kit/build-logic")
     repositories {
         google {
             content {
@@ -21,6 +21,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+    }
+    // Versions shared by all the apps, in the kit checked out next to this repository.
+    versionCatalogs {
+        create("libs") {
+            from(files("../Kit/gradle/libs.versions.toml"))
+        }
     }
 }
 
