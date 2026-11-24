@@ -1,9 +1,9 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.cauri.android.application)
-    alias(libs.plugins.cauri.android.compose)
-    alias(libs.plugins.cauri.android.hilt)
+    alias(libs.plugins.krawist.android.application)
+    alias(libs.plugins.krawist.android.compose)
+    alias(libs.plugins.krawist.android.hilt)
     alias(libs.plugins.kotlin.serialization)
 }
 
